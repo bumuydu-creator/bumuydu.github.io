@@ -3,19 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blog — Bu Muydu?</title>
+<title>RADAR — Bu Muydu?</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f7f5f0;
-    --white: #ffffff;
-    --green: #2d4a3e;
-    --green-light: #4a7c6f;
-    --green-pale: #e8f0ed;
-    --ink: #1a1a1a;
-    --muted: #7a8c85;
-    --border: #dde8e3;
-    --gold: #c9a84c;
+    --bg: #0a1208;
+    --green: #4a9a5f;
+    --green-pale: #1a2e1e;
+    --cream: #f0ede6;
+    --muted: rgba(240,237,230,0.45);
+    --border: rgba(74,154,95,0.12);
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -23,7 +20,7 @@
 
   body {
     background: var(--bg);
-    color: var(--ink);
+    color: var(--cream);
     font-family: 'Lora', Georgia, serif;
     font-size: 17px;
     line-height: 1.8;
@@ -36,28 +33,19 @@
     top: 0; left: 0; right: 0;
     z-index: 100;
     padding: 1.2rem 4rem;
-    background: var(--white);
+    background: rgba(10,18,8,0.95);
     border-bottom: 1px solid var(--border);
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-
-  .nav-left {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-  }
-
   .nav-logo {
     font-family: 'Playfair Display', serif;
     font-size: 1.3rem;
     font-weight: 900;
     color: var(--green);
     text-decoration: none;
-    letter-spacing: -0.02em;
   }
-
   .nav-back {
     font-family: 'DM Mono', monospace;
     font-size: 0.65rem;
@@ -65,280 +53,336 @@
     text-transform: uppercase;
     color: var(--muted);
     text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
     transition: color 0.2s;
   }
   .nav-back:hover { color: var(--green); }
 
-  .nav-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    background: var(--green-pale);
-    color: var(--green);
-    padding: 0.3rem 0.8rem;
-    border-radius: 2px;
-  }
-
-  /* HEADER */
-  .page-header {
-    padding: 8rem 4rem 3rem;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 2rem;
-  }
-
-  .page-header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.5rem, 5vw, 5rem);
-    font-weight: 900;
-    line-height: 1;
-    letter-spacing: -0.03em;
-    color: var(--green);
-  }
-
-  .page-header h1 em {
-    font-style: italic;
-    color: var(--green-light);
-  }
-
-  .header-desc {
-    max-width: 320px;
-    color: var(--muted);
-    font-style: italic;
-    font-size: 1rem;
-    line-height: 1.6;
-    text-align: right;
-  }
-
-  /* FILTER */
-  .filter-bar {
-    padding: 1.2rem 4rem;
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    border-bottom: 1px solid var(--border);
-    background: var(--white);
-  }
-
-  .filter-btn {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 0.4rem 1rem;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
-    border-radius: 2px;
-    transition: all 0.2s;
-  }
-  .filter-btn:hover, .filter-btn.active {
-    background: var(--green);
-    color: var(--white);
-    border-color: var(--green);
-  }
-
-  /* BLOG GRID */
-  .blog-section {
-    padding: 3rem 4rem;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
-  .blog-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-  }
-
-  .blog-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    overflow: hidden;
-    transition: transform 0.3s, box-shadow 0.3s;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .blog-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(45,74,62,0.1);
-  }
-
-  .blog-card.featured {
-    grid-column: span 2;
-  }
-
-  .card-img {
-    width: 100%;
-    aspect-ratio: 16/9;
-    object-fit: cover;
-    display: block;
-    background: var(--green-pale);
-  }
-
-  .card-img-placeholder {
-    width: 100%;
-    aspect-ratio: 16/9;
-    background: var(--green-pale);
+  /* HERO */
+  .hero {
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3rem;
+    position: relative;
+    overflow: hidden;
   }
 
-  .card-body {
-    padding: 1.5rem;
-    flex: 1;
+  .radar-wrap {
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.12;
+  }
+
+  .radar-circle {
+    position: absolute;
+    border: 1px solid var(--green);
+    border-radius: 50%;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .radar-line-h {
+    position: absolute;
+    width: 100%; height: 1px;
+    background: var(--green);
+    top: 50%; left: 0;
+  }
+
+  .radar-line-v {
+    position: absolute;
+    height: 100%; width: 1px;
+    background: var(--green);
+    left: 50%; top: 0;
+  }
+
+  .radar-sweep {
+    position: absolute;
+    width: 50%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--green));
+    top: 50%; left: 50%;
+    transform-origin: left center;
+    animation: sweep 5s linear infinite;
+  }
+
+  @keyframes sweep {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .radar-dot {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 12px var(--green);
+    animation: blink 3s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+  }
+
+  .radar-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(6rem, 18vw, 16rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    color: var(--cream);
+    line-height: 0.85;
+    text-shadow: 0 0 120px rgba(74,154,95,0.2);
+  }
+
+  .radar-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-top: 1.5rem;
+  }
+
+  .radar-desc {
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 0.5rem;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green);
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0.6;
   }
 
-  .card-meta {
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: var(--green);
+    animation: scrollDown 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollDown {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    51% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* SECTIONS */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 1.2rem;
     display: flex;
     align-items: center;
     gap: 0.8rem;
-    margin-bottom: 0.8rem;
+  }
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 1px;
+    background: var(--green);
   }
 
-  .card-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.55rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--green);
-    background: var(--green-pale);
-    padding: 0.2rem 0.6rem;
-    border-radius: 2px;
+  /* GRID */
+  .content-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
   }
 
-  .card-date {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.55rem;
-    letter-spacing: 0.1em;
-    color: var(--muted);
+  .card {
+    background: var(--bg);
+    padding: 3rem;
   }
+
+  .card.dark { background: #070e06; }
+  .card.wide { grid-column: span 2; }
+  .card.full { grid-column: span 3; }
 
   .card-title {
     font-family: 'Playfair Display', serif;
-    font-size: 1.3rem;
-    font-weight: 700;
-    line-height: 1.3;
-    color: var(--ink);
-    margin-bottom: 0.8rem;
-  }
-
-  .blog-card.featured .card-title {
     font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 2rem;
+    line-height: 1.2;
   }
+  .card-title em { font-style: italic; color: var(--green); }
 
-  .card-excerpt {
-    color: var(--muted);
-    font-size: 0.95rem;
-    line-height: 1.7;
-    flex: 1;
-    font-style: italic;
-  }
-
-  .card-footer {
-    margin-top: 1.2rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border);
+  .item {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .item:last-child { border-bottom: none; }
+
+  .item-dot {
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    margin-top: 0.6rem;
+    flex-shrink: 0;
+    box-shadow: 0 0 6px var(--green);
   }
 
-  .read-more {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--green);
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    transition: gap 0.2s;
-  }
-  .read-more:hover { gap: 0.8rem; }
+  .item-inner { flex: 1; }
 
-  .read-time {
+  .item-label {
     font-family: 'DM Mono', monospace;
     font-size: 0.55rem;
-    color: var(--muted);
-  }
-
-  /* YENİ YAZI BUTONU */
-  .new-post-bar {
-    padding: 2rem 4rem;
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: center;
-  }
-
-  .new-post-hint {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--muted);
-    text-align: center;
-    line-height: 2;
+    color: var(--green);
+    margin-bottom: 0.3rem;
   }
 
-  .new-post-hint span {
+  .item-text {
+    font-size: 0.95rem;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  .item-text.filled {
+    color: var(--cream);
+    font-style: normal;
+  }
+
+  /* Wishlist kartları */
+  .wish-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .wish-item {
     background: var(--green-pale);
+    padding: 1.2rem;
+    border: 1px solid var(--border);
+  }
+
+  .wish-item .item-label { margin-bottom: 0.5rem; }
+  .wish-item .item-text { font-size: 0.9rem; }
+
+  /* Günün sorusu */
+  .question-box {
+    background: var(--green-pale);
+    border: 1px solid rgba(74,154,95,0.3);
+    padding: 2rem;
+    margin-top: 1.5rem;
+  }
+
+  .question-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.4;
+  }
+
+  /* Otoportre */
+  .portrait-box {
+    background: var(--green-pale);
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    margin-top: 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .portrait-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .portrait-placeholder {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
     color: var(--green);
-    padding: 0.2rem 0.5rem;
-    border-radius: 2px;
-    font-weight: 500;
+    opacity: 0.4;
+    text-align: center;
+  }
+
+  .portrait-caption {
+    font-style: italic;
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    border-left: 2px solid var(--green);
+    padding-left: 1rem;
   }
 
   /* FOOTER */
   footer {
-    background: var(--green);
-    color: var(--white);
+    background: #050a04;
     padding: 2.5rem 4rem;
+    border-top: 1px solid var(--border);
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
   }
-
   footer p {
     font-family: 'DM Mono', monospace;
     font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    opacity: 0.6;
+    color: var(--muted);
+    opacity: 0.5;
   }
-
   .footer-links { display: flex; gap: 2rem; }
   .footer-links a {
     font-family: 'DM Mono', monospace;
     font-size: 0.6rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.6);
+    color: var(--muted);
     text-decoration: none;
     transition: color 0.2s;
   }
-  .footer-links a:hover { color: var(--white); }
+  .footer-links a:hover { color: var(--green); }
 
   @media (max-width: 900px) {
-    nav, .page-header, .filter-bar, .blog-section, .new-post-bar { padding-left: 1.5rem; padding-right: 1.5rem; }
-    .page-header { flex-direction: column; align-items: flex-start; }
-    .header-desc { text-align: left; }
-    .blog-grid { grid-template-columns: 1fr; }
-    .blog-card.featured { grid-column: span 1; }
+    nav { padding: 1rem 1.5rem; }
+    .content-grid { grid-template-columns: 1fr; }
+    .card.wide, .card.full { grid-column: span 1; }
+    .card { padding: 2rem 1.5rem; }
     footer { padding: 2rem 1.5rem; flex-direction: column; }
   }
 </style>
@@ -346,121 +390,159 @@
 <body>
 
 <nav>
-  <div class="nav-left">
-    <a href="index.html" class="nav-logo">Bu Muydu?</a>
-    <a href="index.html" class="nav-back">← Ana Sayfa</a>
-  </div>
-  <span class="nav-tag">Blog</span>
+  <a href="index.html" class="nav-logo">Bu Muydu?</a>
+  <a href="index.html" class="nav-back">← Ana Sayfa</a>
 </nav>
 
-<div class="page-header">
-  <h1>Günlük<br><em>Düşünceler</em></h1>
-  <p class="header-desc">Her şey hakkında. Film, müzik, kitap, hayat... Düşündüklerimi yazdığım yer.</p>
-</div>
-
-<div class="filter-bar">
-  <button class="filter-btn active" onclick="filterPosts('all', this)">Tümü</button>
-  <button class="filter-btn" onclick="filterPosts('film', this)">Film & Dizi</button>
-  <button class="filter-btn" onclick="filterPosts('muzik', this)">Müzik</button>
-  <button class="filter-btn" onclick="filterPosts('gunluk', this)">Günlük</button>
-  <button class="filter-btn" onclick="filterPosts('diger', this)">Diğer</button>
-</div>
-
-<section class="blog-section">
-  <div class="blog-grid" id="blogGrid">
-
-    <!-- YAZI 1 — Featured -->
-    <div class="blog-card featured" data-tag="film">
-      <div class="card-img-placeholder">🎬</div>
-      <div class="card-body">
-        <div class="card-meta">
-          <span class="card-tag">Film</span>
-          <span class="card-date">5 Mart 2026</span>
-        </div>
-        <div class="card-title">Bu Haftanın Filmi: Buraya Film Adını Yaz</div>
-        <p class="card-excerpt">Bu film hakkında düşüncelerinizi buraya yazın. Neden beğendiniz, hangi sahnesi sizi etkiledi, karakterler hakkında ne düşünüyorsunuz?</p>
-        <div class="card-footer">
-          <a href="#" class="read-more">Devamını Oku →</a>
-          <span class="read-time">3 dk okuma</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- YAZI 2 -->
-    <div class="blog-card" data-tag="muzik">
-      <div class="card-img-placeholder">🎵</div>
-      <div class="card-body">
-        <div class="card-meta">
-          <span class="card-tag">Müzik</span>
-          <span class="card-date">4 Mart 2026</span>
-        </div>
-        <div class="card-title">Bu Haftanın Şarkısı</div>
-        <p class="card-excerpt">Buraya şarkı adı ve düşüncelerinizi yazın.</p>
-        <div class="card-footer">
-          <a href="#" class="read-more">Devamını Oku →</a>
-          <span class="read-time">2 dk okuma</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- YAZI 3 -->
-    <div class="blog-card" data-tag="film">
-      <div class="card-img-placeholder">📺</div>
-      <div class="card-body">
-        <div class="card-meta">
-          <span class="card-tag">Dizi</span>
-          <span class="card-date">3 Mart 2026</span>
-        </div>
-        <div class="card-title">Bu Haftanın Dizisi</div>
-        <p class="card-excerpt">Buraya dizi adı ve düşüncelerinizi yazın.</p>
-        <div class="card-footer">
-          <a href="#" class="read-more">Devamını Oku →</a>
-          <span class="read-time">2 dk okuma</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- YAZI 4 -->
-    <div class="blog-card" data-tag="gunluk">
-      <div class="card-img-placeholder">✍️</div>
-      <div class="card-body">
-        <div class="card-meta">
-          <span class="card-tag">Günlük</span>
-          <span class="card-date">2 Mart 2026</span>
-        </div>
-        <div class="card-title">Bugün Aklımdan Geçenler</div>
-        <p class="card-excerpt">Buraya günlük düşüncelerinizi yazın. Her şey hakkında olabilir.</p>
-        <div class="card-footer">
-          <a href="#" class="read-more">Devamını Oku →</a>
-          <span class="read-time">4 dk okuma</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- YAZI 5 -->
-    <div class="blog-card" data-tag="diger">
-      <div class="card-img-placeholder">💭</div>
-      <div class="card-body">
-        <div class="card-meta">
-          <span class="card-tag">Diğer</span>
-          <span class="card-date">1 Mart 2026</span>
-        </div>
-        <div class="card-title">Başka Bir Yazı Başlığı</div>
-        <p class="card-excerpt">Buraya istediğiniz bir şey yazın.</p>
-        <div class="card-footer">
-          <a href="#" class="read-more">Devamını Oku →</a>
-          <span class="read-time">3 dk okuma</span>
-        </div>
-      </div>
-    </div>
-
+<!-- HERO -->
+<div class="hero">
+  <div class="radar-wrap">
+    <div class="radar-circle" style="width:100px;height:100px;"></div>
+    <div class="radar-circle" style="width:200px;height:200px;"></div>
+    <div class="radar-circle" style="width:300px;height:300px;"></div>
+    <div class="radar-circle" style="width:400px;height:400px;"></div>
+    <div class="radar-circle" style="width:500px;height:500px;"></div>
+    <div class="radar-circle" style="width:600px;height:600px;"></div>
+    <div class="radar-circle" style="width:700px;height:700px;"></div>
+    <div class="radar-line-h"></div>
+    <div class="radar-line-v"></div>
+    <div class="radar-sweep"></div>
+    <div class="radar-dot" style="width:8px;height:8px;top:28%;left:62%;"></div>
+    <div class="radar-dot" style="width:6px;height:6px;top:65%;left:38%;animation-delay:1s;"></div>
+    <div class="radar-dot" style="width:10px;height:10px;top:42%;left:70%;animation-delay:2s;"></div>
+    <div class="radar-dot" style="width:5px;height:5px;top:55%;left:30%;animation-delay:0.5s;"></div>
   </div>
-</section>
 
-<div class="new-post-bar">
-  <p class="new-post-hint">
-    🦋 🧿 <span>Bu muydu?</span> Bir masal biter, merak başalar...
-  </p>
+  <div class="hero-content">
+    <h1 class="radar-title">RADAR</h1>
+    <p class="radar-sub">Haftalık frekans · Bu Muydu?</p>
+    <p class="radar-desc">Takıntılar, kürasyonlar, kişisel notlar.</p>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Kaydır</span>
+    <div class="scroll-line"></div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content-grid">
+
+  <!-- 01 TAKINTIlar -->
+  <div class="card wide">
+    <div class="section-label">01</div>
+    <div class="card-title">Neye <em>Takıntılıyım?</em></div>
+
+    <div class="item">
+      <div class="item-dot"></div>
+      <div class="item-inner">
+        <div class="item-label">Bu Hafta Okudum / Düşündüm</div>
+        <div class="item-text">Buraya makale, felsefi alıntı veya üzerinde düşündüğünüz kavramı yazın...</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-dot"></div>
+      <div class="item-inner">
+        <div class="item-label">Döngüye Aldığım Şarkı</div>
+        <div class="item-text">Şarkı adı buraya...</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-dot"></div>
+      <div class="item-inner">
+        <div class="item-label">Yeni Keşif</div>
+        <div class="item-text">Bir ürün, yemek tarifi, makyaj malzemesi veya küçük bir şey...</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-dot"></div>
+      <div class="item-inner">
+        <div class="item-label">Masa Başında Vazgeçemediğim</div>
+        <div class="item-text">Atıştırmalık, içecek, alışkanlık...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 KÜRASYON -->
+  <div class="card dark">
+    <div class="section-label">02</div>
+    <div class="card-title">Tematik <em>Listeler</em></div>
+
+    <div class="item">
+      <div class="item-dot"></div>
+      <div class="item-inner">
+        <div class="item-label">Mental Sağlığım İçin İzlediklerim</div>
+        <div class="item-text">Rahatlatıcı içerikler buraya...</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-dot"></div>
+      <div class="item-inner">
+        <div class="item-label">İnternetin Karanlık Çukurlarından</div>
+        <div class="item-text">İlginç YouTube belgesi veya Reddit başlığı...</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-dot"></div>
+      <div class="item-inner">
+        <div class="item-label">Şu An Çantamda Ne Var?</div>
+        <div class="item-text">Dijital veya fiziksel çanta içeriği...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 WİSHLİST -->
+  <div class="card full">
+    <div class="section-label">03</div>
+    <div class="card-title">Wishlist & <em>Tavsiyeler</em></div>
+    <div class="wish-grid">
+      <div class="wish-item">
+        <div class="item-label">Para Biriktiriyorum</div>
+        <div class="item-text">Almak istediğiniz şey buraya...</div>
+      </div>
+      <div class="wish-item">
+        <div class="item-label">Keşke Ben Tasarlasaydım</div>
+        <div class="item-text">Hayranlık duyduğunuz ürün buraya...</div>
+      </div>
+      <div class="wish-item">
+        <div class="item-label">Etik Üretim / Sürdürülebilir</div>
+        <div class="item-text">Beğendiğiniz marka veya öneri buraya...</div>
+      </div>
+      <div class="wish-item">
+        <div class="item-label">Bu Hafta Tavsiyem</div>
+        <div class="item-text">Her şey olabilir...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 MİNİ BLOG -->
+  <div class="card dark wide">
+    <div class="section-label">04</div>
+    <div class="card-title">Kişisel <em>Notlar</em></div>
+
+    <div class="question-box">
+      <p style="font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--green);margin-bottom:0.8rem;">Günün Sorusu</p>
+      <p class="question-text">Buraya ziyaretçilerinize bırakmak istediğiniz soruyu yazın...</p>
+    </div>
+  </div>
+
+  <!-- 05 OTOPORTre -->
+  <div class="card">
+    <div class="section-label">05</div>
+    <div class="card-title"><em>Otoportre</em></div>
+
+    <div class="portrait-box">
+      <!-- Fotoğraf eklemek için: <img src="FOTOGRAF_LINKI" alt="Otoportre"> -->
+      <div class="portrait-placeholder">Fotoğraf buraya</div>
+    </div>
+    <p class="portrait-caption">O günkü hissi anlatan tek cümle buraya...</p>
+  </div>
+
 </div>
 
 <footer>
@@ -471,16 +553,6 @@
     <a href="mailto:bumuydu@gmail.com">İletişim</a>
   </div>
 </footer>
-
-<script>
-  function filterPosts(tag, btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.blog-card').forEach(card => {
-      card.style.display = (tag === 'all' || card.dataset.tag === tag) ? 'flex' : 'none';
-    });
-  }
-</script>
 
 </body>
 </html>
