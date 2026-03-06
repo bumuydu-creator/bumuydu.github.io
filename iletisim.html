@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İletişim — Bu Muydu?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0804;
+    --parchment: #f5f0e8;
+    --gold: #faff00;
+    --rust: #8b3a2a;
+    --ash: #2a2520;
+    --smoke: #6b6560;
+    --cream: #ede8de;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--ink);
+    color: var(--parchment);
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.7;
+    cursor: none;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  .cursor {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 32px; height: 32px;
+    border: 1px solid rgba(250,255,0,0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.18s ease;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9000;
+    opacity: 0.35;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.5rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10,8,4,0.95);
+    border-bottom: 1px solid rgba(250,255,0,0.08);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .nav-back {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--smoke);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-back:hover { color: var(--gold); }
+
+  /* HERO */
+  .page-hero {
+    min-height: 45vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 10rem 4rem 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page-hero::before {
+    content: '?';
+    position: absolute;
+    font-family: 'Playfair Display', serif;
+    font-size: 35rem;
+    font-weight: 900;
+    font-style: italic;
+    color: rgba(250,255,0,0.025);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .page-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .page-eyebrow::before,
+  .page-eyebrow::after {
+    content: '';
+    display: block;
+    width: 30px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+
+  .page-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .page-subtitle {
+    font-family: 'Crimson Text', serif;
+    font-size: 1.1rem;
+    color: var(--smoke);
+    font-style: italic;
+    margin-top: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+
+  /* FORM SECTION */
+  .contact-section {
+    padding: 5rem 4rem 8rem;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 6rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* SOL - BİLGİ */
+  .contact-info {
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.8s forwards;
+  }
+
+  .info-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .info-label::before {
+    content: '';
+    display: block;
+    width: 24px; height: 1px;
+    background: var(--gold);
+  }
+
+  .info-text {
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: var(--smoke);
+    font-style: italic;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+  }
+
+  .contact-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(250,255,0,0.08);
+  }
+  .contact-item:first-of-type { border-top: 1px solid rgba(250,255,0,0.08); }
+
+  .contact-item-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .contact-item-value {
+    font-family: 'Crimson Text', serif;
+    font-size: 1rem;
+    color: var(--cream);
+  }
+
+  .contact-item-value a {
+    color: var(--cream);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .contact-item-value a:hover { color: var(--gold); }
+
+  /* SAĞ - FORM */
+  .contact-form-wrap {
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1s forwards;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 0.6rem;
+  }
+
+  .form-input,
+  .form-textarea {
+    width: 100%;
+    background: var(--ash);
+    border: 1px solid rgba(250,255,0,0.1);
+    color: var(--parchment);
+    font-family: 'Crimson Text', serif;
+    font-size: 1rem;
+    padding: 0.9rem 1.2rem;
+    outline: none;
+    transition: border-color 0.3s, background 0.3s;
+    resize: none;
+    appearance: none;
+  }
+
+  .form-input:focus,
+  .form-textarea:focus {
+    border-color: rgba(250,255,0,0.5);
+    background: #2f2a25;
+  }
+
+  .form-input::placeholder,
+  .form-textarea::placeholder {
+    color: var(--smoke);
+    font-style: italic;
+  }
+
+  .form-textarea { height: 160px; }
+
+  .form-select {
+    width: 100%;
+    background: var(--ash);
+    border: 1px solid rgba(250,255,0,0.1);
+    color: var(--parchment);
+    font-family: 'Crimson Text', serif;
+    font-size: 1rem;
+    padding: 0.9rem 1.2rem;
+    outline: none;
+    transition: border-color 0.3s;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23faff00' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1.2rem center;
+  }
+
+  .form-select:focus { border-color: rgba(250,255,0,0.5); }
+  .form-select option { background: var(--ash); }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .submit-btn {
+    width: 100%;
+    background: var(--gold);
+    color: var(--ink);
+    border: none;
+    padding: 1rem 2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 0.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .submit-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--rust);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+  }
+
+  .submit-btn:hover::before { transform: translateX(0); }
+  .submit-btn span { position: relative; z-index: 1; }
+
+  /* BAŞARI MESAJI */
+  .success-msg {
+    display: none;
+    background: rgba(250,255,0,0.05);
+    border: 1px solid rgba(250,255,0,0.3);
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    text-align: center;
+  }
+
+  .success-msg.show { display: block; }
+
+  .success-msg p {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  /* FOOTER */
+  footer {
+    background: #050403;
+    padding: 2.5rem 4rem;
+    border-top: 1px solid rgba(250,255,0,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  footer p {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--smoke);
+    opacity: 0.5;
+  }
+
+  .footer-links { display: flex; gap: 2rem; }
+  .footer-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--smoke);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .page-hero { padding: 8rem 1.5rem 3rem; }
+    .contact-section { grid-template-columns: 1fr; gap: 3rem; padding: 3rem 1.5rem 6rem; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { padding: 2rem 1.5rem; flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Bu Muydu?</a>
+  <a href="index.html" class="nav-back">← Ana Sayfa</a>
+</nav>
+
+<div class="page-hero">
+  <p class="page-eyebrow">Ulaşın</p>
+  <h1 class="page-title">İleti<em>şim</em></h1>
+  <p class="page-subtitle">Bir sorunuz mu var? İş birliği mi? Ya da sadece merhaba demek mi?</p>
+</div>
+
+<div class="contact-section">
+
+  <!-- SOL BİLGİ -->
+  <div class="contact-info">
+    <div class="info-label">İletişim</div>
+    <p class="info-text">Her türlü soru, öneri, iş birliği teklifi veya sadece düşüncelerinizi paylaşmak için yazabilirsiniz.</p>
+
+    <div class="contact-item">
+      <span class="contact-item-label">E-Posta</span>
+      <span class="contact-item-value"><a href="mailto:iletisimbumuydu@gmail.com">iletisimbumuydu@gmail.com</a></span>
+    </div>
+
+    <div class="contact-item">
+      <span class="contact-item-label">YouTube</span>
+      <span class="contact-item-value"><a href="https://www.youtube.com/@bumuydu" target="_blank">@bumuydu</a></span>
+    </div>
+
+    <div class="contact-item">
+      <span class="contact-item-label">Yanıt Süresi</span>
+      <span class="contact-item-value">1–3 iş günü</span>
+    </div>
+  </div>
+
+  <!-- SAĞ FORM -->
+  <div class="contact-form-wrap">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" for="isim">İsim</label>
+        <input class="form-input" type="text" id="isim" placeholder="Adınız...">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="email">E-Posta</label>
+        <input class="form-input" type="email" id="email" placeholder="mail@ornek.com">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="konu">Konu</label>
+      <select class="form-select" id="konu">
+        <option value="" disabled selected>Konu seçin...</option>
+        <option value="isbirligi">İş Birliği</option>
+        <option value="oneri">İçerik Önerisi</option>
+        <option value="destek">Destek</option>
+        <option value="diger">Diğer</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="mesaj">Mesaj</label>
+      <textarea class="form-textarea" id="mesaj" placeholder="Mesajınızı buraya yazın..."></textarea>
+    </div>
+
+    <button class="submit-btn" onclick="handleSubmit()">
+      <span>Gönder →</span>
+    </button>
+
+    <div class="success-msg" id="successMsg">
+      <p>Mesajınız alındı. En kısa sürede dönüş yapılacak. ✦</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2025 Bu Muydu? — Tüm hakları saklıdır.</p>
+  <div class="footer-links">
+    <a href="index.html">Ana Sayfa</a>
+    <a href="https://www.youtube.com/@bumuydu" target="_blank">YouTube</a>
+  </div>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button, input, select, textarea').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+      ring.style.transform = 'translate(-50%,-50%) scale(1.5)';
+      ring.style.borderColor = 'rgba(250,255,0,0.8)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+      ring.style.transform = 'translate(-50%,-50%) scale(1)';
+      ring.style.borderColor = 'rgba(250,255,0,0.4)';
+    });
+  });
+
+  function handleSubmit() {
+    const isim = document.getElementById('isim').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const mesaj = document.getElementById('mesaj').value.trim();
+
+    if (!isim || !email || !mesaj) {
+      alert('Lütfen tüm alanları doldurun.');
+      return;
+    }
+
+    // Mailto ile gönder
+    const konu = document.getElementById('konu').value || 'İletişim';
+    const mailtoLink = `mailto:iletisimbumuydu@gmail.com?subject=${encodeURIComponent(konu + ' - ' + isim)}&body=${encodeURIComponent('İsim: ' + isim + '\nE-Posta: ' + email + '\n\nMesaj:\n' + mesaj)}`;
+    window.location.href = mailtoLink;
+
+    document.getElementById('successMsg').classList.add('show');
+  }
+</script>
+
+</body>
+</html>
