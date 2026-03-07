@@ -483,12 +483,13 @@
     <div class="coffee-box">
       <p class="coffee-title">"Bu öneri işine yaradıysa..."</p>
       <p class="coffee-desc">Bu araç tamamen ücretsiz. Ama bir kahve ısmarlasan çok sevinirim — daha iyi öneriler yapmama yardımcı olur.</p>
-      <button class="btn-coffee" onclick="document.getElementById('papara-info').style.display='block'">☕ Kahve Ismarla</button>
-<div id="papara-info" style="display:none;margin-top:1rem;padding:1rem;border:1px solid rgba(74,154,95,0.3);background:rgba(74,154,95,0.05);">
-  <p style="font-family:'DM Mono',monospace;font-size:0.7rem;color:#4a9a5f;margin-bottom:0.5rem;">Papara Numarası</p>
-  <p style="font-family:'DM Mono',monospace;font-size:1rem;color:#f0ede6;letter-spacing:0.1em;margin-bottom:0.5rem;">1227161789</p>
-  <p style="font-family:'DM Mono',monospace;font-size:0.6rem;color:rgba(240,237,230,0.45);">Papara uygulamasından "Para Gönder" → numara ile gönder</p>
+      <button class="btn-coffee" onclick="document.getElementById('papara-info').style.display=document.getElementById('papara-info').style.display==='block'?'none':'block'">☕ Kahve Ismarla</button>
+<div id="papara-info" style="display:none;margin-top:0.8rem;padding:1.2rem 1.5rem;border:1px solid rgba(74,154,95,0.3);background:#0a1208;max-width:280px;animation:fadeIn 0.3s ease;">
+  <p style="font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.2em;text-transform:uppercase;color:#4a9a5f;margin-bottom:0.8rem;">☕ Papara ile Destek</p>
+  <p style="font-family:'DM Mono',monospace;font-size:1.1rem;color:#f0ede6;letter-spacing:0.15em;margin-bottom:0.5rem;">1227161789</p>
+  <p style="font-family:'DM Mono',monospace;font-size:0.55rem;color:rgba(240,237,230,0.4);line-height:1.6;">Papara → Para Gönder → numara ile</p>
 </div>
+<style>@keyframes fadeIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}</style>
     </div>
     <button class="btn-restart" onclick="restartQuiz()">↺ Yeniden Başla</button>
   </div>
