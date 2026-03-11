@@ -44,7 +44,7 @@ KURALLAR:
 """
 
 def uret_haberler():
-    model = genai.GenerativeModel("gemini-2.0-flash")
+    model = genai.GenerativeModel("gemini-2.0-flash-lite")
     
     # 3 kez dene, her denemede biraz bekle
     for deneme in range(3):
