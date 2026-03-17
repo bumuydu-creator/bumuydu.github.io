@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="favicon.png">
+<title>Hamnet — Bu Muydu?</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --white: #ffffff;
+    --green: #2d4a3e;
+    --green-light: #4a7c6f;
+    --green-pale: #e8f0ed;
+    --ink: #1a1a1a;
+    --muted: #7a8c85;
+    --border: #dde8e3;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Lora', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.85;
+    overflow-x: hidden;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.2rem 4rem;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: var(--green);
+    text-decoration: none;
+  }
+  .nav-back {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-back:hover { color: var(--green); }
+
+  /* HERO */
+  .hero {
+    margin-top: 4rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    min-height: auto;
+    gap: 2rem;
+    padding: 2rem;
+    background: var(--bg);
+  }
+
+  .hero-image {
+    position: relative;
+    overflow: hidden;
+    background: #1a2a25;
+    max-width: 400px;
+    margin: 2rem 0 2rem 2rem;
+    border-radius: 4px;
+  }
+
+  .hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0.85;
+  }
+
+  .hero-image-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background: linear-gradient(135deg, #1a2a25, #0d1a16);
+    color: rgba(255,255,255,0.3);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .hero-image-placeholder span { font-size: 4rem; opacity: 0.2; }
+
+  .hero-content {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--white);
+    border-left: 1px solid var(--border);
+  }
+
+  .film-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green);
+    background: var(--green-pale);
+    padding: 0.3rem 0.8rem;
+    border-radius: 2px;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+  }
+
+  .film-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 4vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+
+  .film-title em {
+    font-style: italic;
+    color: var(--green);
+  }
+
+  .film-meta {
+    display: flex;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+    flex-wrap: wrap;
+  }
+
+  .film-meta span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .film-meta strong {
+    color: var(--green);
+    font-weight: 500;
+  }
+
+  .film-intro {
+    font-size: 1.1rem;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.7;
+    border-left: 3px solid var(--green);
+    padding-left: 1.2rem;
+    margin-top: 1rem;
+  }
+
+  /* ARTICLE */
+  .article {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 5rem 4rem;
+  }
+
+  .article p {
+    margin-bottom: 1.8rem;
+    color: var(--ink);
+  }
+
+  .article h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--green);
+    margin: 3rem 0 1rem;
+    line-height: 1.2;
+  }
+
+  .article h2 em { font-style: italic; }
+
+  .article blockquote {
+    background: var(--green-pale);
+    border-left: 4px solid var(--green);
+    padding: 1.5rem 2rem;
+    margin: 2.5rem 0;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .article blockquote p {
+    font-style: italic;
+    color: var(--green);
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  .divider {
+    text-align: center;
+    margin: 3rem 0;
+    color: var(--green);
+    letter-spacing: 0.5em;
+    font-size: 0.8rem;
+  }
+
+  /* RATING */
+  .rating-box {
+    background: var(--green);
+    color: var(--white);
+    padding: 3rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin: 0 4rem 4rem;
+  }
+
+  .rating-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 0.5rem;
+  }
+
+  .rating-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .rating-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-style: italic;
+    max-width: 400px;
+    line-height: 1.4;
+    opacity: 0.9;
+  }
+
+  /* SOURCES */
+  .sources {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 4rem 4rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    line-height: 2;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--green);
+    color: var(--white);
+    padding: 2.5rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  footer p {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    opacity: 0.5;
+  }
+  .footer-links { display: flex; gap: 2rem; }
+  .footer-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--white); }
+
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-content { padding: 3rem 1.5rem; }
+    .article { padding: 3rem 1.5rem; }
+    .rating-box { margin: 0 1.5rem 3rem; padding: 2rem 1.5rem; }
+    .sources { padding: 0 1.5rem 3rem; }
+    footer { padding: 2rem 1.5rem; flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Bu Muydu?</a>
+  <a href="index.html" class="nav-back">← Ana Sayfa</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-image">
+    <img src="https://bumuydu.github.io/hamnet.png" alt="Hamnet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+  <div class="hero-content">
+    <span class="film-tag">Film · 2025</span>
+    <h1 class="film-title"><em>Hamnet</em></h1>
+    <div class="film-meta">
+      <span><strong>Yönetmen</strong> Chloé Zhao</span>
+      <span><strong>Oyuncular</strong> Jessie Buckley, Paul Mescal</span>
+      <span><strong>Senaryo</strong> Chloé Zhao, Maggie O'Farrell</span>
+    </div>
+    <p class="film-intro">1596'da toprağa verilen on bir yaşındaki bir çocuk, dört yüz otuz yılın ardından bir roman oldu, bir film oldu, bir Oscar heykeli oldu. Ama bunların hepsinden önce bir isimdi. Hamnet.</p>
+  </div>
+</div>
+
+<article class="article">
+
+  <p>1596 yılında, Stratford-upon-Avon'da on bir yaşında bir çocuk toprağa verildi. Adı Hamnet Shakespeare'di. Dünyanın en tanınan yazarının tek oğlu. Ve tarih onu yalnızca iki kez andı: doğduğunda, öldüğünde. Biyografi kitapları onu nüfus istatistiklerine gömdü, sanki o dönemdeki yüksek çocuk ölüm oranı bu acıyı sıradan kılıyormuş gibi. Geçip gitti. Geçmedi.</p>
+
+  <p>İrlandalı romancı Maggie O'Farrell on altı yaşındayken İskoçya'da, bir İngiliz edebiyatı dersinde Hamlet'i okuduğunda kafasında bir şey takılı kaldı: Shakespeare'in oğlunun adı Hamnet'le oyunun adı Hamlet arasındaki o ince ses benzerliği. Biri diğerinin yankısı gibiydi. Ya da hayaleti. Bu merak onu otuz yıldan fazla takip etti. Dokuz kitap yazdı, Hamnet üzerine defalarca denedi, vazgeçti, yeniden başladı. Sonunda 2020'de roman yayımlandı ve dünya onu bağrına bastı.</p>
+
+  <p>O'Farrell'ın yaptığı şey hem basit hem devrimciydi. Shakespeare'i hiçbir zaman adıyla anmadı. Romanda o sadece "koca", "baba", "Londra'ya giden adam." Anlatı bilinçli olarak Anne Hathaway olarak bilinen kadına döndü, romanda Agnes adıyla, özgür ruhlu, ormanla iç içe, şifacı bir kadın olarak. Agnes'in gözünden bakılınca Shakespeare'in destanı bambaşka bir şeye dönüştü: terk edilmiş bir evin, yas içindeki bir annenin, adını bir oyuna gömen bir adamın hikâyesine. O'Farrell iki zaman çizgisi arasında gidip geliyordu, biri veba belirtilerinin ikiz kız kardeş Judith'te ilk göründüğü o felakete, diğeri çiftin tutkulu aşkının başladığı on beş yıl öncesine. Bu yapı okuyucuyu aynı anda iki yerde tuttu: hem sonun kaçınılmazlığını bilerek hem de başlangıcın güzelliğine inanarak.</p>
+
+  <p>New York Times Book Review'dan Geraldine Brooks romanı şöyle özetledi: bir ailenin samimi yürek kırıklığını evrensel ve katmanlı bir şeye dönüştüren bu hikâye, acı ve sevinci bir arada işliyor; en büyük kaybın, en hasarlı evliliğin bile bir teselli, bir iyileşme bulabileceğini ima ediyor. Room'un yazarı Emma Donoghue ise şunu yazdı: "Bir çocuğun ölümü yüzyıllar ve kıtalar boyunca ne kadar yaygın olursa olsun, Maggie O'Farrell kusursuz cümleleri ve öfkeli yüreğiyle bunu yeniden yaratıyor." Claire Tomalin "cesur bir girişim, güzel biçimde hayal edilmiş ve yazılmış" dedi. Patrick Gale ise kitabı yürek parçalayıcı olarak nitelendirirken şunu ekledi: Hamnet, Shakespeare hikâyesi için Jean Rhys'in Jane Eyre için yaptığını gerçekleştiriyor, onu içinden yaşatıp, büyütüp, zenginleştiriyor. NPR'dan gelen değerlendirmede romanın anneliğin hayat değiştiren yoğunluğunu, doğum sancısından kaybın iyileşmez acısına kadar, canlı biçimde aktardığı ve O'Farrell'ın atmosferik ayrıntılarla Elizabethan İngiltere'sinin gündelik ağırlığını sayfaya taşıdığı vurgulandı.</p>
+
+  <p>Kitap 2020'de Women's Prize for Fiction ve National Book Critics Circle Award'ı kazandı. Waterstones'ın Yılın Kitabı seçildi. 2024'e kadar kırk dile çevrildi, iki milyondan fazla sattı. Ama asıl etki rakamlarda değildi. Asıl etki, okuyanların "bu benim acım" demesindeydi.</p>
+
+  <p>Sonra bir yönetmen devreye girdi.</p>
+
+  <p>Chloé Zhao, Nomadland'le Oscar almış, çölde, ışıkta, insanların yüzündeki yalnızlıkta sinema arayan o Chloé Zhao, bu romanı eline aldığında bir şeylerin tıklandığını hissetti. O'Farrell başlangıçta senaryoyu yazmayı reddetmeyi planlamıştı. Ama Zhao'yla aynı masaya oturduğunda vazgeçemedi. Birlikte yazdılar. Senaryo, romancının içeriden sesini taşıdı, bu yüzden ortaya ne salt bir uyarlama çıktı ne de tümden bağımsız bir eser. İkisi arasında bir yerde duran, her ikisini de besleyen bir şey. Agnes rolüne Jessie Buckley, William rolüne Paul Mescal geldi. Emily Watson, Joe Alwyn, Noah Jupe ve küçük Hamnet'i oynayan Jacobi Jupe kadroyu tamamladı.</p>
+
+  <p>29 Ağustos 2025. 52. Telluride Film Festivali. Perdeler açıldı.</p>
+
+  <p>Variety'nin baş eleştirmeni Peter Debruge o gecenin sabahında yazdı: "Chloé Zhao'nun Hamnet'i zaman zaman neredeyse dayanılmaz derecede duygusal ham bir film." Ama asıl cümle şuydu: "Tüm annelerin annesi gibi duran Jessie Buckley, oğlunun ölümünü kabullenmek zorunda kalan yerle bir olmuş bir annenin içini sarsıcı biçimde yansıtıyor. Paul Mescal, hikâyenin dişil boyutları tarafından gölgeleniyor." Ve Debruge daha da ileri gitti: "Bu film, eril ve dişil güçler arasındaki dengesizliği düzeltmeye yönelik Zhao'nun tek bir filmde, aynı anda yaptığı güzel, radikal, tehlikeli bir eylem ve dünyanın buna henüz hazır olmayabileceğini hissettiriyor." Zhao bir şeyi görünür kılmıştı: William acısını sanatına döküp Londra'ya kaçarken, Agnes Stratford'da yapayalnız, yas içinde çocuklarına annelik ediyordu. Erkeğin acıyı dramaya dönüştürme lüksü varken, kadının sırtında bakım yükümlülüğü eziyordu. Bu soru 1596'ya ait değildi. Bu soru bugüne aitti.</p>
+
+  <p>Toronto Uluslararası Film Festivali'nde seyirci ödülünü aldı. Roma Film Festivali'nde alkışlandı. Tokyo Film Festivali'ni kapattı.</p>
+
+  <p>Eleştirmenler ikiye bölündü, ama bu da bir işaretti. Coşkulu cephede güçlü sesler yükseldi. Deadline Hollywood'dan Pete Hammond filmin "sanatın hayattan nasıl etkilendiğine dair söyledikleriyle benzersiz" olduğunu yazdı. IndieWire'dan David Ehrlich, filmin Shakespeare'in en geniş yorumlanan oyununa yakışır bir övgü olduğunu ve Agnes'in karakter olarak klişelere değil, Buckley'nin ilksel bir çıplaklıkla icra ettiği performansa dayandığını belirtti. The Guardian'dan Richard Lawson dört yıldız verdi ve filmi dokunaklı bir uyarlama olarak nitelendirdi. BBC'den Caryn James, zengin ve duygusal açıdan sarsıcı karakterleri, temaları ve imgesiyle filmi 2025'in en iyisi ilan etti. Rotten Tomatoes'un eleştirmen konsensüsü şu cümleyle özetledi: "Kalpleri kırıp onardığı için, Hamnet, Buckley ve Mescal'ın olağanüstü performansları sayesinde Shakespeare'in başyapıtının ardındaki ilhamı palpable duygusal güçle speküle ediyor."</p>
+
+  <blockquote>
+    <p>"Bu film, eril ve dişil güçler arasındaki dengesizliği düzeltmeye yönelik Zhao'nun tek bir filmde, aynı anda yaptığı güzel, radikal, tehlikeli bir eylem." — Peter Debruge, Variety</p>
+  </blockquote>
+
+  <p>Şüpheci cephede ise farklı bir ses tonu vardı. The New Yorker'dan Justin Chang, filmin Zhao için istikrarsız bir yeni mod oluşturduğunu yazdı; ılımlı pastoral realizmin zorla pompalanan duygusallıkla harmanlandığını, filmin bir dakika kulağınıza şiirsel yücelikler fısıldarken ertesi dakika prestij hırsını yüzünüze çarptığını vurguladı. BBC'den Nicholas Barber daha da sert bir yargıya vardı: Zhao ve O'Farrell'ın romanı büyülü kılan şeylerin büyük bölümünü, zaman atlayan yapıyı, hipnotik nesir ritimlerini, iç sesleri, soyduğunu ve geride herhangi bir kostümlü dönem dramasından derin ya da özgün olmayan bir şey bıraktığını savundu. Wall Street Journal'dan Kyle Smith filmi "yüksek kültür temelli, maksimum ağlama ve dramatik yoğunluk içeren" bir tür Oscar tuzağı olarak tanımlarken entelektüel anakronizmle malul olduğunu da ekledi. RogerEbert.com'dan Christy Lemire ise farklı bir açıdan baktı: filmin sinematograf Lukasz Zal'ın görüntüleri, Max Richter'ın müziği ve ses tasarımcısı Johnnie Burn'ün çalışmasıyla bir duyusal deneyim olarak en iyi biçimde işlediğini, ancak büyük olaylar yerli yerine oturduğunda Buckley ve Mescal'in acı anlatımının aşırı teatral ve voyöristik bir hal aldığını yazdı.</p>
+
+  <p>Neredeyse herkes bir noktada buluştu: Jessie Buckley.</p>
+
+  <p>Variety "dünyadaki anneliğin ta kendisini" dedi onun için. CinemaBlend "olağanüstü" kelimesini kullandı. Pek çok eleştirmen küçük Jacobi Jupe'un Hamnet performansının da Paul Mescal'inkini geride bıraktığını not etti, sahneye her girdiğinde havanın değiştiğini, bir çocuğun varlığının ağırlığının tüm kurguya sindiğini yazdılar. Ama Agnes olarak Buckley sahneye hâkimdi. Altın Küre töreninde adı okundu: Drama Dalında En İyi Kadın Oyuncu. Ardından BAFTA geldi, hem Olağanüstü Britanya Filmi hem En İyi Kadın Oyuncu ödülleriyle. Film sekiz Oscar adaylığı aldı, En İyi Film, En İyi Yönetmen, En İyi Uyarlanmış Senaryo dahil. Ve 15 Mart 2026'da, 98. Oscar töreni sahnesinde Buckley'nin adı bir kez daha okundu. En İyi Kadın Oyuncu.</p>
+
+  <p>Amerikan Film Enstitüsü filmi 2025'in en iyi on filmi arasına aldı. Rotten Tomatoes'ta yüzde seksen yedi. Metacritic'te seksen dört. Elli dört eleştirmen değerlendirmesiyle "evrensel beğeni" kategorisi.</p>
+
+  <p>Maggie O'Farrell, filmin romanla ilişkisi üzerine konuşurken ilginç bir şey itiraf etti. İzleyicinin karakterlerle duygusal bağ kurması için sahneye döşenen mutluluk anlarının bilinçli bir manipülasyon olduğunu söyledi. "Yazarlar korkunç insanlardır" dedi. "Eğer karakterlerle duygusal rezonans hissetmeseydiniz, Hamnet öldüğünde üzülmezdiniz." Bu cümle hem romanı hem filmi açıklıyordu: önce sizi sevdiriyorlar, sonra alıyorlar.</p>
+
+  <p>Film ile roman arasındaki ilişki edebiyat çevrelerinde tartışılmaya devam etti. Barber'ın itirazı gerçekti: romanın büyüsünü oluşturan zamansal yapı, hipnotik nesir ritmi, iç monologlar, bunlar sinema diline taşınamaz. Sinemada iç ses bir anlatı aracı olarak çalışır, ama O'Farrell'ın nesrindeki o hipnotik birikim, o tekrarlayan imgeler, o zamansız şimdiki zaman, bunlar perdede yitip gider. Geriye kalan kostüm, dekor, yüz. Ve bazı eleştirmenler bunun yeterli olmadığını düşündü.</p>
+
+  <p>Ama bazıları için final sahnesi her şeye değdi. Agnes, Globe Tiyatrosu'nda Hamlet'i izliyor. Sahnede çizilmiş bir orman fonu var, bir zamanlar paylaştıkları hayatın, o köklü kırsal dünyanın aynası. Agnes anlıyor: kocası oğlunu unutmamış. Adını bir oyuna gömmüş, ama unutmamış. Ve Max Richter'ın "On the Nature of Daylight" parçası bu anda akıyor, o tanıdık, dayanılmaz melodi. Sinemalarda binlerce seyirci el mendillerine uzandı. Bu an filmin bütün tartışmalarına değer miydi, değmez miydi, o soruyu her izleyici kendi yüreğiyle yanıtladı.</p>
+
+  <p>1596'da toprağa verilen on bir yaşındaki çocuk, dört yüz otuz yılın ardından bir roman oldu, bir film oldu, bir Oscar heykeli oldu. Ama bunların hepsinden önce bir isimdi. Hamnet. Ve belki de tüm bu gürültünün altındaki sessiz gerçek şudur: en büyük edebiyat eserleri bile bir kaybın içinden doğar. Hamlet sahneye çıkmadan önce, Hamnet toprağa inmişti. Sanat yasın üzerine inşa edildi. Her zaman böyle olmuştu.</p>
+
+</article>
+
+<div class="rating-box">
+  <div>
+    <p class="rating-label">Değerlendirme</p>
+    <p class="rating-score">%87</p>
+  </div>
+  <p class="rating-text">"Kalpleri kırıp onardığı için hatırlanacak bir film."</p>
+</div>
+
+<div class="sources">
+  Görüşleri aktarılan isimler ve kurumlar: Peter Debruge / Variety · David Ehrlich / IndieWire · Richard Lawson / The Guardian · Justin Chang / The New Yorker · Nicholas Barber &amp; Caryn James / BBC · Kyle Smith / Wall Street Journal · Christy Lemire / RogerEbert.com · Geraldine Brooks / NYT Book Review · Emma Donoghue · Claire Tomalin · Patrick Gale · NPR · Rotten Tomatoes · Metacritic
+</div>
+
+<footer>
+  <p>© 2025 Bu Muydu? — Tüm hakları saklıdır.</p>
+  <div class="footer-links">
+    <a href="index.html">Ana Sayfa</a>
+    <a href="blog.html">Blog</a>
+    <a href="https://www.youtube.com/@bumuydu" target="_blank">YouTube</a>
+  </div>
+</footer>
+
+</body>
+</html>
