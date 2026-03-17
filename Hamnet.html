@@ -300,6 +300,98 @@
   }
   .footer-links a:hover { color: var(--white); }
 
+  /* OTHER POSTS */
+  .other-posts {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 4rem 5rem;
+  }
+
+  .other-posts-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .post-card {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 1.5rem;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    text-decoration: none;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .post-card:hover {
+    border-color: var(--green);
+    box-shadow: 0 4px 20px rgba(45,74,62,0.1);
+  }
+
+  .post-card-image {
+    background: #1a2a25;
+    overflow: hidden;
+  }
+
+  .post-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0.85;
+  }
+
+  .post-card-content {
+    padding: 1.5rem 1.5rem 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.4rem;
+  }
+
+  .post-card-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--green);
+  }
+
+  .post-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+
+  .post-card-title em {
+    font-style: italic;
+    color: var(--green);
+  }
+
+  .post-card-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin: 0;
+  }
+
+  .post-card-excerpt {
+    font-family: 'Lora', serif;
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.5;
+    margin: 0;
+  }
+
   @media (max-width: 900px) {
     nav { padding: 1rem 1.5rem; }
     .hero { grid-template-columns: 1fr; }
@@ -307,6 +399,8 @@
     .article { padding: 3rem 1.5rem; }
     .rating-box { margin: 0 1.5rem 3rem; padding: 2rem 1.5rem; }
     .sources { padding: 0 1.5rem 3rem; }
+    .other-posts { padding: 0 1.5rem 4rem; }
+    .post-card { grid-template-columns: 100px 1fr; }
     footer { padding: 2rem 1.5rem; flex-direction: column; }
   }
 </style>
@@ -390,6 +484,21 @@
 
 <div class="sources">
   Görüşleri aktarılan isimler ve kurumlar: Peter Debruge / Variety · David Ehrlich / IndieWire · Richard Lawson / The Guardian · Justin Chang / The New Yorker · Nicholas Barber &amp; Caryn James / BBC · Kyle Smith / Wall Street Journal · Christy Lemire / RogerEbert.com · Geraldine Brooks / NYT Book Review · Emma Donoghue · Claire Tomalin · Patrick Gale · NPR · Rotten Tomatoes · Metacritic
+</div>
+
+<div class="other-posts">
+  <p class="other-posts-label">Diğer Yazılar</p>
+  <a href="the-bride.html" class="post-card">
+    <div class="post-card-image">
+      <img src="https://upload.wikimedia.org/wikipedia/en/b/b0/The_Bride%21_%282026%29_poster.jpg" alt="The Bride!">
+    </div>
+    <div class="post-card-content">
+      <span class="post-card-tag">Film · 2026</span>
+      <h3 class="post-card-title">The <em>Bride!</em></h3>
+      <p class="post-card-meta">Maggie Gyllenhaal · Jessie Buckley, Christian Bale</p>
+      <p class="post-card-excerpt">Tıpkı Frankenstein'ın yaratığı gibi: biraz korkutucu, biraz trajik, ama kesinlikle unutulmaz.</p>
+    </div>
+  </a>
 </div>
 
 <footer>
