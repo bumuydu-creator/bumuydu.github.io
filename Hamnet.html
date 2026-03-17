@@ -62,10 +62,8 @@
   /* HERO */
   .hero {
     margin-top: 4rem;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    min-height: auto;
-    gap: 2rem;
+    display: inline-flex;
+    gap: 0;
     padding: 2rem;
     background: var(--bg);
   }
@@ -112,9 +110,10 @@
     padding: 2rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     background: var(--white);
     border-left: 1px solid var(--border);
+    max-width: 500px;
   }
 
   .film-tag {
@@ -348,91 +347,53 @@
     max-width: 720px;
     margin: 0 auto;
     padding: 0 4rem 5rem;
+    border-top: 1px solid var(--border);
+    padding-top: 2rem;
   }
 
   .other-posts-label {
     font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
+    font-size: 0.55rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--muted);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
   }
 
-  .post-card {
-    display: grid;
-    grid-template-columns: 140px 1fr;
-    gap: 1.5rem;
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    text-decoration: none;
-    overflow: hidden;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-
-  .post-card:hover {
-    border-color: var(--green);
-    box-shadow: 0 4px 20px rgba(45,74,62,0.1);
-  }
-
-  .post-card-image {
-    background: #1a2a25;
-    overflow: hidden;
-  }
-
-  .post-card-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    opacity: 0.85;
-  }
-
-  .post-card-content {
-    padding: 1.5rem 1.5rem 1.5rem 0;
+  .post-inline {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 0.4rem;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    transition: opacity 0.2s;
   }
 
-  .post-card-tag {
+  .post-inline:hover { opacity: 0.7; }
+
+  .post-inline-tag {
     font-family: 'DM Mono', monospace;
     font-size: 0.55rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--green);
+    color: var(--muted);
   }
 
-  .post-card-title {
+  .post-inline-title {
     font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
-    font-weight: 900;
+    font-size: 1.1rem;
+    font-weight: 700;
     color: var(--ink);
-    line-height: 1.1;
   }
 
-  .post-card-title em {
+  .post-inline-title em {
     font-style: italic;
     color: var(--green);
   }
 
-  .post-card-meta {
+  .post-inline-arrow {
     font-family: 'DM Mono', monospace;
-    font-size: 0.55rem;
-    color: var(--muted);
-    letter-spacing: 0.05em;
-    margin: 0;
-  }
-
-  .post-card-excerpt {
-    font-family: 'Lora', serif;
-    font-size: 0.85rem;
-    color: var(--muted);
-    font-style: italic;
-    line-height: 1.5;
-    margin: 0;
+    font-size: 0.8rem;
+    color: var(--green);
   }
 
   @media (max-width: 900px) {
@@ -538,16 +499,10 @@
 
 <div class="other-posts">
   <p class="other-posts-label">Diğer Yazılar</p>
-  <a href="the-bride.html" class="post-card">
-    <div class="post-card-image">
-      <img src="https://upload.wikimedia.org/wikipedia/en/b/b0/The_Bride%21_%282026%29_poster.jpg" alt="The Bride!">
-    </div>
-    <div class="post-card-content">
-      <span class="post-card-tag">Film · 2026</span>
-      <h3 class="post-card-title">The <em>Bride!</em></h3>
-      <p class="post-card-meta">Maggie Gyllenhaal · Jessie Buckley, Christian Bale</p>
-      <p class="post-card-excerpt">Tıpkı Frankenstein'ın yaratığı gibi: biraz korkutucu, biraz trajik, ama kesinlikle unutulmaz.</p>
-    </div>
+  <a href="the-bride.html" class="post-inline">
+    <span class="post-inline-tag">Film · 2026</span>
+    <span class="post-inline-title">The <em>Bride!</em></span>
+    <span class="post-inline-arrow">→</span>
   </a>
 </div>
 
