@@ -15,349 +15,69 @@
     --muted: rgba(240,237,230,0.45);
     --border: rgba(74,154,95,0.12);
   }
-
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--cream);
-    font-family: 'Lora', Georgia, serif;
-    font-size: 17px;
-    line-height: 1.8;
-    overflow-x: hidden;
-  }
-
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    padding: 1.2rem 4rem;
-    background: rgba(10,18,8,0.95);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .nav-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.3rem;
-    font-weight: 900;
-    color: var(--green);
-    text-decoration: none;
-  }
-  .nav-back {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
+  body { background: var(--bg); color: var(--cream); font-family: 'Lora', Georgia, serif; font-size: 17px; line-height: 1.8; overflow-x: hidden; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.2rem 4rem; background: rgba(10,18,8,0.95); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 900; color: var(--green); text-decoration: none; }
+  .nav-back { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
   .nav-back:hover { color: var(--green); }
-
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .radar-wrap {
-    position: absolute;
-    width: 700px; height: 700px;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0.12;
-  }
-
-  .radar-circle {
-    position: absolute;
-    border: 1px solid var(--green);
-    border-radius: 50%;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-  }
-
+  .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .radar-wrap { position: absolute; width: 700px; height: 700px; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.12; }
+  .radar-circle { position: absolute; border: 1px solid var(--green); border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); }
   .radar-line-h { position: absolute; width: 100%; height: 1px; background: var(--green); top: 50%; left: 0; }
   .radar-line-v { position: absolute; height: 100%; width: 1px; background: var(--green); left: 50%; top: 0; }
-
-  .radar-sweep {
-    position: absolute;
-    width: 50%; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--green));
-    top: 50%; left: 50%;
-    transform-origin: left center;
-    animation: sweep 5s linear infinite;
-  }
-
-  @keyframes sweep {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-
-  .radar-dot {
-    position: absolute;
-    border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 12px var(--green);
-    animation: blink 3s ease-in-out infinite;
-  }
-
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.2; }
-  }
-
+  .radar-sweep { position: absolute; width: 50%; height: 2px; background: linear-gradient(90deg, transparent, var(--green)); top: 50%; left: 50%; transform-origin: left center; animation: sweep 5s linear infinite; }
+  @keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .radar-dot { position: absolute; border-radius: 50%; background: var(--green); box-shadow: 0 0 12px var(--green); animation: blink 3s ease-in-out infinite; }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
   .hero-content { position: relative; z-index: 2; text-align: center; }
-
-  .radar-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(6rem, 18vw, 16rem);
-    font-weight: 900;
-    letter-spacing: -0.04em;
-    color: var(--cream);
-    line-height: 0.85;
-    text-shadow: 0 0 120px rgba(74,154,95,0.2);
-  }
-
-  .radar-sub {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    color: var(--green);
-    margin-top: 1.5rem;
-  }
-
-  .radar-desc {
-    font-family: 'Lora', serif;
-    font-size: 1rem;
-    color: var(--muted);
-    font-style: italic;
-    margin-top: 0.5rem;
-  }
-
-  .scroll-hint {
-    position: absolute;
-    bottom: 3rem; left: 50%;
-    transform: translateX(-50%);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--green);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    opacity: 0.6;
-  }
-
-  .scroll-line {
-    width: 1px; height: 40px;
-    background: var(--green);
-    animation: scrollDown 2s ease-in-out infinite;
-  }
-
-  @keyframes scrollDown {
-    0% { transform: scaleY(0); transform-origin: top; }
-    50% { transform: scaleY(1); transform-origin: top; }
-    51% { transform: scaleY(1); transform-origin: bottom; }
-    100% { transform: scaleY(0); transform-origin: bottom; }
-  }
-
-  .section-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.55rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--green);
-    margin-bottom: 1.2rem;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-  }
-  .section-label::before {
-    content: '';
-    display: block;
-    width: 20px; height: 1px;
-    background: var(--green);
-  }
-
-  .content-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--border);
-  }
-
+  .radar-title { font-family: 'Playfair Display', serif; font-size: clamp(6rem, 18vw, 16rem); font-weight: 900; letter-spacing: -0.04em; color: var(--cream); line-height: 0.85; text-shadow: 0 0 120px rgba(74,154,95,0.2); }
+  .radar-sub { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--green); margin-top: 1.5rem; }
+  .radar-desc { font-family: 'Lora', serif; font-size: 1rem; color: var(--muted); font-style: italic; margin-top: 0.5rem; }
+  .scroll-hint { position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%); font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green); display: flex; flex-direction: column; align-items: center; gap: 0.5rem; opacity: 0.6; }
+  .scroll-line { width: 1px; height: 40px; background: var(--green); animation: scrollDown 2s ease-in-out infinite; }
+  @keyframes scrollDown { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform: scaleY(1); transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+  .section-label { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--green); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.8rem; }
+  .section-label::before { content: ''; display: block; width: 20px; height: 1px; background: var(--green); }
+  .content-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
   .card { background: var(--bg); padding: 3rem; }
   .card.dark { background: #070e06; }
   .card.wide { grid-column: span 2; }
   .card.full { grid-column: span 3; }
-
-  .card-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--cream);
-    margin-bottom: 2rem;
-    line-height: 1.2;
-  }
+  .card-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--cream); margin-bottom: 2rem; line-height: 1.2; }
   .card-title em { font-style: italic; color: var(--green); }
-
-  .item {
-    display: flex;
-    gap: 1rem;
-    padding: 1rem 0;
-    border-bottom: 1px solid var(--border);
-  }
+  .item { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--border); }
   .item:last-child { border-bottom: none; }
-
-  .item-dot {
-    width: 6px; height: 6px;
-    background: var(--green);
-    border-radius: 50%;
-    margin-top: 0.6rem;
-    flex-shrink: 0;
-    box-shadow: 0 0 6px var(--green);
-  }
-
+  .item-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; margin-top: 0.6rem; flex-shrink: 0; box-shadow: 0 0 6px var(--green); }
   .item-inner { flex: 1; }
-
-  .item-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.55rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--green);
-    margin-bottom: 0.3rem;
-  }
-
-  .item-text {
-    font-size: 0.95rem;
-    color: var(--cream);
-    line-height: 1.6;
-  }
-
-  .item-text.muted {
-    color: var(--muted);
-    font-style: italic;
-  }
-
-  .spotify-wrap {
-    margin-top: 0.8rem;
-    border-radius: 12px;
-    overflow: hidden;
-  }
-
-  .wish-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-top: 0.5rem;
-  }
-
-  .wish-item {
-    background: var(--green-pale);
-    padding: 1.2rem;
-    border: 1px solid var(--border);
-  }
-
-  .wish-item .item-label { margin-bottom: 0.5rem; }
-  .wish-item .item-text { font-size: 0.9rem; }
-
-  .question-box {
-    background: var(--green-pale);
-    border: 1px solid rgba(74,154,95,0.3);
-    padding: 2rem;
-    margin-top: 1.5rem;
-  }
-
-  .question-text {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
-    font-style: italic;
-    color: var(--cream);
-    line-height: 1.4;
-  }
-
-  .portrait-box {
-    background: var(--green-pale);
-    max-height: 260px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--border);
-    margin-top: 1rem;
-    position: relative;
-    overflow: hidden;
-  }
-
+  .item-label { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--green); margin-bottom: 0.3rem; }
+  .item-text { font-size: 0.95rem; color: var(--cream); line-height: 1.6; }
+  .item-text.muted { color: var(--muted); font-style: italic; }
+  .spotify-wrap { margin-top: 0.8rem; border-radius: 12px; overflow: hidden; }
+  .question-box { background: var(--green-pale); border: 1px solid rgba(74,154,95,0.3); padding: 2rem; margin-top: 1.5rem; }
+  .question-text { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-style: italic; color: var(--cream); line-height: 1.4; }
+  .portrait-box { background: var(--green-pale); max-height: 260px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); margin-top: 1rem; position: relative; overflow: hidden; }
   .portrait-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .portrait-caption { font-style: italic; color: var(--muted); font-size: 0.9rem; margin-top: 1rem; border-left: 2px solid var(--green); padding-left: 1rem; }
+  .frekans-kategori { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--green); opacity: 0.5; padding: 1.2rem 0 0.4rem; display: flex; align-items: center; gap: 0.6rem; }
+  .frekans-kategori::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-  .portrait-placeholder {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--green);
-    opacity: 0.4;
-    text-align: center;
-  }
+  /* Haber grid */
+  .haber-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(74,154,95,0.08); margin-top: 1rem; }
+  .haber-kart { background: #0c160a; padding: 1.4rem 1.6rem; border-left: 2px solid transparent; transition: border-color 0.25s, background 0.25s; }
+  .haber-kart:hover { border-left-color: var(--green); background: #0f1c0d; }
+  .haber-kart.tam { grid-column: span 2; }
+  .haber-no { font-family: 'DM Mono', monospace; font-size: 0.48rem; letter-spacing: 0.3em; color: var(--green); opacity: 0.45; margin-bottom: 0.45rem; }
+  .haber-baslik { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--cream); line-height: 1.3; margin-bottom: 0.65rem; }
+  .haber-metin { font-size: 0.85rem; color: var(--muted); line-height: 1.65; margin-bottom: 0.7rem; }
+  .haber-kaynak { color: var(--green); font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.08em; text-decoration: none; display: inline-block; margin-right: 0.7rem; opacity: 0.75; transition: opacity 0.2s; }
+  .haber-kaynak:hover { opacity: 1; }
 
-  .portrait-caption {
-    font-style: italic;
-    color: var(--muted);
-    font-size: 0.9rem;
-    margin-top: 1rem;
-    border-left: 2px solid var(--green);
-    padding-left: 1rem;
-  }
-
-  .frekans-kategori {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.55rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--green);
-    opacity: 0.5;
-    padding: 1.2rem 0 0.4rem;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-  }
-  .frekans-kategori::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  footer {
-    padding: 2.5rem 4rem;
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
+  footer { padding: 2.5rem 4rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
   footer p { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--muted); opacity: 0.5; }
   .footer-links { display: flex; gap: 2rem; }
-  .footer-links a {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
+  .footer-links a { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
   .footer-links a:hover { color: var(--green); }
 
   @media (max-width: 900px) {
@@ -366,6 +86,8 @@
     .card.wide, .card.full { grid-column: span 1; }
     .card { padding: 2rem 1.5rem; }
     footer { padding: 2rem 1.5rem; flex-direction: column; }
+    .haber-grid { grid-template-columns: 1fr; }
+    .haber-kart.tam { grid-column: span 1; }
   }
 </style>
 </head>
@@ -393,13 +115,11 @@
     <div class="radar-dot" style="width:10px;height:10px;top:42%;left:70%;animation-delay:2s;"></div>
     <div class="radar-dot" style="width:5px;height:5px;top:55%;left:30%;animation-delay:0.5s;"></div>
   </div>
-
   <div class="hero-content">
     <h1 class="radar-title">RADAR</h1>
     <p class="radar-sub">Haftalık frekans · Bu Muydu?</p>
     <p class="radar-desc">Takıntılar, kürasyonlar, kişisel notlar.</p>
   </div>
-
   <div class="scroll-hint">
     <span>Kaydır</span>
     <div class="scroll-line"></div>
@@ -412,7 +132,6 @@
   <div class="card wide">
     <div class="section-label">01</div>
     <div class="card-title">Neye <em>Takıntılıyım?</em></div>
-
     <div class="item">
       <div class="item-dot"></div>
       <div class="item-inner">
@@ -420,24 +139,16 @@
         <div class="item-text">"Bekle Beni" – Zülfü Livaneli</div>
       </div>
     </div>
-
-   <div class="item">
-  <div class="item-dot"></div>
-  <div class="item-inner">
-    <div class="item-label">Döngüye Aldığım Şarkı</div>
-    <div class="item-text">Fikret Kızılok - Demirbaş</div>
-    <div class="spotify-wrap">
-      <iframe style="border-radius:12px"
-              src="https://open.spotify.com/embed/track/1OZKHiBWls58BPkuvNUnIX?utm_source=generator&theme=0"
-              width="100%" height="80"
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              allowfullscreen
-              loading="lazy">
-      </iframe>
+    <div class="item">
+      <div class="item-dot"></div>
+      <div class="item-inner">
+        <div class="item-label">Döngüye Aldığım Şarkı</div>
+        <div class="item-text">Fikret Kızılok - Demirbaş</div>
+        <div class="spotify-wrap">
+          <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/1OZKHiBWls58BPkuvNUnIX?utm_source=generator&theme=0" width="100%" height="80" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-
     <div class="item">
       <div class="item-dot"></div>
       <div class="item-inner">
@@ -445,7 +156,6 @@
         <div class="item-text"><strong style="color:var(--green);">Apofeni</strong> — Anlamsız şeylerde anlam bulma sanatı. Rastlantılarda bağlantı görmek, örüntü aramak. Belki de "Bu Muydu?" sorusunun ta kendisi.</div>
       </div>
     </div>
-
     <div class="item">
       <div class="item-dot"></div>
       <div class="item-inner">
@@ -459,7 +169,6 @@
   <div class="card dark">
     <div class="section-label">02</div>
     <div class="card-title">Tematik <em>Listeler</em></div>
-
     <div class="item">
       <div class="item-dot"></div>
       <div class="item-inner">
@@ -468,7 +177,6 @@
         <div class="item-text">Hayao Miyazaki — Howl'un Yürüyen Şatosu</div>
       </div>
     </div>
-
     <div class="item">
       <div class="item-dot"></div>
       <div class="item-inner">
@@ -477,7 +185,6 @@
         <div class="item-text">Netflix 2026 — Dinozorlar Belgeseli</div>
       </div>
     </div>
-
     <div class="item">
       <div class="item-dot"></div>
       <div class="item-inner">
@@ -509,110 +216,84 @@
     <div style="margin-top:1.5rem;">
       <div class="item-label" style="margin-bottom:1rem;">Dünyadan</div>
 
-      <!-- ── 17 MART 2026 · TRUMP / KÜBA ANALİZİ ── -->
-      <div class="frekans-kategori">17 Mart 2026</div>
+      <!-- 5 NİSAN 2026 -->
+      <div class="frekans-kategori">5 Nisan 2026</div>
 
       <div class="item">
         <div class="item-dot"></div>
         <div class="item-inner">
           <div class="item-label">Derinlemesine Okuma</div>
           <div class="item-text" style="font-family:'Playfair Display',serif;font-size:1.1rem;font-style:italic;margin-bottom:0.8rem;">
-            Trump Küba'yı "almak" istiyor — bu söylem neyi anlatıyor?
+            Küresel Gayrimenkulden Kaos Denklemi
           </div>
-          <div class="item-text" style="color:var(--muted);margin-bottom:1.2rem;font-size:0.9rem;">
-            16 Mart 2026, Oval Ofis. Bir devlet başkanı egemen bir ülke hakkında şunu söylüyor: <em>"Küba'yı alma onuruna erişeceğimi düşünüyorum. Onunla istediğimi yapabilirim."</em> Bu cümle boşlukta durmuyor. Arkasında dört katmanlı bir strateji var.
+          <div class="item-text" style="color:var(--muted);margin-bottom:1.5rem;font-size:0.9rem;">
+            17 Mart'ta Trump için sorduğumuz "uluslararası toplum ne kadar seyirci kalır?" sorusu, bugün sokaklarda, BM koridorlarında ve boşalan doğalgaz depolarında yanıt buluyor. Yedi haber, bir denklem.
           </div>
 
-          <!-- Katman 1 -->
-          <div style="border-left:2px solid var(--green);padding-left:1rem;margin-bottom:1.2rem;">
-            <div class="item-label" style="margin-bottom:0.4rem;">Katman 1 — İnsani Kriz</div>
-            <div class="item-text" style="font-size:0.9rem;">16 Mart 2026'da Küba'nın ulusal elektrik şebekesi tamamen çöktü; 10 milyon insan elektriksiz kaldı. ABD, Ocak 2026'dan itibaren Küba'ya giden petrol tankerlerini fiilen engellemeye başladı. Hastanelerde operasyonlar iptal edildi, ilaç stokları eridi. BM bu durumu "yaklaşan insani çöküş" olarak tanımladı.
-              <a href="https://www.euronews.com/2026/03/16/cuba-blackout" target="_blank" style="color:var(--green);font-family:'DM Mono',monospace;font-size:0.6rem;display:inline-block;margin-top:0.3rem;">→ Euronews</a>
-              <a href="https://www.cnn.com/2026/03/16/americas/cuba-power-outage" target="_blank" style="color:var(--green);font-family:'DM Mono',monospace;font-size:0.6rem;">→ CNN</a>
+          <div class="haber-grid">
+
+            <div class="haber-kart">
+              <div class="haber-no">Haber 01</div>
+              <div class="haber-baslik">Oval Ofis'te "Onur" Tartışması</div>
+              <div class="haber-metin">16 Mart'ta Trump'ın "Küba'yı alma onuruna erişeceğim, onunla istediğimi yapabilirim" sözleri, bugün Washington'da diplomatik bir "mülkiyet" tartışmasına dönüştü. Trump, bu söylemi sadece bir ada için değil, tüm Batı Yarımküre için emsal olarak kullanıyor.</div>
+              <a href="https://www.theguardian.com/us-news/2026/apr/trump-cuba" target="_blank" class="haber-kaynak">→ The Guardian</a>
             </div>
-          </div>
 
-          <!-- Katman 2 -->
-          <div style="border-left:2px solid var(--green);padding-left:1rem;margin-bottom:1.2rem;">
-            <div class="item-label" style="margin-bottom:0.4rem;">Katman 2 — Uluslararası Hukuk</div>
-            <div class="item-text" style="font-size:0.9rem;">BM insan hakları uzmanları, ABD'nin uyguladığı fiili yakıt bloğunu "uluslararası hukukun ciddi ihlali" olarak nitelendirdi. 1962 Küba Füze Krizi'nde Kennedy'nin "karantinası" bile Küba'nın temel petrole erişimini engellemiyordu — bugünkü blokaj çok daha kapsamlı. ABD Yüksek Mahkemesi'nde hâlâ itiraz konusu olan IEEPA kapsamındaki kararname, hukuki zemin tartışmasını derinleştiriyor.
-              <a href="https://www.aljazeera.com/news/2026/3/un-cuba-oil-blockade" target="_blank" style="color:var(--green);font-family:'DM Mono',monospace;font-size:0.6rem;display:inline-block;margin-top:0.3rem;">→ Al Jazeera</a>
-              <a href="https://www.usnews.com/news/world/articles/2026-03-16/trump-cuba" target="_blank" style="color:var(--green);font-family:'DM Mono',monospace;font-size:0.6rem;">→ U.S. News</a>
+            <div class="haber-kart">
+              <div class="haber-no">Haber 02</div>
+              <div class="haber-baslik">"No Kings" Protestoları Çığ Gibi</div>
+              <div class="haber-metin">28 Mart'ta başlayan "No Kings" eylemleri 3.300'den fazla noktaya yayıldı; yaklaşık 8 milyon katılımcıyla ABD tarihinin tek günde yaşanan en büyük protestosu oldu. Los Angeles'tan Chicago'ya milyonlarca insan "başkan bir mülk sahibi değildir" diyerek sokaklara döküldü.</div>
+              <a href="https://en.wikipedia.org/wiki/March_2026_No_Kings_protests" target="_blank" class="haber-kaynak">→ Wikipedia</a>
             </div>
-          </div>
 
-          <!-- Katman 3 -->
-          <div style="border-left:2px solid var(--green);padding-left:1rem;margin-bottom:1.2rem;">
-            <div class="item-label" style="margin-bottom:0.4rem;">Katman 3 — Tarihsel Bağlam</div>
-            <div class="item-text" style="font-size:0.9rem;">Monroe Doktrini'nden (1823) bu yana ABD, Batı Yarımküre'yi kendi "arka bahçesi" sayıyor. 1961 Domuzlar Körfezi çıkarması başarısız oldu; 60 yıllık ambargo sonuç üretemedi. Bu kez strateji farklı: ekonomik çöküşü bizzat inşa ederek Küba halkını rejime karşı kışkırtmak. Venezuela örneği ise yaptırımların sivil halkı değil, iktidarı hedef aldığı tezini çürütüyor: Maduro değil, milyonlarca Venezuelalı yerle bir oldu.
-              <a href="https://foreignpolicy.com/2026/03/cuba-blockade-analysis" target="_blank" style="color:var(--green);font-family:'DM Mono',monospace;font-size:0.6rem;display:inline-block;margin-top:0.3rem;">→ Foreign Policy</a>
+            <div class="haber-kart">
+              <div class="haber-no">Haber 03</div>
+              <div class="haber-baslik">Petrol Blokajı ve Ulusal Karanlık</div>
+              <div class="haber-metin">Ocak 2026'daki yürütme kararnamesiyle başlayan petrol ambargosu, Küba'nın ulusal şebekesini 16 Mart'ta tamamen çökertmişti. Bugün gelen son bilgilere göre 10 milyondan fazla insan sistematik kesintilerle boğuşuyor; hastaneler ve gıda depoları jeneratör yakıtı bulmakta zorlanıyor.</div>
+              <a href="https://mercopress.com/cuba-power-outage-2026" target="_blank" class="haber-kaynak">→ MercoPress</a>
             </div>
-          </div>
 
-          <!-- Katman 4 -->
-          <div style="border-left:2px solid var(--green);padding-left:1rem;margin-bottom:1.2rem;">
-            <div class="item-label" style="margin-bottom:0.4rem;">Katman 4 — Emperyalist Patern</div>
-            <div class="item-text" style="font-size:0.9rem;">Küba tek değil. Grönland'ı satın alma girişimleri, Venezuela'ya askeri müdahale, Küba blokajı — bunların tamamı Batı Yarımküre'yi ABD'nin münhasır etki alanı olarak yeniden çerçeveleme stratejisinin parçaları. Trump, 29 Ocak 2026'da Küba'nın ABD'ye "olağandışı tehdit" oluşturduğunu ilan eden bir yürütme kararnamesi imzaladı. Dışişleri Bakanı Rubio hedefi net koydu: rejim değişikliği.
-              <a href="https://www.cnbc.com/2026/03/16/trump-cuba-takeover" target="_blank" style="color:var(--green);font-family:'DM Mono',monospace;font-size:0.6rem;display:inline-block;margin-top:0.3rem;">→ CNBC</a>
-              <a href="https://thehill.com/policy/international/trump-cuba-military" target="_blank" style="color:var(--green);font-family:'DM Mono',monospace;font-size:0.6rem;">→ The Hill</a>
+            <div class="haber-kart">
+              <div class="haber-no">Haber 04</div>
+              <div class="haber-baslik">Katar-Britanya Enerji Hattında Yangın</div>
+              <div class="haber-metin">İran savaşı nedeniyle Katar'ın Ras Laffan LNG tesisi hasar gördü; üretim durdu. The Telegraph'a göre bu durum Britanya için "stratejik bağımlılık felaketi" hâline geldi. İngiltere toptan gaz fiyatları 30 günde yüzde 79 arttı; Temmuz'dan itibaren hanehalkı faturaları yüzde 11 yükselebilir.</div>
+              <a href="https://www.telegraph.co.uk/business/2026/03/29/qatar-war-danger-britain-energy/" target="_blank" class="haber-kaynak">→ The Telegraph</a>
             </div>
+
+            <div class="haber-kart tam">
+              <div class="haber-no">Haber 05</div>
+              <div class="haber-baslik">BM'den Tarihi "Tazminat" Hamlesi</div>
+              <div class="haber-metin">25 Mart'ta BM Genel Kurulu, köle ticaretini "insanlığa karşı işlenmiş en ağır suç" ilan etti. ABD, İsrail ve Arjantin'in ret oyuna karşın kabul edilen bu karar, bugün Küba gibi ülkeler tarafından Trump'ın "almak" dediği topraklarda bir tazminat hakkı kozu olarak masaya sürülüyor. Küresel Güney'in yeni müzakere silahı.</div>
+              <a href="https://www.theguardian.com/world/2026/mar/25/un-slave-trade-gravest-crime-against-humanity" target="_blank" class="haber-kaynak">→ The Guardian</a>
+              <a href="https://www.enar-eu.org/un-resolution-slave-trade" target="_blank" class="haber-kaynak">→ ENAR</a>
+            </div>
+
+            <div class="haber-kart">
+              <div class="haber-no">Haber 06</div>
+              <div class="haber-baslik">"Olağandışı Tehdit" ve Ticaret Savaşları</div>
+              <div class="haber-metin">29 Ocak 2026 tarihli "Küba'nın ABD güvenliğine olağandışı tehdit oluşturduğu" ilanı, bugün üçüncü ülkeleri de vuran bir gümrük savaşına dönüştü. Küba'ya dolaylı yoldan petrol satan ülkelere ek tarifeler uygulanıyor; küresel tedarik zinciri kopma noktasında.</div>
+              <a href="https://www.hollandknight.com/insights/publications/cuba-ieepa-sanctions" target="_blank" class="haber-kaynak">→ Holland &amp; Knight</a>
+            </div>
+
+            <div class="haber-kart">
+              <div class="haber-no">Haber 07</div>
+              <div class="haber-baslik">Rubio ve Rejim Değişikliği Baskısı</div>
+              <div class="haber-metin">Dışişleri Bakanı Marco Rubio'nun "Havana'da rejim değişikliği" hedefi, sahadaki askeri hareketlilikle yeni bir boyuta evrildi. Trump'ın "bu dostane bir devralma olmayabilir" uyarısı, Florida kıyılarındaki donanma varlığının artmasıyla uluslararası hukuk uzmanlarını alarma geçirdi.</div>
+              <a href="https://www.theguardian.com/us-news/2026/apr/rubio-cuba-regime-change" target="_blank" class="haber-kaynak">→ The Guardian</a>
+            </div>
+
           </div>
 
-          <div style="background:var(--green-pale);border:1px solid rgba(74,154,95,0.2);padding:1rem;margin-top:0.5rem;">
+          <div style="background:var(--green-pale);border:1px solid rgba(74,154,95,0.2);padding:1rem;margin-top:1.2rem;">
             <div class="item-text" style="font-family:'Playfair Display',serif;font-style:italic;font-size:0.95rem;color:var(--muted);">
-              "Güzel bir ada. Güzel manzaralar." — Bu, bir devlet başkanının egemen bir ülke hakkındaki dili değil; bir müteahhitin gayrimenkul değerlendirmesi. Soru artık 'bunu yapabilir mi?' değil: uluslararası toplum ne kadar süre seyirci kalır?
+              Trump'ın dünyayı bir "emlak ofisi"ne çevirme çabası artık küresel bir mülkiyet krizidir. Soru artık "bunu yapabilir mi?" değil: enkazın altında kalmadan bu ofisten nasıl çıkılır?
             </div>
           </div>
+
         </div>
       </div>
 
-      <!-- ── 29 MART 2026 · GÜNCEL ANALİZ ── -->
-      <div class="frekans-kategori">29 Mart 2026</div>
-
-      <div class="item">
-        <div class="item-dot"></div>
-        <div class="item-inner">
-          <div class="item-label">Derinlemesine Okuma</div>
-          <div class="item-text" style="font-family:'Playfair Display',serif;font-size:1.1rem;font-style:italic;margin-bottom:0.8rem;">
-            Gayrimenkul Diplomasisinden Küresel İflasa: Küba, Katar ve "Kral Değil" Çığlığı
-          </div>
-          <div class="item-text" style="color:var(--muted);margin-bottom:1.2rem;font-size:0.9rem;">
-            16 Mart 2026'da Trump, Küba için "Onunla istediğimi yapabilirim, güzel bir ada" dediğinde, bu sadece bir dil sürçmesi değil, dünyanın yeni işletim sistemiydi: Jeopolitik Gayrimenkul Yönetimi. Ancak bugün, 29 Mart itibarıyla bu "müteahhit mantığı" tüm küresel sistemi geri dönülemez bir noktaya sürükledi.
-          </div>
-
-          <!-- Katman 5 -->
-          <div style="border-left:2px solid var(--green);padding-left:1rem;margin-bottom:1.2rem;">
-            <div class="item-label" style="margin-bottom:0.4rem;">Katman 5 — Enerji Dominosu: Katar ve Britanya</div>
-            <div class="item-text" style="font-size:0.9rem;">Trump'ın Küba'yı bir "mülk" gibi kuşatmasıyla başlayan süreç, Orta Doğu'daki savaşın Katar'ı sarsmasıyla devasa bir enerji krizine evrildi. The Telegraph'ın bugün (29 Mart) bildirdiğine göre, Katar'daki sarsıntı Britanya için doğrudan bir "ulusal tehlike" demek. Eğer bir ülkeyi sadece bir "tedarikçi" veya "gayrimenkul" olarak görürseniz, o mülkteki en ufak bir yangın sizin kendi evinizi vurur. Egemenlikten vazgeçip mülkiyet ilişkisine girdiğinizde, krizler de sınır tanımaz hale gelir.
-              <a href="https://www.telegraph.co.uk/business/2026/03/29/qatar-war-danger-britain-energy/" target="_blank" style="color:var(--green);font-family:'DM Mono',monospace;font-size:0.6rem;display:inline-block;margin-top:0.3rem;">→ The Telegraph</a>
-            </div>
-          </div>
-
-          <!-- Katman 6 -->
-          <div style="border-left:2px solid var(--green);padding-left:1rem;margin-bottom:1.2rem;">
-            <div class="item-label" style="margin-bottom:0.4rem;">Katman 6 — Sokaktaki Öfke: "No Kings"</div>
-            <div class="item-text" style="font-size:0.9rem;">Küba'da "istediğimi yaparım" diyen otoriter dil, ABD içinde ters tepti. 28 Mart'ta başlayan ve bugün tüm eyaletlere yayılan "No Kings" protestoları, Amerikan halkının "devletin bir şirket, başkanın ise bir mülk sahibi" gibi davranmasına verdiği en sert yanıt. Nashville'den Los Angeles'a kadar yüz binlerce insan, hukukun üstünlüğünü ve "krallığa hayır" demeyi hatırlatıyor.
-              <a href="https://www.theguardian.com/us-news/2026/mar/29/no-kings-protests-us" target="_blank" style="color:var(--green);font-family:'DM Mono',monospace;font-size:0.6rem;display:inline-block;margin-top:0.3rem;">→ The Guardian</a>
-            </div>
-          </div>
-
-          <!-- Katman 7 -->
-          <div style="border-left:2px solid var(--green);padding-left:1rem;margin-bottom:1.2rem;">
-            <div class="item-label" style="margin-bottom:0.4rem;">Katman 7 — Tarihin Rövanşı: BM'den İnsanlık Suçu Kararı</div>
-            <div class="item-text" style="font-size:0.9rem;">Dünya bir yandan "yeni sömürgecilik" ile uğraşırken, BM'den tarihi bir hamle geldi. 25 Mart'ta alınan kararla köle ticareti "insanlığa karşı işlenmiş en ağır suç" ilan edildi. Batı bugün enerji kriziyle boğuşurken, Küresel Güney bu tarihi kararı bir "tazminat adaleti" kozu olarak masaya sürüyor. "Benim toprağımı/insanımı mülk gibi kullandın, şimdi bedelini öde" dönemi resmen başladı.
-              <a href="https://www.theguardian.com/world/2026/mar/25/un-slave-trade-gravest-crime-against-humanity" target="_blank" style="color:var(--green);font-family:'DM Mono',monospace;font-size:0.6rem;display:inline-block;margin-top:0.3rem;">→ The Guardian</a>
-            </div>
-          </div>
-
-          <div style="background:var(--green-pale);border:1px solid rgba(74,154,95,0.2);padding:1rem;margin-top:0.5rem;">
-            <div class="item-text" style="font-family:'Playfair Display',serif;font-style:italic;font-size:0.95rem;color:var(--muted);">
-              17 Mart'ta Küba üzerinden sorduğumuz "Uluslararası toplum ne kadar seyirci kalır?" sorusunun cevabı bugün sokaklarda, BM salonlarında ve boşalan doğalgaz depolarında veriliyor. Trump'ın dünyayı bir "emlak ofisi"ne çevirme çabası, 29 Mart 2026 itibarıyla küresel bir "mülkiyet krizine" ve sistemin topyekûn iflasına dönüşmüş durumda. Soru artık 'bunu yapabilir mi?' değil: "Enkazın altında kalmadan bu ofisten nasıl çıkılır?"
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /Dünyadan -->
+    </div>
 
     <div style="margin-top:2rem;background:var(--green-pale);border:1px solid rgba(74,154,95,0.3);padding:1.5rem;">
       <div class="item-label" style="margin-bottom:0.8rem;">Parazit</div>
@@ -624,7 +305,6 @@
   <div class="card dark wide">
     <div class="section-label">04</div>
     <div class="card-title">Kişisel <em>Notlar</em></div>
-
     <div class="question-box">
       <p style="font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--green);margin-bottom:0.8rem;">Günün Sorusu</p>
       <p class="question-text">Buraya ziyaretçilerinize bırakmak istediğiniz soruyu yazın...</p>
@@ -635,7 +315,6 @@
   <div class="card">
     <div class="section-label">05</div>
     <div class="card-title"><em>Kayıt Dışı</em></div>
-
     <div class="portrait-box">
       <img src="https://raw.githubusercontent.com/sadakatsizhayat-design/bumuydu.github.io/main/80ca99bf-d2b6-4e48-a181-c15f968589ce.jpg" alt="Otoportre">
     </div>
@@ -664,15 +343,7 @@
     <div class="card-title"><em>Düşüncelerini Paylaş</em></div>
     <p style="color:var(--muted);font-size:0.95rem;margin-bottom:2rem;">Bu yazı hakkında ne düşünüyorsun? Yorumun, sorun, tepkin — hepsi bana ulaşır.</p>
     <div style="max-width:520px;">
-      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSe1oLIKTfhCdQ9e_lbJCEyrQH2l3HOfr0GJ4R3DhFoTMNi7vg/viewform?embedded=true"
-          width="100%"
-          height="700"
-          frameborder="0"
-          marginheight="0"
-          marginwidth="0"
-          style="filter:invert(1) hue-rotate(180deg) saturate(0.3);">
-        Yükleniyor…
-      </iframe>
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSe1oLIKTfhCdQ9e_lbJCEyrQH2l3HOfr0GJ4R3DhFoTMNi7vg/viewform?embedded=true" width="100%" height="700" frameborder="0" marginheight="0" marginwidth="0" style="filter:invert(1) hue-rotate(180deg) saturate(0.3);">Yükleniyor…</iframe>
     </div>
   </div>
 
@@ -708,7 +379,7 @@
   ];
   grid.forEach(row => row.forEach(c => {
     const s = document.createElement('span');
-    s.style.cssText = `display:block;width:5px;height:5px;background:${fc[c]||'transparent'}`;
+    s.style.cssText = 'display:block;width:5px;height:5px;background:' + (fc[c]||'transparent');
     el.appendChild(s);
   }));
 })();
