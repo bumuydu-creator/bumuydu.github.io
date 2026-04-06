@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pop Kültür Nabız Bülteni | Nisan 2026</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+        :root {
+            --bg: #0e0d0b;
+            --surface: #141310;
+            --surface-2: #1c1a17;
+            --border: #2a2721;
+            --accent: #c8622a;
+            --accent-muted: #9e4c20;
+            --accent-dim: #3d2010;
+            --cream: #e8e0d0;
+            --cream-muted: #9e9486;
+            --cream-dim: #5a5348;
+            --white: #f5f0e8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--cream);
+            line-height: 1.75;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 660px;
+            margin: 0 auto;
+        }
+
+        /* ─── HEADER ─── */
+        .header {
+            border: 1px solid var(--border);
+            padding: 60px 48px 50px;
+            margin-bottom: 0;
+            position: relative;
+            background: var(--surface);
+        }
+
+        .header-eyebrow {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 44px;
+            font-weight: 900;
+            line-height: 1.05;
+            color: var(--white);
+            margin-bottom: 16px;
+        }
+
+        .header h1 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .header-sub {
+            font-size: 13px;
+            font-weight: 300;
+            margin-bottom: 32px;
+            max-width: 380px;
+        }
+
+        .header-meta {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            border-top: 1px solid var(--border);
+            padding-top: 24px;
+        }
+
+        .meta-date {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            color: var(--cream-muted);
+            text-transform: uppercase;
+        }
+
+        .meta-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .meta-issue {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            color: var(--cream-dim);
+            text-transform: uppercase;
+        }
+
+        /* ─── SECTIONS ─── */
+        .section {
+            border: 1px solid var(--border);
+            border-top: none;
+            padding: 48px 48px;
+            background: var(--surface);
+        }
+
+        .section + .section {
+            border-top: none;
+        }
+
+        .section-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 52px;
+            font-weight: 900;
+            color: var(--accent-dim);
+            line-height: 1;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .section-label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        h2 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        h3 {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin: 32px 0 12px;
+        }
+
+        p {
+            font-size: 13px;
+            font-weight: 300;
+        }
+
+        strong {
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        em {
+            font-style: italic;
+        }
+
+        /* ─── STAT BLOCK ─── */
+        .stat-block {
+            border: 1px solid var(--accent-dim);
+            background: #1a1208;
+            padding: 32px;
+            margin: 28px 0;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--accent);
+            display: block;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--cream-muted);
+        }
+
+        /* ─── CALLOUT ─── */
+        .callout {
+            border-left: 3px solid var(--accent);
+            padding: 20px 24px;
+            background: var(--surface-2);
+            margin: 24px 0;
+        }
+
+        .callout p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        /* ─── QUOTE ─── */
+        .quote {
+            padding: 32px 0;
+            margin: 24px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .quote-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-style: italic;
+            color: var(--white);
+            line-height: 1.5;
+            margin-bottom: 0 !important;
+        }
+
+        /* ─── LIST ─── */
+        ul {
+            list-style: none;
+            margin: 12px 0 20px;
+        }
+
+        li {
+            padding: 10px 0 10px 20px;
+            position: relative;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        li:last-child { border-bottom: none; }
+
+        li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* ─── TAGS ─── */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 16px 0 24px;
+        }
+
+        .tag {
+            display: inline-block;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 5px 12px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        /* ─── HIGHLIGHT BAND ─── */
+        .band {
+            background: var(--accent);
+            color: #0e0d0b;
+            padding: 20px 24px;
+            margin: 24px 0;
+            font-size: 14px;
+            letter-spacing: 0.04em;
+        }
+
+        /* ─── DIVIDER ─── */
+        .rule {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 0;
+        }
+
+        /* ─── FOOTER ─── */
+        .footer {
+            border: 1px solid var(--border);
+            border-top: 1px solid var(--accent);
+            padding: 40px 48px;
+            background: var(--surface);
+        }
+
+        .footer-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+
+        .footer p {
+            font-size: 13px;
+            color: var(--cream-dim);
+            margin-bottom: 4px;
+        }
+
+        @media (max-width: 600px) {
+            .header, .section, .footer { padding: 36px 24px; }
+            .header h1 { font-size: 40px; }
+            .stat-number { font-size: 48px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-eyebrow">Kültür · Trend · Analiz</div>
+            <h1>Pop Kültür<br><em>Nabız</em></h1>
+            <p class="header-sub">2026'nın trendlerini takip ettiğiniz bülten.</p>
+            <div class="header-meta">
+                <span class="meta-date">6 Nisan 2026</span>
+                <div class="meta-dot"></div>
+                <span class="meta-issue">Nisan Sayısı</span>
+            </div>
+        </div>
+
+        <!-- 01 — HAIL MARY -->
+        <div class="section">
+            <span class="section-number">01</span>
+            <div class="section-label">Sinema</div>
+            <h2>Project Hail Mary<br><em>Gişe Fırtınası</em> Estiriyor</h2>
+
+            <p><strong>20 Mart'ta vizyona giren film,</strong> bugün 17. gününde ve hâlâ zirvede. Ryan Gosling'in başrolünde, Phil Lord & Christopher Miller'ın yönettiği bu bilim kurgu eseri salonları doldurmaya devam ediyor.</p>
+
+            <div class="callout">
+                <p><strong>Sosyal medyada viral:</strong> "Muazzam, muazzam!" repliği ve Rocky (uzaylı) karakteri çoktan meme oldu. Twitter, TikTok ve Instagram'da her yerde görüyorsunuz.</p>
+            </div>
+
+            <div class="quote">
+                <p class="quote-text">2026'nın en umut veren sci-fi filmi. The Martian'dan daha duygusal.</p>
+            </div>
+
+            <p>Karanlık küresel gündeme karşı bu tür <strong>umut temalı eserler</strong> büyük rağbet görüyor. İnsanlar sinemadan morallerini yükseltmiş çıkıyor.</p>
+
+            <div class="quote">
+                <p class="quote-text">Grace'in trajedisi salt ayrılışta değil, döneceği evin artık var olmayabileceği gerçeğinde gizli. Düşüş ancak başkasıyla taşınabilir. Şeytan bile yalnız gidemedi, insan da gidemez.</p>
+            </div>
+
+            <p>Filmi daha derin bir okumaya tabi tuttuğum Substack yazımda Ryland Grace'i modern insanın en çıplak hali olarak ele aldım: belleği budanmış, uçsuz bucaksız bir boşluğun ortasında <strong>yalnızca kendi aklına mahkûm</strong> kalmış bir adam. Ve Rocky sayesinde anlıyor ki cennet tek başına kazanılmaz.</p>
+
+            <div style="display:flex; gap:12px; flex-wrap:wrap; margin: 24px 0;">
+                <a href="https://youtu.be/RVxoEcRjQ0k" target="_blank" style="
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    background: #FF0000;
+                    color: #fff;
+                    text-decoration: none;
+                    padding: 12px 20px;
+                    font-family: 'DM Sans', sans-serif;
+                    font-size: 12px;
+                    font-weight: 600;
+                    letter-spacing: 0.1em;
+                    text-transform: uppercase;
+                ">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    YouTube'da İzle
+                </a>
+            </div>
+        </div>
+
+        <hr class="rule">
+
+        <!-- 02 — NOSTALJİ -->
+        <div class="section" style="position: relative; overflow: hidden;">
+            <span class="section-number">02</span>
+            <div class="section-label">Kültür Akımı</div>
+
+            <div style="
+                font-family: 'DM Sans', sans-serif;
+                font-size: 13px;
+                font-style: italic;
+                letter-spacing: 0.06em;
+                color: var(--cream-muted);
+                margin-bottom: 8px;
+            ">throwback thursday ✦ #tbt</div>
+
+            <h2>2026'nın En Baskın Trendi:<br><em>2016 Nostaljisi</em></h2>
+
+            <div style="
+                font-size: 11px;
+                color: var(--cream-dim);
+                letter-spacing: 0.1em;
+                margin-bottom: 24px;
+                text-transform: uppercase;
+            ">10 Yıl Önce · 2016</div>
+
+            <div class="band" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+                <span>Fabrika Ayarları: Yine 2016</span>
+                <a href="https://youtu.be/IyKe7A-q2pk" target="_blank" style="
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 7px;
+                    background: #0e0d0b;
+                    color: #fff;
+                    text-decoration: none;
+                    padding: 8px 14px;
+                    font-size: 11px;
+                    font-weight: 600;
+                    letter-spacing: 0.1em;
+                    text-transform: uppercase;
+                    white-space: nowrap;
+                ">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    YouTube'da İzle
+                </a>
+            </div>
+
+            <p>2026, 2016'nın tam <strong>10. yılı</strong> olduğu için nostalji akımı TikTok, Instagram ve X'te zirvede. Herkes throwback fotoğraflar paylaşıyor, 2016 filtreleri kullanıyor.</p>
+
+            <h3>Yeniden Popüler Olan Şeyler</h3>
+            <div style="display: flex; flex-direction: column; gap: 0;">
+                <div style="padding: 12px 16px; background: var(--surface-2); border-left: 3px solid var(--accent); margin-bottom: 6px; font-size: 13px; color: var(--cream); font-weight: 300;">🎵 Beyoncé ve Drake'in 2016 dönemi şarkıları</div>
+                <div style="padding: 12px 16px; background: var(--surface-2); border-left: 3px solid var(--accent); margin-bottom: 6px; font-size: 13px; color: var(--cream); font-weight: 300;">💧 Bottle flip challenge — evinizde bardakları havaya fırlatmaya hazır olun</div>
+                <div style="padding: 12px 16px; background: var(--surface-2); border-left: 3px solid var(--accent); margin-bottom: 6px; font-size: 13px; color: var(--cream); font-weight: 300;">📷 2016 Instagram filtreleri</div>
+                <div style="padding: 12px 16px; background: var(--surface-2); border-left: 3px solid var(--accent); font-size: 13px; color: var(--cream); font-weight: 300;">📹 O dönemin viral video formatları</div>
+            </div>
+
+            <p style="margin-top: 24px; border-top: 1px solid var(--border); padding-top: 20px;"><strong>Neden?</strong> Küresel belirsizlikler — savaş, ekonomi, iklim krizi — insanları <em>"kaçış kültürü"</em> ve nostaljiye itiyor. On yıl önce her şey daha basitti, değil mi?</p>
+        </div>
+
+        <hr class="rule">
+
+        <!-- 03 — MODA -->
+        <div class="section">
+            <span class="section-number">03</span>
+            <div class="section-label">Moda & Estetik</div>
+            <h2><em>Literary Chic</em><br>Yükselişte</h2>
+
+            <p>Algoritmik "clean girl" estetiği artık bıktırdı. Yerini daha <strong>özgün, kaotik ve "insan yapımı"</strong> hissettiren tarzlara bırakıyor.</p>
+
+            <div class="tags">
+                <span class="tag">Literary Chic</span>
+                <span class="tag">Poetcore</span>
+                <span class="tag">Lady of Leisure</span>
+                <span class="tag">Mode Sportif</span>
+                <span class="tag">Modern Boho</span>
+            </div>
+
+            <h3>Öne Çıkan Detaylar</h3>
+            <ul>
+                <li><strong>Maximal renkler</strong> — sade beyazlara elveda</li>
+                <li><strong>Fringe (püskül) detaylar</strong> — 70'ler geri döndü</li>
+                <li><strong>Şal kullanımı</strong> — Fransız kadınlar gibi stilinizi tamamlayın</li>
+                <li><strong>Dantel ve el işçiliği</strong> — vintage tezgahlar yeniden keşfediliyor</li>
+                <li><strong>"Okumuş gibi görünme" isteği</strong> — kitap kafe estetiği her yerde</li>
+            </ul>
+
+            <div class="callout">
+                <p><strong>Anti-AI Estetiği:</strong> Yapay zekanın mükemmelliğine tepki olarak kasıtlı kusurlar, el işçiliği ve "messy" estetik yükselişte. İnsanlar artık dijital mükemmellikten sıkıldı.</p>
+            </div>
+
+            <div style="margin-top: 24px;">
+                <a href="https://youtu.be/628cLzJ78Bc" target="_blank" style="
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    background: #FF0000;
+                    color: #fff;
+                    text-decoration: none;
+                    padding: 12px 20px;
+                    font-family: 'DM Sans', sans-serif;
+                    font-size: 12px;
+                    font-weight: 600;
+                    letter-spacing: 0.1em;
+                    text-transform: uppercase;
+                ">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    YouTube'da İzle
+                </a>
+            </div>
+        </div>
+
+        <hr class="rule">
+
+        <!-- 04 — EĞLENCE -->
+        <div class="section">
+            <span class="section-number">04</span>
+            <div class="section-label">Film · Dizi · Edebiyat</div>
+            <h2>Ekranlar ve<br><em>Sayfalar</em></h2>
+
+            <h3>Vizyondaki Popüler Filmler</h3>
+            <ul>
+                <li><strong>The Super Mario Galaxy Movie</strong> — 1 Nisan'da vizyona girdi</li>
+                <li><strong>The Drama</strong> — Zendaya & Robert Pattinson'ın merakla beklenen filmi</li>
+                <li><strong>Michael</strong> — Michael Jackson biyografisi</li>
+            </ul>
+
+            <h3>Streaming Trendleri</h3>
+            <p>Marty Supreme gibi yapımlar dikkat çekiyor. <strong>Haftalık yayınlanan dizilere dönüş</strong> ve kültleşmiş içerikler trend. Binge-watching dönemi sona eriyor, haftada bir bölüm heyecanı geri geliyor.</p>
+
+            <h3>Edebiyat Trendleri</h3>
+            <div class="tags">
+                <span class="tag">Romantasy</span>
+                <span class="tag">Speculative Fiction</span>
+                <span class="tag">LGBTQ+ Fiction</span>
+                <span class="tag">Horror</span>
+            </div>
+
+            <p><strong>Remix Kültürü:</strong> Frankenstein, Wuthering Heights, Hamnet, Pride &amp; Prejudice gibi klasiklerin modern uyarlamaları çok konuşuluyor. Uluslararası Booker Ödülü 2026 kısa listesi de açıklandı.</p>
+        </div>
+
+        <hr class="rule">
+
+        <!-- 05 — TÜRKİYE -->
+        <div class="section">
+            <span class="section-number">05</span>
+            <div class="section-label">Türkiye'den</div>
+            <h2>Kültür-Sanat<br><em>Haberleri</em></h2>
+
+            <h3>Türkiye Kültür Yolu Festivali</h3>
+            <p><strong>25 Nisan'da Şanlıurfa'da başlayıp 15 Kasım'da Adana'da bitecek.</strong> Toplam 26 şehir bu festivale ev sahipliği yapacak. Hazırlıklar sürüyor.</p>
+
+            <h3>Milliyet Sanat — Nisan 2026</h3>
+            <ul>
+                <li>İlker Çatak özel söyleşisi</li>
+                <li>Arkas Sanat "Moda ve Resim" sergisi</li>
+                <li>45. İstanbul Film Festivali hazırlıkları</li>
+                <li>Göksel'in yeni albümü</li>
+            </ul>
+
+            <h3>Aktif Etkinlikler</h3>
+            <ul>
+                <li>DenizBank 8. Uluslararası İstanbul Çocuk ve Gençlik Sanat Bienali</li>
+                <li>ODTÜ Sanat etkinlikleri devam ediyor</li>
+            </ul>
+        </div>
+
+        <hr class="rule">
+
+        <!-- 06 — SOSYOLOJI -->
+        <div class="section">
+            <span class="section-number">06</span>
+            <div class="section-label">Genel Atmosfer</div>
+            <h2>Sosyolojik<br><em>Tartışmalar</em></h2>
+
+            <h3>Wisdom Flexing</h3>
+            <p>Sosyal medyanın 15 saniyelik hızlı tüketim döngüsünden ve Twitter kavgalarından bunalan herkes, Substack gibi daha sakin sulara yelken açtı. Artık sadece ne bildiğin değil, <strong>ne kadar derin düşünebildiğin</strong> önemli — bilgi, statü sembolüne dönüştü.</p>
+
+            <div class="callout">
+                <p>Eskiden bir konuda hızlı yorum yapmak, o "hot take" kültürü yeterliydi. Şimdi herkes <strong>"ben bu işin felsefesini biliyorum"</strong> deme peşinde. Kimse "bilmiyorum" demiyor; her olayın altında devasa sosyolojik analizler aranıyor.</p>
+            </div>
+
+            <p>Ama bu durum tuhaf bir çelişki yaratıyor: Günlerce üzerine düşünülmüş gerçek içerikler ile sadece <em>"bilge görünmek"</em> için kurulmuş zorlama cümleler yan yana geliyor. Herkesin profesör gibi konuştuğu bir sınıfta kimin kimi takip edeceği de ayrı bir sorun. <span style="color: var(--accent);">Gerçek derinlikle iyi paketlenmiş gösteriş giderek birbirine karışıyor.</span></p>
+
+            <h3>Authenticity vs. AI</h3>
+            <div class="callout">
+                <p><strong>"Gerçek insan yapımı"</strong> vurgusu sanatta ve içerik üretiminde en güçlü kale. AI içeriklerine karşı tepki ve otantiklik arayışı artıyor. İnsanlar <span style="color: var(--accent);">imperfeksiyonu</span> arıyor.</p>
+            </div>
+
+            <h3>Yalnızlık Ekonomisi</h3>
+            <p>Bugün birinin seninle sinemaya gitmesi, iki saat dertleşmesi ya da sadece karşında oturması için marketten süt alır gibi ödeme yapabiliyorsun. Güney Kore'nin "kiralık arkadaş" kültüründen fırlamış bu olgu artık çok daha yaygın — ve normalleşiyor.</p>
+            <p>Modern hayat bizi ekranlara o kadar bağladı ki birine "Naber, nasılsın?" demeye çekinir olduk. Gerçek arkadaşlık emek istiyor; tartışıyorsun, dinliyorsun, zaman harcıyorsun. Yalnızlık ekonomisi ise sunuyor: <em>"Risk alma, parasını ver, sadece eğlen."</em> Ama uygulama kapandığında ya da para bittiğinde yanında kimin kalacağı kocaman bir soru işareti.</p>
+            <p>Aslında yalnızlığımıza yara bandı yapıştırıyoruz — yaranın neden orada olduğunu hiç sorgulamadan. Tıpkı her yere navigasyonla gittiğimiz için yol bulma yeteneğimizi kaybetmemiz gibi, sosyalleşmeyi satın aldığımızda <span style="color: var(--accent);">gerçek bağ kurmayı da unutuyoruz.</span></p>
+
+            <h3>Onarım Estetiği</h3>
+            <p>Sürdürülebilirlik ve kişisel ifadeyle birleşen bir <strong>tamir/yenileme kültürü</strong> hakim. Eski sevilen kıyafetlerinizi atmak yerine yeniden hayal edin.</p>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <div class="footer-title">Pop Kültür Nabız</div>
+            <p>Nisan 2026 — 2026'nın trendlerini takip ettiğiniz yer.</p>
+            <p style="margin-top: 16px; color: #3d3530;">Substack formatında hazırlanmıştır.</p>
+        </div>
+
+    </div>
+</body>
+</html>
