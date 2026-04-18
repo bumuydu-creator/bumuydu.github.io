@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gramer ve Otopsi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f4f1ea;
+      --ink: #1a1a1a;
+      --accent: #8b0000;
+      --highlight: #fff8c4;
+      --muted: rgba(26,26,26,0.4);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Playfair Display", Georgia, serif;
+      min-height: 100vh;
+      padding-bottom: 6rem;
+    }
+
+    ::selection { background: var(--accent); color: white; }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* HEADER */
+    header {
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: 2rem;
+      margin-bottom: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .eyebrow {
+      font-family: "Space Mono", monospace;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .subtitle {
+      font-family: "Space Mono", monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.5;
+      max-width: 60ch;
+      line-height: 1.8;
+    }
+
+    /* LAYOUT */
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { order: -1; }
+    }
+
+    /* MAIN CONTENT */
+    .section-label {
+      font-family: "Space Mono", monospace;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.3;
+    }
+
+    .article-title {
+      font-size: clamp(1.6rem, 3vw, 2.5rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+
+    .drop-cap::first-letter {
+      float: left;
+      font-size: 5rem;
+      line-height: 0.75;
+      margin: 0.1em 0.12em 0 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .article-body {
+      font-size: 1.125rem;
+      line-height: 1.9;
+      color: var(--ink);
+    }
+
+    .article-body p {
+      margin-bottom: 1.2em;
+    }
+
+    /* NAV BUTTONS */
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(26,26,26,0.1);
+      font-family: "Space Mono", monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    .nav-btn {
+      background: none;
+      border: 1px solid var(--ink);
+      padding: 0.6rem 1.2rem;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      color: var(--ink);
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover { background: var(--ink); color: var(--bg); }
+    .nav-btn:disabled { opacity: 0; pointer-events: none; }
+
+    .page-indicator {
+      font-family: "Space Mono", monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      opacity: 0.5;
+      align-self: center;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: sticky;
+      top: 2rem;
+    }
+
+    .sidebar-title {
+      font-family: "Space Mono", monospace;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.4;
+      margin-bottom: 1rem;
+    }
+
+    .sidebar-nav {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .sidebar-nav li button {
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      border-bottom: 1px solid rgba(26,26,26,0.08);
+      padding: 0.6rem 0;
+      font-family: "Space Mono", monospace;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      color: var(--ink);
+      opacity: 0.45;
+      transition: all 0.2s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sidebar-nav li button:hover { opacity: 1; }
+    .sidebar-nav li button.active {
+      opacity: 1;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .sidebar-info {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(26,26,26,0.1);
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      font-family: "Space Mono", monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid rgba(26,26,26,0.05);
+      opacity: 0.5;
+    }
+
+    .info-item span:last-child { font-weight: 700; color: var(--accent); opacity: 1; }
+
+    /* CATEGORY BADGE */
+    .category-badge {
+      display: inline-block;
+      font-family: "Space Mono", monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid rgba(26,26,26,0.1);
+      padding-top: 2rem;
+      margin-top: 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: "Space Mono", monospace;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      opacity: 0.4;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    /* FADE ANIMATION */
+    .fade-in {
+      animation: fadeIn 0.4s ease both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* PROGRESS BAR */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+      z-index: 100;
+    }
+
+    /* ORNAMENT */
+    .ornament {
+      color: var(--accent);
+      font-size: 1.2rem;
+      opacity: 0.4;
+      margin: 1.5rem 0;
+      text-align: center;
+      letter-spacing: 0.5em;
+    }
+  </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<div class="container">
+  <header>
+    <div class="eyebrow">Psikopatoloji ve Sosyolojik Otopsi</div>
+    <h1>Gramer ve <em>Otopsi</em></h1>
+    <p class="subtitle">Çocuk şiddeti, görünme ekonomisi ve toplumsal çözülme üzerine felsefi bir soruşturma — Dostoyevski'nin Suç ve Ceza'sından ilhamla</p>
+  </header>
+
+  <div class="layout">
+    <!-- MAIN ARTICLE -->
+    <main>
+      <div id="article-container" class="fade-in">
+        <!-- injected by JS -->
+      </div>
+
+      <div class="nav-buttons">
+        <button class="nav-btn" id="prev-btn" onclick="navigate(-1)">← Önceki</button>
+        <span class="page-indicator" id="page-indicator"></span>
+        <button class="nav-btn" id="next-btn" onclick="navigate(1)">Sonraki →</button>
+      </div>
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-title">Dizin</div>
+      <ul class="sidebar-nav" id="sidebar-nav"></ul>
+
+      <div class="sidebar-info">
+        <div class="info-item"><span>Bölüm</span> <span id="info-section">—</span></div>
+        <div class="info-item"><span>Kategori</span> <span id="info-category">—</span></div>
+        <div class="info-item"><span>Toplam</span> <span>10 Bölüm</span></div>
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    <span>Dostoyevski 160. Yıl Notları</span>
+    <span>Soruşturma Açık Tutulmalıdır</span>
+  </footer>
+</div>
+
+<script>
+const sections = [
+  {
+    id: 'intro',
+    title: 'Olay Yerinde Duranın İlk İzlenimi',
+    category: 'Giriş',
+    content: `Çocuk şiddetinin bugün aldığı biçimlere bakınca, farklı failler, farklı coğrafyalar, farklı biçimler ama aynı gramer görülüyor. Gramer derken Columbine'ı hatırlayın: Olay değil, dildi dedik. Ama mesele sadece Columbine da değil. 1866'da Petersburg'un izbe bir tavan arasında, genç bir hukuk öğrencisi bir baltayla iki kadını öldürmüştü. Adı Raskolnikov'du. Bugün karşımızdaki tablo 160 yıl önce Dostoyevski'nin teşhis ettiği ruhun bugünkü Türkçe tercümesidir.
+
+Ama burada dikkatli olmak gerek. Raskolnikov öldürürken "sistemde delik açtığını", seçilmiş bir insan olduğunu kanıtladığını sanıyordu; eylemi bir iktidar iddiasıydı. Bugünün faili ise başka bir damardan geliyor: onu görmeyenlere karşı bir görünme çığlığı atıyor. Biri üstünlük iddia ediyor, diğeri varlık iddia ediyor. Fark burada.
+
+Dostoyevski'nin baltasıyla bugünün tetiği aynı gramerin iki farklı çekimi — biri etken, diğeri tepkisel.`
+  },
+  {
+    id: 'prevention',
+    title: 'Empati Değil, Önleme',
+    category: 'Giriş',
+    content: `Bu ayrımı yapmak şunun için önemli: Cinayet haklı değildir, olamaz. Bir failin eylemini anlamak, onu aklamak değildir. Ama bir toplum, neyin bu çocuğu oraya götürdüğünü anlamadan bir sonrakini engelleyemez.
+
+Dosyayı "canavar çıktı" diyerek kapatmak kolay; zor olan, faili üreten zeminin otopsisini yapmak. Bu yazının derdi empati değil, önleme. Suçluyla kol kola girmek değil, bir sonraki kurbanın ismini bilmemek için zemini okumak.
+
+Raskolnikov'un baltası artık başka aletler, Yeraltı Adamı'nın rutubetli bodrumu artık bir çocuk odasıdır. Dolayısıyla ilk soru fail değil, dil üzerine olmalı: Bu çocuklara bu dili kim öğretti, nerede öğretti, ne zaman öğretti.`
+  },
+  {
+    id: 'actors',
+    title: 'Kurban, Fail, Tanık',
+    category: 'Otopsi',
+    content: `Görünürdeki kurban: Ölen ve yaralanan çocuklar, okul personeli. Görünürdeki fail: Tetiği çeken çocuk. Görünürdeki tanık: Sınıf, mahalle, haberleri okuyan millet.
+
+Ama otopside yüzeyde kalınmaz. Asıl kurban, daha geniş bir halka. Çünkü bu çocuklar ölmediği, öldürülmediği, izole edilmediği günlerce önce, çoktan bir başka ölümün içindeydi. Görülmeyen çocuğun, duyulmayan çocuğun, sessizliği olmayan evin, bildirim fırtınasında büyüyen zihnin ölümü.
+
+Bu öldürme hareketi, tetiğin çekilmesiyle değil, o çocuğun aylar önce kimse tarafından hakkıyla bakılmamasıyla başlar. Kurban, fail olmadan önce kurbandır.`
+  },
+  {
+    id: 'ecosystem',
+    title: 'Faili Üreten Ekosistem',
+    category: 'Otopsi',
+    content: `Asıl fail de sadece tetikçi değil. Tetikçiyi üreten ekosistem.
+
+Medyanın normalleştirme çizgisi, sendikanın reaksiyon performansı, ailenin sınır koymaktan vazgeçmiş pedagojisi, siyasetin konu kapatma refleksi, eğitim sisteminin müfredat yarışında çocuğu unutması, dijital ortamın onu hem yalnızlaştırıp hem gürültüye gömmesi.
+
+Bu ekosistemin her bir aktörü bir parça fail. Tetiği çeken sadece son kilometreyi taşır.`
+  },
+  {
+    id: 'equation',
+    title: 'Ben Bir Bit miyim?',
+    category: 'Analiz',
+    content: `Raskolnikov'un tüm felsefi çırpınışı tek bir cümlede düğümlenir: "Ben bir bit miyim, yoksa hakkım var mı?" Bugünün çocuğu artık Napolyon'u değil, milyonluk takipçili bir influencer'ı referans alıyor. Ama denklem aynı: sıradan olmak ölümdür; görünmek ise ne pahasına olursa olsun gerçekleşmesi gereken bir haktır.
+
+Dostoyevski, Raskolnikov'un bu hastalıklı ikiliğini "teorinin" insanı zehirlemesi diye adlandırmıştı. Bugün bu teoriyi kitaplardan çocuğun cebine algoritma taşıdı.
+
+"Özel olma" zehrinin dozajı 19. yüzyılda kitap sayfalarıyla sınırlıyken, bugün saniyede yenileniyor.`
+  },
+  {
+    id: 'timeline',
+    title: 'Zamanın Anatomisi',
+    category: 'Otopsi',
+    content: `Otopside "ne zaman" sorusu klinik. En az 15 yıl geriye gitmek gerek. "Özgüvenli nesil" söyleminin okula yerleştiği, akıllı telefonun çocuğun eline sistematik verildiği tarih. Ve daha geri gidersek: 40 yıl. 1980'den sonra meslek kimliği erozyona uğrayan öğretmenlik. Bireyin atomize edilmesi.
+
+Okul, sadece sahne. Asıl olay; evdedir, ekrandadır.
+
+Bir çocuğu silaha götüren yol, okul koridorundan geçmez; sınır duymamış bir iradenin kontrolsüz hiddetinden, atomize edilmiş bir bireyin kalabalık yalnızlığından geçer.`
+  },
+  {
+    id: 'underground',
+    title: 'Yeraltı Sığınağından Dijital Odaya',
+    category: 'Analiz',
+    content: `Dostoyevski'nin Yeraltı Adamı bodrumuna kapanmıştır. Bugünün çocuğunun odası, o bodrumun tam bir röprodüksiyonudur. Aradaki tek fark: Yeraltı Adamı'nın duvarları taştan, bugünün çocuğunun duvarları ekrandandır.
+
+Yeraltı Adamı en azından kendi monoloğunu yazabiliyordu; bugünün çocuğu sadece bildirim sesi duyuyor.
+
+Aile pasif verir, çünkü çocuğuna hayır diyemeyen anne baba aslında "kendini var etmek için dışarıyı aç" demiş olur.`
+  },
+  {
+    id: 'risk_factors',
+    title: 'Risk Faktörleri',
+    category: 'Otopsi',
+    content: `Hastalığın risk faktörleri: Kolektif hafıza kaybı, görülme ekonomisinin baskısı, sessizlik kapasitesinin yitirilmesi ve bedenselleşmiş kültürün yokluğu.
+
+Bu çocuğun belleğinde tutunabileceği bir mısra, bir hikaye, bir türkü yok. İç dünyası kupkuru.
+
+Yeraltı Adamı'nın elinde Kutsal Kitap vardı; bugünün çocuğunun elinde şarj kablosu var.`
+  },
+  {
+    id: 'redemption',
+    title: "Sonya ve Porfiri'nin Yokluğu",
+    category: 'Analiz',
+    content: `Raskolnikov'u kurtaran Sonya'nın bakışıydı. Bugünün çocuğunun Sonya'sı yok. Milyonlarca kişi tarafından "görülebilir" ama hiç kimse tarafından görülmemiş bir çocuk.
+
+Sorgulayan müfettiş Porfiri de yok. Sadece algoritma var. Algoritma anlamaz, sınıflandırır. Bir çocuk karanlık içeriklere yöneldiğinde algoritma onu durdurmaz; aksine, daha fazlasını sunar. Çünkü algoritmanın işi kurtarmak değil, tutmaktır.`
+  },
+  {
+    id: 'conclusion',
+    title: 'Yeni Bir Hikâye İmkânı mı?',
+    category: 'Sonuç',
+    content: `Suç ve Ceza'nın son sayfasında Raskolnikov, Sibirya'daki kampta Sonya'ya bakar ve ilk kez ağlar. Bugünün çocuğunun Sibirya'sı yok, Sonya'sı yok, Porfiri'si yok.
+
+Çözüm metal dedektörlerinde değil; bir çocuğa Sonya gibi bakabilecek bir çift gözün, bir Porfiri gibi konuşabilecek bir muhatabın inşasındadır.
+
+Zemin duruyor. Ve zemin duruyorsa, iz de duruyor. İz sürülmeye değer.`
+  }
+];
+
+let current = 0;
+
+function render() {
+  const s = sections[current];
+
+  // progress
+  document.getElementById('progress').style.width = ((current + 1) / sections.length * 100) + '%';
+
+  // article
+  const paragraphs = s.content.split('\n\n').filter(p => p.trim());
+  const articleHtml = paragraphs.map((p, i) => {
+    if (i === 0) return `<p class="article-body drop-cap">${p}</p>`;
+    return `<p class="article-body">${p}</p>`;
+  }).join('');
+
+  document.getElementById('article-container').innerHTML = `
+    <div class="fade-in">
+      <div class="section-label">${String(current + 1).padStart(2, '0')} / ${sections.length}</div>
+      <span class="category-badge">${s.category}</span>
+      <h2 class="article-title">${s.title}</h2>
+      <div class="ornament">— ✦ —</div>
+      ${articleHtml}
+    </div>
+  `;
+
+  // sidebar
+  document.querySelectorAll('.sidebar-nav li button').forEach((btn, i) => {
+    btn.classList.toggle('active', i === current);
+  });
+
+  // info
+  document.getElementById('info-section').textContent = String(current + 1).padStart(2, '0');
+  document.getElementById('info-category').textContent = s.category;
+
+  // page indicator
+  document.getElementById('page-indicator').textContent = `Sayfa ${String(current + 1).padStart(2, '0')} / ${sections.length}`;
+
+  // buttons
+  document.getElementById('prev-btn').disabled = current === 0;
+  document.getElementById('next-btn').disabled = current === sections.length - 1;
+}
+
+function navigate(dir) {
+  const next = current + dir;
+  if (next < 0 || next >= sections.length) return;
+  current = next;
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Build sidebar
+const nav = document.getElementById('sidebar-nav');
+sections.forEach((s, i) => {
+  const li = document.createElement('li');
+  const btn = document.createElement('button');
+  btn.textContent = `${String(i + 1).padStart(2, '0')}. ${s.title}`;
+  btn.onclick = () => { current = i; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+  li.appendChild(btn);
+  nav.appendChild(li);
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') navigate(1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') navigate(-1);
+});
+
+render();
+</script>
+</body>
+</html>
