@@ -122,7 +122,7 @@ function imgEl(src){const i=document.createElement('img');i.src=src;i.alt='';ret
 function emptyEl(){const d=document.createElement('div');d.className='empty-page';d.innerHTML='<div class="empty-page-logo">Bu<br><span>Muydu?</span></div>';return d;}
 function lastEl(){
   const d=document.createElement('div');d.className='last-page';
-  d.innerHTML='<div class="last-page-bg-text">Bu Muydu?</div><div class="last-page-issue">Dijital Sayı #14 & #15</div><div class="last-page-title">Bu<br><span>Muydu?</span></div><div class="last-page-divider"></div><div class="last-page-tags"><span class="last-page-tag tag-p">Orhan Pamuk</span><span class="last-page-tag tag-y">Andy Weir</span><span class="last-page-tag tag-g">Vedat Türkali</span><span class="last-page-tag tag-p">Dostoyevski</span><span class="last-page-tag tag-p">Albert Camus</span><span class="last-page-tag tag-y">Campbell</span></div><div class="last-page-sub">Edebiyat · Kültür · Sinema · Felsefe<br>bumuydu.github.io</div>';
+  d.innerHTML='<div class="last-page-bg-text">Bu Muydu?</div><div class="last-page-issue">Dijital Sayı #1</div><div class="last-page-title">Bu<br><span>Muydu?</span></div><div class="last-page-divider"></div><div class="last-page-tags"><span class="last-page-tag tag-p">Orhan Pamuk</span><span class="last-page-tag tag-y">Andy Weir</span><span class="last-page-tag tag-g">Vedat Türkali</span><span class="last-page-tag tag-p">Dostoyevski</span><span class="last-page-tag tag-p">Albert Camus</span><span class="last-page-tag tag-y">Campbell</span></div><div class="last-page-sub">Edebiyat · Kültür · Sinema · Felsefe<br>bumuydu.github.io</div>';
   return d;
 }
 function makeContent(s){return{left:s===0?emptyEl():imgEl(imgs[s-1]),right:s>=TOTAL?lastEl():imgEl(imgs[s])};}
