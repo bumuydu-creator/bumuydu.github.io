@@ -28,20 +28,12 @@
             background: var(--bg);
             color: var(--cream);
             line-height: 1.75;
-            padding: 40px 20px;
+            padding: 40px 40px;
         }
 
         .container {
-    max-width: 960px;
-    margin: 0 auto;
-}
-
-body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--cream);
-    line-height: 1.75;
-    padding: 40px 40px;
+            max-width: 960px;
+            margin: 0 auto;
         }
 
         /* ─── HEADER ─── */
@@ -90,6 +82,7 @@ body {
             align-items: center;
             border-top: 1px solid var(--border);
             padding-top: 24px;
+            flex-wrap: wrap;
         }
 
         .meta-date {
@@ -121,10 +114,6 @@ body {
             border-top: none;
             padding: 48px 48px;
             background: var(--surface);
-        }
-
-        .section + .section {
-            border-top: none;
         }
 
         .section-number {
@@ -182,33 +171,6 @@ body {
 
         em {
             font-style: italic;
-        }
-
-        /* ─── STAT BLOCK ─── */
-        .stat-block {
-            border: 1px solid var(--accent-dim);
-            background: #1a1208;
-            padding: 32px;
-            margin: 28px 0;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-family: 'Playfair Display', serif;
-            font-size: 48px;
-            font-weight: 900;
-            color: var(--accent);
-            display: block;
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--cream-muted);
         }
 
         /* ─── CALLOUT ─── */
@@ -322,10 +284,50 @@ body {
             margin-bottom: 4px;
         }
 
+        /* ─── SOCIAL NOTE ─── */
+        .social-note {
+            border: 1px solid var(--border);
+            border-top: none;
+            padding: 32px 48px;
+            background: var(--surface-2);
+        }
+
+        .social-note-title {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .social-link {
+            display: inline-block;
+            border: 1px solid var(--border);
+            color: var(--cream-muted);
+            padding: 6px 14px;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: border-color 0.2s, color 0.2s;
+        }
+
+        .social-link:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
         @media (max-width: 600px) {
-            .header, .section, .footer { padding: 36px 24px; }
-            .header h1 { font-size: 40px; }
-            .stat-number { font-size: 48px; }
+            .header, .section, .footer, .social-note { padding: 36px 24px; }
+            .header h1 { font-size: 34px; }
         }
     </style>
 </head>
@@ -338,148 +340,145 @@ body {
             <h1>Sarsıntılar · Sinyaller · Notlar<br><em>Bu muydu? Bülten</em></h1>
             <p class="header-sub">2026'nın trendlerini takip ettiğiniz bülten.</p>
             <div class="header-meta">
-            <span class="meta-date">6 Nisan 2026</span>
-            <div class="meta-dot"></div>
-            <span class="meta-issue">Nisan Sayısı - 1</span>
-            <div class="meta-dot"></div>
-            <a href="https://uansalyangoz.substack.com/" target="_blank" style="font-size:12px;font-weight:500;letter-spacing:0.12em;color:var(--accent);text-transform:uppercase;text-decoration:none;">Substack Bülten →</a>
-        </div>
+                <span class="meta-date">26 Nisan 2026</span>
+                <div class="meta-dot"></div>
+                <span class="meta-issue">Nisan Sayısı - 2</span>
+                <div class="meta-dot"></div>
+                <a href="https://uansalyangoz.substack.com/" target="_blank" style="font-size:12px;font-weight:500;letter-spacing:0.12em;color:var(--accent);text-transform:uppercase;text-decoration:none;">Substack Bülten →</a>
+            </div>
         </div>
 
-        <!-- 01 — HAIL MARY -->
+        <!-- 01 — DÜNYA & SİYASET -->
         <div class="section">
             <span class="section-number">01</span>
-            <div class="section-label">Sinema</div>
-            <h2>Project Hail Mary<br><em>Gişe Fırtınası</em> Estiriyor</h2>
+            <div class="section-label">Dünya & Siyaset</div>
+            <h2>İran-ABD-İsrail Gerilimi:<br><em>Müzakere mi, Karartma mı?</em></h2>
 
-            <p><strong>20 Mart'ta vizyona giren film,</strong> bugün 17. gününde ve hâlâ zirvede. Ryan Gosling'in başrolünde, Phil Lord & Christopher Miller'ın yönettiği bu bilim kurgu eseri salonları doldurmaya devam ediyor.</p>
+            <p>İran Dışişleri Bakanı Abbas Araqchi, Pakistan'ın İslamabad kentine giderek ABD ile barış görüşmeleri için bir teklif sundu. <strong>8 haftadır süren çatışmalar</strong> binlerce ölüme ve küresel piyasalarda dalgalanmaya yol açtı. ABD Başkanı Trump ise İsrail-Lübnan arasındaki ateşkesi 3 hafta daha uzattığını açıkladı; ancak Hizbullah anlaşmanın dışında kaldı.</p>
 
             <div class="callout">
-                <p><strong>Sosyal medyada viral:</strong> "Muazzam, muazzam!" repliği ve Rocky (uzaylı) karakteri çoktan meme oldu. Twitter, TikTok ve Instagram'da her yerde görüyorsunuz.</p>
+                <p><strong>Hürmüz Boğazı:</strong> İran, boğazdaki operasyonlarını "zafer belgesi" olarak nitelendirdi; gemilere el koyma görüntüleri yayınlandı. Petrol fiyatları etkilenmeye devam ediyor, küresel enerji arzı yavaş yavaş toparlanıyor.</p>
             </div>
+
+            <p>Öte yandan İran, Batılı kitleleri etkilemek amacıyla <strong>yapay zeka üretimi Lego karakterli animasyonlar ve meme benzeri videolar</strong> kullanarak sofistike bir bilgi savaşı yürütürken, dış dünyadan bilgi akışını kesmek için dünyanın en uzun süreli internet karartmalarından birini uyguluyor. Halk yalnızca devlet kontrolündeki kısıtlı bir intranet ağına erişebiliyor.</p>
+
+            <h3>Diğer Gündem Başlıkları</h3>
+            <ul>
+                <li><strong>Ukrayna:</strong> AB'den 90 milyar euroluk yeni kredi paketiyle rahatlama; yarı otonom dron teknolojisiyle sahada avantaj</li>
+                <li><strong>Pakistan:</strong> ABD ve İran arasında arabuluculukla uluslararası prestij kazanma hamlesi</li>
+                <li><strong>ABD-AB:</strong> Çin'e karşı kritik mineraller anlaşması imzalandı</li>
+                <li><strong>Estonya:</strong> Başbakan, Ukrayna'da savaşan askerlerin Schengen'e girişine kalıcı yasak önerdi</li>
+                <li><strong>Fransa:</strong> Kripto para bağlantılı 88 kişi (10'dan fazla reşit olmayan dahil) kaçırma olaylarından suçlandı</li>
+            </ul>
 
             <div class="quote">
-                <p class="quote-text">2026'nın en umut veren sci-fi filmi. The Martian'dan daha duygusal.</p>
-            </div>
-
-            <p>Karanlık küresel gündeme karşı bu tür <strong>umut temalı eserler</strong> büyük rağbet görüyor. İnsanlar sinemadan morallerini yükseltmiş çıkıyor.</p>
-
-            <div class="quote">
-                <p class="quote-text">Grace'in trajedisi salt ayrılışta değil, döneceği evin artık var olmayabileceği gerçeğinde gizli. Düşüş ancak başkasıyla taşınabilir. Şeytan bile yalnız gidemedi, insan da gidemez.</p>
-            </div>
-
-            <p>Filmi daha derin bir okumaya tabi tuttuğum Substack yazımda Ryland Grace'i modern insanın en çıplak hali olarak ele aldım: belleği budanmış, uçsuz bucaksız bir boşluğun ortasında <strong>yalnızca kendi aklına mahkûm</strong> kalmış bir adam. Ve Rocky sayesinde anlıyor ki cennet tek başına kazanılmaz.</p>
-
-            <div style="display:flex; gap:12px; flex-wrap:wrap; margin: 24px 0;">
-                <a href="https://youtu.be/RVxoEcRjQ0k" target="_blank" style="
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 8px;
-                    background: #FF0000;
-                    color: #fff;
-                    text-decoration: none;
-                    padding: 12px 20px;
-                    font-family: 'DM Sans', sans-serif;
-                    font-size: 12px;
-                    font-weight: 600;
-                    letter-spacing: 0.1em;
-                    text-transform: uppercase;
-                ">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                    YouTube'da İzle
-                </a>
+                <p class="quote-text">Algoritmalar her şeyi yönetirken, bu kadar çok hikâye, renk ve veri akışı arasında "insan kalmak" hangi stratejide saklı?</p>
             </div>
         </div>
 
         <hr class="rule">
 
-        <!-- 02 — NOSTALJİ -->
-        <div class="section" style="position: relative; overflow: hidden;">
+        <!-- 02 — TEKNOLOJİ -->
+        <div class="section">
             <span class="section-number">02</span>
-            <div class="section-label">Kültür Akımı</div>
+            <div class="section-label">Teknoloji & Yapay Zeka</div>
+            <h2>Ajansal YZ Yükseliyor,<br><em>Dijital Egemenlik Savaşları</em></h2>
 
-            <div style="
-                font-family: 'DM Sans', sans-serif;
-                font-size: 13px;
-                font-style: italic;
-                letter-spacing: 0.06em;
-                color: var(--cream-muted);
-                margin-bottom: 8px;
-            ">throwback thursday ✦ #tbt</div>
+            <p>ChatGPT 5.5, özellikle terminal üzerinden iş yapabilme ve <strong>"agentic" (ajansal) görevlerde</strong> Claude ve Gemini gibi rakiplerini geride bırakmış durumda. Yeni Workspace Agent'lar, kullanıcıların kendi iş akışlarını otomatize eden takımlar kurmasına olanak tanıyor; bu ajanlar siz uyurken bile <em>7/24 çalışabiliyor.</em></p>
 
-            <h2>2026'nın En Baskın Trendi:<br><em>2016 Nostaljisi</em></h2>
-
-            <div style="
-                font-size: 11px;
-                color: var(--cream-dim);
-                letter-spacing: 0.1em;
-                margin-bottom: 24px;
-                text-transform: uppercase;
-            ">10 Yıl Önce · 2016</div>
-
-            <div class="band" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
-                <span>Fabrika Ayarları: Yine 2016</span>
-                <a href="https://youtu.be/IyKe7A-q2pk" target="_blank" style="
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 7px;
-                    background: #0e0d0b;
-                    color: #fff;
-                    text-decoration: none;
-                    padding: 8px 14px;
-                    font-size: 11px;
-                    font-weight: 600;
-                    letter-spacing: 0.1em;
-                    text-transform: uppercase;
-                    white-space: nowrap;
-                ">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                    YouTube'da İzle
-                </a>
+            <div class="callout">
+                <p><strong>Claude'da "skill" yapıları:</strong> Kullanıcılara daha iyi soru sorma (context engineering) becerisi kazandırarak yapay zekadan alınan verimi artırıyor. Araç, artık yalnızca sohbet robotu değil; kişisel bir iş ortağı.</p>
             </div>
 
-            <p>2026, 2016'nın tam <strong>10. yılı</strong> olduğu için nostalji akımı TikTok, Instagram ve X'te zirvede. Herkes throwback fotoğraflar paylaşıyor, 2016 filtreleri kullanıyor.</p>
+            <h3>AB'nin WhatsApp'ı Terk Etmesi</h3>
+            <p>Avrupa Birliği, ABD menşeli uygulamalara (WhatsApp, Signal) olan bağımlılığını azaltmak ve <strong>"dijital egemenlik"</strong> kurmak için kamu sektöründe kendi açık kaynaklı mesajlaşma servislerini kullanmaya başladı: Fransa'da <em>CHAP</em>, Almanya'da <em>BundesMessenger</em>. Meta'nın WhatsApp üzerinden sunduğu yapay zeka botu politikası, AB tarafından hakim durumun kötüye kullanılması ve rekabet ihlali olarak değerlendiriliyor.</p>
 
-            <h3>Yeniden Popüler Olan Şeyler</h3>
-            <div style="display: flex; flex-direction: column; gap: 0;">
-                <div style="padding: 12px 16px; background: var(--surface-2); border-left: 3px solid var(--accent); margin-bottom: 6px; font-size: 13px; color: var(--cream); font-weight: 300;">🎵 Beyoncé ve Drake'in 2016 dönemi şarkıları</div>
-                <div style="padding: 12px 16px; background: var(--surface-2); border-left: 3px solid var(--accent); margin-bottom: 6px; font-size: 13px; color: var(--cream); font-weight: 300;">💧 Bottle flip challenge — evinizde bardakları havaya fırlatmaya hazır olun</div>
-                <div style="padding: 12px 16px; background: var(--surface-2); border-left: 3px solid var(--accent); margin-bottom: 6px; font-size: 13px; color: var(--cream); font-weight: 300;">📷 2016 Instagram filtreleri</div>
-                <div style="padding: 12px 16px; background: var(--surface-2); border-left: 3px solid var(--accent); font-size: 13px; color: var(--cream); font-weight: 300;">📹 O dönemin viral video formatları</div>
+            <div class="band">
+                Bir tarafta dronlar gökyüzünü otonom birer avcıya dönüştürürken, insan beyni "derinliği" kaybetmemeye çalışıyor.
             </div>
 
-            <p style="margin-top: 24px; border-top: 1px solid var(--border); padding-top: 20px;"><strong>Neden?</strong> Küresel belirsizlikler — savaş, ekonomi, iklim krizi — insanları <em>"kaçış kültürü"</em> ve nostaljiye itiyor. On yıl önce her şey daha basitti, değil mi?</p>
+            <h3>Okuma Beynimizi Nasıl Değiştiriyor?</h3>
+            <p>Okuma, beynin görme, dil ve dikkat bölümlerini bir araya getiren <strong>sonradan kazanılmış bir devre.</strong> Ancak ekranlardan yapılan yüzeysel okuma (skimming), beynin derin analiz ve eleştirel düşünme yeteneğini köreltebilir. Bu haftanın en sessiz ama en önemli hatırlatması bu.</p>
         </div>
 
         <hr class="rule">
 
-        <!-- 03 — MODA -->
+        <!-- 03 — SİNEMA & DİZİ -->
         <div class="section">
             <span class="section-number">03</span>
-            <div class="section-label">Moda & Estetik</div>
-            <h2><em>Literary Chic</em><br>Yükselişte</h2>
+            <div class="section-label">Sinema & Dizi</div>
+            <h2>Perdedeki Hayatlar<br><em>ve Yeni Mitler</em></h2>
 
-            <p>Algoritmik "clean girl" estetiği artık bıktırdı. Yerini daha <strong>özgün, kaotik ve "insan yapımı"</strong> hissettiren tarzlara bırakıyor.</p>
+            <p>Nisan sonu sinema için büyük bir kırılma noktası. <strong>Michael Jackson biyografisi</strong> (24 Nisan, Antoine Fuqua yönetmenliğinde, Jaafar Jackson başrolde) popun kralının mirasını ve tartışmalı geçmişini perdede yeniden açıyor.</p>
 
-            <div class="tags">
-                <span class="tag">Literary Chic</span>
-                <span class="tag">Poetcore</span>
-                <span class="tag">Lady of Leisure</span>
-                <span class="tag">Mode Sportif</span>
-                <span class="tag">Modern Boho</span>
-            </div>
-
-            <h3>Öne Çıkan Detaylar</h3>
+            <h3>Vizyondaki Öne Çıkanlar</h3>
             <ul>
-                <li><strong>Maximal renkler</strong> — sade beyazlara elveda</li>
-                <li><strong>Fringe (püskül) detaylar</strong> — 70'ler geri döndü</li>
-                <li><strong>Şal kullanımı</strong> — Fransız kadınlar gibi stilinizi tamamlayın</li>
-                <li><strong>Dantel ve el işçiliği</strong> — vintage tezgahlar yeniden keşfediliyor</li>
-                <li><strong>"Okumuş gibi görünme" isteği</strong> — kitap kafe estetiği her yerde</li>
+                <li><strong>Michael</strong> (24 Nisan) — MJ biyografisi, geniş bir tartışma zemini açıyor</li>
+                <li><strong>Mother Mary</strong> (24 Nisan) — Anne Hathaway'li A24 yapımı; psikolojik gerilimi müzikal bir ayin tadında sunuyor</li>
+                <li><strong>The Super Mario Galaxy Movie</strong> — Universal animasyon hamlesi, aile seyircisini salonlara çekiyor</li>
+                <li><strong>The Drama</strong> — Zendaya & Robert Pattinson; merakla bekleniyor</li>
+            </ul>
+
+            <h3>Dizi Gündemi</h3>
+            <ul>
+                <li><strong>Beef Season 2</strong> (Netflix) — Oscar Isaac & Carey Mulligan ile sınıfsal öfke farklı bir kadroyla masada</li>
+                <li><strong>Euphoria Season 3</strong> (HBO) — Zendaya dönüyor</li>
+                <li><strong>Hacks</strong> final sezonu — HBO'nun en sevilen komedisi bitiyor</li>
+                <li><strong>The Testaments</strong> — Handmaid's Tale evreninin devamı</li>
+                <li><strong>Half Man</strong> — Richard Gadd'ın yeni mini dizisi</li>
             </ul>
 
             <div class="callout">
-                <p><strong>Anti-AI Estetiği:</strong> Yapay zekanın mükemmelliğine tepki olarak kasıtlı kusurlar, el işçiliği ve "messy" estetik yükselişte. İnsanlar artık dijital mükemmellikten sıkıldı.</p>
+                <p><strong>Trend:</strong> Haftalık yayınlanan dizilere dönüş hızlanıyor. Binge-watching dönemi kapanıyor; haftada bir bölüm heyecanı geri geliyor. Kültleşmiş içerik üretimi ön planda.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px;">
+                <a href="https://youtu.be/RVxoEcRjQ0k" target="_blank" style="display:block; text-decoration:none; border: 1px solid var(--border); overflow:hidden;">
+                    <img src="https://img.youtube.com/vi/RVxoEcRjQ0k/mqdefault.jpg" style="width:100%; display:block;">
+                    <div style="padding: 10px 12px; background: var(--surface-2);">
+                        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px;">Film Analizi</div>
+                        <div style="font-family: 'Playfair Display', serif; font-size: 13px; color: var(--white);">Project Hail Mary</div>
+                    </div>
+                </a>
+                <a href="https://youtu.be/fm8MO3sWKY0" target="_blank" style="display:block; text-decoration:none; border: 1px solid var(--border); overflow:hidden;">
+                    <img src="https://img.youtube.com/vi/fm8MO3sWKY0/mqdefault.jpg" style="width:100%; display:block;">
+                    <div style="padding: 10px 12px; background: var(--surface-2);">
+                        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px;">Kitap Analizi</div>
+                        <div style="font-family: 'Playfair Display', serif; font-size: 13px; color: var(--white);">Frankenstein</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <hr class="rule">
+
+        <!-- 04 — MODA -->
+        <div class="section">
+            <span class="section-number">04</span>
+            <div class="section-label">Moda & Estetik</div>
+            <h2>Baharın Giysileri<br><em>ve Geçişlerin Sanatı</em></h2>
+
+            <p>2026 Bahar/Yaz modası <strong>"gerçek hayatta giyilebilir"</strong> olana dönüyor. Fonksiyonellik artık podyumdan sokağa iniyor.</p>
+
+            <div class="tags">
+                <span class="tag">Utility & Recreation</span>
+                <span class="tag">Jazz Age</span>
+                <span class="tag">Mode Sportif</span>
+                <span class="tag">Retro Summer</span>
+                <span class="tag">Art of In-Between</span>
+            </div>
+
+            <h3>Öne Çıkan Renkler & Parçalar</h3>
+            <ul>
+                <li><strong>Renk paleti:</strong> Teal (mavi-yeşil), cherry red, cobalt blue hâkim</li>
+                <li><strong>Capri pantolonlar</strong> ve soft brogue ayakkabılar sezonu tanımlıyor</li>
+                <li><strong>Jazz Age esintisi</strong> — 1920'lerin kriz sonrası coşkusu bugüne sızıyor</li>
+                <li><strong>Windbreaker ceketler</strong> ve utility detaylar her yerde</li>
+                <li><strong>Milan Design Week</strong> bağlantılı İtalya bahar modası tasarımı bir yaşam alanı olarak kurgular</li>
+            </ul>
+
+            <div class="callout">
+                <p><strong>Anti-AI Estetiği:</strong> Yapay zekanın mükemmelliğine tepki olarak kasıtlı kusurlar, el işçiliği ve "messy" estetik yükseliyor. Sanat dünyasında 3D tarama teknolojisiyle eserlerin kopyalanması ise "orijinallik" kavramını bir kez daha sorgulatıyor.</p>
             </div>
 
             <div style="margin-top: 24px;">
@@ -505,111 +504,80 @@ body {
 
         <hr class="rule">
 
-        <!-- 04 — EĞLENCE -->
+        <!-- 05 — BİLİM & DOĞA -->
         <div class="section">
-            <span class="section-number">04</span>
-            <div class="section-label">Film · Dizi · Edebiyat</div>
-            <h2>Ekranlar ve<br><em>Sayfalar</em></h2>
+            <span class="section-number">05</span>
+            <div class="section-label">Bilim & Doğa</div>
+            <h2>Sessiz Krizler<br><em>ve Sınır Boyları</em></h2>
 
-            <h3>Vizyondaki Popüler Filmler</h3>
+            <p>Diplomatik gürültünün gölgesinde, <strong>sessizce yaklaşan krizler</strong> var. Colorado Nehri'ndeki su krizi ve Atlantik akıntısının (AMOC) çöküş riski zihnimizin arka planında uğuldamaya devam ediyor.</p>
+
+            <h3>Bu Haftanın Bilim Gündemi</h3>
             <ul>
-                <li><strong>The Super Mario Galaxy Movie</strong> — 1 Nisan'da vizyona girdi</li>
-                <li><strong>The Drama</strong> — Zendaya & Robert Pattinson'ın merakla beklenen filmi</li>
-                <li><strong>Michael</strong> — Michael Jackson biyografisi</li>
+                <li><strong>Gözyaşı gazı & biber spreyi</strong> — Science News, uzun vadeli sağlık etkilerini masaya yatırıyor</li>
+                <li><strong>Nükleer atıktan radyoaktif ilaç</strong> — New Scientist "atığı şifaya dönüştürme" projelerini öne çıkarıyor</li>
+                <li><strong>Maymunlarda "pretend play"</strong> — Hayali oyun yeteneği keşfi, insan benzeri düşüncenin köklerini sorgulatıyor</li>
+                <li><strong>Canavar sayı dizileri</strong> — Matematikçiler evrenin kodlarını çözmeye devam ediyor</li>
+                <li><strong>Mikroplastikler</strong> — Sessiz işgal ve kaynakları tartışılıyor</li>
             </ul>
 
-            <h3>Streaming Trendleri</h3>
-            <p>Marty Supreme gibi yapımlar dikkat çekiyor. <strong>Haftalık yayınlanan dizilere dönüş</strong> ve kültleşmiş içerikler trend. Binge-watching dönemi sona eriyor, haftada bir bölüm heyecanı geri geliyor.</p>
+            <div class="quote">
+                <p class="quote-text">Görünüşe göre, bizler otonom gelecekleri kurgularken doğa kendi oyununun kurallarını yeniden yazıyor.</p>
+            </div>
 
-            <h3>Edebiyat Trendleri</h3>
+            <p><strong>İş birliği teorisi nerede?</strong> "Mahkum İkilemi" üzerine yapılan çalışmalar, bencil bir dünyada bile <em>"Kısasa Kısas" (Tit for Tat)</em> gibi nazik, bağışlayıcı ama suistimale izin vermeyen stratejilerin iş birliğini kalıcı kılabileceğini gösteriyor. Belki teknoloji politikalarında da denenebilir.</p>
+        </div>
+
+        <hr class="rule">
+
+        <!-- 06 — EDEBİYAT & KÜLTÜR -->
+        <div class="section">
+            <span class="section-number">06</span>
+            <div class="section-label">Edebiyat & Genel Kültür</div>
+            <h2>Kitaplar, Anzac Günü<br><em>ve Türkiye'den</em></h2>
+
+            <h3>Nisan 2026 Edebiyat Gündemi</h3>
             <div class="tags">
                 <span class="tag">Romantasy</span>
                 <span class="tag">Speculative Fiction</span>
                 <span class="tag">LGBTQ+ Fiction</span>
                 <span class="tag">Horror</span>
             </div>
+            <ul>
+                <li><strong>Yesteryear</strong> (Caro Claire Burke) — spekülatif kurgu öne çıkıyor</li>
+                <li><strong>Transcription</strong> (Ben Lerner) — ciddi nonfiction alanda</li>
+                <li><strong>This Land Is Your Land</strong> (Beverly Gage) — tarih ve siyaset kesişiminde</li>
+                <li>Dünya Kitap Günü (23 Nisan) etkinlikleri ve Goodreads tartışmaları sürüyor</li>
+            </ul>
 
-            <p><strong>Remix Kültürü:</strong> Frankenstein, Wuthering Heights, Hamnet, Pride &amp; Prejudice gibi klasiklerin modern uyarlamaları çok konuşuluyor. Uluslararası Booker Ödülü 2026 kısa listesi de açıklandı.</p>
+            <div class="callout">
+                <p>Belki de bu kadar çok gerçeklik ve veri içinde, kendimize kaçacak <strong>hayali odalar inşa etmeye</strong> her zamankinden daha çok ihtiyaç duyuyoruz. Goodreads listelerini romantasy ve spekülatif kurgu domine etmesi boşuna değil.</p>
+            </div>
 
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px;">
-
-    <a href="https://youtu.be/fm8MO3sWKY0" target="_blank" style="display:block; text-decoration:none; border: 1px solid var(--border); overflow:hidden;">
-        <img src="https://img.youtube.com/vi/fm8MO3sWKY0/mqdefault.jpg" style="width:100%; display:block;">
-        <div style="padding: 10px 12px; background: var(--surface-2);">
-            <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px;">Kitap Analizi</div>
-            <div style="font-family: 'Playfair Display', serif; font-size: 13px; color: var(--white);">Frankenstein</div>
-        </div>
-    </a>
-
-    <a href="https://youtu.be/330BjRO5HHc" target="_blank" style="display:block; text-decoration:none; border: 1px solid var(--border); overflow:hidden;">
-        <img src="https://img.youtube.com/vi/330BjRO5HHc/mqdefault.jpg" style="width:100%; display:block;">
-        <div style="padding: 10px 12px; background: var(--surface-2);">
-            <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px;">Kitap Analizi</div>
-            <div style="font-family: 'Playfair Display', serif; font-size: 13px; color: var(--white);">Hamnet</div>
-        </div>
-    </a>
-
-</div>
-
-        <!-- 05 — TÜRKİYE -->
-        <div class="section">
-            <span class="section-number">05</span>
-            <div class="section-label">Türkiye'den</div>
-            <h2>Kültür-Sanat<br><em>Haberleri</em></h2>
+            <h3>Anzac Günü — 25 Nisan</h3>
+            <p>Avustralya ve Yeni Zelanda'da I. Dünya Savaşı'ndaki Gelibolu çıkarmasının yıl dönümü anıldı. Sydney'de şafak törenlerinde protestolar yaşandı; NSW, ACT ve WA'da ekstra tatil düzenlendi.</p>
 
             <h3>Türkiye Kültür Yolu Festivali</h3>
-            <p><strong>25 Nisan'da Şanlıurfa'da başlayıp 15 Kasım'da Adana'da bitecek.</strong> Toplam 26 şehir bu festivale ev sahipliği yapacak. Hazırlıklar sürüyor.</p>
-
-            <h3>Milliyet Sanat — Nisan 2026</h3>
-            <ul>
-                <li>İlker Çatak özel söyleşisi</li>
-                <li>Arkas Sanat "Moda ve Resim" sergisi</li>
-                <li>45. İstanbul Film Festivali hazırlıkları</li>
-                <li>Göksel'in yeni albümü</li>
-            </ul>
-
-            <h3>Aktif Etkinlikler</h3>
-            <ul>
-                <li>DenizBank 8. Uluslararası İstanbul Çocuk ve Gençlik Sanat Bienali</li>
-                <li>ODTÜ Sanat etkinlikleri devam ediyor</li>
-            </ul>
+            <p><strong>25 Nisan'da Şanlıurfa'da başlayıp 15 Kasım'da Adana'da bitecek.</strong> Toplam 26 şehir ev sahipliği yapacak. Milliyet Sanat Nisan sayısında İlker Çatak özel söyleşisi, 45. İstanbul Film Festivali hazırlıkları ve Göksel'in yeni albümü de gündemde.</p>
         </div>
 
-        <hr class="rule">
-
-        <!-- 06 — SOSYOLOJI -->
-        <div class="section">
-            <span class="section-number">06</span>
-            <div class="section-label">Genel Atmosfer</div>
-            <h2>Sosyolojik<br><em>Tartışmalar</em></h2>
-
-            <h3>Wisdom Flexing</h3>
-            <p>Sosyal medyanın 15 saniyelik hızlı tüketim döngüsünden ve Twitter kavgalarından bunalan herkes, Substack gibi daha sakin sulara yelken açtı. Artık sadece ne bildiğin değil, <strong>ne kadar derin düşünebildiğin</strong> önemli — bilgi, statü sembolüne dönüştü.</p>
-
-            <div class="callout">
-                <p>Eskiden bir konuda hızlı yorum yapmak, o "hot take" kültürü yeterliydi. Şimdi herkes <strong>"ben bu işin felsefesini biliyorum"</strong> deme peşinde. Kimse "bilmiyorum" demiyor; her olayın altında devasa sosyolojik analizler aranıyor.</p>
+        <!-- SOCIAL NOTE -->
+        <div class="social-note">
+            <div class="social-note-title">Bizi Takip Edin</div>
+            <p style="font-size: 12px; color: var(--cream-dim); margin-bottom: 16px;">Bu Muydu? ve Uçan Salyangoz kanallarını takip etmeyi unutmayın. Düşüncelerinizi <strong style="color: var(--cream-muted);">iletisimbumuydu@gmail.com</strong> adresine veya Instagram'a DM yoluyla gönderebilirsiniz.</p>
+            <div class="social-links">
+                <a href="https://uansalyangoz.substack.com/" target="_blank" class="social-link">Substack →</a>
+                <a href="https://www.instagram.com/bumuydu/" target="_blank" class="social-link">Instagram →</a>
+                <a href="https://www.youtube.com/@UcanSalyangoz" target="_blank" class="social-link">YouTube (Uçan Salyangoz) →</a>
+                <a href="https://www.tiktok.com/@bumuydu" target="_blank" class="social-link">TikTok →</a>
+                <a href="https://t.me/bumuydu" target="_blank" class="social-link">Telegram →</a>
             </div>
-
-            <p>Ama bu durum tuhaf bir çelişki yaratıyor: Günlerce üzerine düşünülmüş gerçek içerikler ile sadece <em>"bilge görünmek"</em> için kurulmuş zorlama cümleler yan yana geliyor. Herkesin profesör gibi konuştuğu bir sınıfta kimin kimi takip edeceği de ayrı bir sorun. <span style="color: var(--accent);">Gerçek derinlikle iyi paketlenmiş gösteriş giderek birbirine karışıyor.</span></p>
-
-            <h3>Authenticity vs. AI</h3>
-            <div class="callout">
-                <p><strong>"Gerçek insan yapımı"</strong> vurgusu sanatta ve içerik üretiminde en güçlü kale. AI içeriklerine karşı tepki ve otantiklik arayışı artıyor. İnsanlar <span style="color: var(--accent);">imperfeksiyonu</span> arıyor.</p>
-            </div>
-
-            <h3>Yalnızlık Ekonomisi</h3>
-            <p>Bugün birinin seninle sinemaya gitmesi, iki saat dertleşmesi ya da sadece karşında oturması için marketten süt alır gibi ödeme yapabiliyorsun. Güney Kore'nin "kiralık arkadaş" kültüründen fırlamış bu olgu artık çok daha yaygın — ve normalleşiyor.</p>
-            <p>Modern hayat bizi ekranlara o kadar bağladı ki birine "Naber, nasılsın?" demeye çekinir olduk. Gerçek arkadaşlık emek istiyor; tartışıyorsun, dinliyorsun, zaman harcıyorsun. Yalnızlık ekonomisi ise sunuyor: <em>"Risk alma, parasını ver, sadece eğlen."</em> Ama uygulama kapandığında ya da para bittiğinde yanında kimin kalacağı kocaman bir soru işareti.</p>
-            <p>Aslında yalnızlığımıza yara bandı yapıştırıyoruz — yaranın neden orada olduğunu hiç sorgulamadan. Tıpkı her yere navigasyonla gittiğimiz için yol bulma yeteneğimizi kaybetmemiz gibi, sosyalleşmeyi satın aldığımızda <span style="color: var(--accent);">gerçek bağ kurmayı da unutuyoruz.</span></p>
-
-            <h3>Onarım Estetiği</h3>
-            <p>Sürdürülebilirlik ve kişisel ifadeyle birleşen bir <strong>tamir/yenileme kültürü</strong> hakim. Eski sevilen kıyafetlerinizi atmak yerine yeniden hayal edin.</p>
         </div>
 
         <!-- FOOTER -->
         <div class="footer">
             <div class="footer-title">Sarsıntılar · Sinyaller · Notlar</div>
-            <p>Nisan 2026 — 2026'nın trendlerini takip ettiğiniz yer.</p>
+            <p>26 Nisan 2026 · Nisan Sayısı 2 — 2026'nın trendlerini takip ettiğiniz yer.</p>
             <p style="margin-top: 16px; color: #3d3530;">Substack formatında hazırlanmıştır.</p>
         </div>
 
