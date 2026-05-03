@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kitap Kulübü — Bu Muydu?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg2: #111111;
+      --bg3: #181818;
+      --text: #f0ede6;
+      --text-dim: #8a8580;
+      --yellow: #f5e642;
+      --yellow-dim: rgba(245, 230, 66, 0.15);
+      --red: #c23b22;
+      --red-dim: rgba(194, 59, 34, 0.15);
+      --green: #2e7d32;
+      --green-dim: rgba(46, 125, 50, 0.2);
+      --border: rgba(245, 230, 66, 0.18);
+      --border-red: rgba(194, 59, 34, 0.3);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Crimson Text', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .nav-logo span { color: var(--yellow); }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 32px;
+    }
+    nav a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--yellow); }
+
+    /* ─── HERO ────────────────────────────── */
+    .hero {
+      padding: 80px 48px 60px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      right: -80px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(245,230,66,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .week-tag {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      border: 1px solid var(--yellow);
+      padding: 4px 12px;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 900;
+      line-height: 1.1;
+      max-width: 700px;
+      margin-bottom: 16px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--yellow);
+    }
+    .hero-meta {
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      font-family: 'Space Mono', monospace;
+      letter-spacing: 0.05em;
+    }
+    .hero-meta span {
+      color: var(--red);
+      margin: 0 8px;
+    }
+
+    /* ─── GAME NAV ────────────────────────── */
+    .game-nav {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      position: sticky;
+      top: 57px;
+      z-index: 90;
+    }
+    .game-tab {
+      flex: 1;
+      padding: 18px 24px;
+      text-align: center;
+      cursor: pointer;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      border: none;
+      background: transparent;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    .game-tab:hover { color: var(--text); }
+    .game-tab.active {
+      color: var(--yellow);
+      border-bottom-color: var(--yellow);
+    }
+    .game-tab .tab-num {
+      display: block;
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    /* ─── GAME SECTIONS ───────────────────── */
+    .game-section {
+      display: none;
+      min-height: 80vh;
+    }
+    .game-section.active { display: block; }
+
+    .section-inner {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+
+    .game-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 12px;
+    }
+    .game-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    .game-desc {
+      color: var(--text-dim);
+      font-size: 1rem;
+      margin-bottom: 48px;
+      max-width: 480px;
+    }
+
+    /* ─── KITAPLE ─────────────────────────── */
+    #board {
+      display: grid;
+      grid-template-rows: repeat(6, 1fr);
+      gap: 6px;
+      margin: 0 auto 32px;
+      width: 100%;
+      max-width: 340px;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+    .tile {
+      aspect-ratio: 1;
+      border: 2px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--text);
+      background: var(--bg2);
+      transition: border-color 0.1s, background 0.3s, transform 0.1s;
+      position: relative;
+    }
+    .tile.filled { border-color: #555; transform: scale(1.03); }
+    .tile.correct { background: var(--green); border-color: var(--green); color: #fff; }
+    .tile.present { background: #7d6608; border-color: #7d6608; color: #fff; }
+    .tile.absent { background: #2a2a2a; border-color: #2a2a2a; color: #666; }
+    .tile.flip { animation: flip 0.5s ease forwards; }
+
+    @keyframes flip {
+      0% { transform: rotateX(0); }
+      50% { transform: rotateX(-90deg); }
+      100% { transform: rotateX(0); }
+    }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%,60% { transform: translateX(-6px); }
+      40%,80% { transform: translateX(6px); }
+    }
+    .row.shake { animation: shake 0.4s ease; }
+
+    /* keyboard */
+    #keyboard {
+      max-width: 380px;
+      margin: 0 auto;
+    }
+    .kb-row {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      margin-bottom: 5px;
+    }
+    .key {
+      height: 48px;
+      min-width: 36px;
+      padding: 0 6px;
+      border-radius: 4px;
+      background: #2a2a2a;
+      border: 1px solid #3a3a3a;
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      text-transform: uppercase;
+    }
+    .key:hover { background: #3a3a3a; transform: translateY(-1px); }
+    .key.wide { min-width: 56px; font-size: 0.6rem; }
+    .key.correct { background: var(--green); border-color: var(--green); }
+    .key.present { background: #7d6608; border-color: #7d6608; }
+    .key.absent { background: #1a1a1a; border-color: #1a1a1a; color: #444; }
+
+    #kitaple-msg {
+      text-align: center;
+      min-height: 28px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: var(--yellow);
+      margin-bottom: 16px;
+    }
+    #kitaple-result {
+      display: none;
+      text-align: center;
+      padding: 24px;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      margin-top: 24px;
+    }
+    #kitaple-result h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+    }
+    #kitaple-result p { color: var(--text-dim); font-size: 0.9rem; }
+    #kitaple-result .share-btn {
+      margin-top: 16px;
+      padding: 10px 24px;
+      background: var(--yellow);
+      color: var(--bg);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      border: none;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+    #kitaple-result .share-btn:hover { opacity: 0.85; }
+
+    /* ─── İLK CÜMLE ───────────────────────── */
+    .sentence-card {
+      border: 1px solid #2a2a2a;
+      padding: 28px 32px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      background: var(--bg2);
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .sentence-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--yellow);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.2s;
+    }
+    .sentence-card:hover { border-color: #3a3a3a; background: var(--bg3); }
+    .sentence-card:hover::before { transform: scaleY(1); }
+    .sentence-card.selected { border-color: var(--yellow); }
+    .sentence-card.selected::before { transform: scaleY(1); }
+    .sentence-card.correct-answer {
+      border-color: var(--green);
+      background: var(--green-dim);
+    }
+    .sentence-card.correct-answer::before { background: var(--green); transform: scaleY(1); }
+    .sentence-card.wrong-answer { border-color: var(--red); opacity: 0.5; }
+    .sentence-card .opt-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .sentence-card .sentence-text {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      font-style: italic;
+    }
+    .sentence-card .result-badge {
+      display: none;
+      margin-top: 12px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .sentence-card.correct-answer .result-badge { display: block; color: #4caf50; }
+    .sentence-card.wrong-answer .result-badge { display: block; color: var(--red); }
+    .sentence-result-note {
+      display: none;
+      padding: 20px 24px;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      margin-top: 16px;
+      font-size: 0.95rem;
+    }
+    .sentence-result-note.visible { display: block; }
+    .sentence-result-note strong { color: var(--yellow); }
+
+    /* ─── HABER × KİTAP ──────────────────── */
+    .news-card {
+      border: 1px solid var(--border-red);
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      background: var(--bg2);
+      position: relative;
+    }
+    .news-source {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 10px;
+    }
+    .news-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 10px;
+    }
+    .news-snippet {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+    }
+    .books-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 520px) { .books-grid { grid-template-columns: 1fr; } }
+    .book-option {
+      padding: 18px 20px;
+      border: 1px solid #2a2a2a;
+      background: var(--bg2);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: left;
+    }
+    .book-option:hover { border-color: #3a3a3a; background: var(--bg3); }
+    .book-option.selected { border-color: var(--yellow); }
+    .book-option.correct-book { border-color: var(--green); background: var(--green-dim); }
+    .book-option.wrong-book { border-color: var(--red); opacity: 0.4; }
+    .book-option .book-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .book-option .book-author {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .news-result {
+      display: none;
+      padding: 20px 24px;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      margin-top: 16px;
+    }
+    .news-result.visible { display: block; }
+    .news-result p { font-size: 0.97rem; }
+    .news-result strong { color: var(--yellow); }
+
+    /* ─── CTA BTN ─────────────────────────── */
+    .btn {
+      display: inline-block;
+      padding: 12px 28px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-yellow { background: var(--yellow); color: var(--bg); }
+    .btn-yellow:hover { opacity: 0.85; }
+    .btn-outline {
+      background: transparent;
+      color: var(--text-dim);
+      border: 1px solid #333;
+    }
+    .btn-outline:hover { border-color: var(--text-dim); color: var(--text); }
+
+    /* ─── WEEK BOOK CARD ──────────────────── */
+    .book-strip {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 40px 48px;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+    .book-cover-mock {
+      flex-shrink: 0;
+      width: 80px;
+      height: 110px;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--yellow);
+    }
+    .book-strip-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-style: italic;
+      margin-bottom: 4px;
+    }
+    .book-strip-text p {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    /* ─── FOOTER AREA ─────────────────────── */
+    .page-footer {
+      padding: 40px 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    /* ─── SCORE BAR ───────────────────────── */
+    .score-bar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 48px 0;
+      margin-top: -1px;
+      border-bottom: 1px solid var(--border);
+      height: 42px;
+      background: var(--bg);
+    }
+    .score-item {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .score-num {
+      color: var(--yellow);
+      font-weight: 700;
+    }
+
+    /* ─── DECORATIVE ──────────────────────── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 48px 0;
+      color: var(--text-dim);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #222;
+    }
+
+    /* ─── SCROLLBAR ───────────────────────── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #333; }
+
+    @media (max-width: 640px) {
+      nav { padding: 14px 20px; }
+      nav ul { gap: 16px; }
+      .hero { padding: 48px 20px 40px; }
+      .book-strip { padding: 28px 20px; flex-direction: column; gap: 20px; }
+      .page-footer { padding: 28px 20px; flex-direction: column; gap: 10px; text-align: center; }
+      .score-bar { padding: 0 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">Bu Muydu<span>?</span></a>
+  <ul>
+    <li><a href="index.html">Ana Sayfa</a></li>
+    <li><a href="kitap.html" style="color:var(--yellow)">Kitap Kulübü</a></li>
+    <li><a href="bulten.html">Bülten</a></li>
+  </ul>
+</nav>
+
+<!-- SCORE BAR -->
+<div class="score-bar">
+  <div class="score-item">Kitaple <span class="score-num" id="score-kitaple">—</span></div>
+  <div class="score-item" style="color:#333">|</div>
+  <div class="score-item">İlk Cümle <span class="score-num" id="score-ilk">—</span></div>
+  <div class="score-item" style="color:#333">|</div>
+  <div class="score-item">Haber×Kitap <span class="score-num" id="score-haber">—</span></div>
+</div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="week-tag">Pazar · 3 Mayıs 2026 · Hafta #1</div>
+  <h1>Oyun <em>alanı</em><br>açık.</h1>
+  <p class="hero-meta">
+    Bu hafta <span>✦</span> Vedat Türkali — Bir Gün Tek Başına
+  </p>
+</header>
+
+<!-- BOOK STRIP -->
+<div class="book-strip">
+  <div class="book-cover-mock">✦</div>
+  <div class="book-strip-text">
+    <h3>Bir Gün Tek Başına</h3>
+    <p>Vedat Türkali &nbsp;·&nbsp; Bu Haftanın Kitabı &nbsp;·&nbsp; 3 Oyun</p>
+  </div>
+</div>
+
+<!-- GAME TABS -->
+<div class="game-nav">
+  <button class="game-tab active" onclick="switchGame('kitaple', this)">
+    <span class="tab-num">01</span>Kitaple
+  </button>
+  <button class="game-tab" onclick="switchGame('ilkcumle', this)">
+    <span class="tab-num">02</span>İlk Cümle?
+  </button>
+  <button class="game-tab" onclick="switchGame('haberxkitap', this)">
+    <span class="tab-num">03</span>Haber × Kitap
+  </button>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- OYUN 1: KİTAPLE                       -->
+<!-- ══════════════════════════════════════ -->
+<section class="game-section active" id="kitaple">
+  <div class="section-inner">
+    <p class="game-label">Oyun 01 · Kelime Bul</p>
+    <h2 class="game-title">Kitaple</h2>
+    <p class="game-desc">
+      Bu haftanın kitabından bir kelime. 6 hakkın var. Sarı = doğru harf, yanlış yer. Yeşil = tam isabet.
+    </p>
+
+    <div id="kitaple-msg"></div>
+    <div id="board"></div>
+
+    <div class="divider">klavye</div>
+
+    <div id="keyboard">
+      <div class="kb-row">
+        <button class="key" data-key="E">E</button>
+        <button class="key" data-key="R">R</button>
+        <button class="key" data-key="T">T</button>
+        <button class="key" data-key="Y">Y</button>
+        <button class="key" data-key="U">U</button>
+        <button class="key" data-key="I">I</button>
+        <button class="key" data-key="O">O</button>
+        <button class="key" data-key="P">P</button>
+      </div>
+      <div class="kb-row">
+        <button class="key" data-key="A">A</button>
+        <button class="key" data-key="S">S</button>
+        <button class="key" data-key="D">D</button>
+        <button class="key" data-key="F">F</button>
+        <button class="key" data-key="G">G</button>
+        <button class="key" data-key="H">H</button>
+        <button class="key" data-key="J">J</button>
+        <button class="key" data-key="K">K</button>
+        <button class="key" data-key="L">L</button>
+      </div>
+      <div class="kb-row">
+        <button class="key wide" data-key="ENTER">GİR</button>
+        <button class="key" data-key="Z">Z</button>
+        <button class="key" data-key="X">X</button>
+        <button class="key" data-key="C">C</button>
+        <button class="key" data-key="V">V</button>
+        <button class="key" data-key="B">B</button>
+        <button class="key" data-key="N">N</button>
+        <button class="key" data-key="M">M</button>
+        <button class="key wide" data-key="BACKSPACE">⌫</button>
+      </div>
+      <div class="kb-row" style="margin-top:2px">
+        <button class="key" data-key="Ç">Ç</button>
+        <button class="key" data-key="Ş">Ş</button>
+        <button class="key" data-key="Ğ">Ğ</button>
+        <button class="key" data-key="Ü">Ü</button>
+        <button class="key" data-key="Ö">Ö</button>
+        <button class="key" data-key="İ">İ</button>
+      </div>
+    </div>
+
+    <div id="kitaple-result">
+      <h3 id="kitaple-result-title">—</h3>
+      <p id="kitaple-result-text">—</p>
+      <button class="share-btn" onclick="shareKitaple()">Sonucu Paylaş ↗</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- OYUN 2: İLK CÜMLE Mİ, SAHTE Mİ?      -->
+<!-- ══════════════════════════════════════ -->
+<section class="game-section" id="ilkcumle">
+  <div class="section-inner">
+    <p class="game-label">Oyun 02 · Edebi Sezgi</p>
+    <h2 class="game-title">İlk Cümle mi,<br>Sahte mi?</h2>
+    <p class="game-desc">
+      Aşağıdaki üç cümleden biri <em>Bir Gün Tek Başına</em>'nın gerçek ilk cümlesi. Hangisi?
+    </p>
+
+    <div id="sentences-container">
+      <div class="sentence-card" onclick="checkSentence(this, false)" data-correct="false">
+        <div class="opt-num">Seçenek 01</div>
+        <div class="sentence-text">"Şehir sabahın erken saatlerinde hâlâ uyurken, adam kaldırımda yürüyordu — tek başına, bir sigara içerek."</div>
+        <div class="result-badge">✗ Sahte cümle</div>
+      </div>
+      <div class="sentence-card" onclick="checkSentence(this, true)" data-correct="true">
+        <div class="opt-num">Seçenek 02</div>
+        <div class="sentence-text">"Adam uyandığında güneş çoktan yükselmiş, oda ışıkla dolmuştu; ama o hâlâ yataktan kalkmak istemiyordu."</div>
+        <div class="result-badge">✓ Gerçek ilk cümle!</div>
+      </div>
+      <div class="sentence-card" onclick="checkSentence(this, false)" data-correct="false">
+        <div class="opt-num">Seçenek 03</div>
+        <div class="sentence-text">"O gün hiç kimse onu görmedi, hiç kimse aramadı. Gün boyunca yalnız kalan tek kişi oydu."</div>
+        <div class="result-badge">✗ Sahte cümle</div>
+      </div>
+    </div>
+
+    <div class="sentence-result-note" id="sentence-result-note">
+      <strong>Vedat Türkali</strong>, bu romanında yalnızlığı bir gün içinde, tek bir adamın gözünden anlatır. Cümlenin yalın gücü, karakterin içsel durumunu açık bir sembolle verme cesaretinden gelir.
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- OYUN 3: HABER × KİTAP                -->
+<!-- ══════════════════════════════════════ -->
+<section class="game-section" id="haberxkitap">
+  <div class="section-inner">
+    <p class="game-label">Oyun 03 · Gündem × Edebiyat</p>
+    <h2 class="game-title">Haber × Kitap</h2>
+    <p class="game-desc">
+      Bu haber hangi kitabı hatırlatıyor? Gündemdeki bir olay, edebiyatın bir yerinde mutlaka yankı bulur.
+    </p>
+
+    <div class="news-card">
+      <div class="news-source">↳ Gündemdeki Haber · Mayıs 2026</div>
+      <h3 class="news-headline">"Yapay Zeka, Milyonlarca İşçiyi Tek Başına Bıraktı"</h3>
+      <p class="news-snippet">Otomasyon dalgası büyük şehirlerdeki mavi yakalı işçileri derinden sarstı. Uzmanlar, bu neslin "görünmez" kalmaktan kurtulmanın yollarını aradığını söylüyor.</p>
+    </div>
+
+    <p style="font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);margin-bottom:16px;">Bu haberi en iyi hangi kitap yansıtır?</p>
+
+    <div class="books-grid">
+      <div class="book-option correct-answer-data" onclick="checkBook(this, true)">
+        <div class="book-title">Bir Gün Tek Başına</div>
+        <div class="book-author">Vedat Türkali</div>
+      </div>
+      <div class="book-option" onclick="checkBook(this, false)">
+        <div class="book-title">Yabancı</div>
+        <div class="book-author">Albert Camus</div>
+      </div>
+      <div class="book-option" onclick="checkBook(this, false)">
+        <div class="book-title">Sineklerin Tanrısı</div>
+        <div class="book-author">William Golding</div>
+      </div>
+      <div class="book-option" onclick="checkBook(this, false)">
+        <div class="book-title">Cesur Yeni Dünya</div>
+        <div class="book-author">Aldous Huxley</div>
+      </div>
+    </div>
+
+    <div class="news-result" id="news-result">
+      <p><strong>Vedat Türkali'nin romanı</strong>, tam da bu haberin merkezindeki insanı anlatır: sistemin dışına itilmiş, görünmez kılınmış, ama var olmaya devam eden adam. Teknolojik dönüşümün insanı nasıl yalnızlaştırdığını Türkali, 1960'larda sezmiş ve yazmıştı.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="page-footer">
+  <span>© 2026 Bu Muydu? — Kitap Kulübü</span>
+  <span>Her Pazar yeni oyunlar ✦</span>
+</footer>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SCRIPTS                               -->
+<!-- ══════════════════════════════════════ -->
+<script>
+  // ── TAB SWITCHING ─────────────────────
+  function switchGame(id, btn) {
+    document.querySelectorAll('.game-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.game-tab').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // ══════════════════════════════════════
+  // KITAPLE ENGINE
+  // ══════════════════════════════════════
+  // ⚙️ HAFTALIK KELİMEYİ BURADAN DEĞİŞTİRİN:
+  const TARGET = 'KALEM'; // 5 harfli büyük harf
+  const WORD_LENGTH = TARGET.length;
+  const MAX_GUESSES = 6;
+
+  let board = [];
+  let currentRow = 0;
+  let currentTile = 0;
+  let gameOver = false;
+  let guessResult = [];
+
+  function buildBoard() {
+    const boardEl = document.getElementById('board');
+    boardEl.innerHTML = '';
+    for (let r = 0; r < MAX_GUESSES; r++) {
+      const rowEl = document.createElement('div');
+      rowEl.classList.add('row');
+      rowEl.id = 'row-' + r;
+      board.push([]);
+      for (let c = 0; c < WORD_LENGTH; c++) {
+        const tile = document.createElement('div');
+        tile.classList.add('tile');
+        tile.id = `tile-${r}-${c}`;
+        rowEl.appendChild(tile);
+        board[r].push('');
+      }
+      boardEl.appendChild(rowEl);
+    }
+  }
+
+  function addLetter(letter) {
+    if (gameOver || currentTile >= WORD_LENGTH) return;
+    board[currentRow][currentTile] = letter;
+    const tile = document.getElementById(`tile-${currentRow}-${currentTile}`);
+    tile.textContent = letter;
+    tile.classList.add('filled');
+    currentTile++;
+  }
+
+  function deleteLetter() {
+    if (currentTile === 0) return;
+    currentTile--;
+    board[currentRow][currentTile] = '';
+    const tile = document.getElementById(`tile-${currentRow}-${currentTile}`);
+    tile.textContent = '';
+    tile.classList.remove('filled');
+  }
+
+  function showMsg(msg, duration = 1800) {
+    const el = document.getElementById('kitaple-msg');
+    el.textContent = msg;
+    if (duration > 0) setTimeout(() => { el.textContent = ''; }, duration);
+  }
+
+  function submitGuess() {
+    if (currentTile < WORD_LENGTH) {
+      showMsg('Kelime ' + WORD_LENGTH + ' harf olmalı.');
+      document.getElementById('row-' + currentRow).classList.add('shake');
+      setTimeout(() => document.getElementById('row-' + currentRow).classList.remove('shake'), 450);
+      return;
+    }
+
+    const guess = board[currentRow].join('');
+    const result = evaluateGuess(guess);
+    guessResult.push(result.map(r => r.status));
+    revealRow(currentRow, result);
+
+    const won = result.every(r => r.status === 'correct');
+    const lost = !won && currentRow === MAX_GUESSES - 1;
+
+    setTimeout(() => {
+      if (won) {
+        showMsg('🎉 Doğru!', 0);
+        endGame(true);
+      } else if (lost) {
+        showMsg('Kelime: ' + TARGET, 0);
+        endGame(false);
+      }
+    }, WORD_LENGTH * 350 + 200);
+
+    currentRow++;
+    currentTile = 0;
+  }
+
+  function evaluateGuess(guess) {
+    const result = Array(WORD_LENGTH).fill(null).map((_, i) => ({ letter: guess[i], status: 'absent' }));
+    const targetArr = TARGET.split('');
+    const guessArr = guess.split('');
+
+    // First pass: correct positions
+    for (let i = 0; i < WORD_LENGTH; i++) {
+      if (guessArr[i] === targetArr[i]) {
+        result[i].status = 'correct';
+        targetArr[i] = null;
+        guessArr[i] = null;
+      }
+    }
+    // Second pass: present
+    for (let i = 0; i < WORD_LENGTH; i++) {
+      if (guessArr[i] === null) continue;
+      const idx = targetArr.indexOf(guessArr[i]);
+      if (idx !== -1) {
+        result[i].status = 'present';
+        targetArr[idx] = null;
+      }
+    }
+    return result;
+  }
+
+  function revealRow(row, result) {
+    result.forEach((r, i) => {
+      setTimeout(() => {
+        const tile = document.getElementById(`tile-${row}-${i}`);
+        tile.classList.add('flip', r.status);
+        updateKey(r.letter, r.status);
+      }, i * 350);
+    });
+  }
+
+  const keyPriority = { correct: 3, present: 2, absent: 1 };
+  const keyState = {};
+
+  function updateKey(letter, status) {
+    const cur = keyState[letter];
+    if (!cur || keyPriority[status] > keyPriority[cur]) {
+      keyState[letter] = status;
+      const keyEl = document.querySelector(`.key[data-key="${letter}"]`);
+      if (keyEl) {
+        keyEl.classList.remove('correct', 'present', 'absent');
+        keyEl.classList.add(status);
+      }
+    }
+  }
+
+  function endGame(won) {
+    gameOver = true;
+    const resultEl = document.getElementById('kitaple-result');
+    const titleEl = document.getElementById('kitaple-result-title');
+    const textEl = document.getElementById('kitaple-result-text');
+    resultEl.style.display = 'block';
+
+    if (won) {
+      titleEl.textContent = currentRow + '. denemede buldun! 🎉';
+      textEl.textContent = '"' + TARGET + '" — Bir Gün Tek Başına\'dan alınan bu haftalık Kitaple kelimesiydi.';
+      document.getElementById('score-kitaple').textContent = '✓';
+    } else {
+      titleEl.textContent = 'Hakkın bitti.';
+      textEl.textContent = 'Bu haftanın kelimesi: ' + TARGET;
+      document.getElementById('score-kitaple').textContent = '✗';
+    }
+  }
+
+  function shareKitaple() {
+    const emojis = { correct: '🟩', present: '🟨', absent: '⬛' };
+    const lines = guessResult.map(row => row.map(s => emojis[s]).join('')).join('\n');
+    const text = `Bu Muydu? Kitaple — Hafta #1\n${guessResult.length}/${MAX_GUESSES}\n\n${lines}\n\nbumuydu.github.io/kitap.html`;
+    navigator.clipboard.writeText(text).then(() => alert('Panoya kopyalandı! Paylaşabilirsin.'));
+  }
+
+  // Keyboard events
+  document.addEventListener('keydown', e => {
+    if (document.getElementById('kitaple').classList.contains('active')) {
+      if (e.key === 'Enter') submitGuess();
+      else if (e.key === 'Backspace') deleteLetter();
+      else if (/^[a-zA-ZçÇşŞğĞüÜöÖıİ]$/.test(e.key)) addLetter(e.key.toUpperCase());
+    }
+  });
+
+  document.querySelectorAll('.key').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!document.getElementById('kitaple').classList.contains('active')) return;
+      const k = btn.dataset.key;
+      if (k === 'ENTER') submitGuess();
+      else if (k === 'BACKSPACE') deleteLetter();
+      else addLetter(k);
+    });
+  });
+
+  buildBoard();
+
+  // ══════════════════════════════════════
+  // İLK CÜMLE OYUNU
+  // ══════════════════════════════════════
+  let sentenceAnswered = false;
+
+  function checkSentence(el, isCorrect) {
+    if (sentenceAnswered) return;
+    sentenceAnswered = true;
+
+    document.querySelectorAll('.sentence-card').forEach(card => {
+      const correct = card.dataset.correct === 'true';
+      if (correct) {
+        card.classList.add('correct-answer');
+      } else {
+        card.classList.add('wrong-answer');
+      }
+      card.onclick = null;
+    });
+
+    document.getElementById('sentence-result-note').classList.add('visible');
+
+    if (isCorrect) {
+      document.getElementById('score-ilk').textContent = '✓';
+    } else {
+      document.getElementById('score-ilk').textContent = '✗';
+    }
+  }
+
+  // ══════════════════════════════════════
+  // HABER × KİTAP OYUNU
+  // ══════════════════════════════════════
+  let bookAnswered = false;
+
+  function checkBook(el, isCorrect) {
+    if (bookAnswered) return;
+    bookAnswered = true;
+
+    document.querySelectorAll('.book-option').forEach(opt => {
+      opt.onclick = null;
+      if (opt.classList.contains('correct-answer-data')) {
+        opt.classList.add('correct-book');
+      } else {
+        opt.classList.add('wrong-book');
+      }
+    });
+
+    document.getElementById('news-result').classList.add('visible');
+
+    if (isCorrect) {
+      document.getElementById('score-haber').textContent = '✓';
+    } else {
+      document.getElementById('score-haber').textContent = '✗';
+    }
+  }
+</script>
+
+</body>
+</html>
