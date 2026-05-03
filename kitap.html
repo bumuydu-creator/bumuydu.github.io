@@ -667,10 +667,14 @@
     </div>
 
     <div style="display:flex;justify-content:center;gap:0.5rem;flex-wrap:wrap">
-      <button class="card-action" onclick="shareBadge()">Unvanı Paylaş ↗</button>
+      <button class="card-action" onclick="downloadBadgeImage()">📥 Görseli İndir</button>
       <button class="card-action-outline" onclick="showCard(3)">Sıradaki →</button>
     </div>
+    <p style="font-family:'Space Mono',monospace;font-size:0.55rem;letter-spacing:0.1em;color:#444;margin-top:0.8rem;text-transform:uppercase">Görseli kaydet · Hikayene ekle</p>
   </div>
+
+  <!-- GİZLİ CANVAS -->
+  <canvas id="badge-canvas" style="display:none"></canvas>
 
   <!-- KART 3: GELECEKTEKİ KİTAP TEASERİ -->
   <div class="surprise-card" id="card-3" style="display:none">
@@ -1049,6 +1053,95 @@
   function closeSurprise() {
     document.getElementById('surprise-overlay').classList.remove('visible');
   }
+
+  // Canvas ile hikaye görseli üret ve indir
+  function downloadBadgeImage() {
+    const name = document.getElementById('reader-name').value.trim() || 'Okuyucu';
+    const canvas = document.getElementById('badge-canvas');
+    const W = 1080, H = 1920;
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext('2d');
+
+    // Arkaplan
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fillRect(0, 0, W, H);
+
+    // Sarı üst şerit
+    ctx.fillStyle = '#f5e642';
+    ctx.fillRect(0, 0, W, 8);
+
+    // Sarı alt şerit
+    ctx.fillRect(0, H - 8, W, 8);
+
+    // Köşe süsleme — sol üst
+    ctx.strokeStyle = 'rgba(245,230,66,0.2)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(40, 40, 200, 200);
+
+    // Köşe süsleme — sağ alt
+    ctx.strokeRect(W - 240, H - 240, 200, 200);
+
+    // Rozet dairesi
+    const cx = W / 2, cy = H / 2 - 180;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 130, 0, Math.PI * 2);
+    ctx.strokeStyle = '#f5e642';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Kitap emojisi
+    ctx.font = '100px serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('📖', cx, cy);
+
+    // Hafta etiketi
+    ctx.font = '700 36px monospace';
+    ctx.fillStyle = '#f5e642';
+    ctx.letterSpacing = '8px';
+    ctx.fillText('HAFTA  #1  ·  UNVAN  KAZANILDI', W / 2, cy + 200);
+
+    // Unvan başlığı
+    ctx.font = 'italic 900 96px Georgia, serif';
+    ctx.fillStyle = '#f0ede6';
+    ctx.fillText(name, W / 2, cy + 330);
+
+    // Alt çizgi
+    ctx.strokeStyle = 'rgba(245,230,66,0.4)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(W / 2 - 180, cy + 380);
+    ctx.lineTo(W / 2 + 180, cy + 380);
+    ctx.stroke();
+
+    // Unvan adı
+    ctx.font = '500 52px Georgia, serif';
+    ctx.fillStyle = '#f5e642';
+    ctx.fillText('Labyrent Okuyucusu', W / 2, cy + 460);
+
+    // Kitap adı
+    ctx.font = 'italic 38px Georgia, serif';
+    ctx.fillStyle = '#8a8580';
+    ctx.fillText('Vedat Türkali — Bir Gün Tek Başına', W / 2, cy + 560);
+
+    // Süslü ayırıcı
+    ctx.font = '40px serif';
+    ctx.fillStyle = '#f5e642';
+    ctx.fillText('— ✦ —', W / 2, cy + 660);
+
+    // Site adresi
+    ctx.font = '700 34px monospace';
+    ctx.fillStyle = '#444';
+    ctx.fillText('bumuydu.github.io', W / 2, H - 100);
+
+    // İndir
+    const link = document.createElement('a');
+    link.download = 'bumuydu-rozet-hafta1.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+
 </script>
 
 </body>
