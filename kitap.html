@@ -285,6 +285,38 @@
       color: var(--yellow);
       margin-bottom: 16px;
     }
+    /* ─── İPUCU KUTULARI ─────────────────── */
+    .hint-box {
+      display: none;
+      border: 1px solid var(--border-red);
+      background: var(--red-dim);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      animation: fadeIn 0.5s ease;
+    }
+    .hint-box.visible { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hint-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 6px;
+    }
+    .hint-text {
+      font-size: 0.95rem;
+      color: var(--text-dim);
+    }
+    .hint-text a {
+      color: var(--yellow);
+      text-decoration: underline;
+    }
+    .hint-text strong { color: var(--text); }
+
     #kitaple-result {
       display: none;
       text-align: center;
@@ -656,6 +688,18 @@
     <div id="kitaple-msg"></div>
     <div id="board"></div>
 
+    <!-- ⚙️ İPUÇLARINI BURADAN DEĞİŞTİRİN -->
+    <div id="hint-area" style="max-width:340px;margin:0 auto 8px;">
+      <div class="hint-box" id="hint1">
+        <div class="hint-label">İpucu 1 · 3. tahminden sonra</div>
+        <div class="hint-text">Bu nesne Türkali'nin romanında hem özgürlüğü hem de hapsi simgeler. Bu haftaki <a href="bulten.html">bültenimizde</a> de geçiyor.</div>
+      </div>
+      <div class="hint-box" id="hint2">
+        <div class="hint-label">İpucu 2 · 5. tahminden sonra</div>
+        <div class="hint-text">Yazarın elinden hiç düşürmediği şeydir. <strong>5 harf.</strong> Düşün.</div>
+      </div>
+    </div>
+
     <div class="divider">klavye</div>
 
     <div id="keyboard">
@@ -878,6 +922,12 @@
 
     const won = result.every(r => r.status === 'correct');
     const lost = !won && currentRow === MAX_GUESSES - 1;
+
+    // İpucu sistemi
+    if (!won) {
+      if (currentRow === 2) document.getElementById('hint1').classList.add('visible');
+      if (currentRow === 4) document.getElementById('hint2').classList.add('visible');
+    }
 
     setTimeout(() => {
       if (won) {
