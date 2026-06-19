@@ -13,7 +13,6 @@
 <meta property="og:url" content="https://bumuydu-creator.github.io/bumuydu.github.io/">
 <meta property="og:type" content="website">
 <link rel="canonical" href="https://bumuydu-creator.github.io/bumuydu.github.io/">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -26,11 +25,8 @@
     --smoke: #6b6560;
     --cream: #ede8de;
   }
-
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   html { scroll-behavior: smooth; }
-
   body {
     background-color: var(--ink);
     color: var(--parchment);
@@ -40,834 +36,158 @@
     cursor: none;
     overflow-x: hidden;
   }
-
-  /* Custom cursor */
   .cursor {
-    position: fixed;
-    width: 8px; height: 8px;
-    background: var(--gold);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: transform 0.1s ease;
+    position: fixed; width: 8px; height: 8px;
+    background: var(--gold); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%); transition: transform 0.1s ease;
   }
   .cursor-ring {
-    position: fixed;
-    width: 32px; height: 32px;
-    border: 1px solid rgba(201,168,76,0.4);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: all 0.18s ease;
+    position: fixed; width: 32px; height: 32px;
+    border: 1px solid rgba(201,168,76,0.4); border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%); transition: all 0.18s ease;
   }
-
-  /* Grain overlay */
   body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
+    content: ''; position: fixed; inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9000;
-    opacity: 0.35;
+    pointer-events: none; z-index: 9000; opacity: 0.35;
   }
 
   /* NAV */
   nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     padding: 1.5rem 4rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: flex; justify-content: space-between; align-items: center;
     background: linear-gradient(to bottom, rgba(10,8,4,0.95), transparent);
   }
-
   .nav-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
-    font-weight: 900;
-    letter-spacing: 0.05em;
-    color: var(--gold);
-    text-decoration: none;
+    font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 900;
+    letter-spacing: 0.05em; color: var(--gold); text-decoration: none;
   }
-
-  .nav-links {
-    display: flex;
-    gap: 2.5rem;
-    list-style: none;
-  }
-
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
   .nav-links a {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--smoke);
-    text-decoration: none;
-    transition: color 0.3s;
+    font-family: 'Space Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--smoke); text-decoration: none; transition: color 0.3s;
   }
-
   .nav-links a:hover { color: var(--gold); }
 
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero-left {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 8rem 4rem 4rem 4rem;
-    position: relative;
-    z-index: 2;
-  }
-
-  .hero-eyebrow {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 2rem;
-    opacity: 0;
-    animation: fadeUp 1s ease 0.3s forwards;
-  }
-
-  .hero-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(3.5rem, 6vw, 6rem);
-    font-weight: 900;
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    margin-bottom: 1.5rem;
-    opacity: 0;
-    animation: fadeUp 1s ease 0.5s forwards;
-  }
-
-  .hero-title em {
-    font-style: italic;
-    color: var(--gold);
-  }
-
-  .hero-subtitle {
-    font-family: 'Crimson Text', serif;
-    font-size: 1.25rem;
-    color: var(--smoke);
-    max-width: 420px;
-    margin-bottom: 3rem;
-    font-style: italic;
-    opacity: 0;
-    animation: fadeUp 1s ease 0.7s forwards;
-  }
-
-  .hero-cta {
-    display: flex;
-    gap: 1.2rem;
-    flex-wrap: wrap;
-    opacity: 0;
-    animation: fadeUp 1s ease 0.9s forwards;
-  }
-
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
+  /* Patreon nav özel butonu */
+  .nav-patreon {
+    color: var(--ink) !important;
     background: var(--gold);
-    color: var(--ink);
-    padding: 0.85rem 2rem;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    text-decoration: none;
+    padding: 0.4rem 1.1rem !important;
     font-weight: 700;
-    transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
+    transition: all 0.3s !important;
+  }
+  .nav-patreon:hover {
+    background: #FF424D !important;
+    color: #fff !important;
   }
 
-  .btn-primary::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--rust);
-    transform: translateX(-100%);
-    transition: transform 0.4s ease;
-  }
-
+  /* HERO */
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; position: relative; overflow: hidden; }
+  .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 8rem 4rem 4rem 4rem; position: relative; z-index: 2; }
+  .hero-eyebrow { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 2rem; opacity: 0; animation: fadeUp 1s ease 0.3s forwards; }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(3.5rem, 6vw, 6rem); font-weight: 900; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 1s ease 0.5s forwards; }
+  .hero-title em { font-style: italic; color: var(--gold); }
+  .hero-subtitle { font-family: 'Crimson Text', serif; font-size: 1.25rem; color: var(--smoke); max-width: 420px; margin-bottom: 3rem; font-style: italic; opacity: 0; animation: fadeUp 1s ease 0.7s forwards; }
+  .hero-cta { display: flex; gap: 1.2rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 1s ease 0.9s forwards; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 0.6rem; background: var(--gold); color: var(--ink); padding: 0.85rem 2rem; font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; font-weight: 700; transition: all 0.3s; position: relative; overflow: hidden; }
+  .btn-primary::before { content: ''; position: absolute; inset: 0; background: var(--rust); transform: translateX(-100%); transition: transform 0.4s ease; }
   .btn-primary:hover::before { transform: translateX(0); }
   .btn-primary span { position: relative; z-index: 1; }
+  .btn-secondary { display: inline-flex; align-items: center; gap: 0.6rem; border: 1px solid rgba(201,168,76,0.3); color: var(--parchment); padding: 0.85rem 2rem; font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; transition: all 0.3s; }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+  .hero-right { position: relative; overflow: hidden; }
+  .hero-visual { position: absolute; inset: 0; background: radial-gradient(ellipse at 70% 40%, rgba(180,20,20,0.5) 0%, transparent 60%), radial-gradient(ellipse at 30% 70%, rgba(100,10,10,0.3) 0%, transparent 50%), linear-gradient(135deg, #1a0505 0%, var(--ink) 100%); }
+  .hero-glyph { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-8deg); width: 100%; height: auto; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); animation: slowFloat 12s ease-in-out infinite; }
+  .hero-lines { position: absolute; inset: 0; overflow: hidden; opacity: 0.15; }
+  .hero-lines::before { content: ''; position: absolute; top: 20%; left: -10%; width: 120%; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); transform: rotate(-15deg); }
+  .hero-lines::after { content: ''; position: absolute; top: 60%; left: -10%; width: 120%; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); transform: rotate(-15deg); }
+  .hero-scroll { position: absolute; bottom: 2.5rem; left: 4rem; display: flex; align-items: center; gap: 1rem; font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--smoke); opacity: 0; animation: fadeUp 1s ease 1.3s forwards; }
+  .scroll-line { width: 40px; height: 1px; background: var(--smoke); animation: scrollPulse 2s ease-in-out infinite; }
 
-  .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    border: 1px solid rgba(201,168,76,0.3);
-    color: var(--parchment);
-    padding: 0.85rem 2rem;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    text-decoration: none;
-    transition: all 0.3s;
-  }
-
-  .btn-secondary:hover {
-    border-color: var(--gold);
-    color: var(--gold);
-  }
-
-  .hero-right {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero-visual {
-    position: absolute;
-    inset: 0;
-    background: 
-      radial-gradient(ellipse at 70% 40%, rgba(180,20,20,0.5) 0%, transparent 60%),
-      radial-gradient(ellipse at 30% 70%, rgba(100,10,10,0.3) 0%, transparent 50%),
-      linear-gradient(135deg, #1a0505 0%, var(--ink) 100%);
-  }
-
-  .hero-glyph {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-8deg);
-    width: 100%;
-    height: 100%;
-    height: auto;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    animation: slowFloat 12s ease-in-out infinite;
-  }
-
-  .hero-lines {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    opacity: 0.15;
-  }
-
-  .hero-lines::before {
-    content: '';
-    position: absolute;
-    top: 20%;
-    left: -10%;
-    width: 120%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    transform: rotate(-15deg);
-  }
-
-  .hero-lines::after {
-    content: '';
-    position: absolute;
-    top: 60%;
-    left: -10%;
-    width: 120%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    transform: rotate(-15deg);
-  }
-
-  .hero-scroll {
-    position: absolute;
-    bottom: 2.5rem;
-    left: 4rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--smoke);
-    opacity: 0;
-    animation: fadeUp 1s ease 1.3s forwards;
-  }
-
-  .scroll-line {
-    width: 40px;
-    height: 1px;
-    background: var(--smoke);
-    animation: scrollPulse 2s ease-in-out infinite;
-  }
-
-  /* SECTION SHARED */
   section { padding: 7rem 4rem; }
-
-  .section-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .section-label::before {
-    content: '';
-    display: block;
-    width: 30px;
-    height: 1px;
-    background: var(--gold);
-  }
+  .section-label { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem; }
+  .section-label::before { content: ''; display: block; width: 30px; height: 1px; background: var(--gold); }
 
   /* ABOUT */
-  .about {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6rem;
-    align-items: center;
-    background: var(--ash);
-    padding: 7rem 4rem;
-  }
-
-  .about-quote {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.8rem, 3vw, 2.8rem);
-    font-style: italic;
-    line-height: 1.3;
-    color: var(--cream);
-    position: relative;
-    padding-left: 0;
-  }
-
-  .about-text p {
-    color: var(--smoke);
-    margin-bottom: 1.2rem;
-    font-size: 1.1rem;
-  }
-
-  .about-text p strong {
-    color: var(--parchment);
-    font-weight: 600;
-  }
-
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    margin-top: 3rem;
-    background: rgba(201,168,76,0.15);
-  }
-
-  .stat {
-    background: var(--ash);
-    padding: 1.5rem;
-    text-align: center;
-  }
-
-  .stat-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.2rem;
-    font-weight: 700;
-    color: var(--gold);
-    display: block;
-  }
-
-  .stat-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--smoke);
-  }
+  .about { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; background: var(--ash); padding: 7rem 4rem; }
+  .about-text p { color: var(--smoke); margin-bottom: 1.2rem; font-size: 1.1rem; }
+  .about-text p strong { color: var(--parchment); font-weight: 600; }
+  .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 3rem; background: rgba(201,168,76,0.15); }
+  .stat { background: var(--ash); padding: 1.5rem; text-align: center; }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: var(--gold); display: block; }
+  .stat-label { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--smoke); }
 
   /* VIDEOS */
   .videos { background: var(--ink); }
-
-  .videos-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 3.5rem;
-  }
-
-  .videos-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 4vw, 3.5rem);
-    font-weight: 900;
-    line-height: 1.1;
-  }
-
-  .videos-title em {
-    display: block;
-    font-style: italic;
-    color: var(--gold);
-  }
-
-  .view-all {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--gold);
-    text-decoration: none;
-    border-bottom: 1px solid rgba(201,168,76,0.3);
-    padding-bottom: 2px;
-    transition: border-color 0.3s;
-    white-space: nowrap;
-  }
-
+  .videos-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3.5rem; }
+  .videos-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 900; line-height: 1.1; }
+  .videos-title em { display: block; font-style: italic; color: var(--gold); }
+  .view-all { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(201,168,76,0.3); padding-bottom: 2px; transition: border-color 0.3s; white-space: nowrap; }
   .view-all:hover { border-color: var(--gold); }
-
-  .video-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5px;
-    background: rgba(201,168,76,0.1);
-  }
-
-  .video-card {
-    background: var(--ash);
-    position: relative;
-    overflow: hidden;
-    group: true;
-    transition: transform 0.4s ease;
-  }
-
+  .video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; background: rgba(201,168,76,0.1); }
+  .video-card { background: var(--ash); position: relative; overflow: hidden; transition: transform 0.4s ease; }
   .video-card:hover { transform: scale(1.02); z-index: 2; }
-
-  .video-thumb {
-    aspect-ratio: 16/9;
-    background: linear-gradient(135deg, var(--ink), var(--ash));
-    position: relative;
-    overflow: hidden;
-  }
-
-  .video-thumb iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    pointer-events: none;
-  }
-
-  .video-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(10,8,4,0.9) 0%, transparent 50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
+  .video-thumb { aspect-ratio: 16/9; background: linear-gradient(135deg, var(--ink), var(--ash)); position: relative; overflow: hidden; }
+  .video-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,8,4,0.9) 0%, transparent 50%); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
   .video-card:hover .video-overlay { opacity: 1; }
-
-  .play-btn {
-    width: 52px; height: 52px;
-    border: 1.5px solid var(--gold);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--gold);
-    transition: all 0.3s;
-    text-decoration: none;
-  }
-
-  .play-btn:hover {
-    background: var(--gold);
-    color: var(--ink);
-  }
-
-  .video-info {
-    padding: 1.2rem 1.5rem;
-  }
-
-  .video-cat {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.55rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 0.5rem;
-  }
-
-  .video-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1rem;
-    font-weight: 700;
-    line-height: 1.3;
-    color: var(--cream);
-    margin-bottom: 0.5rem;
-  }
-
-  .video-meta {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--smoke);
-    letter-spacing: 0.05em;
-  }
+  .play-btn { width: 52px; height: 52px; border: 1.5px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gold); transition: all 0.3s; text-decoration: none; }
+  .play-btn:hover { background: var(--gold); color: var(--ink); }
+  .video-info { padding: 1.2rem 1.5rem; }
+  .video-cat { font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+  .video-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; line-height: 1.3; color: var(--cream); margin-bottom: 0.5rem; }
 
   /* TOPICS */
-  .topics {
-    background: var(--ash);
-    padding: 5rem 4rem;
-  }
-
-  .topics-inner {
-    max-width: 900px;
-    margin: 0 auto;
-    text-align: center;
-  }
-
-  .topics-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 3.5vw, 3rem);
-    font-weight: 900;
-    margin-bottom: 1rem;
-  }
-
-  .topics-subtitle {
-    color: var(--smoke);
-    font-style: italic;
-    margin-bottom: 3rem;
-    font-size: 1.1rem;
-  }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    justify-content: center;
-  }
-
-  .tag {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 0.5rem 1.1rem;
-    border: 1px solid rgba(201,168,76,0.25);
-    color: var(--smoke);
-    transition: all 0.3s;
-    cursor: default;
-  }
-
-  .tag:hover {
-    border-color: var(--gold);
-    color: var(--gold);
-    background: rgba(201,168,76,0.05);
-  }
+  .topics { background: var(--ash); padding: 5rem 4rem; }
+  .topics-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 900; margin-bottom: 1rem; }
 
   /* SUPPORT */
-  .support {
-    background: linear-gradient(135deg, #1a0f08 0%, var(--ink) 100%);
-    text-align: center;
-    padding: 7rem 4rem;
-    position: relative;
-    overflow: hidden;
-  }
+  .support { background: linear-gradient(135deg, #1a0f08 0%, var(--ink) 100%); text-align: center; padding: 7rem 4rem; position: relative; overflow: hidden; }
+  .support::before { content: '?'; position: absolute; font-family: 'Playfair Display', serif; font-size: 40rem; font-weight: 900; font-style: italic; color: rgba(201,168,76,0.03); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; user-select: none; }
+  .support-inner { max-width: 750px; margin: 0 auto; position: relative; z-index: 1; }
+  .support-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 900; margin-bottom: 1rem; line-height: 1.1; }
+  .support-title em { font-style: italic; color: var(--gold); }
+  .support-text { color: var(--smoke); font-style: italic; margin-bottom: 3rem; font-size: 1.1rem; }
+  .support-options { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; }
+  .support-card { border: 1px solid rgba(201,168,76,0.2); padding: 1.8rem 1.5rem; flex: 1; min-width: 150px; max-width: 190px; transition: all 0.3s; cursor: pointer; text-decoration: none; color: inherit; display: block; }
+  .support-card:hover { border-color: var(--gold); background: rgba(201,168,76,0.05); transform: translateY(-4px); }
 
-  .support::before {
-    content: '?';
-    position: absolute;
-    font-family: 'Playfair Display', serif;
-    font-size: 40rem;
-    font-weight: 900;
-    font-style: italic;
-    color: rgba(201,168,76,0.03);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    user-select: none;
-  }
+  /* Patreon kartı özel */
+  .support-card.patreon-card { border-color: rgba(255,66,77,0.5); background: rgba(255,66,77,0.05); }
+  .support-card.patreon-card:hover { border-color: #FF424D; background: rgba(255,66,77,0.12); transform: translateY(-6px); }
+  .support-card-action { margin-top: 0.6rem; font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: #FF424D; font-weight: 700; }
 
-  .support-inner {
-    max-width: 600px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-  }
-
-  .support-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 4vw, 3.5rem);
-    font-weight: 900;
-    margin-bottom: 1rem;
-    line-height: 1.1;
-  }
-
-  .support-title em {
-    font-style: italic;
-    color: var(--gold);
-  }
-
-  .support-text {
-    color: var(--smoke);
-    font-style: italic;
-    margin-bottom: 3rem;
-    font-size: 1.1rem;
-  }
-
-  .support-options {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 2rem;
-  }
-
-  .support-card {
-    border: 1px solid rgba(201,168,76,0.2);
-    padding: 1.8rem 2rem;
-    flex: 1;
-    min-width: 180px;
-    max-width: 220px;
-    transition: all 0.3s;
-    cursor: pointer;
-    text-decoration: none;
-    color: inherit;
-    display: block;
-  }
-
-  .support-card:hover {
-    border-color: var(--gold);
-    background: rgba(201,168,76,0.05);
-    transform: translateY(-4px);
-  }
-
-  .support-card-icon {
-    font-size: 1.8rem;
-    margin-bottom: 0.8rem;
-    display: block;
-  }
-
-  .support-card-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 0.3rem;
-    color: var(--cream);
-  }
-
-  .support-card-desc {
-    font-size: 0.85rem;
-    color: var(--smoke);
-    font-style: italic;
-  }
-
-  /* BLOG */
-  .blog { background: var(--ink); }
-
-  .blog-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 1.5px;
-    background: rgba(201,168,76,0.1);
-    margin-top: 3rem;
-  }
-
-  .blog-featured {
-    background: var(--ash);
-    padding: 3rem;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.4s;
-  }
-
-  .blog-featured:hover {
-    background: #2f2a25;
-  }
-
-  .blog-featured::before {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--gold), var(--rust));
-    transform: scaleX(0);
-    transition: transform 0.4s ease;
-    transform-origin: left;
-  }
-
-  .blog-featured:hover::before { transform: scaleX(1); }
-
-  .blog-post-cat {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.55rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1rem;
-  }
-
-  .blog-post-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.8rem;
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 1rem;
-  }
-
-  .blog-post-excerpt {
-    color: var(--smoke);
-    font-style: italic;
-    line-height: 1.6;
-  }
-
-  .blog-sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5px;
-    background: rgba(201,168,76,0.1);
-  }
-
-  .blog-small {
-    background: var(--ash);
-    padding: 1.8rem 2rem;
-    cursor: pointer;
-    transition: background 0.3s;
-    flex: 1;
-  }
-
-  .blog-small:hover { background: #2f2a25; }
-
-  .blog-small-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1rem;
-    font-weight: 700;
-    line-height: 1.3;
-    margin-top: 0.5rem;
-  }
+  .support-card-icon { font-size: 1.8rem; margin-bottom: 0.8rem; display: block; }
+  .support-card-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.3rem; color: var(--cream); }
+  .support-card-desc { font-size: 0.85rem; color: var(--smoke); font-style: italic; }
 
   /* FOOTER */
-  footer {
-    background: #050403;
-    padding: 4rem 4rem 2rem;
-    border-top: 1px solid rgba(201,168,76,0.1);
-  }
-
-  .footer-top {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr;
-    gap: 4rem;
-    margin-bottom: 3rem;
-  }
-
-  .footer-brand .nav-logo {
-    font-size: 1.8rem;
-    display: block;
-    margin-bottom: 1rem;
-  }
-
-  .footer-brand p {
-    color: var(--smoke);
-    font-style: italic;
-    font-size: 0.95rem;
-    line-height: 1.6;
-  }
-
-  .footer-col h4 {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1.2rem;
-  }
-
-  .footer-col ul {
-    list-style: none;
-  }
-
-  .footer-col ul li {
-    margin-bottom: 0.6rem;
-  }
-
-  .footer-col ul li a {
-    color: var(--smoke);
-    text-decoration: none;
-    font-size: 0.95rem;
-    transition: color 0.3s;
-  }
-
+  footer { background: #050403; padding: 4rem 4rem 2rem; border-top: 1px solid rgba(201,168,76,0.1); }
+  .footer-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 4rem; margin-bottom: 3rem; }
+  .footer-brand .nav-logo { font-size: 1.8rem; display: block; margin-bottom: 1rem; }
+  .footer-brand p { color: var(--smoke); font-style: italic; font-size: 0.95rem; line-height: 1.6; }
+  .footer-col h4 { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 0.6rem; }
+  .footer-col ul li a { color: var(--smoke); text-decoration: none; font-size: 0.95rem; transition: color 0.3s; }
   .footer-col ul li a:hover { color: var(--gold); }
-
-  .footer-bottom {
-    border-top: 1px solid rgba(255,255,255,0.05);
-    padding-top: 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .footer-bottom p {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    color: var(--smoke);
-    opacity: 0.5;
-  }
-
-  .social-links {
-    display: flex;
-    gap: 1.2rem;
-  }
-
-  .social-links a {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--smoke);
-    text-decoration: none;
-    transition: color 0.3s;
-  }
-
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+  .footer-bottom p { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; color: var(--smoke); opacity: 0.5; }
+  .social-links { display: flex; gap: 1.2rem; }
+  .social-links a { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--smoke); text-decoration: none; transition: color 0.3s; }
   .social-links a:hover { color: var(--gold); }
 
   /* ANIMATIONS */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slowFloat { 0%, 100% { transform: translate(-50%, -50%) rotate(-5deg); } 50% { transform: translate(-50%, -52%) rotate(-3deg); } }
+  @keyframes scrollPulse { 0%, 100% { width: 40px; opacity: 0.5; } 50% { width: 60px; opacity: 1; } }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
 
-  @keyframes slowFloat {
-    0%, 100% { transform: translate(-50%, -50%) rotate(-5deg); }
-    50% { transform: translate(-50%, -52%) rotate(-3deg); }
-  }
-
-  @keyframes scrollPulse {
-    0%, 100% { width: 40px; opacity: 0.5; }
-    50% { width: 60px; opacity: 1; }
-  }
-
-  /* Scroll reveal */
-  .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* Responsive */
   @media (max-width: 900px) {
     nav { padding: 1.2rem 1.5rem; }
     .nav-links { display: none; }
@@ -890,123 +210,73 @@
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
-<!-- NAV -->
+<!-- NAV — "Videolar" yerine "Patreon" -->
 <nav>
   <a href="#" class="nav-logo">Bu Muydu?</a>
   <ul class="nav-links">
-  <li><a href="#videos">Videolar</a></li>
-  <li><a href="#hakkinda">Hakkında</a></li>
-  <li><a href="iletisim.html">İletişim</a></li>
-</ul>
+    <li><a href="https://patreon.com/Bbumuydu?utm_medium=unknown&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink" target="_blank" class="nav-patreon">❤ Patreon</a></li>
+    <li><a href="#hakkinda">Hakkında</a></li>
+    <li><a href="iletisim.html">İletişim</a></li>
+  </ul>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-left">
     <p class="hero-eyebrow">Düşüncenin Sınırlarında</p>
-    <h1 class="hero-title">
-      Sorular<br>
-      <em>cevaplardan</em><br>
-      daha derin
-    </h1>
+    <h1 class="hero-title">Sorular<br><em>cevaplardan</em><br>daha derin</h1>
     <p class="hero-subtitle">Bir masal biter, merak başalar...</p>
     <div class="hero-cta">
-  <a href="https://www.youtube.com/@bumuydu" target="_blank" class="btn-primary">
-    <span> ▶ YouTube </span>
-  </a>
-  <a href="https://bumuydu-creator.github.io/bumuydu.github.io/bulten.html" class="btn-secondary">
-    Bülten Oku
-  </a>
-  <a href="https://bumuydu-creator.github.io/bumuydu.github.io/anal%C4%B1z.html" target="_blank" class="btn-primary">
-    Haftanın yazısı
-  </a>
-  <a href="https://bumuydu-creator.github.io/bumuydu.github.io/kitap.html" class="btn-secondary">
-    Labyrent Oyun
-  </a>
-</div>
+      <a href="https://www.youtube.com/@bumuydu" target="_blank" class="btn-primary"><span>▶ YouTube</span></a>
+      <a href="https://bumuydu-creator.github.io/bumuydu.github.io/bulten.html" class="btn-secondary">Bülten Oku</a>
+      <a href="https://bumuydu-creator.github.io/bumuydu.github.io/anal%C4%B1z.html" target="_blank" class="btn-primary"><span>Haftanın yazısı</span></a>
+      <a href="https://bumuydu-creator.github.io/bumuydu.github.io/kitap.html" class="btn-secondary">Labyrent Oyun</a>
+    </div>
   </div>
   <div class="hero-right">
     <div class="hero-visual"></div>
     <div class="hero-lines"></div>
     <div class="hero-glyph">
-  <img src="https://bumuydu-creator.github.io/bumuydu.github.io/film%20kitap.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
-</div>
+      <img src="https://bumuydu-creator.github.io/bumuydu.github.io/film%20kitap.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+    </div>
   </div>
-  <div class="hero-scroll">
-    <span class="scroll-line"></span>
-    Devam Et 👇
-  </div>
+  <div class="hero-scroll"><span class="scroll-line"></span>Devam Et 👇</div>
 </section>
 
+<!-- HAKKINDA + MAKALE -->
 <section style="box-sizing:border-box;padding:2rem 1rem;display:flex;flex-direction:column;gap:2.5rem;max-width:1100px;margin:0 auto;">
-
-  <!-- Hakkında Satırı -->
   <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:1.5rem;align-items:start;">
-
-    <!-- Sol: Görsel + Alıntı -->
     <div style="display:flex;flex-direction:column;">
-      <img src="https://raw.githubusercontent.com/sadakatsizhayat-design/bumuydu.github.io/main/a7066d49-f049-403f-95f3-54bf6e227710.jpg"
-           style="width:100%;height:220px;object-fit:cover;display:block;opacity:0.9;border-radius:12px 12px 0 0;">
+      <img src="https://raw.githubusercontent.com/sadakatsizhayat-design/bumuydu.github.io/main/a7066d49-f049-403f-95f3-54bf6e227710.jpg" style="width:100%;height:220px;object-fit:cover;display:block;opacity:0.9;border-radius:12px 12px 0 0;">
       <div style="padding:0.85rem 1rem 0.85rem 1.25rem;font-family:'Playfair Display',serif;font-size:1.6rem;font-style:italic;color:#f5efe0;line-height:1.4;border-left:4px solid #e8ff00;background:#1a1a1a;border-radius:0 0 12px 12px;">
         "Bir şeyi anlamak için önce doğru soruyu sormak gerekir."
       </div>
     </div>
-
-    <!-- Sağ: Metin + İstatistikler -->
     <div class="about-text">
       <p><strong>Bu Muydu?</strong> — masal, mitoloji ve bilimin kesiştiği o karanlık köşede dolaşan bir içerik kanalı.</p>
       <p>Klasik edebiyattan sinik bilim kurguya, antik mitlerden yapay zeka felsefesine uzanan geniş bir alanda <strong>derinlikli analizler</strong> sunuyor.</p>
       <p>Her video bir soru işaretiyle başlar. Cevabı bulmak... sizin işiniz.</p>
       <div class="stats-grid">
-        <div class="stat">
-          <span class="stat-num">50+</span>
-          <span class="stat-label">Video</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num">1 yıl+</span>
-          <span class="stat-label">İçerik</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num">∞</span>
-          <span class="stat-label">Soru</span>
-        </div>
+        <div class="stat"><span class="stat-num">50+</span><span class="stat-label">Video</span></div>
+        <div class="stat"><span class="stat-num">1 yıl+</span><span class="stat-label">İçerik</span></div>
+        <div class="stat"><span class="stat-num">∞</span><span class="stat-label">Soru</span></div>
       </div>
     </div>
-
   </div>
 
-  <!-- Ayraç -->
   <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:0;">
+  <div style="font-family:'Playfair Display',serif;font-size:1.3rem;color:#f5efe0;margin-bottom:0.5rem;">Yayımlanan Haberlerim</div>
 
-  <!-- Bölüm Başlığı -->
-<div style="font-family:'Playfair Display',serif;font-size:1.3rem;color:#f5efe0;margin-bottom:0.5rem;">Yayımlanan Haberlerim</div>
-
-  <!-- Makale Satırı -->
   <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:1.5rem;align-items:center;">
-
-    <!-- Sol: Makale Görseli -->
-    <img src="https://i0.wp.com/journo.com.tr/wp-content/uploads/2026/04/gazetecison.jpg?w=1280&ssl=1"
-         style="width:100%;height:200px;object-fit:cover;border-radius:12px;display:block;">
-
-    <!-- Sağ: Makale Metni -->
+    <img src="https://i0.wp.com/journo.com.tr/wp-content/uploads/2026/04/gazetecison.jpg?w=1280&ssl=1" style="width:100%;height:200px;object-fit:cover;border-radius:12px;display:block;">
     <div style="display:flex;flex-direction:column;gap:0.75rem;">
       <span style="font-size:0.72rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:#f5efe0;opacity:0.6;">Journo.com.tr · Makale</span>
       <div style="font-family:'Playfair Display',serif;font-size:1.1rem;line-height:1.45;color:#f5efe0;">Yapay Zekada Gazeteci: Genç, Batılı, Beyaz ve Erkek</div>
       <p style="font-size:0.85rem;line-height:1.65;color:#f5efe0;opacity:0.75;">Yapay zeka sistemlerinin içine yerleştirilen varsayılan "gazeteci" kimliği ne anlama geliyor? Kimin sesi duyuluyor, kimin silinip gidiyor?</p>
-      <a href="https://journo.com.tr/yapay-zekada-gazeteci-genc-batili-beyaz-ve-erkek"
-         target="_blank"
-         style="display:inline-flex;align-items:center;gap:6px;font-size:0.82rem;font-weight:500;color:#e8ff00;text-decoration:none;padding:6px 14px;border:1px solid #e8ff00;border-radius:8px;width:fit-content;">
-        Makaleyi oku ↗
-      </a>
-      <a href="https://bumuydu-creator.github.io/bumuydu.github.io/haberler%C4%B1m.html"
-         style="display:inline-block;margin-top:0.5rem;font-family:'Space Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;color:#6b6560;text-decoration:none;border-bottom:1px solid rgba(107,101,96,0.3);padding-bottom:1px;transition:color 0.3s;"
-         onmouseover="this.style.color='#faff00'" onmouseout="this.style.color='#6b6560'">
-        Tümü →
-      </a>
+      <a href="https://journo.com.tr/yapay-zekada-gazeteci-genc-batili-beyaz-ve-erkek" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:0.82rem;font-weight:500;color:#e8ff00;text-decoration:none;padding:6px 14px;border:1px solid #e8ff00;border-radius:8px;width:fit-content;">Makaleyi oku ↗</a>
+      <a href="https://bumuydu-creator.github.io/bumuydu.github.io/haberlerim.html" style="display:inline-block;margin-top:0.5rem;font-family:'Space Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;color:#6b6560;text-decoration:none;border-bottom:1px solid rgba(107,101,96,0.3);padding-bottom:1px;" onmouseover="this.style.color='#faff00'" onmouseout="this.style.color='#6b6560'">Tümü →</a>
     </div>
-
   </div>
-
 </section>
 
 <!-- VIDEOS -->
@@ -1018,172 +288,81 @@
     </div>
     <a href="https://www.youtube.com/@bumuydu/videos" target="_blank" class="view-all">Tümünü Gör →</a>
   </div>
-
   <div class="video-grid">
-
     <div class="video-card">
-      <div class="video-thumb" style="background: linear-gradient(135deg,#1a0a0a,#2a1515);">
-        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
-          <img src="https://img.youtube.com/vi/s_DmweTzKOY/maxresdefault.jpg" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <div class="video-overlay">
-          <a href="https://youtu.be/s_DmweTzKOY" target="_blank" class="play-btn">▶</a>
-        </div>
+      <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
+        <div style="position:absolute;inset:0;"><img src="https://img.youtube.com/vi/s_DmweTzKOY/maxresdefault.jpg" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="video-overlay"><a href="https://youtu.be/s_DmweTzKOY" target="_blank" class="play-btn">▶</a></div>
       </div>
-      <div class="video-info">
-        <div class="video-cat"> Kitap · Film </div>
-        <div class="video-title"> Orhan Kemal'in Cevabı Seni Rahatsız Edecek: 1 Mayıs sadece bir gün mü, yoksa bir bakış biçimi mi?
- </div>
-      </div>
+      <div class="video-info"><div class="video-cat">Kitap · Film</div><div class="video-title">Orhan Kemal'in Cevabı Seni Rahatsız Edecek: 1 Mayıs sadece bir gün mü, yoksa bir bakış biçimi mi?</div></div>
     </div>
-
-      <div class="video-card">
-      <div class="video-thumb" style="background: linear-gradient(135deg,#1a0a0a,#2a1515);">
-        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
-          <img src="https://img.youtube.com/vi/QqJDwJyvXa4/maxresdefault.jpg" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <div class="video-overlay">
-          <a href="https://youtu.be/QqJDwJyvXa4" target="_blank" class="play-btn">▶</a>
-        </div>
-      </div>
-      <div class="video-info">
-        <div class="video-cat"> Kitap · Film </div>
-        <div class="video-title"> Türk Edebiyatının En "Dürüst" Aşk Romanı: Bir Gün Tek Başına
- </div>
-      </div>
-    </div>
-    
-
     <div class="video-card">
-      <div class="video-thumb" style="background: linear-gradient(135deg,#1a0a0a,#2a1515);">
-        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
-          <img src="https://bumuydu-creator.github.io/bumuydu.github.io/film%20kitap.jpg" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <div class="video-overlay">
-          <a href="https://youtu.be/RVxoEcRjQ0k" target="_blank" class="play-btn">▶</a>
-        </div>
+      <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
+        <div style="position:absolute;inset:0;"><img src="https://img.youtube.com/vi/QqJDwJyvXa4/maxresdefault.jpg" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="video-overlay"><a href="https://youtu.be/QqJDwJyvXa4" target="_blank" class="play-btn">▶</a></div>
       </div>
-      <div class="video-info">
-        <div class="video-cat">Kitap · Film</div>
-        <div class="video-title">Project Hail Mary Analizi: Kurtuluş Yok Tek Başına</div>
-      </div>
+      <div class="video-info"><div class="video-cat">Kitap · Film</div><div class="video-title">Türk Edebiyatının En "Dürüst" Aşk Romanı: Bir Gün Tek Başına</div></div>
     </div>
-    
     <div class="video-card">
-      <div class="video-thumb" style="background: linear-gradient(135deg,#1a0a0a,#2a1515);">
-        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
-          <img src="https://img.youtube.com/vi/-1kWYCSnLS4/maxresdefault.jpg" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <div class="video-overlay">
-          <a href="https://youtu.be/-1kWYCSnLS4" target="_blank" class="play-btn">▶</a>
-        </div>
+      <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
+        <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/film%20kitap.jpg" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="video-overlay"><a href="https://youtu.be/RVxoEcRjQ0k" target="_blank" class="play-btn">▶</a></div>
       </div>
-      <div class="video-info">
-        <div class="video-cat">Kitap · Dizi</div>
-        <div class="video-title">Masumiyet Müzesi — Şirin'e Doğru. Füsun'dan Geriye!</div>
-      </div>
+      <div class="video-info"><div class="video-cat">Kitap · Film</div><div class="video-title">Project Hail Mary Analizi: Kurtuluş Yok Tek Başına</div></div>
     </div>
-
     <div class="video-card">
-      <div class="video-thumb" style="background: linear-gradient(135deg,#1a0a0a,#2a1515);">
-        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
-          <img src="https://img.youtube.com/vi/2ey0AXKLyKE/maxresdefault.jpg" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <div class="video-overlay">
-          <a href="https://youtu.be/2ey0AXKLyKE?si=zfNXU3T9yhpmnP0C" target="_blank" class="play-btn">▶</a>
-        </div>
+      <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
+        <div style="position:absolute;inset:0;"><img src="https://img.youtube.com/vi/-1kWYCSnLS4/maxresdefault.jpg" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="video-overlay"><a href="https://youtu.be/-1kWYCSnLS4" target="_blank" class="play-btn">▶</a></div>
       </div>
-      <div class="video-info">
-        <div class="video-cat">Yapay Zeka · Felsefe</div>
-        <div class="video-title">Siberpunk Haklı mıydı? İnsan, Algoritma ve Gözetim Çağı</div>
-      </div>
+      <div class="video-info"><div class="video-cat">Kitap · Dizi</div><div class="video-title">Masumiyet Müzesi — Şirin'e Doğru. Füsun'dan Geriye!</div></div>
     </div>
-
     <div class="video-card">
-      <div class="video-thumb" style="background: linear-gradient(135deg,#0a1a0a,#152a15);">
-        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
-          <img src="https://img.youtube.com/vi/U6BmKCj_VkQ/maxresdefault.jpg" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <div class="video-overlay">
-          <a href="https://youtu.be/U6BmKCj_VkQ?si=VnAUauo2LsqrnhiB" target="_blank" class="play-btn">▶</a>
-        </div>
+      <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
+        <div style="position:absolute;inset:0;"><img src="https://img.youtube.com/vi/2ey0AXKLyKE/maxresdefault.jpg" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="video-overlay"><a href="https://youtu.be/2ey0AXKLyKE?si=zfNXU3T9yhpmnP0C" target="_blank" class="play-btn">▶</a></div>
       </div>
-      <div class="video-info">
-        <div class="video-cat">Tarih · Bilim</div>
-        <div class="video-title">İnsanlık Tarihini Kim Yazdı? Sıtmanın Görünmez İmparatorluğu</div>
+      <div class="video-info"><div class="video-cat">Yapay Zeka · Felsefe</div><div class="video-title">Siberpunk Haklı mıydı? İnsan, Algoritma ve Gözetim Çağı</div></div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb" style="background:linear-gradient(135deg,#0a1a0a,#152a15);">
+        <div style="position:absolute;inset:0;"><img src="https://img.youtube.com/vi/U6BmKCj_VkQ/maxresdefault.jpg" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="video-overlay"><a href="https://youtu.be/U6BmKCj_VkQ?si=VnAUauo2LsqrnhiB" target="_blank" class="play-btn">▶</a></div>
       </div>
-   </div>
-
-  </div><!-- video-grid kapanıyor -->
-</section><!-- videos kapanıyor -->
+      <div class="video-info"><div class="video-cat">Tarih · Bilim</div><div class="video-title">İnsanlık Tarihini Kim Yazdı? Sıtmanın Görünmez İmparatorluğu</div></div>
+    </div>
+  </div>
+</section>
 
 <!-- 4 SÜTUN -->
 <section class="topics reveal" id="topics">
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.5px;background:rgba(201,168,76,0.1);">
-
-    <!-- Podcast -->
     <div style="background:var(--ink);padding:2rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;border-left:1px solid rgba(201,168,76,0.1);border-right:1px solid rgba(201,168,76,0.1);">
       <div class="section-label" style="justify-content:center;">Podcast</div>
       <h2 class="topics-title" style="font-size:2rem;">Sesli <span style="color:var(--gold);font-style:italic;">Düşünceler</span></h2>
       <img src="hamnet.png" style="width:100%;max-height:180px;object-fit:cover;border-radius:4px;">
-      <div style="width:100%;">
-        <p style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:0.3rem;">Dikkat Çeken Bölüm</p>
-        <p style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--cream);">Hamnet</p>
-        <p style="font-family:'Crimson Text',serif;font-size:0.9rem;color:var(--smoke);font-style:italic;margin-top:0.5rem;">Acıyı Seyrediyoruz</p>
-      </div>
+      <div style="width:100%;"><p style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:0.3rem;">Dikkat Çeken Bölüm</p><p style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--cream);">Hamnet</p><p style="font-family:'Crimson Text',serif;font-size:0.9rem;color:var(--smoke);font-style:italic;margin-top:0.5rem;">Acıyı Seyrediyoruz</p></div>
     </div>
-
-    <!-- Bu Haftanın İzlemeleri -->
     <div style="background:var(--ink);padding:2rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;border-left:1px solid rgba(201,168,76,0.1);border-right:1px solid rgba(201,168,76,0.1);">
       <div class="section-label" style="justify-content:center;">Bu Hafta</div>
       <h2 class="topics-title">Bu <em style="color:var(--gold);font-style:italic;">Hafta</em></h2>
       <img src="https://bumuydu-creator.github.io/bumuydu.github.io/film%20kitap.jpg" style="width:100%;max-height:180px;object-fit:cover;border-radius:4px;">
-      <div style="width:100%;">
-        <p style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:0.3rem;">Film</p>
-        <p style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--cream);">Project Hail Mary Analizi</p>
-        <p style="font-family:'Crimson Text',serif;font-size:0.9rem;color:var(--smoke);font-style:italic;margin-top:0.5rem;">Bu Cennetten düşüş bu kez fırtınalarla değil, steril bir sessizlikle başlamıştı. Şimdi düşün...</p>
-        <a href="kurtulusproje.html" style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid rgba(201,168,76,0.3);padding-bottom:2px;text-decoration:none;margin-top:0.5rem;display:inline-block;">Okumak için tıkla →</a>
-      </div>
+      <div style="width:100%;"><p style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:0.3rem;">Film</p><p style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--cream);">Project Hail Mary Analizi</p><p style="font-family:'Crimson Text',serif;font-size:0.9rem;color:var(--smoke);font-style:italic;margin-top:0.5rem;">Bu Cennetten düşüş bu kez fırtınalarla değil, steril bir sessizlikle başlamıştı.</p><a href="kurtulusproje.html" style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid rgba(201,168,76,0.3);padding-bottom:2px;text-decoration:none;margin-top:0.5rem;display:inline-block;">Okumak için tıkla →</a></div>
     </div>
-
-    <!-- Mercek -->
     <div onclick="window.location='edebiyat.html'" style="background:var(--ink);padding:2rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;border-left:1px solid rgba(201,168,76,0.1);border-right:1px solid rgba(201,168,76,0.1);cursor:pointer;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
       <div class="section-label" style="justify-content:center;">Mercek</div>
       <h2 class="topics-title" style="font-size:2rem;">Edebiyat <span style="color:var(--gold);font-style:italic;">İncelemesi</span></h2>
       <img src="https://bumuydu-creator.github.io/bumuydu.github.io/viocast.png" style="width:100%;max-height:180px;object-fit:cover;border-radius:4px;">
-      <div style="width:100%;">
-        <p style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:0.3rem;">İnceleme</p>
-        <p style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--cream);">Vedat Türkali – Bir Gün Tek Başına</p>
-        <p style="font-family:'Crimson Text',serif;font-size:0.9rem;color:var(--smoke);font-style:italic;margin-top:0.5rem;">"Toplumcu Gerçekçilik" etiketinin dar kalıplarını kıran bir dehanın varoluşsal izdüşümü.</p>
-        <a href="edebiyat.html" style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid rgba(201,168,76,0.3);padding-bottom:2px;text-decoration:none;margin-top:0.5rem;display:inline-block;">Merceği Aç →</a>
-      </div>
+      <div style="width:100%;"><p style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:0.3rem;">İnceleme</p><p style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--cream);">Vedat Türkali – Bir Gün Tek Başına</p><p style="font-family:'Crimson Text',serif;font-size:0.9rem;color:var(--smoke);font-style:italic;margin-top:0.5rem;">"Toplumcu Gerçekçilik" etiketinin dar kalıplarını kıran bir dehanın varoluşsal izdüşümü.</p><a href="edebiyat.html" style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid rgba(201,168,76,0.3);padding-bottom:2px;text-decoration:none;margin-top:0.5rem;display:inline-block;">Merceği Aç →</a></div>
     </div>
-
-    <!-- Blog / Radar -->
     <div onclick="window.location='blog.html'" style="background:#0a1208;padding:2rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;cursor:pointer;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
       <div class="section-label" style="justify-content:center;">Blog</div>
       <h2 class="topics-title">RADAR</h2>
       <div style="position:relative;width:100%;max-height:180px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#0a1208;border-radius:4px;aspect-ratio:16/9;">
-        <svg viewBox="0 0 400 225" style="position:absolute;width:100%;height:100%;opacity:0.3;">
-          <circle cx="200" cy="112" r="40" fill="none" stroke="#4a9a5f" stroke-width="0.8"/>
-          <circle cx="200" cy="112" r="80" fill="none" stroke="#4a9a5f" stroke-width="0.8"/>
-          <circle cx="200" cy="112" r="120" fill="none" stroke="#4a9a5f" stroke-width="0.8"/>
-          <circle cx="200" cy="112" r="160" fill="none" stroke="#4a9a5f" stroke-width="0.8"/>
-          <line x1="0" y1="112" x2="400" y2="112" stroke="#4a9a5f" stroke-width="0.5"/>
-          <line x1="200" y1="0" x2="200" y2="225" stroke="#4a9a5f" stroke-width="0.5"/>
-          <circle cx="255" cy="75" r="4" fill="#4a9a5f" opacity="0.8"/>
-          <circle cx="160" cy="155" r="3" fill="#4a9a5f" opacity="0.6"/>
-          <circle cx="280" cy="130" r="5" fill="#4a9a5f" opacity="0.9"/>
-        </svg>
+        <svg viewBox="0 0 400 225" style="position:absolute;width:100%;height:100%;opacity:0.3;"><circle cx="200" cy="112" r="40" fill="none" stroke="#4a9a5f" stroke-width="0.8"/><circle cx="200" cy="112" r="80" fill="none" stroke="#4a9a5f" stroke-width="0.8"/><circle cx="200" cy="112" r="120" fill="none" stroke="#4a9a5f" stroke-width="0.8"/><circle cx="200" cy="112" r="160" fill="none" stroke="#4a9a5f" stroke-width="0.8"/><line x1="0" y1="112" x2="400" y2="112" stroke="#4a9a5f" stroke-width="0.5"/><line x1="200" y1="0" x2="200" y2="225" stroke="#4a9a5f" stroke-width="0.5"/><circle cx="255" cy="75" r="4" fill="#4a9a5f" opacity="0.8"/><circle cx="160" cy="155" r="3" fill="#4a9a5f" opacity="0.6"/><circle cx="280" cy="130" r="5" fill="#4a9a5f" opacity="0.9"/></svg>
       </div>
-      <div style="width:100%;">
-        <p style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:#4a9a5f;margin-bottom:0.3rem;">Blog</p>
-        <p style="font-family:'Playfair Display',serif;font-size:1rem;color:#f0ede6;">RADAR</p>
-        <p style="font-family:'Crimson Text',serif;font-size:0.9rem;color:var(--smoke);font-style:italic;margin-top:0.5rem;">Takıntılar, kürasyonlar, kişisel notlar.</p>
-        <a href="blog.html" style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:#4a9a5f;border-bottom:1px solid rgba(74,154,95,0.3);padding-bottom:2px;text-decoration:none;margin-top:0.5rem;display:inline-block;">Radarı Aç →</a>
-      </div>
+      <div style="width:100%;"><p style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:#4a9a5f;margin-bottom:0.3rem;">Blog</p><p style="font-family:'Playfair Display',serif;font-size:1rem;color:#f0ede6;">RADAR</p><p style="font-family:'Crimson Text',serif;font-size:0.9rem;color:var(--smoke);font-style:italic;margin-top:0.5rem;">Takıntılar, kürasyonlar, kişisel notlar.</p><a href="blog.html" style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:#4a9a5f;border-bottom:1px solid rgba(74,154,95,0.3);padding-bottom:2px;text-decoration:none;margin-top:0.5rem;display:inline-block;">Radarı Aç →</a></div>
     </div>
-
   </div>
 </section>
 
@@ -1196,45 +375,49 @@
 
     <div class="support-options">
 
-      <a href="https://www.youtube.com/@bumuydu?sub_confirmation=1" target="_blank" class="support-card">
+      <!-- PATREON — öne çıkarılmış kart -->
+      <a href="https://patreon.com/Bbumuydu?utm_medium=unknown&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink" target="_blank" class="support-card patreon-card">
         <span class="support-card-icon">
-          <img src="hd-youtube-logo-png-transparent-background-20 Arka Planı Silindi.png" style="width:32px;height:32px;object-fit:contain;">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="#FF424D" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14.82 2.41C11.57 2.41 8.93 5.05 8.93 8.3C8.93 11.54 11.57 14.18 14.82 14.18C18.06 14.18 20.7 11.54 20.7 8.3C20.7 5.05 18.06 2.41 14.82 2.41ZM3.3 21.59H6.41V2.41H3.3V21.59Z"/>
+          </svg>
         </span>
+        <div class="support-card-title">Patreon</div>
+        <div class="support-card-desc">Aylık destek ol</div>
+        <div class="support-card-action">Üye Ol →</div>
+      </a>
+
+      <a href="https://www.youtube.com/@bumuydu?sub_confirmation=1" target="_blank" class="support-card">
+        <span class="support-card-icon"><img src="hd-youtube-logo-png-transparent-background-20 Arka Planı Silindi.png" style="width:32px;height:32px;object-fit:contain;"></span>
         <div class="support-card-title">Abone Ol</div>
         <div class="support-card-desc">Ücretsiz, en büyük destek</div>
       </a>
 
       <a href="https://www.shopier.com/ucansalyangoz" target="_blank" class="support-card">
-        <span class="support-card-icon">
-          <img src="https://play-lh.googleusercontent.com/ldzRkyCNvKA0ZxHw1jS8mdbJEyj8rMyLqfqclZFiNDh8kMQdSLOzULkP0j-NnZbnqQ=w480-h960-rw" style="width:32px;height:32px;object-fit:contain;border-radius:8px;">
-        </span>
+        <span class="support-card-icon"><img src="https://play-lh.googleusercontent.com/ldzRkyCNvKA0ZxHw1jS8mdbJEyj8rMyLqfqclZFiNDh8kMQdSLOzULkP0j-NnZbnqQ=w480-h960-rw" style="width:32px;height:32px;object-fit:contain;border-radius:8px;"></span>
         <div class="support-card-title">Shopier</div>
         <div class="support-card-desc">Dijital ürünler</div>
       </a>
 
       <a href="https://www.etsy.com/shop/FlyingSnailstoryAI" target="_blank" class="support-card">
-        <span class="support-card-icon">
-          <img src="etsy-rounded-logo-design-free-png.png" style="width:32px;height:32px;object-fit:contain;">
-        </span>
+        <span class="support-card-icon"><img src="etsy-rounded-logo-design-free-png.png" style="width:32px;height:32px;object-fit:contain;"></span>
         <div class="support-card-title">Etsy</div>
         <div class="support-card-desc">Dijital ürünler</div>
       </a>
 
       <a href="okuma-listesi.html" class="support-card">
-  <img src="M3TMf%20Arka%20Plan%C4%B1%20Silindi.png" style="width:56px;height:56px;object-fit:contain;display:block;margin:0 auto 0.8rem;">
-  <div class="support-card-title">Okuma Listesi</div>
-  <div class="support-card-desc">Kaynak rehberler yakında</div>
-</a>
+        <img src="M3TMf%20Arka%20Plan%C4%B1%20Silindi.png" style="width:56px;height:56px;object-fit:contain;display:block;margin:0 auto 0.8rem;">
+        <div class="support-card-title">Okuma Listesi</div>
+        <div class="support-card-desc">Kaynak rehberler yakında</div>
+      </a>
 
       <a href="https://uansalyangoz.substack.com/" target="_blank" class="support-card">
-  <span class="support-card-icon">
-    <img src="Substack.png" style="width:32px;height:32px;object-fit:contain;">
-  </span>
-  <div class="support-card-title">Substack</div>
-  <div class="support-card-desc">Yazılar & bülten</div>
-</a>
+        <span class="support-card-icon"><img src="Substack.png" style="width:32px;height:32px;object-fit:contain;"></span>
+        <div class="support-card-title">Substack</div>
+        <div class="support-card-desc">Yazılar & bülten</div>
+      </a>
 
-      <a href="#" onclick="event.preventDefault();document.getElementById('papara-ana').style.display=document.getElementById('papara-ana').style.display==='block'?'none':'block'" class="support-card">
+      <a href="#" onclick="event.preventDefault();var el=document.getElementById('papara-ana');el.style.display=el.style.display==='block'?'none':'block'" class="support-card">
         <span class="support-card-icon">☕</span>
         <div class="support-card-title">Kahve Ismarla</div>
         <div class="support-card-desc">Papara ile destek ol</div>
@@ -1248,9 +431,7 @@
       <p style="font-family:'Space Mono',monospace;font-size:0.55rem;color:var(--smoke);line-height:1.6;">Papara → Para Gönder → numara ile</p>
     </div>
 
-    <p style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;color:var(--smoke);text-transform:uppercase;">
-      Videoları paylaşmak da büyük katkı ✦
-    </p>
+    <p style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;color:var(--smoke);text-transform:uppercase;">Videoları paylaşmak da büyük katkı ✦</p>
   </div>
 </section>
 
@@ -1273,6 +454,7 @@
       <h4>Bağlantı</h4>
       <ul>
         <li><a href="https://www.youtube.com/@bumuydu" target="_blank">YouTube</a></li>
+        <li><a href="https://patreon.com/Bbumuydu?utm_medium=unknown&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink" target="_blank">Patreon</a></li>
         <li><a href="#destek">Destek Ol</a></li>
         <li><a href="https://bumuydu-creator.github.io/bumuydu.github.io/iletisim.html">İletişim</a></li>
       </ul>
@@ -1282,65 +464,34 @@
     <p>© 2025 Bu Muydu? — Tüm hakları saklıdır.</p>
     <div class="social-links">
       <a href="https://www.youtube.com/@bumuydu" target="_blank">YouTube</a>
+      <a href="https://patreon.com/Bbumuydu?utm_medium=unknown&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink" target="_blank">Patreon</a>
     </div>
   </div>
 </footer>
 
 <script>
-  // Custom cursor
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
   let mx = 0, my = 0, rx = 0, ry = 0;
-
   document.addEventListener('mousemove', e => {
     mx = e.clientX; my = e.clientY;
-    cursor.style.left = mx + 'px';
-    cursor.style.top = my + 'px';
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
   });
-
   function animateRing() {
-    rx += (mx - rx) * 0.12;
-    ry += (my - ry) * 0.12;
-    ring.style.left = rx + 'px';
-    ring.style.top = ry + 'px';
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
     requestAnimationFrame(animateRing);
   }
   animateRing();
-
   document.querySelectorAll('a, button, .video-card, .support-card, .tag').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
-      ring.style.transform = 'translate(-50%,-50%) scale(1.5)';
-      ring.style.borderColor = 'rgba(201,168,76,0.8)';
-    });
-    el.addEventListener('mouseleave', () => {
-      cursor.style.transform = 'translate(-50%,-50%) scale(1)';
-      ring.style.transform = 'translate(-50%,-50%) scale(1)';
-      ring.style.borderColor = 'rgba(201,168,76,0.4)';
-    });
+    el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%,-50%) scale(2.5)'; ring.style.transform = 'translate(-50%,-50%) scale(1.5)'; ring.style.borderColor = 'rgba(201,168,76,0.8)'; });
+    el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.borderColor = 'rgba(201,168,76,0.4)'; });
   });
-
-  // Scroll reveal
   const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.1 });
-
+  const observer = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.1 });
   reveals.forEach(r => observer.observe(r));
-
-  // Smooth nav
   document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const target = document.querySelector(a.getAttribute('href'));
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth' });
-      }
-    });
+    a.addEventListener('click', e => { const target = document.querySelector(a.getAttribute('href')); if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); } });
   });
 </script>
 
