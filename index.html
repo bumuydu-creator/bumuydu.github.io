@@ -12,6 +12,13 @@
 <meta property="og:description" content="Masal, felsefe, tarih ve yapay zekanın kesiştiği noktada derinlikli Türkçe içerik.">
 <meta property="og:url" content="https://bumuydu-creator.github.io/bumuydu.github.io/">
 <meta property="og:type" content="website">
+<meta property="og:image" content="https://bumuydu-creator.github.io/bumuydu.github.io/film%20kitap.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Bu Muydu? — Düşüncenin Sınırlarında">
+<meta name="twitter:description" content="Masal, felsefe, tarih ve yapay zekanın kesiştiği noktada derinlikli Türkçe içerik.">
+<meta name="twitter:image" content="https://bumuydu-creator.github.io/bumuydu.github.io/film%20kitap.jpg">
 <link rel="canonical" href="https://bumuydu-creator.github.io/bumuydu.github.io/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -73,7 +80,6 @@
   }
   .nav-links a:hover { color: var(--gold); }
 
-  /* Patreon nav özel butonu */
   .nav-patreon {
     color: var(--ink) !important;
     background: var(--gold);
@@ -140,6 +146,7 @@
   .video-info { padding: 1.2rem 1.5rem; }
   .video-cat { font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
   .video-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; line-height: 1.3; color: var(--cream); margin-bottom: 0.5rem; }
+  .video-desc { font-family: 'Crimson Text', serif; font-size: 0.88rem; color: var(--smoke); font-style: italic; line-height: 1.5; }
 
   /* TOPICS */
   .topics { background: var(--ash); padding: 5rem 4rem; }
@@ -156,7 +163,6 @@
   .support-card { border: 1px solid rgba(201,168,76,0.2); padding: 1.8rem 1.5rem; flex: 1; min-width: 150px; max-width: 190px; transition: all 0.3s; cursor: pointer; text-decoration: none; color: inherit; display: block; }
   .support-card:hover { border-color: var(--gold); background: rgba(201,168,76,0.05); transform: translateY(-4px); }
 
-  /* Patreon kartı özel */
   .support-card.patreon-card { border-color: rgba(255,66,77,0.5); background: rgba(255,66,77,0.05); }
   .support-card.patreon-card:hover { border-color: #FF424D; background: rgba(255,66,77,0.12); transform: translateY(-6px); }
   .support-card-action { margin-top: 0.6rem; font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: #FF424D; font-weight: 700; }
@@ -210,7 +216,6 @@
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
-<!-- NAV — "Videolar" yerine "Patreon" -->
 <nav>
   <a href="#" class="nav-logo">Bu Muydu?</a>
   <ul class="nav-links">
@@ -237,7 +242,7 @@
     <div class="hero-visual"></div>
     <div class="hero-lines"></div>
     <div class="hero-glyph">
-      <img src="https://bumuydu-creator.github.io/bumuydu.github.io/film%20kitap.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+      <img src="https://bumuydu-creator.github.io/bumuydu.github.io/film%20kitap.jpg" alt="Bu Muydu? — Film ve kitap analizleri" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
     </div>
   </div>
   <div class="hero-scroll"><span class="scroll-line"></span>Devam Et 👇</div>
@@ -247,7 +252,7 @@
 <section style="box-sizing:border-box;padding:2rem 1rem;display:flex;flex-direction:column;gap:2.5rem;max-width:1100px;margin:0 auto;">
   <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:1.5rem;align-items:start;">
     <div style="display:flex;flex-direction:column;">
-      <img src="https://raw.githubusercontent.com/sadakatsizhayat-design/bumuydu.github.io/main/Ekran%20Resmi%202026-06-19%2007.10.31.png" style="width:100%;height:220px;object-fit:cover;display:block;opacity:0.9;border-radius:12px 12px 0 0;">
+      <img src="https://raw.githubusercontent.com/sadakatsizhayat-design/bumuydu.github.io/main/Ekran%20Resmi%202026-06-19%2007.10.31.png" alt="Bu Muydu? kanal tanıtım görseli" style="width:100%;height:220px;object-fit:cover;display:block;opacity:0.9;border-radius:12px 12px 0 0;">
       <div style="padding:0.85rem 1rem 0.85rem 1.25rem;font-family:'Playfair Display',serif;font-size:1.6rem;font-style:italic;color:#f5efe0;line-height:1.4;border-left:4px solid #e8ff00;background:#1a1a1a;border-radius:0 0 12px 12px;">
         "Bir şeyi anlamak için önce doğru soruyu sormak gerekir."
       </div>
@@ -259,12 +264,11 @@
       <p style="font-family:'Crimson Text',serif;font-size:0.9rem;color:var(--smoke);opacity:0.7;">Yazının tamamına ulaşmak için Patreon'a abone olman gerekiyor.</p>
       <div style="display:flex;gap:0.8rem;flex-wrap:wrap;margin-top:0.5rem;">
         <a href="https://www.patreon.com/cw/Bumuydu" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#FF424D;color:#fff;padding:0.7rem 1.4rem;font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;text-decoration:none;border-radius:2px;transition:all 0.3s;" onmouseover="this.style.background='#cc2f39'" onmouseout="this.style.background='#FF424D'">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M14.82 2.41C11.57 2.41 8.93 5.05 8.93 8.3C8.93 11.54 11.57 14.18 14.82 14.18C18.06 14.18 20.7 11.54 20.7 8.3C20.7 5.05 18.06 2.41 14.82 2.41ZM3.3 21.59H6.41V2.41H3.3V21.59Z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M14.82 2.41C11.57 2.41 8.93 5.05 8.93 8.3C8.93 11.54 11.57 14.18 14.82 14.18C18.06 14.18 20.7 11.54 20.7 8.3C20.7 5.05 18.06 2.41 14.82 2.41ZM3.3 21.59H6.41V2.41H3.3V21.59Z"/></svg>
           Üye Ol & Oku
         </a>
         <a href="https://www.patreon.com/cw/Bumuydu" target="_blank" style="display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(255,66,77,0.4);color:#FF424D;padding:0.7rem 1.4rem;font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;transition:all 0.3s;" onmouseover="this.style.borderColor='#FF424D'" onmouseout="this.style.borderColor='rgba(255,66,77,0.4)'">Patreon →</a>
       </div>
-      
     </div>
   </div>
 
@@ -272,7 +276,7 @@
   <div style="font-family:'Playfair Display',serif;font-size:1.3rem;color:#f5efe0;margin-bottom:0.5rem;">Yayımlanan Haberlerim</div>
 
   <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:1.5rem;align-items:center;">
-    <img src="https://i0.wp.com/journo.com.tr/wp-content/uploads/2026/04/gazetecison.jpg?w=1280&ssl=1" style="width:100%;height:200px;object-fit:cover;border-radius:12px;display:block;">
+    <img src="https://i0.wp.com/journo.com.tr/wp-content/uploads/2026/04/gazetecison.jpg?w=1280&ssl=1" alt="Journo.com.tr — Yapay Zekada Gazeteci: Genç, Batılı, Beyaz ve Erkek" style="width:100%;height:200px;object-fit:cover;border-radius:12px;display:block;">
     <div style="display:flex;flex-direction:column;gap:0.75rem;">
       <span style="font-size:0.72rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:#f5efe0;opacity:0.6;">Journo.com.tr · Makale</span>
       <div style="font-family:'Playfair Display',serif;font-size:1.1rem;line-height:1.45;color:#f5efe0;">Yapay Zekada Gazeteci: Genç, Batılı, Beyaz ve Erkek</div>
@@ -295,45 +299,69 @@
   <div class="video-grid">
     <div class="video-card">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
-        <div style="position:absolute;inset:0;"><img src="https://img.youtube.com/vi/s_DmweTzKOY/maxresdefault.jpg" style="width:100%;height:100%;object-fit:cover;"></div>
-        <div class="video-overlay"><a href="https://youtu.be/s_DmweTzKOY" target="_blank" class="play-btn">▶</a></div>
+        <div style="position:absolute;inset:0;"><img src="https://img.youtube.com/vi/s_DmweTzKOY/maxresdefault.jpg" alt="Orhan Kemal 1 Mayıs analizi — Bu Muydu?" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="video-overlay"><a href="https://youtu.be/s_DmweTzKOY" target="_blank" class="play-btn" aria-label="Videoyu izle">▶</a></div>
       </div>
-      <div class="video-info"><div class="video-cat">Kitap · Film</div><div class="video-title">Orhan Kemal'in Cevabı Seni Rahatsız Edecek: 1 Mayıs sadece bir gün mü, yoksa bir bakış biçimi mi?</div></div>
+      <div class="video-info">
+        <div class="video-cat">Kitap · Film</div>
+        <div class="video-title">Orhan Kemal'in Cevabı Seni Rahatsız Edecek: 1 Mayıs sadece bir gün mü, yoksa bir bakış biçimi mi?</div>
+        <p class="video-desc">Orhan Kemal'in edebiyatında işçi sınıfı ve 1 Mayıs'ın yalnızca bir tarih değil, bir dünya görüşü olduğunu keşfediyoruz.</p>
+      </div>
     </div>
     <div class="video-card">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
-        <div style="position:absolute;inset:0;"><img src="https://img.youtube.com/vi/QqJDwJyvXa4/maxresdefault.jpg" style="width:100%;height:100%;object-fit:cover;"></div>
-        <div class="video-overlay"><a href="https://youtu.be/QqJDwJyvXa4" target="_blank" class="play-btn">▶</a></div>
+        <div style="position:absolute;inset:0;"><img src="https://img.youtube.com/vi/QqJDwJyvXa4/maxresdefault.jpg" alt="Vedat Türkali Bir Gün Tek Başına analizi — Bu Muydu?" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="video-overlay"><a href="https://youtu.be/QqJDwJyvXa4" target="_blank" class="play-btn" aria-label="Videoyu izle">▶</a></div>
       </div>
-      <div class="video-info"><div class="video-cat">Kitap · Film</div><div class="video-title">Türk Edebiyatının En "Dürüst" Aşk Romanı: Bir Gün Tek Başına</div></div>
+      <div class="video-info">
+        <div class="video-cat">Kitap · Film</div>
+        <div class="video-title">Türk Edebiyatının En "Dürüst" Aşk Romanı: Bir Gün Tek Başına</div>
+        <p class="video-desc">Vedat Türkali'nin toplumcu gerçekçilik geleneğini aşan bu romanında aşk, yalnızlık ve varoluş iç içe geçiyor.</p>
+      </div>
     </div>
     <div class="video-card">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
-        <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/film%20kitap.jpg" style="width:100%;height:100%;object-fit:cover;"></div>
-        <div class="video-overlay"><a href="https://youtu.be/RVxoEcRjQ0k" target="_blank" class="play-btn">▶</a></div>
+        <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/film%20kitap.jpg" alt="Project Hail Mary analizi — Bu Muydu?" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="video-overlay"><a href="https://youtu.be/RVxoEcRjQ0k" target="_blank" class="play-btn" aria-label="Videoyu izle">▶</a></div>
       </div>
-      <div class="video-info"><div class="video-cat">Kitap · Film</div><div class="video-title">Project Hail Mary Analizi: Kurtuluş Yok Tek Başına</div></div>
+      <div class="video-info">
+        <div class="video-cat">Kitap · Film</div>
+        <div class="video-title">Project Hail Mary Analizi: Kurtuluş Yok Tek Başına</div>
+        <p class="video-desc">Andy Weir'ın romanında yalnız bir astronotun hayatta kalma mücadelesi ve işbirliğinin insan doğasındaki yeri.</p>
+      </div>
     </div>
     <div class="video-card">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
-        <div style="position:absolute;inset:0;"><img src="https://img.youtube.com/vi/-1kWYCSnLS4/maxresdefault.jpg" style="width:100%;height:100%;object-fit:cover;"></div>
-        <div class="video-overlay"><a href="https://youtu.be/-1kWYCSnLS4" target="_blank" class="play-btn">▶</a></div>
+        <div style="position:absolute;inset:0;"><img src="https://img.youtube.com/vi/-1kWYCSnLS4/maxresdefault.jpg" alt="Masumiyet Müzesi Orhan Pamuk analizi — Bu Muydu?" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="video-overlay"><a href="https://youtu.be/-1kWYCSnLS4" target="_blank" class="play-btn" aria-label="Videoyu izle">▶</a></div>
       </div>
-      <div class="video-info"><div class="video-cat">Kitap · Dizi</div><div class="video-title">Masumiyet Müzesi — Şirin'e Doğru. Füsun'dan Geriye!</div></div>
+      <div class="video-info">
+        <div class="video-cat">Kitap · Dizi</div>
+        <div class="video-title">Masumiyet Müzesi — Şirin'e Doğru. Füsun'dan Geriye!</div>
+        <p class="video-desc">Orhan Pamuk'un koleksiyon ve obsesyon üzerine kurulu bu romanında İstanbul, bellek ve kaybın izini sürüyoruz.</p>
+      </div>
     </div>
     <div class="video-card">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
-        <div style="position:absolute;inset:0;"><img src="https://img.youtube.com/vi/2ey0AXKLyKE/maxresdefault.jpg" style="width:100%;height:100%;object-fit:cover;"></div>
-        <div class="video-overlay"><a href="https://youtu.be/2ey0AXKLyKE?si=zfNXU3T9yhpmnP0C" target="_blank" class="play-btn">▶</a></div>
+        <div style="position:absolute;inset:0;"><img src="https://img.youtube.com/vi/2ey0AXKLyKE/maxresdefault.jpg" alt="Siberpunk felsefe ve gözetim çağı analizi — Bu Muydu?" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="video-overlay"><a href="https://youtu.be/2ey0AXKLyKE?si=zfNXU3T9yhpmnP0C" target="_blank" class="play-btn" aria-label="Videoyu izle">▶</a></div>
       </div>
-      <div class="video-info"><div class="video-cat">Yapay Zeka · Felsefe</div><div class="video-title">Siberpunk Haklı mıydı? İnsan, Algoritma ve Gözetim Çağı</div></div>
+      <div class="video-info">
+        <div class="video-cat">Yapay Zeka · Felsefe</div>
+        <div class="video-title">Siberpunk Haklı mıydı? İnsan, Algoritma ve Gözetim Çağı</div>
+        <p class="video-desc">Siberpunk edebiyatının öngördüğü distopik gelecek bugün ne kadar gerçek? Algoritma, gözetim ve özgürlük üzerine.</p>
+      </div>
     </div>
     <div class="video-card">
       <div class="video-thumb" style="background:linear-gradient(135deg,#0a1a0a,#152a15);">
-        <div style="position:absolute;inset:0;"><img src="https://img.youtube.com/vi/U6BmKCj_VkQ/maxresdefault.jpg" style="width:100%;height:100%;object-fit:cover;"></div>
-        <div class="video-overlay"><a href="https://youtu.be/U6BmKCj_VkQ?si=VnAUauo2LsqrnhiB" target="_blank" class="play-btn">▶</a></div>
+        <div style="position:absolute;inset:0;"><img src="https://img.youtube.com/vi/U6BmKCj_VkQ/maxresdefault.jpg" alt="Sıtmanın tarihe etkisi analizi — Bu Muydu?" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="video-overlay"><a href="https://youtu.be/U6BmKCj_VkQ?si=VnAUauo2LsqrnhiB" target="_blank" class="play-btn" aria-label="Videoyu izle">▶</a></div>
       </div>
-      <div class="video-info"><div class="video-cat">Tarih · Bilim</div><div class="video-title">İnsanlık Tarihini Kim Yazdı? Sıtmanın Görünmez İmparatorluğu</div></div>
+      <div class="video-info">
+        <div class="video-cat">Tarih · Bilim</div>
+        <div class="video-title">İnsanlık Tarihini Kim Yazdı? Sıtmanın Görünmez İmparatorluğu</div>
+        <p class="video-desc">Sıtma hastalığının imparatorlukların yükselişi ve çöküşündeki gizli rolü. Tarihi şekillendiren görünmez güçler.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -344,26 +372,26 @@
     <div style="background:var(--ink);padding:2rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;border-left:1px solid rgba(201,168,76,0.1);border-right:1px solid rgba(201,168,76,0.1);">
       <div class="section-label" style="justify-content:center;">Podcast</div>
       <h2 class="topics-title" style="font-size:2rem;">Sesli <span style="color:var(--gold);font-style:italic;">Düşünceler</span></h2>
-      <img src="hamnet.png" style="width:100%;max-height:180px;object-fit:cover;border-radius:4px;">
+      <img src="hamnet.png" alt="Hamnet podcast bölümü — Acıyı Seyrediyoruz" style="width:100%;max-height:180px;object-fit:cover;border-radius:4px;">
       <div style="width:100%;"><p style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:0.3rem;">Dikkat Çeken Bölüm</p><p style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--cream);">Hamnet</p><p style="font-family:'Crimson Text',serif;font-size:0.9rem;color:var(--smoke);font-style:italic;margin-top:0.5rem;">Acıyı Seyrediyoruz</p></div>
     </div>
     <div style="background:var(--ink);padding:2rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;border-left:1px solid rgba(201,168,76,0.1);border-right:1px solid rgba(201,168,76,0.1);">
       <div class="section-label" style="justify-content:center;">Bu Hafta</div>
       <h2 class="topics-title">Bu <em style="color:var(--gold);font-style:italic;">Hafta</em></h2>
-      <img src="https://bumuydu-creator.github.io/bumuydu.github.io/film%20kitap.jpg" style="width:100%;max-height:180px;object-fit:cover;border-radius:4px;">
+      <img src="https://bumuydu-creator.github.io/bumuydu.github.io/film%20kitap.jpg" alt="Bu haftanın öne çıkan içeriği — Project Hail Mary" style="width:100%;max-height:180px;object-fit:cover;border-radius:4px;">
       <div style="width:100%;"><p style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:0.3rem;">Film</p><p style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--cream);">Project Hail Mary Analizi</p><p style="font-family:'Crimson Text',serif;font-size:0.9rem;color:var(--smoke);font-style:italic;margin-top:0.5rem;">Bu Cennetten düşüş bu kez fırtınalarla değil, steril bir sessizlikle başlamıştı.</p><a href="kurtulusproje.html" style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid rgba(201,168,76,0.3);padding-bottom:2px;text-decoration:none;margin-top:0.5rem;display:inline-block;">Okumak için tıkla →</a></div>
     </div>
     <div onclick="window.location='edebiyat.html'" style="background:var(--ink);padding:2rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;border-left:1px solid rgba(201,168,76,0.1);border-right:1px solid rgba(201,168,76,0.1);cursor:pointer;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
       <div class="section-label" style="justify-content:center;">Mercek</div>
       <h2 class="topics-title" style="font-size:2rem;">Edebiyat <span style="color:var(--gold);font-style:italic;">İncelemesi</span></h2>
-      <img src="https://bumuydu-creator.github.io/bumuydu.github.io/viocast.png" style="width:100%;max-height:180px;object-fit:cover;border-radius:4px;">
+      <img src="https://bumuydu-creator.github.io/bumuydu.github.io/viocast.png" alt="Vedat Türkali edebiyat incelemesi görseli" style="width:100%;max-height:180px;object-fit:cover;border-radius:4px;">
       <div style="width:100%;"><p style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:0.3rem;">İnceleme</p><p style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--cream);">Vedat Türkali – Bir Gün Tek Başına</p><p style="font-family:'Crimson Text',serif;font-size:0.9rem;color:var(--smoke);font-style:italic;margin-top:0.5rem;">"Toplumcu Gerçekçilik" etiketinin dar kalıplarını kıran bir dehanın varoluşsal izdüşümü.</p><a href="edebiyat.html" style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid rgba(201,168,76,0.3);padding-bottom:2px;text-decoration:none;margin-top:0.5rem;display:inline-block;">Merceği Aç →</a></div>
     </div>
     <div onclick="window.location='blog.html'" style="background:#0a1208;padding:2rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;cursor:pointer;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
       <div class="section-label" style="justify-content:center;">Blog</div>
       <h2 class="topics-title">RADAR</h2>
-      <div style="position:relative;width:100%;max-height:180px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#0a1208;border-radius:4px;aspect-ratio:16/9;">
-        <svg viewBox="0 0 400 225" style="position:absolute;width:100%;height:100%;opacity:0.3;"><circle cx="200" cy="112" r="40" fill="none" stroke="#4a9a5f" stroke-width="0.8"/><circle cx="200" cy="112" r="80" fill="none" stroke="#4a9a5f" stroke-width="0.8"/><circle cx="200" cy="112" r="120" fill="none" stroke="#4a9a5f" stroke-width="0.8"/><circle cx="200" cy="112" r="160" fill="none" stroke="#4a9a5f" stroke-width="0.8"/><line x1="0" y1="112" x2="400" y2="112" stroke="#4a9a5f" stroke-width="0.5"/><line x1="200" y1="0" x2="200" y2="225" stroke="#4a9a5f" stroke-width="0.5"/><circle cx="255" cy="75" r="4" fill="#4a9a5f" opacity="0.8"/><circle cx="160" cy="155" r="3" fill="#4a9a5f" opacity="0.6"/><circle cx="280" cy="130" r="5" fill="#4a9a5f" opacity="0.9"/></svg>
+      <div style="position:relative;width:100%;max-height:180px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#0a1208;border-radius:4px;aspect-ratio:16/9;" role="img" aria-label="Radar blog bölümü görseli">
+        <svg viewBox="0 0 400 225" style="position:absolute;width:100%;height:100%;opacity:0.3;" aria-hidden="true"><circle cx="200" cy="112" r="40" fill="none" stroke="#4a9a5f" stroke-width="0.8"/><circle cx="200" cy="112" r="80" fill="none" stroke="#4a9a5f" stroke-width="0.8"/><circle cx="200" cy="112" r="120" fill="none" stroke="#4a9a5f" stroke-width="0.8"/><circle cx="200" cy="112" r="160" fill="none" stroke="#4a9a5f" stroke-width="0.8"/><line x1="0" y1="112" x2="400" y2="112" stroke="#4a9a5f" stroke-width="0.5"/><line x1="200" y1="0" x2="200" y2="225" stroke="#4a9a5f" stroke-width="0.5"/><circle cx="255" cy="75" r="4" fill="#4a9a5f" opacity="0.8"/><circle cx="160" cy="155" r="3" fill="#4a9a5f" opacity="0.6"/><circle cx="280" cy="130" r="5" fill="#4a9a5f" opacity="0.9"/></svg>
       </div>
       <div style="width:100%;"><p style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:#4a9a5f;margin-bottom:0.3rem;">Blog</p><p style="font-family:'Playfair Display',serif;font-size:1rem;color:#f0ede6;">RADAR</p><p style="font-family:'Crimson Text',serif;font-size:0.9rem;color:var(--smoke);font-style:italic;margin-top:0.5rem;">Takıntılar, kürasyonlar, kişisel notlar.</p><a href="blog.html" style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:#4a9a5f;border-bottom:1px solid rgba(74,154,95,0.3);padding-bottom:2px;text-decoration:none;margin-top:0.5rem;display:inline-block;">Radarı Aç →</a></div>
     </div>
@@ -378,11 +406,9 @@
     <p class="support-text">Reklamsız, bağımsız içerik üretmek ancak sizin desteğinizle mümkün.</p>
 
     <div class="support-options">
-
-      <!-- PATREON — öne çıkarılmış kart -->
       <a href="https://www.patreon.com/c/Bumuydu" target="_blank" class="support-card patreon-card">
         <span class="support-card-icon">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="#FF424D" xmlns="http://www.w3.org/2000/svg">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="#FF424D" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M14.82 2.41C11.57 2.41 8.93 5.05 8.93 8.3C8.93 11.54 11.57 14.18 14.82 14.18C18.06 14.18 20.7 11.54 20.7 8.3C20.7 5.05 18.06 2.41 14.82 2.41ZM3.3 21.59H6.41V2.41H3.3V21.59Z"/>
           </svg>
         </span>
@@ -392,31 +418,31 @@
       </a>
 
       <a href="https://www.youtube.com/@bumuydu?sub_confirmation=1" target="_blank" class="support-card">
-        <span class="support-card-icon"><img src="hd-youtube-logo-png-transparent-background-20 Arka Planı Silindi.png" style="width:32px;height:32px;object-fit:contain;"></span>
+        <span class="support-card-icon"><img src="hd-youtube-logo-png-transparent-background-20 Arka Planı Silindi.png" alt="YouTube" style="width:32px;height:32px;object-fit:contain;"></span>
         <div class="support-card-title">Abone Ol</div>
         <div class="support-card-desc">Ücretsiz, en büyük destek</div>
       </a>
 
       <a href="https://www.shopier.com/ucansalyangoz" target="_blank" class="support-card">
-        <span class="support-card-icon"><img src="https://play-lh.googleusercontent.com/ldzRkyCNvKA0ZxHw1jS8mdbJEyj8rMyLqfqclZFiNDh8kMQdSLOzULkP0j-NnZbnqQ=w480-h960-rw" style="width:32px;height:32px;object-fit:contain;border-radius:8px;"></span>
+        <span class="support-card-icon"><img src="https://play-lh.googleusercontent.com/ldzRkyCNvKA0ZxHw1jS8mdbJEyj8rMyLqfqclZFiNDh8kMQdSLOzULkP0j-NnZbnqQ=w480-h960-rw" alt="Shopier" style="width:32px;height:32px;object-fit:contain;border-radius:8px;"></span>
         <div class="support-card-title">Shopier</div>
         <div class="support-card-desc">Dijital ürünler</div>
       </a>
 
       <a href="https://www.etsy.com/shop/FlyingSnailstoryAI" target="_blank" class="support-card">
-        <span class="support-card-icon"><img src="etsy-rounded-logo-design-free-png.png" style="width:32px;height:32px;object-fit:contain;"></span>
+        <span class="support-card-icon"><img src="etsy-rounded-logo-design-free-png.png" alt="Etsy" style="width:32px;height:32px;object-fit:contain;"></span>
         <div class="support-card-title">Etsy</div>
         <div class="support-card-desc">Dijital ürünler</div>
       </a>
 
       <a href="okuma-listesi.html" class="support-card">
-        <img src="M3TMf%20Arka%20Plan%C4%B1%20Silindi.png" style="width:56px;height:56px;object-fit:contain;display:block;margin:0 auto 0.8rem;">
+        <img src="M3TMf%20Arka%20Plan%C4%B1%20Silindi.png" alt="Okuma listesi ikonu" style="width:56px;height:56px;object-fit:contain;display:block;margin:0 auto 0.8rem;">
         <div class="support-card-title">Okuma Listesi</div>
         <div class="support-card-desc">Kaynak rehberler yakında</div>
       </a>
 
       <a href="https://uansalyangoz.substack.com/" target="_blank" class="support-card">
-        <span class="support-card-icon"><img src="Substack.png" style="width:32px;height:32px;object-fit:contain;"></span>
+        <span class="support-card-icon"><img src="Substack.png" alt="Substack" style="width:32px;height:32px;object-fit:contain;"></span>
         <div class="support-card-title">Substack</div>
         <div class="support-card-desc">Yazılar & bülten</div>
       </a>
@@ -426,7 +452,6 @@
         <div class="support-card-title">Kahve Ismarla</div>
         <div class="support-card-desc">Papara ile destek ol</div>
       </a>
-
     </div>
 
     <div id="papara-ana" style="display:none;margin-top:0.8rem;padding:1.2rem 1.5rem;border:1px solid rgba(201,168,76,0.3);background:rgba(10,8,4,0.8);max-width:280px;margin-left:auto;margin-right:auto;">
@@ -465,7 +490,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2025 Bu Muydu? — Tüm hakları saklıdır.</p>
+    <p>© 2026 Bu Muydu? — Tüm hakları saklıdır.</p>
     <div class="social-links">
       <a href="https://www.youtube.com/@bumuydu" target="_blank">YouTube</a>
       <a href="https://www.patreon.com/c/Bumuydu" target="_blank">Patreon</a>
