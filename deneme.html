@@ -394,6 +394,63 @@
   /* kinship tree svg */
   .kinship-wrap{width:100%;max-width:420px;}
 
+  /* ---- image slots: drop your own images into /images/ with these filenames ---- */
+  .hero-bg-img{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:cover;
+    opacity:0.34;
+    mix-blend-mode:luminosity;
+    z-index:0;
+  }
+  .hero-bg-fade{
+    position:absolute;inset:0;
+    background:
+      radial-gradient(ellipse 90% 60% at 50% 0%, rgba(221,154,69,0.10), transparent 60%),
+      linear-gradient(180deg, rgba(26,22,17,0.35) 0%, var(--soil-0-deep) 92%);
+    z-index:1;
+  }
+  .hero > *:not(.hero-bg-img):not(.hero-bg-fade){position:relative;z-index:2;}
+
+  .dig-texture-img{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:cover;
+    opacity:0.22;
+    z-index:0;
+    border-radius:4px;
+  }
+  .dig-graphic{z-index:1;}
+  .dig-graphic > *{position:relative;z-index:1;}
+
+  .ld-img{
+    width:100%;
+    max-width:420px;
+    aspect-ratio:4/3;
+    object-fit:cover;
+    border-radius:8px;
+    border:1px solid var(--line-strong);
+    box-shadow:var(--shadow);
+    display:block;
+  }
+  .ld-img-caption{
+    font-family:var(--mono);
+    font-size:0.7rem;
+    color:var(--ink-faint);
+    margin-top:0.6rem;
+    text-align:center;
+  }
+
+  .cta-bg-img{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:cover;
+    opacity:0.18;
+    z-index:0;
+  }
+  .cta-section{position:relative;}
+  .cta-section > *:not(.cta-bg-img){position:relative;z-index:1;}
+
   /* ================= MATCH WIDGET ================= */
   .match-section{
     max-width:680px;margin:0 auto;padding:10vh 7vw;
@@ -530,6 +587,9 @@
 
 <!-- ===================== HERO ===================== -->
 <section class="hero" aria-label="Giriş">
+  <!-- GÖRSEL: images/hero.jpg — geniş, atmosferik bir orman/kazı fotoğrafı. Önerilen: 1920x1200, koyu/loş tonlar iyi gider -->
+  <img class="hero-bg-img" src="images/hero.jpg" alt="" aria-hidden="true" onerror="this.style.display='none'">
+  <div class="hero-bg-fade" aria-hidden="true"></div>
   <span class="eyebrow" id="hero-eyebrow">Bu Muydu? — Masalların Arkeolojisi</span>
   <h1 id="hero-title">Toprağı kazıyorsun,<br><em>masal</em> çıkıyor.</h1>
   <p class="hero-sub" id="hero-sub">
@@ -565,6 +625,8 @@
 <section class="dig-scroll" id="dig-scroll" aria-label="Kazı kesiti">
   <div class="dig-sticky-wrap">
     <div class="dig-graphic" id="dig-graphic">
+      <!-- GÖRSEL (opsiyonel): images/soil-texture.jpg — gerçek toprak/kazı dokusu, kesit grafiğinin arkasında hafif görünür. Önerilen: 800x900 -->
+      <img class="dig-texture-img" src="images/soil-texture.jpg" alt="" aria-hidden="true" onerror="this.style.display='none'">
       <div class="ruler-track" aria-hidden="true"></div>
       <span class="ruler-mark" style="top:6%;" aria-hidden="true">0 cm</span>
       <span class="ruler-mark" style="top:40%;" aria-hidden="true">~120 cm</span>
@@ -688,15 +750,11 @@
       </p>
     </div>
     <div class="ld-visual">
-      <svg width="260" height="220" viewBox="0 0 260 220" aria-hidden="true">
-        <ellipse cx="130" cy="190" rx="110" ry="14" fill="#000" opacity="0.25"/>
-        <path d="M40,180 Q130,40 220,180" stroke="#caa15a" stroke-width="3" fill="none" opacity="0.6"/>
-        <path d="M70,180 Q130,90 190,180" stroke="#caa15a" stroke-width="2" fill="none" opacity="0.35"/>
-        <circle cx="130" cy="120" r="20" fill="#b14a31"/>
-        <path d="M110,140 L150,140 L142,178 L118,178 Z" fill="#b14a31"/>
-        <circle cx="130" cy="108" r="9" fill="#ece4d2"/>
-        <path d="M20,178 q110,-26 220,0" stroke="#3c2c1a" stroke-width="10" fill="none" opacity="0.0"/>
-      </svg>
+      <!-- GÖRSEL: images/yuzey.jpg — bugünkü/bildiğimiz masal hissi (resimli kitap sayfası, kırmızı pelerin, orman yolu vb). Önerilen: 800x600 (4:3) -->
+      <figure style="margin:0;">
+        <img class="ld-img" src="images/yuzey.jpg" alt="Kırmızı Başlıklı Kız'ın bugün bilinen, çocuk kitabı görünümlü hâli" onerror="this.style.display='none'">
+        <figcaption class="ld-img-caption">Buluntu 01 — yüzey katmanı</figcaption>
+      </figure>
     </div>
   </div>
 </section>
@@ -705,6 +763,11 @@
 <section class="layer-detail mit" aria-label="Sözlü anlatı katmanı detayı">
   <div class="layer-detail-inner reverse">
     <div class="ld-visual">
+      <!-- GÖRSEL (opsiyonel): images/mit.jpg — eski kitap sayfası / 17-19. yüzyıl gravür hissi. Önerilen: 800x500 -->
+      <figure style="margin:0 0 1.2rem;">
+        <img class="ld-img" style="aspect-ratio:8/5;" src="images/mit.jpg" alt="Perrault ve Grimm dönemine ait eski bir baskı sayfası hissi" onerror="this.style.display='none'">
+        <figcaption class="ld-img-caption">Buluntu 02 — ara tabaka</figcaption>
+      </figure>
       <div class="compare-cards" id="compare-cards">
         <div class="compare-card" data-card="perrault">
           <div class="cc-head"><span>Fransa, 1697</span><span class="cc-toggle">aç +</span></div>
@@ -769,6 +832,11 @@
       </p>
     </div>
     <div class="ld-visual">
+      <!-- GÖRSEL (opsiyonel): images/anakaya.jpg — gece, orman, yırtıcı/karanlık doğa hissi. Önerilen: 800x500 -->
+      <figure style="margin:0 0 1.2rem;">
+        <img class="ld-img" style="aspect-ratio:8/5;" src="images/anakaya.jpg" alt="Karanlık bir orman ya da gece manzarası, evrimsel korkuyu çağrıştıran" onerror="this.style.display='none'">
+        <figcaption class="ld-img-caption">Buluntu 03 — ana kaya</figcaption>
+      </figure>
       <svg class="kinship-wrap" viewBox="0 0 420 240" aria-label="Kırmızı Başlıklı Kız'ın dünya çapındaki akraba hikâyeleriyle bağını gösteren basit bir soy ağacı">
         <circle cx="210" cy="34" r="6" fill="#7fc1b6"/>
         <text x="210" y="20" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#ece4d2">Ortak Çekirdek Anlatı</text>
@@ -835,6 +903,8 @@
 
 <!-- ===================== CTA ===================== -->
 <section class="cta-section" aria-label="Kanalı takip et">
+  <!-- GÖRSEL (opsiyonel): images/cta.jpg — kanal/kazı temasına uygun kapanış görseli. Önerilen: 1600x900 -->
+  <img class="cta-bg-img" src="images/cta.jpg" alt="" aria-hidden="true" onerror="this.style.display='none'">
   <span class="eyebrow">Kazıya devam et</span>
   <h2>Masalların Arkeolojisi serisinin tamamı Bu Muydu?'da</h2>
   <p>
