@@ -1,0 +1,332 @@
+
+<!DOCTYPE html>
+
+<html class="dark" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bu Muydu? | Düşüncenin Sınırlarında</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Space+Mono:wght@400;700&amp;family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#34302b",
+                        "patreon-red": "#E85B46",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#7b2e1f",
+                        "secondary-container": "#e6eb00",
+                        "error": "#ffb4ab",
+                        "secondary": "#ffffff",
+                        "surface-variant": "#38342d",
+                        "on-secondary-container": "#666800",
+                        "on-primary-container": "#ffb5a6",
+                        "tertiary-container": "#58524d",
+                        "midnight-ink": "#0A0804",
+                        "on-secondary-fixed-variant": "#484a00",
+                        "surface-container-low": "#1e1b15",
+                        "inverse-on-surface": "#333029",
+                        "secondary-fixed": "#e6eb00",
+                        "surface-bright": "#3c3932",
+                        "on-tertiary-fixed": "#1f1b17",
+                        "tertiary-fixed": "#eae1da",
+                        "primary": "#ffb4a5",
+                        "on-secondary": "#313300",
+                        "surface-dim": "#16130d",
+                        "paper-off-white": "#F5F0E8",
+                        "on-primary-fixed": "#3e0400",
+                        "on-secondary-fixed": "#1c1d00",
+                        "inverse-surface": "#e9e1d7",
+                        "on-surface-variant": "#dbc1bb",
+                        "tertiary-fixed-dim": "#cdc5bf",
+                        "primary-fixed-dim": "#ffb4a5",
+                        "surface-container": "#221f19",
+                        "on-tertiary-fixed-variant": "#4b4641",
+                        "primary-fixed": "#ffdad3",
+                        "surface-container-high": "#2d2a23",
+                        "on-error": "#690005",
+                        "surface": "#16130d",
+                        "tertiary": "#cdc5bf",
+                        "surface-tint": "#ffb4a5",
+                        "background": "#16130d",
+                        "on-primary": "#5d180b",
+                        "surface-container-highest": "#38342d",
+                        "primary-container": "#8b3a2a",
+                        "outline": "#a38b87",
+                        "inverse-primary": "#994534",
+                        "on-background": "#e9e1d7",
+                        "error-container": "#93000a",
+                        "surface-container-lowest": "#100e08",
+                        "secondary-fixed-dim": "#cace00",
+                        "muted-gold": "#C5A059",
+                        "on-surface": "#e9e1d7",
+                        "outline-variant": "#55423f",
+                        "on-tertiary-container": "#cec6c0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-loose": "24px",
+                        "gutter-mobile": "16px",
+                        "stack-tight": "8px",
+                        "unit": "4px",
+                        "section-gap": "48px",
+                        "margin-mobile": "20px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "quote": ["Playfair Display"],
+                        "label-mono": ["Space Mono"],
+                        "label-caps": ["Space Mono"],
+                        "body-md": ["Crimson Text"],
+                        "headline-md": ["Playfair Display"],
+                        "body-lg": ["Crimson Text"],
+                        "headline-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                        "quote": ["20px", {"lineHeight": "30px", "fontWeight": "400"}],
+                        "label-mono": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+        .grain-overlay {
+            background-image: url("https://www.transparenttextures.com/patterns/pinstriped-dark.png");
+            opacity: 0.05;
+            pointer-events: none;
+        }
+        .text-glow {
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background selection:bg-secondary selection:text-midnight-ink overflow-x-hidden">
+<div class="grain-overlay fixed inset-0 z-10"></div>
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile py-4 bg-midnight-ink/80 backdrop-blur-xl border-b border-surface-variant/30">
+<div class="flex items-center gap-4">
+<button class="text-secondary active:opacity-70 transition-opacity">
+<span class="material-symbols-outlined">menu_open</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface tracking-tighter">Bu Muydu?</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-secondary">search</span>
+</div>
+</header>
+<main class="pt-24 pb-32 px-margin-mobile max-w-4xl mx-auto space-y-section-gap">
+<!-- Hero: Haftanın Yazısı -->
+<section class="relative group">
+<div class="mb-stack-loose">
+<span class="font-label-caps text-label-caps text-muted-gold border border-muted-gold/30 px-3 py-1 rounded-full uppercase">Haftanın Yazısı</span>
+</div>
+<div class="aspect-[4/5] relative overflow-hidden rounded-xl border border-surface-variant/30">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A profound and artistic oil-painted portrait of a young woman with deep, cosmic eyes reflecting the universe. Her hair is dark and flowing like night waves, and a vivid, thick stroke of crimson-red paint swirls elegantly across her face like a mysterious path or a serpent. The background is a textured abyss of dark blues and blacks, maintaining a dark academia and philosophical noir aesthetic with high contrast and emotional weight." src="https://lh3.googleusercontent.com/aida/AP1WRLs79809-NkcwdSuIimW4gvVDOYoyAwq_w5kFI-USEQRM_ubX3wHJlSV-i0hrTPTqF1U91RvJparPSfpHEAENtK7LxDV3gxZm-7CdDmTrzgLXRhP65DYge2NMA0N-vf_DKjayVARI_uOE5t-LCaEpX1RDR52qT_8z8RjPw3I73hbZdcBEcgVWKa4I9mpfhQLHTkaaj9SN6VXgMsc5UowGLECl7Aqjikqc30tsjrXLCOYZ8BeFzbVNZ-rGQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-midnight-ink via-transparent to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-gutter-mobile">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile mb-2 text-glow">Sorular cevaplardan daha derin</h2>
+<p class="font-body-md text-body-md text-on-surface-variant italic">"Bir masal biter, merak başlar..."</p>
+</div>
+</div>
+<div class="mt-stack-loose flex gap-4">
+<a class="flex-1 text-center py-4 border border-secondary text-secondary font-label-mono text-label-mono hover:bg-secondary hover:text-midnight-ink transition-all" href="#">OKUMAYA BAŞLA</a>
+</div>
+</section>
+<!-- Quote Divider -->
+<section class="text-center py-stack-loose border-y border-surface-variant/20">
+<p class="font-quote text-quote italic text-on-surface">"Bir şeyi anlamak için önce doğru soruyu sormak gerekir."</p>
+</section>
+<!-- Öne Çıkan Videolar -->
+<section>
+<div class="flex justify-between items-end mb-stack-loose border-l-2 border-secondary pl-4">
+<div>
+<span class="font-label-mono text-label-mono text-secondary">YENİ YÜKLENEN</span>
+<h3 class="font-headline-md text-headline-md">Öne Çıkan Videolar</h3>
+</div>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-secondary transition-colors underline underline-offset-4" href="#">TÜMÜ</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-loose">
+<!-- Video Card 1 -->
+<div class="space-y-stack-tight group">
+<div class="relative aspect-video overflow-hidden rounded border border-surface-variant/30">
+<img class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" data-alt="A cinematic thumbnail image for a philosophical analysis of Project Hail Mary. The visual features a split composition: on the left, a lone astronaut in a futuristic cockpit illuminated by warm, glowing dashboard lights, looking exhausted yet determined. On the right, a stylized silhouette of Sisyphus pushing a giant boulder uphill against a dark, moody sky. The overall style is intellectual noir with deep shadows, high contrast, and a somber, scholarly mood." src="https://lh3.googleusercontent.com/aida/AP1WRLtD8jWpp5lMzd0pbWDe8sMN9kwUpzBfLaMY3hz2kVUjFJ8I0mzqEA8sEFMvMLtbt9qz-tWyXSRkGq1zXnACNLBvOVcHGM4yAkCHo8en92d9UAIfX9uatDMhPoGI77smp7FDzBZu2IP0LWlzS39NBKQa_x3elXC0mVHb-8sIh8becpi40-5PXS3WgtXWgojxq7jR2VUmUU3chvDDcVbli1Ch2ZxTI2KKtVMrkYqVxvJY6Hs0eP3nmKwmbA"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-12 h-12 rounded-full border border-secondary flex items-center justify-center bg-midnight-ink/40 backdrop-blur-sm group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-secondary translate-x-0.5">play_arrow</span>
+</div>
+</div>
+</div>
+<div class="px-1">
+<span class="font-label-mono text-label-mono text-muted-gold">YAPAY ZEKA · FELSEFE</span>
+<h4 class="font-headline-md text-[18px] leading-tight mt-1 group-hover:text-secondary transition-colors">Siberpunk Haklı mıydı? İnsan, Algoritma ve Gözetim Çağı</h4>
+</div>
+</div>
+<!-- Video Card 2 -->
+<div class="space-y-stack-tight group">
+<div class="relative aspect-video overflow-hidden rounded border border-surface-variant/30">
+<img class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" data-alt="A moody, atmospheric thumbnail image for a literature analysis of Vedat Turkali's work. The scene shows two silhouettes of people standing on a balcony or bridge, looking out into a thick, fiery orange and deep red haze. The lighting is dramatic and silhouettes are sharp against the glowing background, evoking feelings of solitude, love, and existential longing within a dark academia visual framework." src="https://lh3.googleusercontent.com/aida/AP1WRLsFkMlNcYCHlc7DN6Bz2N8oB-UcNt5taGdh7HV-Knn0Eo9pjMGK6UIhdTuHATnLhy8f7B18Jl2HC_7oF9Bh11m9lU5_R0s5Wx4_pwG8wYa-fM0AZzWW7kPrsN8wMcnGsXMPlwXwkVB1N8m9vcG0Oj4Kw91oGbXl_5mXGy7J62vHGtB9enheyDB9MxxNs7McPKJvTcF1V6ZQJyfApJCJ-ZfNTH4FheoDhpbKFpYn178HXWb3mFHmSvatTmw"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-12 h-12 rounded-full border border-secondary flex items-center justify-center bg-midnight-ink/40 backdrop-blur-sm group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-secondary translate-x-0.5">play_arrow</span>
+</div>
+</div>
+</div>
+<div class="px-1">
+<span class="font-label-mono text-label-mono text-muted-gold">KİTAP · FİLM</span>
+<h4 class="font-headline-md text-[18px] leading-tight mt-1 group-hover:text-secondary transition-colors">Türk Edebiyatının En "Dürüst" Aşk Romanı: Bir Gün Tek Başına</h4>
+</div>
+</div>
+</div>
+</section>
+<!-- Podcast Section -->
+<section class="bg-surface-container-low p-margin-mobile border border-surface-variant/20 rounded-xl">
+<div class="flex items-center gap-3 mb-stack-loose">
+<span class="material-symbols-outlined text-primary">podcasts</span>
+<h3 class="font-headline-md text-headline-md">Sesli Düşünceler</h3>
+</div>
+<div class="flex flex-col md:flex-row gap-gutter-mobile items-center">
+<div class="w-full md:w-1/3 aspect-square relative group overflow-hidden rounded-lg">
+<img class="w-full h-full object-cover border border-surface-variant/50" data-alt="A minimalist and high-contrast book cover art for 'Masallarin Arkeolojisi'. It depicts a woman in ornate, Renaissance-style royal attire holding a bright red apple, set against a solid dark brown background. The aesthetic is surreal and academic, blending historical portraiture with a modern, clean digital finish. The lighting is focused and theatrical, highlighting the textures of her lace collar and velvet sleeves." src="https://lh3.googleusercontent.com/aida/AP1WRLsr6uyfbH7rftNRlWUaey2SIHagn62BLUqHR3a0E4Osssa-D39kFf2UKm4ez0500DUn9gY-2lEQEP_wteGqx5GlsS3e--qe9qLPEMjvtBz_XAVAZv2d6yf9IhJ4vjTmLLOIroQoeiSM3_CqTBMWR9XLdLUZfO0FaQ84d7PVUemWMJ-wDDLqTNmxA_7PtoP1RUxG8Lw966FsmzeQrJEedbDTfjY85_VeiQvDd6U8NaFISQiFHkoM-S6adgg"/>
+</div>
+<div class="w-full md:w-2/3 space-y-stack-tight">
+<span class="font-label-mono text-label-mono text-primary uppercase">DİKKAT ÇEKEN BÖLÜM</span>
+<h4 class="font-headline-lg-mobile text-headline-lg-mobile">Masalların Arkeolojisi: Hikâyenin Evrimi</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Enkidu'dan Kızıl Başlıklı Kız'a, mağara ritüellerinden modern anlatıya uzanan derin bir yolculuk.</p>
+<!-- Simplified Player -->
+<div class="mt-stack-loose p-4 bg-midnight-ink/40 rounded border border-surface-variant/10">
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 rounded-full bg-secondary text-midnight-ink flex items-center justify-center">
+<span class="material-symbols-outlined">play_arrow</span>
+</button>
+<div class="flex-1 h-1 bg-surface-variant relative overflow-hidden rounded-full">
+<div class="absolute inset-y-0 left-0 w-1/3 bg-primary"></div>
+</div>
+<span class="font-label-mono text-label-mono text-on-surface-variant">14:20</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- En Son Analizler -->
+<section>
+<div class="mb-stack-loose">
+<h3 class="font-headline-md text-headline-md border-b border-secondary/20 pb-2">En Son Analizler</h3>
+</div>
+<div class="space-y-stack-loose">
+<article class="group pb-stack-loose border-b border-surface-variant/10">
+<div class="flex justify-between items-start gap-4">
+<div class="space-y-2">
+<span class="font-label-caps text-label-caps text-muted-gold">MERCEK</span>
+<h4 class="font-headline-md text-headline-md group-hover:text-secondary transition-colors cursor-pointer">Pan'ın Labirenti: Arketipsel Analiz ve Semboller</h4>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Karanlığın yavaş yavaş şekil aldığı, gölgelerin tarihin üzerine bir kefen gibi serildiği bu rehberde Pan mitinin derinliklerine iniyoruz...</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-secondary transition-colors mt-8">arrow_outward</span>
+</div>
+</article>
+<article class="group pb-stack-loose border-b border-surface-variant/10">
+<div class="flex justify-between items-start gap-4">
+<div class="space-y-2">
+<span class="font-label-caps text-label-caps text-muted-gold">RADAR</span>
+<h4 class="font-headline-md text-headline-md group-hover:text-secondary transition-colors cursor-pointer">Yapay Zekada Gazeteci: Genç, Batılı ve Erkek</h4>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Yapay zeka sistemlerinin içine yerleştirilen varsayılan "gazeteci" kimliği ne anlama geliyor? Kimin sesi duyuluyor?</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-secondary transition-colors mt-8">arrow_outward</span>
+</div>
+</article>
+</div>
+</section>
+<!-- Patreon CTA -->
+<section class="bg-primary-container/20 border border-primary/20 p-stack-loose rounded-xl text-center space-y-stack-tight relative overflow-hidden">
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+
+</div>
+<h3 class="font-headline-md text-headline-md text-primary">Bu işi birlikte büyütelim</h3>
+<p class="font-body-md text-body-md text-on-primary-container max-w-sm mx-auto">Reklamsız, bağımsız içerik üretmek ancak sizin desteğinizle mümkün.</p>
+<div class="pt-stack-loose">
+<a class="inline-flex items-center gap-2 px-8 py-3 bg-patreon-red text-white font-label-mono text-label-mono rounded hover:scale-105 transition-transform" href="https://www.patreon.com/c/Bumuydu">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                    PATREON ÜYE OL
+                </a>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter-mobile pb-safe bg-midnight-ink/90 backdrop-blur-2xl border-t border-surface-variant/20 h-20">
+<a class="flex flex-col items-center justify-center text-secondary border-t-2 border-secondary pt-2 h-full" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home_max</span>
+<span class="font-label-caps text-label-caps mt-1">Ev</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant pt-2 hover:text-secondary/80 h-full" href="#">
+<span class="material-symbols-outlined">auto_stories</span>
+<span class="font-label-caps text-label-caps mt-1">Kitaplık</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant pt-2 hover:text-secondary/80 h-full" href="#">
+<span class="material-symbols-outlined">favorite</span>
+<span class="font-label-caps text-label-caps mt-1">Destek</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant pt-2 hover:text-secondary/80 h-full" href="#">
+<span class="material-symbols-outlined">person_pin</span>
+<span class="font-label-caps text-label-caps mt-1">Ben</span>
+</a>
+</nav>
+<footer class="bg-midnight-ink pt-stack-loose pb-32 px-margin-mobile border-t border-surface-variant/10">
+<div class="max-w-4xl mx-auto space-y-stack-loose">
+<div class="grid grid-cols-2 gap-stack-loose">
+<div>
+<h5 class="font-label-caps text-label-caps text-secondary mb-4">İçerikler</h5>
+<ul class="font-body-md text-body-md text-on-surface-variant space-y-2">
+<li>Son Videolar</li>
+<li>Konular</li>
+<li>Yazılar</li>
+</ul>
+</div>
+<div>
+<h5 class="font-label-caps text-label-caps text-secondary mb-4">Bağlantı</h5>
+<ul class="font-body-md text-body-md text-on-surface-variant space-y-2">
+<li>YouTube</li>
+<li>Patreon</li>
+<li>İletişim</li>
+</ul>
+</div>
+</div>
+<div class="pt-stack-loose border-t border-surface-variant/10 text-center">
+<p class="font-label-mono text-label-mono text-on-surface-variant opacity-60">© 2026 Bu Muydu? — Tüm hakları saklıdır.</p>
+</div>
+</div>
+</footer>
+<script>
+        // Subtle scroll reveal effect
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-4');
+                }
+            });
+        }, observerOptions);
+
+        document.</script></body></html>
