@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Haftalık Salyangoz Takvimi — Bu Muydu?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.383.0/umd/lucide.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #F9F7F2;
+      --black: #1A1A1A;
+      --red: #FF3B30;
+      --stone-200: #e7e5e4;
+      --stone-300: #d6d3d1;
+      --stone-500: #78716c;
+      --stone-600: #57534e;
+      --stone-700: #44403c;
+      --stone-800: #292524;
+      --emerald-600: #059669;
+      --sky-950: #082f49;
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--black);
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 100vh;
+      padding-bottom: 4rem;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--cream); border-left: 2px solid #000; }
+    ::-webkit-scrollbar-thumb { background: #000; border: 2px solid #000; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--red); }
+
+    /* Typography */
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .font-serif { font-family: 'Lora', Georgia, serif; }
+
+    /* Neo-brutalist utilities */
+    .neo-border { border: 3px solid #000; }
+    .neo-border-sm { border: 2px solid #000; }
+    .neo-shadow { box-shadow: 4px 4px 0 0 rgba(0,0,0,1); }
+    .neo-shadow-sm { box-shadow: 2px 2px 0 0 rgba(0,0,0,1); }
+    .neo-shadow-lg { box-shadow: 6px 6px 0 0 rgba(0,0,0,1); }
+    .neo-shadow-red { box-shadow: 4px 4px 0 0 rgba(255,59,48,1); }
+
+    /* Layout */
+    .container { max-width: 64rem; margin: 0 auto; padding: 0 1rem; }
+    .grid-7 { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; }
+    @media(max-width:900px){ .grid-7 { grid-template-columns: repeat(4, 1fr); } }
+    @media(max-width:600px){ .grid-7 { grid-template-columns: repeat(2, 1fr); } }
+
+    /* Top bar */
+    #topbar {
+      width: 100%; background: #000; color: #fff;
+      border-bottom: 3px solid #000;
+      padding: 0.625rem 1rem;
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+      font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+    }
+    #topbar .actions { display: flex; gap: 1rem; }
+    #topbar button { background: none; border: none; color: #fff; cursor: pointer;
+      font-family: inherit; font-size: inherit; font-weight: 900; text-transform: uppercase;
+      display: flex; align-items: center; gap: 0.375rem; transition: color 0.15s; }
+    #topbar button:hover { color: var(--red); }
+    #topbar button.danger:hover { color: var(--red); }
+
+    /* Header */
+    #app-header {
+      border: 4px solid #000;
+      margin-top: 1.5rem;
+      overflow: hidden;
+      box-shadow: 6px 6px 0 0 rgba(0,0,0,1);
+    }
+    .header-top {
+      background: #000; color: #fff;
+      display: flex; flex-wrap: wrap; align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem; gap: 1rem;
+      border-bottom: 4px solid #000;
+    }
+    .header-top h1 { font-size: clamp(1.5rem, 4vw, 2.25rem); font-weight: 900;
+      letter-spacing: -0.03em; text-transform: uppercase; font-style: italic; }
+    .header-top h1 span { color: var(--red); }
+    .header-badge { font-size: 0.625rem; font-family: 'JetBrains Mono', monospace;
+      opacity: 0.8; text-transform: uppercase; letter-spacing: 0.15em;
+      background: #292524; padding: 0.125rem 0.5rem; border: 1px solid #57534e; }
+    .header-body { padding: 1.5rem; display: flex; flex-direction: column; align-items: center; }
+    .snail-logo-area { display: flex; flex-wrap: wrap; gap: 1.5rem;
+      align-items: center; justify-content: center; margin-bottom: 1.5rem; width: 100%; max-width: 48rem; }
+    .snail-logo-card { background: #fff; border: 3px solid #000; padding: 0.75rem;
+      box-shadow: 2px 2px 0 0 rgba(0,0,0,1); flex-shrink: 0; }
+    .snail-desc h2 { font-size: 1.25rem; font-weight: 900; text-transform: uppercase;
+      letter-spacing: -0.02em; font-style: italic; }
+    .snail-desc p { font-size: 0.8rem; color: var(--stone-700); font-family: 'Lora',serif;
+      line-height: 1.6; max-width: 36rem; margin-top: 0.5rem; }
+    .snail-desc p strong { color: var(--red); }
+
+    /* Links bar */
+    .links-bar { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center;
+      width: 100%; max-width: 48rem; }
+    .links-bar a {
+      display: flex; align-items: center; gap: 0.375rem;
+      padding: 0.375rem 0.75rem; background: #fff;
+      border: 2px solid #000; font-size: 0.7rem; font-weight: 700;
+      color: #000; text-decoration: none; text-transform: uppercase;
+      letter-spacing: 0.08em; transition: all 0.15s;
+      box-shadow: 2px 2px 0 0 rgba(0,0,0,1);
+    }
+    .links-bar a:hover { transform: translate(1px,1px); box-shadow: none; }
+    .links-bar a.spotify:hover { background: #1DB954; color: #fff; }
+    .links-bar a.insta:hover { background: #E1306C; color: #fff; }
+    .links-bar a.substack:hover { background: #f59e0b; color: #fff; }
+    .links-bar a.etsy:hover { background: #f97316; color: #fff; }
+    .links-bar a.linktree:hover { background: #059669; color: #fff; }
+
+    /* Quote block */
+    .quote-block {
+      width: 100%; max-width: 48rem; background: #fff;
+      border: 3px solid #000; padding: 1.25rem;
+      margin-top: 1.5rem; position: relative; overflow: hidden;
+      box-shadow: 4px 4px 0 0 rgba(0,0,0,1);
+    }
+    .quote-block::before { content:''; position: absolute; top:0; left:0;
+      width: 0.625rem; height: 100%; background: var(--red); border-right: 3px solid #000; }
+    .quote-block .inner { padding-left: 1rem; }
+    .quote-label { font-size: 0.625rem; font-family: 'JetBrains Mono',monospace;
+      letter-spacing: 0.15em; text-transform: uppercase; color: #fff;
+      background: #000; padding: 0.125rem 0.5rem; border: 1px solid #000; font-weight: 900; }
+    .quote-text { font-family: 'Lora',serif; font-style: italic; font-size: 0.9rem;
+      line-height: 1.7; margin-top: 0.75rem; color: var(--stone-800); }
+    .quote-footer { display: flex; justify-content: space-between; align-items: center;
+      margin-top: 1rem; padding-top: 0.75rem; border-top: 2px dashed var(--stone-200); flex-wrap: wrap; gap: 0.5rem; }
+    .quote-author { font-size: 0.7rem; color: var(--stone-600); font-family: 'JetBrains Mono',monospace;
+      font-weight: 700; text-transform: uppercase; }
+    .quote-next { font-size: 0.7rem; color: var(--red); cursor: pointer; font-weight: 900;
+      text-transform: uppercase; letter-spacing: 0.1em; background: none; border: none;
+      text-decoration: underline; }
+    .quote-next:hover { color: #000; }
+
+    /* Weekly Grid Section */
+    #weekly-section { margin-top: 2rem; }
+    #weekly-section h2 { font-size: 1rem; font-weight: 900; text-transform: uppercase;
+      letter-spacing: 0.1em; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+
+    .day-tab {
+      padding: 0.75rem 0.5rem; background: #fff; border: 2px solid #000;
+      cursor: pointer; text-align: center; font-weight: 900; font-size: 0.75rem;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      transition: all 0.15s; box-shadow: 2px 2px 0 0 rgba(0,0,0,1);
+      display: flex; flex-direction: column; align-items: center; gap: 0.25rem;
+    }
+    .day-tab:hover { background: var(--cream); transform: translate(1px,1px); box-shadow: none; }
+    .day-tab.active { background: #000; color: #fff; transform: translate(2px,2px); box-shadow: none; }
+    .day-tab .day-mood { font-size: 1rem; }
+    .day-tab .day-progress { font-size: 0.6rem; font-family: 'JetBrains Mono',monospace;
+      color: var(--stone-500); }
+    .day-tab.active .day-progress { color: #aaa; }
+
+    /* Day detail */
+    #day-detail { margin-top: 1rem; background: #fff; border: 3px solid #000;
+      padding: 1.5rem; box-shadow: 4px 4px 0 0 rgba(0,0,0,1); }
+    .detail-header { display: flex; flex-wrap: wrap; justify-content: space-between;
+      align-items: flex-start; gap: 1rem; border-bottom: 2px solid #000; padding-bottom: 1rem; margin-bottom: 1.5rem; }
+    .detail-dayname { font-size: 2rem; font-weight: 900; text-transform: uppercase;
+      letter-spacing: -0.03em; }
+    .detail-focus { font-size: 0.7rem; font-family: 'JetBrains Mono',monospace;
+      font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+      background: var(--red); color: #fff; padding: 0.25rem 0.75rem; border: 2px solid #000; }
+
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media(max-width:600px){ .detail-grid { grid-template-columns: 1fr; } }
+
+    .section-label { font-size: 0.625rem; font-family: 'JetBrains Mono',monospace;
+      font-weight: 900; text-transform: uppercase; letter-spacing: 0.15em;
+      color: var(--stone-500); display: block; margin-bottom: 0.5rem; }
+
+    /* Tasks */
+    .task-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .task-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.625rem;
+      border: 2px solid #000; background: var(--cream); cursor: pointer;
+      transition: all 0.15s; }
+    .task-item:hover { background: #fff; }
+    .task-item.done { background: #f0fdf4; }
+    .task-checkbox { width: 1.125rem; height: 1.125rem; border: 2px solid #000;
+      background: #fff; flex-shrink: 0; display: flex; align-items: center;
+      justify-content: center; margin-top: 0.1rem; }
+    .task-item.done .task-checkbox { background: var(--emerald-600); border-color: var(--emerald-600); }
+    .task-text { font-size: 0.8rem; font-weight: 700; line-height: 1.4; }
+    .task-item.done .task-text { text-decoration: line-through; color: var(--stone-500); }
+
+    /* Water tracker */
+    .water-tracker { display: flex; gap: 0.375rem; flex-wrap: wrap; margin-top: 0.5rem; }
+    .water-drop { width: 2.25rem; height: 2.25rem; border: 2px solid #000; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; font-size: 1rem;
+      transition: all 0.15s; background: #fff; }
+    .water-drop.filled { background: #BAE6FD; }
+    .water-drop:hover { transform: scale(1.1); }
+
+    /* Mood selector */
+    .mood-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+    .mood-btn { padding: 0.375rem 0.75rem; border: 2px solid #000; background: #fff;
+      cursor: pointer; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; transition: all 0.15s; display: flex; align-items: center; gap: 0.375rem; }
+    .mood-btn:hover { background: var(--cream); }
+    .mood-btn.active { background: #000; color: #fff; }
+
+    /* Reflection */
+    .reflection-q { font-size: 0.8rem; font-family: 'Lora',serif; font-style: italic;
+      line-height: 1.6; color: var(--stone-700); margin-bottom: 0.75rem;
+      padding: 0.75rem; background: var(--cream); border: 2px dashed var(--stone-300); }
+    textarea.reflection-input {
+      width: 100%; padding: 0.75rem; border: 2px solid #000; background: #fff;
+      font-family: 'Space Grotesk',sans-serif; font-size: 0.8rem; font-weight: 600;
+      resize: vertical; min-height: 100px; outline: none;
+    }
+
+    /* Suni Aciliyet Savar */
+    #suni-section {
+      margin-top: 2rem; background: #fff; border: 3px solid #000; padding: 1.5rem;
+      box-shadow: 4px 4px 0 0 rgba(0,0,0,1);
+    }
+    .section-header { display: flex; align-items: center; gap: 0.75rem;
+      margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 2px solid #000; }
+    .section-icon { background: var(--red); color: #fff; padding: 0.625rem;
+      border: 2px solid #000; box-shadow: 2px 2px 0 0 rgba(0,0,0,1); }
+    .section-title { font-size: 1rem; font-weight: 900; text-transform: uppercase;
+      letter-spacing: 0.08em; }
+    .section-sub { font-size: 0.75rem; font-family: 'Lora',serif; font-style: italic;
+      color: var(--stone-700); margin-top: 0.125rem; }
+
+    .suni-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
+    @media(max-width:800px){ .suni-grid { grid-template-columns: 1fr; } }
+
+    .suni-input-area { grid-column: span 2; }
+    @media(max-width:800px){ .suni-input-area { grid-column: span 1; } }
+
+    textarea.suni-textarea {
+      width: 100%; height: 8rem; padding: 1rem; background: #fff;
+      border: 2px solid #000; font-family: 'Space Grotesk',sans-serif;
+      font-size: 0.85rem; font-weight: 600; resize: none; outline: none;
+    }
+    .analyze-btn {
+      display: block; margin-top: 0.75rem; margin-left: auto;
+      padding: 0.625rem 1.25rem; background: var(--red); color: #fff;
+      border: 2px solid #000; font-family: 'JetBrains Mono',monospace;
+      font-size: 0.7rem; font-weight: 900; text-transform: uppercase;
+      cursor: pointer; box-shadow: 2px 2px 0 0 rgba(0,0,0,1);
+      transition: all 0.15s; letter-spacing: 0.1em;
+    }
+    .analyze-btn:hover { transform: translate(1px,1px); box-shadow: none; background: #000; }
+
+    .example-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+    .chip {
+      padding: 0.375rem 0.75rem; background: #fff; border: 2px solid #000;
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; cursor: pointer; text-align: left;
+      box-shadow: 2px 2px 0 0 rgba(0,0,0,1); transition: all 0.15s;
+    }
+    .chip:hover { background: var(--red); color: #fff; transform: translate(1px,1px); box-shadow: none; }
+
+    /* Purged box */
+    .purged-box { background: var(--cream); border: 2px solid #000; padding: 1rem;
+      box-shadow: 2px 2px 0 0 rgba(0,0,0,1); display: flex; flex-direction: column; }
+    .purged-header { display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 0.75rem; padding-bottom: 0.375rem; border-bottom: 1px solid var(--stone-300); }
+    .purged-title { font-size: 0.625rem; font-family: 'JetBrains Mono',monospace;
+      font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; }
+    .clear-btn { font-size: 0.625rem; font-family: 'JetBrains Mono',monospace;
+      font-weight: 900; text-transform: uppercase; color: var(--red); background: none;
+      border: none; cursor: pointer; text-decoration: underline; }
+    .purged-list { display: flex; flex-direction: column; gap: 0.625rem;
+      max-height: 12rem; overflow-y: auto; }
+    .purged-item { padding: 0.625rem; background: #fff; border: 1px solid #000; }
+    .purged-item-text { font-size: 0.7rem; font-weight: 700; color: var(--stone-800);
+      text-decoration: line-through; text-decoration-color: var(--red); text-decoration-thickness: 2px; }
+    .purged-item-advice { font-size: 0.65rem; color: var(--stone-600); font-family: 'Lora',serif;
+      font-style: italic; margin-top: 0.25rem; }
+    .purged-empty { font-size: 0.75rem; color: var(--stone-500); font-family: 'Lora',serif;
+      font-style: italic; text-align: center; padding: 2rem; background: #fff;
+      border: 1px dashed var(--stone-300); }
+    .purged-motto { font-size: 0.6rem; font-family: 'JetBrains Mono',monospace; font-weight: 900;
+      text-transform: uppercase; letter-spacing: 0.1em; text-align: center;
+      border-top: 1px solid var(--stone-300); padding-top: 0.5rem; margin-top: auto; padding-top: 0.75rem; }
+
+    /* Analysis result */
+    #analysis-result {
+      margin-top: 1.5rem; background: var(--cream); border: 3px solid #000; padding: 1.25rem;
+      box-shadow: 4px 4px 0 0 rgba(0,0,0,1); display: none; position: relative;
+    }
+    .detected-badge { position: absolute; top: 1rem; right: 1rem;
+      font-size: 0.6rem; font-family: 'JetBrains Mono',monospace; font-weight: 900;
+      text-transform: uppercase; letter-spacing: 0.1em; background: #000; color: #fff;
+      padding: 0.25rem 0.5rem; border: 1px solid #000; display: flex; align-items: center; gap: 0.25rem; }
+    .analysis-original { margin-bottom: 1rem; }
+    .analysis-original-label { font-size: 0.6rem; font-family: 'JetBrains Mono',monospace;
+      font-weight: 900; text-transform: uppercase; letter-spacing: 0.15em; color: var(--stone-500); }
+    .analysis-original-text { font-family: 'Lora',serif; font-style: italic;
+      font-size: 0.9rem; font-weight: 700; margin-top: 0.5rem; }
+    .analysis-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+      margin-top: 1rem; padding-top: 1rem; border-top: 2px dashed #000; }
+    @media(max-width:600px){ .analysis-cards { grid-template-columns: 1fr; } }
+    .analysis-card { padding: 0.75rem; border: 2px solid #000; }
+    .analysis-card.real { background: #fff; }
+    .analysis-card.snail { background: #E0F2FE; box-shadow: 2px 2px 0 0 rgba(255,59,48,1); }
+    .analysis-card-label { font-size: 0.6rem; font-family: 'JetBrains Mono',monospace;
+      font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; }
+    .analysis-card-text { font-size: 0.78rem; font-family: 'Lora',serif; font-weight: 700;
+      line-height: 1.5; margin-top: 0.5rem; color: var(--stone-800); }
+    .analysis-actions { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem; padding-top: 0.75rem; }
+    .btn-dismiss { padding: 0.5rem 1rem; border: 2px solid transparent; background: none;
+      color: var(--stone-700); font-weight: 700; text-transform: uppercase; font-size: 0.7rem; cursor: pointer; }
+    .btn-dismiss:hover { background: var(--stone-200); }
+    .btn-purge { padding: 0.625rem 1.25rem; background: #000; color: #fff;
+      border: 2px solid #000; font-family: 'JetBrains Mono',monospace; font-size: 0.7rem;
+      font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer;
+      box-shadow: 2px 2px 0 0 rgba(0,0,0,1); display: flex; align-items: center; gap: 0.375rem;
+      transition: all 0.15s; }
+    .btn-purge:hover { background: var(--red); transform: translate(1px,1px); box-shadow: none; }
+
+    /* Notification */
+    #notification {
+      position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 100;
+      background: #000; color: #fff; padding: 0.75rem 1.25rem;
+      border: 2px solid #fff; box-shadow: 3px 3px 0 0 rgba(255,59,48,1);
+      display: flex; align-items: center; gap: 0.625rem;
+      font-family: 'JetBrains Mono',monospace; font-size: 0.7rem;
+      font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    #notification.show { opacity: 1; }
+
+    /* Footer */
+    footer {
+      max-width: 64rem; margin: 3rem auto 0; padding: 2rem 1rem;
+      border-top: 3px solid #000; text-align: center;
+    }
+    footer p { font-size: 0.65rem; color: var(--stone-600); font-family: 'JetBrains Mono',monospace;
+      font-weight: 900; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 0.5rem; }
+
+    /* Animations */
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+    .pulse { animation: pulse 2s infinite; }
+  </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div style="display:flex;align-items:center;gap:0.375rem">
+    <span>🐌</span>
+    <span class="hide-mobile">"Uçan Salyangoz" Zaman Dilimi: Akışta ve Yavaş</span>
+    <span class="show-mobile" style="display:none">YAVAŞ ZAMAN</span>
+  </div>
+  <div class="actions">
+    <button onclick="exportSummary()">⬇ Haftalık Özeti Kopyala</button>
+    <button class="danger" onclick="resetWeek()" style="color:#ef4444">↺ Sıfırla</button>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="container">
+<div id="app-header">
+  <div class="header-top">
+    <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:0.5rem 1rem">
+      <h1>BU MUYDU? <span>HAFTALIK TAKVİM</span></h1>
+      <span class="header-badge font-mono">Salyangoz Hızı / Vol. 2026</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:1rem">
+      <div style="text-align:right">
+        <p style="font-size:0.625rem;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:var(--red);font-family:'JetBrains Mono',monospace">PAZARTESİ — PAZAR</p>
+        <p style="font-size:0.8rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;margin-top:0.25rem;font-family:'JetBrains Mono',monospace">SAKİN YAŞAM REÇETESİ</p>
+      </div>
+      <div style="width:2.5rem;height:2.5rem;background:var(--red);border:2px solid #fff;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <div style="width:0.875rem;height:0.875rem;background:#fff;transform:rotate(45deg)"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="header-body">
+    <div class="snail-logo-area">
+      <div class="snail-logo-card">
+        <svg width="80" height="80" viewBox="0 0 100 100" fill="none">
+          <path d="M38,35 C30,20 20,25 28,42 C30,46 36,44 38,35 Z" fill="#FF3B30" stroke="#000" stroke-width="2.5"/>
+          <path d="M44,32 C40,12 52,10 48,30 C46,36 44,34 44,32 Z" fill="#FF3B30" stroke="#000" stroke-width="2.5"/>
+          <circle cx="55" cy="58" r="22" fill="#E29578" stroke="#000" stroke-width="2.5"/>
+          <path d="M55,36 A22,22 0 1,1 55,80 A17,17 0 1,1 55,46 A12,12 0 1,1 55,70 A7,7 0 1,1 55,54" stroke="#000" stroke-width="2.5" fill="none"/>
+          <path d="M22,68 C22,58 32,55 45,55 C52,55 78,55 85,68 C88,73 80,74 72,74 C50,74 35,74 25,74 C21,74 22,70 22,68 Z" fill="#F4F1DE" stroke="#000" stroke-width="2.5"/>
+          <line x1="28" y1="58" x2="25" y2="42" stroke="#000" stroke-width="2.5"/>
+          <line x1="33" y1="57" x2="33" y2="41" stroke="#000" stroke-width="2.5"/>
+          <circle cx="25" cy="42" r="3.5" fill="#000"/>
+          <circle cx="33" cy="41" r="3.5" fill="#000"/>
+          <circle cx="26" cy="41" r="1" fill="#fff"/>
+          <circle cx="34" cy="40" r="1" fill="#fff"/>
+          <circle cx="30" cy="62" r="2.5" fill="#FF3B30" opacity="0.6"/>
+          <path d="M27,64 Q29,66 31,64" stroke="#000" stroke-width="2" fill="none"/>
+        </svg>
+      </div>
+      <div class="snail-desc">
+        <h2>"Bu Muydu?" Salyangoz Planlayıcı</h2>
+        <p>Dünyanın tüm suni aciliyetlerine karşı, yavaş yaşam savunucusu bir salyangoz hızıyla plan yap. Podcast'te sorduğumuz o varoluşsal soruyla her güne başla: <strong>"Bu muydu?"</strong></p>
+      </div>
+    </div>
+
+    <div class="links-bar">
+      <a class="spotify" href="https://open.spotify.com/show/6UZNypTefgFUOKD4V00FdP" target="_blank">🎵 Spotify Podcast</a>
+      <a class="insta" href="https://instagram.com/bbumuydu" target="_blank">📷 Instagram</a>
+      <a class="substack" href="https://uansalyangoz.substack.com" target="_blank">📖 Substack Bülten</a>
+      <a class="etsy" href="https://etsy.com/shop/FlyingSnailstoryAI" target="_blank">🛍 Etsy Shop</a>
+      <a class="linktree" href="https://linktr.ee/ucansalyankoz11" target="_blank">🧭 Linktree</a>
+    </div>
+
+    <!-- Quote block -->
+    <div class="quote-block">
+      <div class="inner">
+        <span class="quote-label font-mono" id="quote-label">Günün Salyangoz Bilgeliği</span>
+        <blockquote class="quote-text" id="quote-text"></blockquote>
+        <div class="quote-footer">
+          <span class="quote-author font-mono" id="quote-author"></span>
+          <button class="quote-next" onclick="nextQuote()">Sonraki Bilgelik Reçetesi 🍃</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WEEKLY GRID -->
+<div id="weekly-section">
+  <div class="grid-7" id="day-tabs"></div>
+  <div id="day-detail"></div>
+</div>
+
+<!-- SUNI ACİLİYET SAVAR -->
+<div id="suni-section">
+  <div class="section-header">
+    <div class="section-icon">✨</div>
+    <div>
+      <div class="section-title">Suni Aciliyet Savar (Deşifre Odası)</div>
+      <div class="section-sub">Zihnini sıkıştıran "hemen yapmalıyım" baskılarını buraya yaz, Uçan Salyangoz onları yavaşlatsın.</div>
+    </div>
+  </div>
+
+  <div class="suni-grid">
+    <div class="suni-input-area">
+      <textarea class="suni-textarea" id="suni-input" placeholder="Seni strese sokan, acele etmen gerektiğini düşündüğün o konuyu buraya dök..."></textarea>
+      <button class="analyze-btn" onclick="analyzeSuni()">Yavaşça Analiz Et 🐌</button>
+      <div style="margin-top:0.75rem">
+        <span class="section-label font-mono">Sık Karşılaşılan Örnekler:</span>
+        <div class="example-chips" id="example-chips"></div>
+      </div>
+    </div>
+    <div class="purged-box" id="purged-box">
+      <div class="purged-header">
+        <span class="purged-title font-mono">Kurtulunan Aciliyetler (<span id="purged-count">0</span>)</span>
+        <button class="clear-btn font-mono" onclick="clearPurged()">Sıfırla</button>
+      </div>
+      <div class="purged-list" id="purged-list"></div>
+      <div class="purged-motto font-mono">"ACİLİYET HİSSİ BİTTİĞİNDE YAŞAM BAŞLAR."</div>
+    </div>
+  </div>
+
+  <div id="analysis-result">
+    <div class="detected-badge">⚠ SUNİ ACİLİYET TESPİT EDİLDİ</div>
+    <div class="analysis-original">
+      <span class="analysis-original-label">ZİHNİNDEKİ SENARYO:</span>
+      <p class="analysis-original-text" id="analysis-original-text"></p>
+    </div>
+    <div class="analysis-cards">
+      <div class="analysis-card real">
+        <div class="analysis-card-label">🔍 GERÇEKÇİ SONUÇ NEDİR?</div>
+        <p class="analysis-card-text" id="analysis-real"></p>
+      </div>
+      <div class="analysis-card snail">
+        <div class="analysis-card-label">🐌 SALYANGOZ REÇETESİ:</div>
+        <p class="analysis-card-text" id="analysis-snail"></p>
+      </div>
+    </div>
+    <div class="analysis-actions">
+      <button class="btn-dismiss" onclick="dismissAnalysis()">Vazgeç</button>
+      <button class="btn-purge" onclick="purgeUrgency()">🛡 Bu Aciliyeti Çöpe At</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<!-- FOOTER -->
+<footer>
+  <div style="display:flex;align-items:center;justify-content:center;gap:0.375rem;font-family:'Lora',serif;font-weight:900;font-size:0.8rem">
+    <span>Uçan Salyangoz her gün bir adım atarak ilerler.</span> 🌿
+  </div>
+  <p>BU MUYDU? PODCAST ve UÇAN SALYANGOZ TASARIMINDAN İLHAM ALINARAK SEVGİYLE TASARLANDI • 2026</p>
+</footer>
+
+<!-- NOTIFICATION -->
+<div id="notification">✨ <span id="notification-text"></span></div>
+
+<script>
+// =========== DATA ===========
+const QUOTES = [
+  { topic:'Suni Aciliyet', title:'Suni Aciliyet Çağında Hayatta Kalmak', quote:'Dünya bize sürekli koşmamızı söylüyor. Çünkü koşan insan sorgulamaz. Oysa salyangozlar koşamaz, yine de her yere zamanında varırlar.' },
+  { topic:'Mükemmeliyetçilik', title:'Mükemmeliyetçilik ve Kabuktan Çıkmak', quote:'Mükemmel bir başlangıç arayışı, başlamanın en büyük düşmanıdır. Salyangoz kabuğundan yavaşça başını uzatır, hava yağmurluysa geri çekilir ama asla denemekten vazgeçmez.' },
+  { topic:'Konfor Alanı', title:'Konfor Alanı Gerçekten Zehirli mi?', quote:'Herkes konfor alanından çıkman gerektiğini bağırıyor. Peki ya senin kabuğun, senin en güvende hissettiğin, şifa bulduğun yerse? Arada bir kabuğuna çekilmek zayıflık değil, öz bakımdır.' },
+  { topic:'Üretkenlik Baskısı', title:'Üretkenlik Suçluluğu ve Hiçbir Şey Yapmama Sanatı', quote:'Bir gün boyunca sadece durmak, nefes almak ve hiçbir şey üretmemek bir kayıp değildir. Toprak bile dinlenmeden yeni ekin veremezken, biz neden 7/24 çalışmak zorundayız?' },
+  { topic:'Varoluş', title:'Başkalarının Hayalleriyle Yaşamak: Bu Muydu?', quote:'Yıllarca bir hedefin peşinden koşarsın, o hedefe ulaştığında durup sorarsın: "Bu muydu gerçekten istediğim?" Kendi hayallerimizin sesini duymak için önce dünyanın gürültüsünü kısmalıyız.' }
+];
+
+const MOODS = [
+  { id:'relax', label:'Yavaş & Huzurlu', icon:'🐌' },
+  { id:'coffee', label:'Keyifli Kahve', icon:'☕️' },
+  { id:'thoughtful', label:'Düşünceli', icon:'🍃' },
+  { id:'dreamer', label:'Hayalperest', icon:'☁️' },
+  { id:'explorer', label:'Meraklı Kaşif', icon:'🎒' },
+  { id:'none', label:'Belirtilmedi', icon:'—' }
+];
+
+const DEFAULT_PLANS = [
+  { id:'pazartesi', name:'Pazartesi', reflectionQuestion:'Bugün yapmayı ertelediğim şeylerin ne kadarı gerçekten benim isteklerim, ne kadarı başkalarının beklentileri?', reflectionAnswer:'', tasks:[{id:'t1',text:'Güne 3 dakika boyunca hiçbir şey yapmadan sadece nefes alarak başla',completed:false},{id:'t2',text:'E-postaları kontrol etmeden önce kahvenin ilk yudumunun tadını çıkar',completed:false}], waterDeceptions:2, snailMood:'coffee', focusGoal:'Suni aciliyetlerden uzak durmak' },
+  { id:'sali', name:'Salı', reflectionQuestion:'Hayatımı yavaşlatsam ve bir salyangoz hızıyla ilerlesem, neleri kaçırmaktan korkuyorum? Bu korku gerçekçi mi?', reflectionAnswer:'', tasks:[{id:'t3',text:'Çalışırken her 50 dakikada bir pencereden dışarı bakıp gökyüzünü izle',completed:false},{id:'t4',text:'Bir işi kasten normalden iki kat daha yavaş yapmayı dene',completed:false}], waterDeceptions:3, snailMood:'relax', focusGoal:'Kendi hızımı kabul etmek' },
+  { id:'carsamba', name:'Çarşamba', reflectionQuestion:'Bugün maruz kaldığım hangi "suni aciliyet" beni gereksiz yere strese soktu?', reflectionAnswer:'', tasks:[{id:'t5',text:'Sürekli gelen bildirimleri 2 saatliğine tamamen sessize al',completed:false},{id:'t6',text:'Bir arkadaşına "Şu an buna vaktim yok ama cuma bakabilirim" de',completed:false}], waterDeceptions:1, snailMood:'thoughtful', focusGoal:'Bildirimlerden arınmak' },
+  { id:'persembe', name:'Perşembe', reflectionQuestion:'Konfor alanımdan çıkmak her zaman acı mı vermeli, yoksa kabuğumdan başımı tatlı tatlı uzatabilir miyim?', reflectionAnswer:'', tasks:[{id:'t7',text:'Daha önce hiç denemediğin çok küçük bir şeyi dene (yeni bir çay, farklı bir rota)',completed:false},{id:'t8',text:'Zorlandığın bir konuda kendine şefkatli bir cümle kur',completed:false}], waterDeceptions:4, snailMood:'explorer', focusGoal:'Güvenle kabuğumdan çıkmak' },
+  { id:'cuma', name:'Cuma', reflectionQuestion:'Bugün kendime "Bu muydu gerçekten benim hayalim?" diye sorduğum bir an oldu mu?', reflectionAnswer:'', tasks:[{id:'t9',text:'Haftalık başarıları değil, haftalık huzurlu anları listele',completed:false},{id:'t10',text:'Akşam bilgisayar ekranını normalden 1 saat erken kapat',completed:false}], waterDeceptions:3, snailMood:'dreamer', focusGoal:'Hayallerime alan açmak' },
+  { id:'cumartesi', name:'Cumartesi', reflectionQuestion:'Hiçbir şey üretmediğim, sadece var olduğum bir saati kendime suçluluk duymadan hediye edebildim mi?', reflectionAnswer:'', tasks:[{id:'t11',text:'Telefonu evde bırakarak 15 dakikalık bir salyangoz yürüyüşü yap',completed:false},{id:'t12',text:'Sadece keyif aldığın için bir şeyler karala veya oku',completed:false}], waterDeceptions:5, snailMood:'relax', focusGoal:'Üretkenlik suçluluğundan kurtulmak' },
+  { id:'pazar', name:'Pazar', reflectionQuestion:'Gelecek hafta için kendime koyduğum en büyük baskı ne? Bu baskıyı yarı yarıya azaltmak hayatımda neyi değiştirir?', reflectionAnswer:'', tasks:[{id:'t13',text:'Gelecek haftanın planına en az 3 boş yavaşlama saati ekle',completed:false},{id:'t14',text:'Bugün sadece canının istediği yiyecekleri hazırla veya seç',completed:false}], waterDeceptions:4, snailMood:'coffee', focusGoal:'Yumuşak bir geçiş planlamak' }
+];
+
+const URGENCY_EXAMPLES = [
+  "Hemen bu e-postaya cevap vermeliyim yoksa her şey mahvolacak.",
+  "Her gün LinkedIn'de paylaşım yapmalıyım yoksa sektörden silineceğim.",
+  "Hafta sonu gelen iş mesajına hemen yanıt yazmalıyım yoksa beni ilgisiz sanacaklar.",
+  "Bugün mutlaka tüm yapılacaklar listesini bitirmeliyim yoksa başarısız biriyim.",
+  "Herkes yeni bir eğitim alıyor, ben de hemen almalıyım yoksa geri kalacağım."
+];
+
+const URGENCY_ADVICES = [
+  { realDanger:"E-postaya yarın sabah makul bir zihinle cevap vermek, aceleyle yazılmış eksik bir cevaptan daha profesyoneldir.", snailAdvice:"E-postalar anlık mesajlaşma değildir. Derin bir nefes al, kahvenden bir yudum çek ve cevabı yarına bırak." },
+  { realDanger:"Gerçek değer, sürekli orada olduğunu bağırmakla değil, yaptığın işin niteliğiyle ölçülür.", snailAdvice:"LinkedIn gürültüsü geçicidir. Gerçekten paylaşmaya değer bir şey hissettiğinde yaz. Salyangozlar iz bırakır ama bunu sessiz gümüşi bir patikayla yaparlar." },
+  { realDanger:"Hafta sonu çalışmak sınırlarını ihlal eder. Hemen cevap verirsen, onlara 'Bana her zaman ulaşabilirsiniz' sinyali verirsin.", snailAdvice:"Pazartesi sabahına kadar beklet. Kabuğuna çekil ve dinlenmenin tadını çıkar." },
+  { realDanger:"Yapılacaklar listesi bitmek için değil, yol göstermek içindir. Tamamlanmayan maddeler yarının adımlarıdır.", snailAdvice:"Listendeki en kritik tek şeyi seç ve yap. Geri kalanını yavaşça katla ve yarınki yaprağın altına yerleştir." },
+  { realDanger:"Her eğitimi almak seni bilge yapmaz, sadece zihnini yorar. Sindirilmeyen bilgi yükten başka bir şey değildir.", snailAdvice:"Öğrenmek bir yarış değil, bir bahçedir. Önce elindeki tohumu sula. Yavaşça öğren ve tadını çıkar." }
+];
+
+// =========== STATE ===========
+let plans = JSON.parse(localStorage.getItem('salyangoz_weekly_plans') || 'null') || JSON.parse(JSON.stringify(DEFAULT_PLANS));
+let activeDayId = 'pazartesi';
+let quoteIndex = new Date().getDate() % QUOTES.length;
+let purgedList = JSON.parse(localStorage.getItem('purged_urgencies') || 'null') || [{ id:'p-1', text:'E-postaları hafta sonu kontrol etmeliyim.', advice:'Pazartesi sabahına kadar beklet. Hafta sonu dinlenmek senin hakkın!', date:'Bugün' }];
+let currentAnalysis = null;
+
+function savePlans() { localStorage.setItem('salyangoz_weekly_plans', JSON.stringify(plans)); }
+function savePurged() { localStorage.setItem('purged_urgencies', JSON.stringify(purgedList)); }
+
+// =========== QUOTES ===========
+function renderQuote() {
+  const q = QUOTES[quoteIndex];
+  document.getElementById('quote-label').textContent = 'Günün Salyangoz Bilgeliği / ' + q.topic;
+  document.getElementById('quote-text').textContent = '"' + q.quote + '"';
+  document.getElementById('quote-author').textContent = '— ' + q.title;
+}
+function nextQuote() {
+  quoteIndex = (quoteIndex + 1) % QUOTES.length;
+  renderQuote();
+}
+
+// =========== WEEKLY GRID ===========
+function getMoodIcon(id) {
+  const m = MOODS.find(m => m.id === id);
+  return m ? m.icon : '—';
+}
+function renderTabs() {
+  const container = document.getElementById('day-tabs');
+  container.innerHTML = '';
+  plans.forEach(day => {
+    const done = day.tasks.filter(t => t.completed).length;
+    const total = day.tasks.length;
+    const btn = document.createElement('button');
+    btn.className = 'day-tab' + (day.id === activeDayId ? ' active' : '');
+    btn.innerHTML = `<span class="day-mood">${getMoodIcon(day.snailMood)}</span><span>${day.name}</span><span class="day-progress">${done}/${total} ✓</span>`;
+    btn.onclick = () => { activeDayId = day.id; renderTabs(); renderDetail(); };
+    container.appendChild(btn);
+  });
+}
+
+function renderDetail() {
+  const day = plans.find(p => p.id === activeDayId);
+  if (!day) return;
+  const detail = document.getElementById('day-detail');
+
+  const tasksHtml = day.tasks.map(t => `
+    <div class="task-item${t.completed ? ' done' : ''}" onclick="toggleTask('${day.id}','${t.id}')">
+      <div class="task-checkbox">${t.completed ? '✓' : ''}</div>
+      <span class="task-text">${t.text}</span>
+    </div>
+  `).join('');
+
+  const dropsHtml = Array.from({length:8}, (_,i) => `
+    <div class="water-drop${i < day.waterDeceptions ? ' filled' : ''}" onclick="setWater('${day.id}',${i+1})" title="${i+1} bardak">💧</div>
+  `).join('');
+
+  const moodHtml = MOODS.filter(m => m.id !== 'none').map(m => `
+    <button class="mood-btn${day.snailMood === m.id ? ' active' : ''}" onclick="setMood('${day.id}','${m.id}')">
+      ${m.icon} ${m.label}
+    </button>
+  `).join('');
+
+  detail.innerHTML = `
+    <div class="detail-header">
+      <span class="detail-dayname">${day.name}</span>
+      <span class="detail-focus">${day.focusGoal}</span>
+    </div>
+    <div class="detail-grid">
+      <div>
+        <span class="section-label font-mono">Yavaş Adımlar (Görevler)</span>
+        <div class="task-list">${tasksHtml}</div>
+        <div style="margin-top:1.5rem">
+          <span class="section-label font-mono">Salyangoz Modu</span>
+          <div class="mood-grid">${moodHtml}</div>
+        </div>
+      </div>
+      <div>
+        <span class="section-label font-mono">Günlük Çiy (Su) — ${day.waterDeceptions}/8</span>
+        <div class="water-tracker">${dropsHtml}</div>
+        <div style="margin-top:1.5rem">
+          <span class="section-label font-mono">Yavaşlama Günlüğü</span>
+          <div class="reflection-q">${day.reflectionQuestion}</div>
+          <textarea class="reflection-input" placeholder="Düşüncelerini buraya yaz..." oninput="setReflection('${day.id}', this.value)">${day.reflectionAnswer}</textarea>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function toggleTask(dayId, taskId) {
+  const day = plans.find(p => p.id === dayId);
+  const task = day.tasks.find(t => t.id === taskId);
+  task.completed = !task.completed;
+  savePlans(); renderTabs(); renderDetail();
+}
+function setWater(dayId, count) {
+  const day = plans.find(p => p.id === dayId);
+  day.waterDeceptions = day.waterDeceptions === count ? count - 1 : count;
+  savePlans(); renderDetail();
+}
+function setMood(dayId, mood) {
+  const day = plans.find(p => p.id === dayId);
+  day.snailMood = mood;
+  savePlans(); renderTabs(); renderDetail();
+}
+function setReflection(dayId, val) {
+  const day = plans.find(p => p.id === dayId);
+  day.reflectionAnswer = val;
+  savePlans();
+}
+
+// =========== SUNI ACİLİYET ===========
+function renderExamples() {
+  const container = document.getElementById('example-chips');
+  container.innerHTML = '';
+  URGENCY_EXAMPLES.forEach(ex => {
+    const btn = document.createElement('button');
+    btn.className = 'chip';
+    btn.textContent = '🍃 ' + ex;
+    btn.onclick = () => { document.getElementById('suni-input').value = ex; analyzeText(ex); };
+    container.appendChild(btn);
+  });
+}
+
+function analyzeSuni() {
+  const text = document.getElementById('suni-input').value.trim();
+  if (!text) return;
+  analyzeText(text);
+}
+
+function analyzeText(text) {
+  const lower = text.toLowerCase();
+  let index = Math.floor(Math.random() * URGENCY_ADVICES.length);
+  if (lower.includes('mail') || lower.includes('e-posta') || lower.includes('cevap')) index = 0;
+  else if (lower.includes('linkedin') || lower.includes('paylaş') || lower.includes('sosyal')) index = 1;
+  else if (lower.includes('hafta sonu') || lower.includes('mesaj') || lower.includes('patron')) index = 2;
+  else if (lower.includes('todo') || lower.includes('yapılacak') || lower.includes('bitir') || lower.includes('liste')) index = 3;
+  else if (lower.includes('eğitim') || lower.includes('öğren') || lower.includes('kurs') || lower.includes('geri kal')) index = 4;
+
+  currentAnalysis = { original: text, ...URGENCY_ADVICES[index] };
+
+  document.getElementById('analysis-original-text').textContent = '"' + text + '"';
+  document.getElementById('analysis-real').textContent = currentAnalysis.realDanger;
+  document.getElementById('analysis-snail').textContent = currentAnalysis.snailAdvice;
+
+  const result = document.getElementById('analysis-result');
+  result.style.display = 'block';
+  result.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+function dismissAnalysis() {
+  document.getElementById('analysis-result').style.display = 'none';
+  currentAnalysis = null;
+}
+
+function purgeUrgency() {
+  if (!currentAnalysis) return;
+  purgedList.unshift({
+    id: 'p-' + Date.now(),
+    text: currentAnalysis.original,
+    advice: currentAnalysis.snailAdvice,
+    date: new Date().toLocaleDateString('tr-TR', { day:'numeric', month:'short' })
+  });
+  savePurged();
+  renderPurged();
+  dismissAnalysis();
+  document.getElementById('suni-input').value = '';
+  showNotification('Suni aciliyet çöpe gitti! Nefes almaya devam et 🌿');
+}
+
+function renderPurged() {
+  const list = document.getElementById('purged-list');
+  const count = document.getElementById('purged-count');
+  count.textContent = purgedList.length;
+  if (purgedList.length === 0) {
+    list.innerHTML = '<div class="purged-empty">Henüz hiçbir suni aciliyeti çöpe atmadın. Hadi, bir tane ekle!</div>';
+    return;
+  }
+  list.innerHTML = purgedList.map(item => `
+    <div class="purged-item">
+      <div class="purged-item-text">${item.text}</div>
+      <div class="purged-item-advice">${item.advice}</div>
+    </div>
+  `).join('');
+}
+
+function clearPurged() {
+  purgedList = [];
+  savePurged();
+  renderPurged();
+}
+
+// =========== TOP BAR ACTIONS ===========
+function resetWeek() {
+  if (!confirm('Tüm haftalık görev işaretlerini ve günlük cevaplarını sıfırlamak istiyor musunuz?')) return;
+  plans = JSON.parse(JSON.stringify(DEFAULT_PLANS));
+  savePlans();
+  renderTabs();
+  renderDetail();
+  showNotification('Haftalık takvim sıfırlandı. Yeni, sakin bir haftaya hazırsın! 🍃');
+}
+
+function exportSummary() {
+  let text = '# 🐌 Haftalık Salyangoz Raporu\n\n*Kendi hızımda yaşadığım bir haftanın özeti.*\n\n';
+  plans.forEach(day => {
+    const done = day.tasks.filter(t => t.completed).length;
+    text += `## 📅 ${day.name}\n`;
+    text += `- **Odak:** ${day.focusGoal}\n`;
+    text += `- **Salyangoz Modu:** ${getMoodIcon(day.snailMood)} ${day.snailMood}\n`;
+    text += `- **Nemlenme:** ${day.waterDeceptions}/8 bardak\n`;
+    text += `- **Tamamlanan:** ${done}/${day.tasks.length} adım\n`;
+    if (day.reflectionAnswer.trim()) {
+      text += `- **Günlük:**\n  > *${day.reflectionQuestion}*\n  > "${day.reflectionAnswer}"\n`;
+    }
+    text += '\n';
+  });
+  navigator.clipboard.writeText(text).then(() => showNotification('Haftalık özet panoya kopyalandı! 📋'));
+}
+
+// =========== NOTIFICATION ===========
+function showNotification(msg) {
+  const el = document.getElementById('notification');
+  document.getElementById('notification-text').textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3500);
+}
+
+// =========== INIT ===========
+renderQuote();
+renderExamples();
+renderTabs();
+renderDetail();
+renderPurged();
+</script>
+</body>
+</html>
