@@ -482,6 +482,137 @@
   </div>
 </section>
 
+  <!-- İçerik Slider -->
+<section style="padding: 2rem 0; overflow: hidden;">
+  <style>
+    .bm-track {
+      display: flex;
+      gap: 16px;
+      animation: bmScroll 28s linear infinite;
+      width: max-content;
+    }
+    .bm-track:hover { animation-play-state: paused; }
+    @keyframes bmScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .bm-card {
+      width: 260px;
+      flex-shrink: 0;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .bm-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 6px;
+      background: #2a2a2a;
+      color: #aaa;
+      width: fit-content;
+    }
+    .bm-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      margin: 0;
+      line-height: 1.4;
+    }
+    .bm-desc {
+      font-size: 13px;
+      color: #999;
+      margin: 0;
+      line-height: 1.6;
+    }
+  </style>
+
+  <div style="overflow: hidden;">
+    <div class="bm-track">
+
+      <!-- KART 1 -->
+      <div class="bm-card">
+        <span class="bm-tag">Mitoloji</span>
+        <p class="bm-title">Homeros Kimdir?</p>
+        <p class="bm-desc">Antik Yunan'ın efsanevi ozanı, İlyada ve Odysseia'nın gizemli yaratıcısı.</p>
+      </div>
+
+      <!-- KART 2 -->
+      <div class="bm-card">
+        <span class="bm-tag">Felsefe</span>
+        <p class="bm-title">Başlık 2</p>
+        <p class="bm-desc">Açıklama buraya.</p>
+      </div>
+
+      <!-- KART 3 -->
+      <div class="bm-card">
+        <span class="bm-tag">Edebiyat</span>
+        <p class="bm-title">Başlık 3</p>
+        <p class="bm-desc">Açıklama buraya.</p>
+      </div>
+
+      <!-- KART 4 -->
+      <div class="bm-card">
+        <span class="bm-tag">Tarih</span>
+        <p class="bm-title">Başlık 4</p>
+        <p class="bm-desc">Açıklama buraya.</p>
+      </div>
+
+      <!-- KART 5 -->
+      <div class="bm-card">
+        <span class="bm-tag">Yapay Zeka</span>
+        <p class="bm-title">Başlık 5</p>
+        <p class="bm-desc">Açıklama buraya.</p>
+      </div>
+
+      <!-- KART 6 -->
+      <div class="bm-card">
+        <span class="bm-tag">Mitoloji</span>
+        <p class="bm-title">Başlık 6</p>
+        <p class="bm-desc">Açıklama buraya.</p>
+      </div>
+
+      <!-- Sonsuz döngü için kopya (aynı kartları tekrar yapıştır) -->
+      <div class="bm-card">
+        <span class="bm-tag">Mitoloji</span>
+        <p class="bm-title">Homeros Kimdir?</p>
+        <p class="bm-desc">Antik Yunan'ın efsanevi ozanı, İlyada ve Odysseia'nın gizemli yaratıcısı.</p>
+      </div>
+      <div class="bm-card">
+        <span class="bm-tag">Felsefe</span>
+        <p class="bm-title">Başlık 2</p>
+        <p class="bm-desc">Açıklama buraya.</p>
+      </div>
+      <div class="bm-card">
+        <span class="bm-tag">Edebiyat</span>
+        <p class="bm-title">Başlık 3</p>
+        <p class="bm-desc">Açıklama buraya.</p>
+      </div>
+      <div class="bm-card">
+        <span class="bm-tag">Tarih</span>
+        <p class="bm-title">Başlık 4</p>
+        <p class="bm-desc">Açıklama buraya.</p>
+      </div>
+      <div class="bm-card">
+        <span class="bm-tag">Yapay Zeka</span>
+        <p class="bm-title">Başlık 5</p>
+        <p class="bm-desc">Açıklama buraya.</p>
+      </div>
+      <div class="bm-card">
+        <span class="bm-tag">Mitoloji</span>
+        <p class="bm-title">Başlık 6</p>
+        <p class="bm-desc">Açıklama buraya.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+  
 <!-- FOOTER -->
 <footer>
   <div class="footer-top">
