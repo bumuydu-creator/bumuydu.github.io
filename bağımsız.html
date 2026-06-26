@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bu Muydu?</title>
+  <meta name="description" content="Sorular cevaplardan daha derin">
+  <meta property="og:title" content="Bu Muydu?">
+  <meta property="og:description" content="Sorular cevaplardan daha derin">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://bumuydu-creator.github.io/bumuydu.github.io/">
+
+  <!-- Google Fonts: Playfair Display (serif başlıklar) + Inter (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,600&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #0a0a0a;
+      --dark:    #111111;
+      --dark2:   #1a1a1a;
+      --card-bg: #1e1c1c;
+      --yellow:  #e8f033;
+      --red:     #c0392b;
+      --white:   #f5f0e8;
+      --muted:   #888;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+    }
+
+    /* ─── NAV ─────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--black);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      border-bottom: 1px solid #1e1e1e;
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 1.25rem;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+    .nav-logo span { color: var(--red); }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; }
+
+    .nav-cta {
+      border: 1.5px solid var(--yellow);
+      color: var(--yellow);
+      padding: 8px 18px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-cta:hover { background: var(--yellow); color: var(--black); }
+
+    /* ─── HERO ───────────────────────────────────────── */
+    .hero {
+      margin-top: 64px;
+      min-height: 620px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      /* Arka plan görselin varsa buraya koy: background-image: url('images/hero-bg.jpg'); */
+      background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/John_William_Waterhouse_-_Consulting_the_Oracle.jpg/1280px-John_William_Waterhouse_-_Consulting_the_Oracle.jpg');
+      background-size: cover;
+      background-position: center top;
+      filter: brightness(0.22) saturate(0.6);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+      padding: 60px 40px;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      color: var(--white);
+      margin-bottom: 24px;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--yellow);
+    }
+
+    .hero-divider {
+      width: 180px;
+      height: 2px;
+      background: var(--red);
+      margin: 0 auto 28px;
+    }
+
+    .hero-sub {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: rgba(245, 240, 232, 0.72);
+      max-width: 580px;
+      margin: 0 auto;
+      font-weight: 300;
+    }
+
+    /* ─── KÜLTÜREL ANALİZ SECTION ─────────────────────── */
+    .about-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 580px;
+    }
+
+    .about-text {
+      background: var(--black);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 80px 80px 80px;
+    }
+
+    .section-label {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 700;
+      color: var(--yellow);
+      margin-bottom: 12px;
+    }
+    .section-label-underline {
+      width: 40px;
+      height: 2.5px;
+      background: var(--red);
+      margin-bottom: 36px;
+    }
+
+    .drop-cap-para {
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: rgba(245, 240, 232, 0.85);
+      margin-bottom: 28px;
+    }
+    .drop-cap-para::first-letter {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.2rem;
+      font-weight: 900;
+      color: var(--red);
+      float: left;
+      line-height: 0.75;
+      margin-right: 8px;
+      margin-top: 6px;
+    }
+
+    .about-image {
+      overflow: hidden;
+    }
+    .about-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ─── MARQUEE BAND ────────────────────────────────── */
+    .marquee-band {
+      background: #1c1812;
+      padding: 36px 0;
+      overflow: hidden;
+    }
+    .marquee-track {
+      display: flex;
+      gap: 60px;
+      width: max-content;
+      animation: marquee 18s linear infinite;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .marquee-item {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .marquee-dot {
+      color: var(--red);
+      font-size: 0.9rem;
+    }
+
+    /* ─── ÜRETİMLER & İÇERİKLER ──────────────────────── */
+    .content-section {
+      background: var(--black);
+      padding: 100px 0 60px;
+    }
+
+    .section-heading {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      color: var(--yellow);
+      margin-bottom: 12px;
+    }
+    .section-heading-underline {
+      width: 40px;
+      height: 2.5px;
+      background: var(--red);
+      margin: 0 auto 60px;
+    }
+
+    /* İçerik Kartı: sol text / sağ görsel */
+    .content-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      max-width: 1300px;
+      margin: 0 auto 40px;
+      background: var(--card-bg);
+      overflow: hidden;
+    }
+
+    .content-card-text {
+      padding: 60px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+    /* Kırmızı sol çizgi */
+    .content-card-text::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--red);
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--yellow);
+      margin-bottom: 18px;
+    }
+    .card-desc {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: rgba(245, 240, 232, 0.75);
+    }
+    .card-link {
+      display: inline-block;
+      margin-top: 28px;
+      color: var(--yellow);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-bottom: 1px solid var(--yellow);
+      padding-bottom: 2px;
+      transition: opacity 0.2s;
+    }
+    .card-link:hover { opacity: 0.7; }
+
+    .content-card-image {
+      overflow: hidden;
+      height: 380px;
+    }
+    .content-card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .content-card:hover .content-card-image img { transform: scale(1.04); }
+
+    /* ─── GÖRSEL ARŞİV ────────────────────────────────── */
+    .archive-section {
+      background: var(--dark2);
+      padding: 100px 60px 80px;
+    }
+
+    .archive-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .archive-thumb {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      aspect-ratio: 16/9;
+    }
+    .archive-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .archive-thumb:hover img { transform: scale(1.06); }
+    .archive-thumb-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* ─── FOOTER ──────────────────────────────────────── */
+    footer {
+      background: var(--black);
+      padding: 70px 40px 40px;
+      text-align: center;
+      border-top: 1px solid #1e1e1e;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 14px;
+    }
+    .footer-logo span { color: var(--red); }
+    .footer-tagline {
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-family: 'Cormorant Garamond', serif;
+      margin-bottom: 40px;
+    }
+    .footer-copy {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #555;
+    }
+
+    /* ─── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+
+      .hero-title { font-size: 2.4rem; }
+
+      .about-section { grid-template-columns: 1fr; }
+      .about-image { height: 300px; }
+      .about-text { padding: 50px 30px; }
+
+      .content-card { grid-template-columns: 1fr; }
+      .content-card-image { height: 260px; }
+      .content-card-text { padding: 40px 30px; }
+
+      .archive-grid { grid-template-columns: 1fr 1fr; }
+      .archive-section { padding: 60px 20px; }
+    }
+
+    @media (max-width: 560px) {
+      .archive-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ NAV ═══ -->
+  <nav>
+    <a href="index.html" class="nav-logo">BU MUYDU<span>?</span></a>
+    <ul class="nav-links">
+      <li><a href="felsefe.html">Felsefe</a></li>
+      <li><a href="icerikler.html">İçerikler</a></li>
+      <li><a href="arsiv.html">Arşiv</a></li>
+    </ul>
+    <!-- Buraya kendi linkini ekle (Patreon, YouTube, vb.) -->
+    <a href="https://www.patreon.com/bumuydu" class="nav-cta" target="_blank">[LİNKİNİ BURAYA EKLE]</a>
+  </nav>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">
+        Sorular <em>cevaplardan</em><br>daha derin.
+      </h1>
+      <div class="hero-divider"></div>
+      <p class="hero-sub">
+        Felsefe, tarih, mitoloji ve yapay zekanın kesişim noktalarını keşfeden
+        entelektüel bir içerik platformu.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══ KÜLTÜREL ANALİZ ═══ -->
+  <section class="about-section">
+    <div class="about-text">
+      <h2 class="section-label">Kültürel Analiz</h2>
+      <div class="section-label-underline"></div>
+      <p class="drop-cap-para">
+        u Muydu?, derin kültürel ve felsefi perspektifler arayan Türkçe konuşan
+        izleyiciler için özelleşmiş bir entelektüel merkez olarak konumlanmaktadır.
+        Akademik kuram ile popüler kültür arasındaki mesafeyi kapatır.
+      </p>
+      <p class="drop-cap-para" style="--drop-color: var(--red);">
+        derin kültürel analizlerini videolar, kitaplar ve kurslar aracılığıyla
+        üretir; izleyicisini basit cevapların ötesine geçerek hikayelerin ve
+        modern eğilimlerin ardındaki derin anlamları keşfetmeye davet eder.
+      </p>
+    </div>
+    <div class="about-image">
+      <!-- Pomelli'deki Seni/Batoni tablosu yerine kendi görselinle değiştir -->
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Sebastiano_Ricci_-_Ulysses_in_the_Cave_of_Polyphemus.jpg/1280px-Sebastiano_Ricci_-_Ulysses_in_the_Cave_of_Polyphemus.jpg"
+        alt="Kültürel Analiz görseli"
+      >
+    </div>
+  </section>
+
+  <!-- ═══ MARQUEE BAND ═══ -->
+  <div class="marquee-band">
+    <div class="marquee-track">
+      <!-- İkinci kopya seamless loop için -->
+      <span class="marquee-item">Entelektüel Derinlik <span class="marquee-dot">✦</span></span>
+      <span class="marquee-item">Bağımsız İçerik <span class="marquee-dot">✦</span></span>
+      <span class="marquee-item">Eleştirel Sorgulama <span class="marquee-dot">✦</span></span>
+      <span class="marquee-item">Arketipsel Analiz <span class="marquee-dot">✦</span></span>
+      <span class="marquee-item">Entelektüel Derinlik <span class="marquee-dot">✦</span></span>
+      <span class="marquee-item">Bağımsız İçerik <span class="marquee-dot">✦</span></span>
+      <span class="marquee-item">Eleştirel Sorgulama <span class="marquee-dot">✦</span></span>
+      <span class="marquee-item">Arketipsel Analiz <span class="marquee-dot">✦</span></span>
+    </div>
+  </div>
+
+  <!-- ═══ ÜRETİMLER & İÇERİKLER ═══ -->
+  <section class="content-section" id="icerikler">
+    <h2 class="section-heading">Üretimler &amp; İçerikler</h2>
+    <div class="section-heading-underline"></div>
+
+    <!-- Kart 1: Odysseia Kurs -->
+    <div class="content-card">
+      <div class="content-card-text">
+        <h3 class="card-title">Odysseia Kurs</h3>
+        <p class="card-desc">
+          Antikçağ'dan modern anlatıya uzanan süreçte Odysseia, Yüzüklerin
+          Efendisi ve Ruhların Kaçışı eserlerini felsefi ve sosyolojik açıdan
+          inceleyen bir kurs.
+        </p>
+        <a href="#" class="card-link">Kursa Git →</a>
+      </div>
+      <div class="content-card-image">
+        <!-- Kendi thumbnail'ınla değiştir -->
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Spirited_Away_-_Chihiro_and_Haku_running.jpg/640px-Spirited_Away_-_Chihiro_and_Haku_running.jpg"
+          alt="Odysseia Kurs görseli"
+        >
+      </div>
+    </div>
+
+    <!-- Kart 2: Patreon Üyeliği -->
+    <div class="content-card">
+      <div class="content-card-text">
+        <h3 class="card-title">Patreon Üyeliği</h3>
+        <p class="card-desc">
+          Arketipsel analizler, semboller rehberi ve masalların arkeolojisi gibi
+          derinlikli içeriklere erişim sağlayan abonelik bazlı özel içerik
+          platformu.
+        </p>
+        <a href="https://www.patreon.com/bumuydu" class="card-link" target="_blank">Patreon'a Git →</a>
+      </div>
+      <div class="content-card-image">
+        <!-- Kendi Patreon thumbnail'ınla değiştir -->
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Lascaux_painting.jpg/1280px-Lascaux_painting.jpg"
+          alt="Patreon Üyeliği görseli"
+        >
+      </div>
+    </div>
+
+    <!-- Kart 3: Frekans Kaydı Bülten -->
+    <div class="content-card">
+      <div class="content-card-text">
+        <h3 class="card-title">Frekans Kaydı Bülten</h3>
+        <p class="card-desc">
+          Kültür, siyaset, teknoloji ve bilim alanındaki küresel trendleri ve
+          sarsıntıları takip eden haftalık analiz bülteni.
+        </p>
+        <a href="#" class="card-link">Bültene Abone Ol →</a>
+      </div>
+      <div class="content-card-image">
+        <!-- "Siberpunk Kehanetleri" thumbnail'ın buraya -->
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/A_small_cup_of_coffee.JPG/1280px-A_small_cup_of_coffee.JPG"
+          alt="Frekans Kaydı Bülten görseli"
+          style="object-position: center;"
+        >
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ═══ GÖRSEL ARŞİV ═══ -->
+  <section class="archive-section" id="arsiv">
+    <h2 class="section-heading">Görsel Arşiv</h2>
+    <div class="section-heading-underline"></div>
+
+    <div class="archive-grid">
+      <!-- Her thumb için YouTube linkini href'e ekle, kendi thumbnail görselini src'ye -->
+      <a class="archive-thumb" href="#" target="_blank">
+        <img src="https://i.ytimg.com/vi/placeholder1/maxresdefault.jpg"
+             onerror="this.src='https://via.placeholder.com/640x360/1a1a1a/e8f033?text=Project+Hail+Mary'"
+             alt="Project Hail Mary – Tek Dua Miti Çöküyor">
+        <div class="archive-thumb-overlay"></div>
+      </a>
+      <a class="archive-thumb" href="#" target="_blank">
+        <img src="https://i.ytimg.com/vi/placeholder2/maxresdefault.jpg"
+             onerror="this.src='https://via.placeholder.com/640x360/1a1a1a/e8f033?text=Kim+Yazd%C4%B1%3F'"
+             alt="Kim Yazdı?">
+        <div class="archive-thumb-overlay"></div>
+      </a>
+      <a class="archive-thumb" href="#" target="_blank">
+        <img src="https://i.ytimg.com/vi/placeholder3/maxresdefault.jpg"
+             onerror="this.src='https://via.placeholder.com/640x360/1a1a1a/e8f033?text=1+May%C4%B1s+Bir+Yalan+m%C4%B1%3F'"
+             alt="1 Mayıs Bir Yalan mı?">
+        <div class="archive-thumb-overlay"></div>
+      </a>
+      <a class="archive-thumb" href="#" target="_blank">
+        <img src="https://i.ytimg.com/vi/placeholder4/maxresdefault.jpg"
+             onerror="this.src='https://via.placeholder.com/640x360/1a1a1a/e8f033?text=Hamnet'"
+             alt="Hamnet – Acını Seyrediyoruz!">
+        <div class="archive-thumb-overlay"></div>
+      </a>
+      <a class="archive-thumb" href="#" target="_blank">
+        <img src="https://i.ytimg.com/vi/placeholder5/maxresdefault.jpg"
+             onerror="this.src='https://via.placeholder.com/640x360/1a1a1a/e8f033?text=Ruhlar%C4%B1n+Ka%C3%A7%C4%B1%C5%9F%C4%B1'"
+             alt="Ruhların Kaçışı">
+        <div class="archive-thumb-overlay"></div>
+      </a>
+      <a class="archive-thumb" href="#" target="_blank">
+        <img src="https://i.ytimg.com/vi/placeholder6/maxresdefault.jpg"
+             onerror="this.src='https://via.placeholder.com/640x360/1a1a1a/e8f033?text=Bir+G%C3%BCn+Tek+Ba%C5%9F%C4%B1na'"
+             alt="Bir Gün Tek Başına">
+        <div class="archive-thumb-overlay"></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <div class="footer-logo">Bu Muydu<span>?</span></div>
+    <p class="footer-tagline">Derin kültürel ve felsefi perspektifler arayan Türkçe konuşan izleyiciler için özelleşmiş entelektüel merkez.</p>
+    <p class="footer-copy">© Bu Muydu? Tüm Hakları Saklıdır.</p>
+  </footer>
+
+</body>
+</html>
