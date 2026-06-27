@@ -322,8 +322,21 @@
 
 
   
-    <div style="overflow:hidden;margin-top:1.5rem;">
-    <div style="display:flex;gap:16px;animation:bmScroll 40s linear infinite;width:max-content;">
+  <style>
+  .news-scroll { overflow: hidden; margin-top: 1.5rem; }
+  .news-track {
+    display: flex;
+    gap: 16px;
+    animation: bmScroll 40s linear infinite;
+    width: max-content;
+  }
+  .news-scroll:hover .news-track {
+    animation-play-state: paused;
+  }
+</style>
+
+<div class="news-scroll">
+  <div class="news-track">
 
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
@@ -335,7 +348,6 @@
         <a href="https://journo.com.tr/nimet-arzik-kimdir" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:500;color:#e8ff00;text-decoration:none;padding:5px 12px;border:1px solid #e8ff00;border-radius:6px;margin-top:0.5rem;">Makaleyi oku ↗</a>
       </div>
     </div>
-
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
         <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/e.jpg" alt="Martha Gellhorn" style="width:100%;height:100%;object-fit:cover;"></div>
@@ -346,7 +358,6 @@
         <a href="https://journo.com.tr/martha-gellhorn" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:500;color:#e8ff00;text-decoration:none;padding:5px 12px;border:1px solid #e8ff00;border-radius:6px;margin-top:0.5rem;">Makaleyi oku ↗</a>
       </div>
     </div>
-
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
         <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/b.jpg" alt="Ali Naci Karacan" style="width:100%;height:100%;object-fit:cover;"></div>
@@ -357,7 +368,6 @@
         <a href="https://journo.com.tr/ali-naci-karacan" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:500;color:#e8ff00;text-decoration:none;padding:5px 12px;border:1px solid #e8ff00;border-radius:6px;margin-top:0.5rem;">Makaleyi oku ↗</a>
       </div>
     </div>
-
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
         <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/f.jpg" alt="Fatma Aliye" style="width:100%;height:100%;object-fit:cover;"></div>
@@ -368,7 +378,6 @@
         <a href="https://journo.com.tr/fatma-aliye-kimdir-hayati" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:500;color:#e8ff00;text-decoration:none;padding:5px 12px;border:1px solid #e8ff00;border-radius:6px;margin-top:0.5rem;">Makaleyi oku ↗</a>
       </div>
     </div>
-
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
         <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/j.jpg" alt="Ilona Elek" style="width:100%;height:100%;object-fit:cover;"></div>
@@ -379,7 +388,6 @@
         <a href="https://www.femsport.net/ilona-elek-engelleri-asan-sampiyonun-hikayesi/" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:500;color:#e8ff00;text-decoration:none;padding:5px 12px;border:1px solid #e8ff00;border-radius:6px;margin-top:0.5rem;">Makaleyi oku ↗</a>
       </div>
     </div>
-
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
         <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/c.png" alt="Nettie Honeyball" style="width:100%;height:100%;object-fit:cover;"></div>
@@ -390,7 +398,6 @@
         <a href="https://www.femsport.net/kadin-futbolunun-kurucusu-nettie-honeyball/" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:500;color:#e8ff00;text-decoration:none;padding:5px 12px;border:1px solid #e8ff00;border-radius:6px;margin-top:0.5rem;">Makaleyi oku ↗</a>
       </div>
     </div>
-
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
         <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/a.jpg" alt="Wilma Rudolph" style="width:100%;height:100%;object-fit:cover;"></div>
@@ -401,7 +408,6 @@
         <a href="https://www.femsport.net/wilma-rudolph-hayatta-kalmanin-ve-zaferin-mucadelesi/" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:500;color:#e8ff00;text-decoration:none;padding:5px 12px;border:1px solid #e8ff00;border-radius:6px;margin-top:0.5rem;">Makaleyi oku ↗</a>
       </div>
     </div>
-
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
         <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/k.png" alt="Gertrude Ederle" style="width:100%;height:100%;object-fit:cover;"></div>
@@ -412,7 +418,6 @@
         <a href="https://www.femsport.net/gertrude-ederle-dalgalarin-kralicesi/" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:500;color:#e8ff00;text-decoration:none;padding:5px 12px;border:1px solid #e8ff00;border-radius:6px;margin-top:0.5rem;">Makaleyi oku ↗</a>
       </div>
     </div>
-
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
         <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/i.jpg" alt="9. Köy" style="width:100%;height:100%;object-fit:cover;"></div>
@@ -423,7 +428,6 @@
         <a href="https://9koy.org/gazeteciler-asgari-ucretle-calistiriliyor.html" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:500;color:#e8ff00;text-decoration:none;padding:5px 12px;border:1px solid #e8ff00;border-radius:6px;margin-top:0.5rem;">Makaleyi oku ↗</a>
       </div>
     </div>
-
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
         <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/d.png" alt="Gazetecilik oyunlarla yenileme" style="width:100%;height:100%;object-fit:cover;"></div>
@@ -434,7 +438,6 @@
         <a href="https://supporttomediafreedom.com/haberler/gazeteciligi-oyunlarla-yenileme/" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:500;color:#e8ff00;text-decoration:none;padding:5px 12px;border:1px solid #e8ff00;border-radius:6px;margin-top:0.5rem;">Makaleyi oku ↗</a>
       </div>
     </div>
-
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
         <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/g.jpg" alt="ChatGPT Gemini Bing" style="width:100%;height:100%;object-fit:cover;"></div>
@@ -446,10 +449,10 @@
       </div>
     </div>
 
-    <!-- KOPYA BAŞLANGICI (sonsuz döngü için) -->
+    <!-- KOPYA (sonsuz döngü için) -->
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
-        <div style="position:absolute;inset:0;"><img src="GÖRSEL_1" alt="Nimet Arzık" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/%C4%B1.jpg" alt="Nimet Arzık" style="width:100%;height:100%;object-fit:cover;"></div>
       </div>
       <div class="video-info">
         <div class="video-cat">Journo.com.tr · Gazetecilik</div>
@@ -459,7 +462,7 @@
     </div>
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
-        <div style="position:absolute;inset:0;"><img src="GÖRSEL_2" alt="Martha Gellhorn" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/e.jpg" alt="Martha Gellhorn" style="width:100%;height:100%;object-fit:cover;"></div>
       </div>
       <div class="video-info">
         <div class="video-cat">Journo.com.tr · Gazetecilik</div>
@@ -469,7 +472,7 @@
     </div>
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
-        <div style="position:absolute;inset:0;"><img src="GÖRSEL_3" alt="Ali Naci Karacan" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/b.jpg" alt="Ali Naci Karacan" style="width:100%;height:100%;object-fit:cover;"></div>
       </div>
       <div class="video-info">
         <div class="video-cat">Journo.com.tr · Gazetecilik</div>
@@ -479,7 +482,7 @@
     </div>
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
-        <div style="position:absolute;inset:0;"><img src="GÖRSEL_4" alt="Fatma Aliye" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/f.jpg" alt="Fatma Aliye" style="width:100%;height:100%;object-fit:cover;"></div>
       </div>
       <div class="video-info">
         <div class="video-cat">Journo.com.tr · Gazetecilik</div>
@@ -489,7 +492,7 @@
     </div>
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
-        <div style="position:absolute;inset:0;"><img src="GÖRSEL_5" alt="Ilona Elek" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/j.jpg" alt="Ilona Elek" style="width:100%;height:100%;object-fit:cover;"></div>
       </div>
       <div class="video-info">
         <div class="video-cat">FemSport · Spor</div>
@@ -499,7 +502,7 @@
     </div>
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
-        <div style="position:absolute;inset:0;"><img src="GÖRSEL_6" alt="Nettie Honeyball" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/c.png" alt="Nettie Honeyball" style="width:100%;height:100%;object-fit:cover;"></div>
       </div>
       <div class="video-info">
         <div class="video-cat">FemSport · Spor</div>
@@ -509,7 +512,7 @@
     </div>
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
-        <div style="position:absolute;inset:0;"><img src="GÖRSEL_7" alt="Wilma Rudolph" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/a.jpg" alt="Wilma Rudolph" style="width:100%;height:100%;object-fit:cover;"></div>
       </div>
       <div class="video-info">
         <div class="video-cat">FemSport · Spor</div>
@@ -519,7 +522,7 @@
     </div>
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
-        <div style="position:absolute;inset:0;"><img src="GÖRSEL_8" alt="Gertrude Ederle" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/k.png" alt="Gertrude Ederle" style="width:100%;height:100%;object-fit:cover;"></div>
       </div>
       <div class="video-info">
         <div class="video-cat">FemSport · Spor</div>
@@ -529,7 +532,7 @@
     </div>
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
-        <div style="position:absolute;inset:0;"><img src="GÖRSEL_9" alt="9. Köy" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/i.jpg" alt="9. Köy" style="width:100%;height:100%;object-fit:cover;"></div>
       </div>
       <div class="video-info">
         <div class="video-cat">9. Köy · Gazetecilik</div>
@@ -539,7 +542,7 @@
     </div>
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
-        <div style="position:absolute;inset:0;"><img src="GÖRSEL_10" alt="Gazetecilik oyunlarla yenileme" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/d.png" alt="Gazetecilik oyunlarla yenileme" style="width:100%;height:100%;object-fit:cover;"></div>
       </div>
       <div class="video-info">
         <div class="video-cat">Support to Media Freedom · Gazetecilik</div>
@@ -549,7 +552,7 @@
     </div>
     <div class="video-card" style="width:260px;flex-shrink:0;">
       <div class="video-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2a1515);">
-        <div style="position:absolute;inset:0;"><img src="GÖRSEL_11" alt="ChatGPT Gemini Bing" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div style="position:absolute;inset:0;"><img src="https://bumuydu-creator.github.io/bumuydu.github.io/g.jpg" alt="ChatGPT Gemini Bing" style="width:100%;height:100%;object-fit:cover;"></div>
       </div>
       <div class="video-info">
         <div class="video-cat">Newslab Turkey · Yapay Zeka</div>
@@ -560,10 +563,6 @@
 
   </div>
 </div>
-    
-    </div>
-  </div>
-</section>
 
 
   
