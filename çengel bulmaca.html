@@ -5,65 +5,69 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Türkçe Çengel Bulmaca</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Nunito:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Nunito:wght@400;600;700&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --blue:#1a6fc4;--lblue:#dbeafe;--black:#111;
-  --cell:#fff;--blocked:#1e2a38;
-  --active:#fde68a;--word-hi:#bfdbfe;
-  --correct:#d1fae5;--correct-txt:#15803d;
-}
+:root{--blue:#1a6fc4;--lblue:#dbeafe;--active:#fde68a;--word-hi:#bfdbfe;--correct:#d1fae5;}
 body{font-family:'Nunito',sans-serif;background:#eef2f7;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding-bottom:48px}
 
-/* HEADER */
 header{width:100%;background:var(--blue);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,.3)}
-.logo{font-family:'Montserrat',sans-serif;font-weight:900;font-size:1rem;color:#fff;letter-spacing:1px;text-transform:uppercase}
+.logo{font-family:'Montserrat',sans-serif;font-weight:900;font-size:1rem;color:#fff;text-transform:uppercase;letter-spacing:1px}
 .puzzle-title{font-family:'Montserrat',sans-serif;font-weight:900;font-size:1.3rem;color:#fff;text-transform:uppercase;letter-spacing:3px}
-.score-box{font-family:'Montserrat',sans-serif;font-weight:700;color:#fff;font-size:.85rem;text-align:right}
+.score-box{font-family:'Montserrat',sans-serif;font-weight:700;color:#fff;font-size:.85rem}
 
-/* LAYOUT */
 .layout{display:flex;gap:24px;align-items:flex-start;padding:24px 16px 0;max-width:1080px;width:100%}
 
-/* GRID */
 .grid-wrap{background:var(--blue);padding:8px;border-radius:6px;box-shadow:0 6px 24px rgba(0,0,0,.3);flex-shrink:0}
 #grid{display:grid;grid-template-columns:repeat(13,40px);grid-template-rows:repeat(13,40px);gap:2px;background:var(--blue)}
-.cell{width:40px;height:40px;background:var(--blocked);position:relative;border-radius:1px}
-.cell.open{background:var(--cell);cursor:text}
-.cell.open:hover{background:#f0f7ff}
+
+.cell{width:40px;height:40px;background:#1e2a38;position:relative;border-radius:1px;overflow:hidden}
+.cell.open{background:#fff}
 .cell.active{background:var(--active)!important}
 .cell.word-hi{background:var(--word-hi)!important}
 .cell.correct-cell{background:var(--correct)!important}
-@keyframes wrongFlash{0%,100%{background:#fff}50%{background:#fecaca}}
-.cell.wrong{animation:wrongFlash .4s ease}
-.cell-num{position:absolute;top:2px;left:2px;font-size:8px;font-family:'Montserrat',sans-serif;font-weight:700;color:var(--blue);line-height:1;pointer-events:none;z-index:1}
-.cell input{width:100%;height:100%;border:none;outline:none;background:transparent;text-align:center;font-size:17px;font-family:'Montserrat',sans-serif;font-weight:800;color:#111;caret-color:transparent;text-transform:uppercase;padding:0;cursor:pointer}
-.cell.active input,.cell.word-hi input{color:#1a3a5c}
-.cell.correct-cell input{color:var(--correct-txt)}
+@keyframes wf{0%,100%{background:#fff}50%{background:#fecaca}}
+.cell.wrong{animation:wf .4s ease}
 
-/* CLUES */
+.cell-num{position:absolute;top:2px;left:2px;font-size:8px;font-family:'Montserrat',sans-serif;font-weight:700;color:var(--blue);line-height:1;pointer-events:none;z-index:2}
+
+/* KEY FIX: input covers entire cell, fully transparent, z-index on top */
+.cell input{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  border:none;outline:none;
+  background:transparent;
+  text-align:center;
+  font-size:18px;
+  font-family:'Montserrat',sans-serif;font-weight:800;
+  color:#111;
+  text-transform:uppercase;
+  padding:0;
+  cursor:pointer;
+  z-index:3;
+  -webkit-appearance:none;
+  border-radius:0;
+}
+.cell.active input{color:#1a3a5c}
+.cell.correct-cell input{color:#15803d}
+
 .clues-wrap{flex:1;min-width:240px}
 .dir-toggle{display:flex;gap:8px;margin-bottom:16px}
-.dir-btn{flex:1;font-family:'Montserrat',sans-serif;font-weight:800;font-size:.72rem;text-transform:uppercase;letter-spacing:1.5px;padding:8px;border:2px solid var(--blue);border-radius:4px;cursor:pointer;background:#fff;color:var(--blue);transition:all .15s}
+.dir-btn{flex:1;font-family:'Montserrat',sans-serif;font-weight:800;font-size:.72rem;text-transform:uppercase;letter-spacing:1px;padding:8px;border:2px solid var(--blue);border-radius:4px;cursor:pointer;background:#fff;color:var(--blue);transition:all .15s}
 .dir-btn.active{background:var(--blue);color:#fff}
 .clues-section{margin-bottom:20px}
-.clues-section h3{font-family:'Montserrat',sans-serif;font-weight:900;font-size:.7rem;text-transform:uppercase;letter-spacing:2.5px;color:var(--blue);border-bottom:3px solid var(--blue);padding-bottom:6px;margin-bottom:10px}
-.clue-item{display:flex;align-items:flex-start;gap:8px;padding:5px 8px;border-radius:4px;cursor:pointer;transition:background .12s;font-size:.8rem;line-height:1.4;color:#334155}
+.clues-section h3{font-family:'Montserrat',sans-serif;font-weight:900;font-size:.7rem;text-transform:uppercase;letter-spacing:2px;color:var(--blue);border-bottom:3px solid var(--blue);padding-bottom:6px;margin-bottom:10px}
+.clue-item{display:flex;align-items:flex-start;gap:8px;padding:5px 8px;border-radius:4px;cursor:pointer;font-size:.8rem;line-height:1.4;color:#334155;transition:background .12s}
 .clue-item:hover{background:#e2edf8}
-.clue-item.active{background:var(--word-hi);font-weight:700;color:#1a3a5c}
-.clue-item.solved{color:#16a34a;text-decoration:line-through;opacity:.65}
+.clue-item.active{background:var(--word-hi);font-weight:700}
+.clue-item.solved{color:#16a34a;text-decoration:line-through;opacity:.6}
 .clue-num{font-family:'Montserrat',sans-serif;font-weight:800;color:var(--blue);min-width:24px;font-size:.75rem}
 
-/* CONTROLS */
 .controls{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
-.btn{font-family:'Montserrat',sans-serif;font-weight:800;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;padding:9px 18px;border:none;border-radius:4px;cursor:pointer;transition:all .15s}
-.btn-check{background:var(--blue);color:#fff}
-.btn-check:hover{background:#1558a0}
-.btn-reveal{background:#64748b;color:#fff}
-.btn-reveal:hover{background:#475569}
-.btn-reset{background:#fff;color:var(--blue);border:2px solid var(--blue)}
-.btn-reset:hover{background:var(--lblue)}
+.btn{font-family:'Montserrat',sans-serif;font-weight:800;font-size:.72rem;text-transform:uppercase;padding:9px 18px;border:none;border-radius:4px;cursor:pointer;transition:all .15s}
+.btn-check{background:var(--blue);color:#fff}.btn-check:hover{background:#1558a0}
+.btn-reveal{background:#64748b;color:#fff}.btn-reveal:hover{background:#475569}
+.btn-reset{background:#fff;color:var(--blue);border:2px solid var(--blue)}.btn-reset:hover{background:var(--lblue)}
 #message{margin-top:12px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.88rem;min-height:20px;color:var(--blue)}
-.progress-wrap{margin-top:12px;background:#cbd5e1;border-radius:99px;height:6px;overflow:hidden;width:100%}
+.progress-wrap{margin-top:12px;background:#cbd5e1;border-radius:99px;height:6px;overflow:hidden}
 #progress-bar{height:100%;background:var(--blue);border-radius:99px;transition:width .4s;width:0%}
 
 @media(max-width:680px){
@@ -71,7 +75,7 @@ header{width:100%;background:var(--blue);padding:12px 24px;display:flex;align-it
   #grid{grid-template-columns:repeat(13,28px);grid-template-rows:repeat(13,28px)}
   .cell{width:28px;height:28px}
   .cell input{font-size:12px}
-  .cell-num{font-size:5.5px}
+  .cell-num{font-size:5px}
   .puzzle-title{font-size:1rem;letter-spacing:1px}
 }
 </style>
@@ -115,9 +119,7 @@ header{width:100%;background:var(--blue);padding:12px 24px;display:flex;align-it
 <script>
 const ROWS=13,COLS=13;
 
-// All words verified conflict-free
 const WORDS=[
-  // YATAY
   {num:1, dir:'H',row:0, col:0, word:'BALIK', clue:'Suda yaşayan omurgalı canlı'},
   {num:2, dir:'H',row:0, col:6, word:'DENİZ', clue:'Okyanustan küçük, tuzlu su kütlesi'},
   {num:3, dir:'H',row:2, col:2, word:'KAR',   clue:'Kışın yağan beyaz yağış'},
@@ -132,56 +134,79 @@ const WORDS=[
   {num:12,dir:'H',row:10,col:5, word:'SİNEMA',clue:'Film izlenen yer'},
   {num:13,dir:'H',row:12,col:0, word:'BACAK', clue:'İnsanın yürüme uzvu'},
   {num:14,dir:'H',row:12,col:6, word:'MAVİ',  clue:'Gökyüzünün ve denizin rengi'},
-  // DİKEY
   {num:15,dir:'V',row:0, col:0, word:'BURSA', clue:"Türkiye'nin dördüncü büyük şehri, ipek kenti"},
   {num:16,dir:'V',row:0, col:1, word:'AYRAN', clue:'Yoğurttan yapılan geleneksel Türk içeceği'},
   {num:17,dir:'V',row:0, col:6, word:'DAL',   clue:'Ağacın ana gövdesinden ayrılan uzantısı'},
   {num:18,dir:'V',row:0, col:10,word:'ZAN',   clue:'Kanıtsız kurulan düşünce; şüphe, kuşku'},
   {num:19,dir:'V',row:2, col:3, word:'ABANA', clue:"Kastamonu'nun ilçesi; el dokuması kilim türü"},
-  {num:20,dir:'V',row:4, col:10,word:'DUT',   clue:'Siyah veya beyaz meyveli dut ağacı'},
+  {num:20,dir:'V',row:4, col:10,word:'DUT',   clue:'Siyah veya beyaz meyveli ağaç'},
   {num:21,dir:'V',row:6, col:1, word:'ARENA', clue:'Gladyatör dövüşleri yapılan alan; yarışma meydanı'},
   {num:22,dir:'V',row:6, col:9, word:'EDA',   clue:'İncelik, nezaket; güzel hareket tarzı'},
 ];
 
-// Build solution grid
 const sol=Array.from({length:ROWS},()=>Array(COLS).fill(''));
 const open=Array.from({length:ROWS},()=>Array(COLS).fill(false));
 const cnum=Array.from({length:ROWS},()=>Array(COLS).fill(0));
 WORDS.forEach(({row,col,dir,word,num})=>{
   [...word].forEach((ch,i)=>{
-    const r=row+(dir==='V'?i:0), c=col+(dir==='H'?i:0);
+    const r=row+(dir==='V'?i:0),c=col+(dir==='H'?i:0);
     if(r<ROWS&&c<COLS){sol[r][c]=ch;open[r][c]=true;}
   });
-  cnum[row][col]=num;
+  if(!cnum[row][col])cnum[row][col]=num;
 });
 
 const user=Array.from({length:ROWS},()=>Array(COLS).fill(''));
 let aRow=-1,aCol=-1,aDir='H',aWord=null;
 
-// Build DOM
 const gridEl=document.getElementById('grid');
-const inp=[];
+const inp=Array.from({length:ROWS},()=>Array(COLS).fill(null));
+
 for(let r=0;r<ROWS;r++){
-  inp[r]=[];
   for(let c=0;c<COLS;c++){
     const div=document.createElement('div');
     div.className='cell'+(open[r][c]?' open':'');
-    if(cnum[r][c]){const s=document.createElement('span');s.className='cell-num';s.textContent=cnum[r][c];div.appendChild(s);}
+
+    if(cnum[r][c]){
+      const s=document.createElement('span');
+      s.className='cell-num';
+      s.textContent=cnum[r][c];
+      div.appendChild(s);
+    }
+
     if(open[r][c]){
       const input=document.createElement('input');
-      input.maxLength=2;input.autocomplete='off';input.spellcheck=false;
+      input.type='text';
+      input.maxLength=2;
+      input.setAttribute('autocomplete','off');
+      input.setAttribute('autocorrect','off');
+      input.setAttribute('autocapitalize','characters');
+      input.setAttribute('spellcheck','false');
+
       div.appendChild(input);
-      input.addEventListener('focus',()=>onFocus(r,c));
+      inp[r][c]=input;
+
+      // Click on div OR input -> focus input
+      const doFocus=(e)=>{
+        e.stopPropagation();
+        input.focus();
+        if(aRow===r&&aCol===c){
+          const ws=wordsAt(r,c);
+          const dirs=[...new Set(ws.map(w=>w.dir))];
+          if(dirs.length>1)aDir=aDir==='H'?'V':'H';
+        }
+        aRow=r;aCol=c;
+        highlight(r,c);
+      };
+      div.addEventListener('click',doFocus);
+      input.addEventListener('focus',()=>{aRow=r;aCol=c;highlight(r,c);});
       input.addEventListener('keydown',e=>onKey(e,r,c));
       input.addEventListener('input',e=>onInp(e,r,c));
-      div.addEventListener('click',()=>{input.focus();onCellClick(r,c);});
-      inp[r][c]=input;
-    } else inp[r][c]=null;
+    }
     gridEl.appendChild(div);
   }
 }
 
-function cell(r,c){return gridEl.children[r*COLS+c]}
+function cell(r,c){return gridEl.children[r*COLS+c];}
 
 function wordsAt(r,c){
   return WORDS.filter(w=>{
@@ -203,16 +228,6 @@ function setDir(d){
   if(aRow>=0)highlight(aRow,aCol);
 }
 
-function onCellClick(r,c){
-  if(aRow===r&&aCol===c){
-    const dirs=[...new Set(wordsAt(r,c).map(w=>w.dir))];
-    if(dirs.length>1)setDir(aDir==='H'?'V':'H');
-  }
-  highlight(r,c);
-}
-
-function onFocus(r,c){aRow=r;aCol=c;highlight(r,c);}
-
 function highlight(r,c){
   for(let i=0;i<ROWS;i++)for(let j=0;j<COLS;j++)cell(i,j).classList.remove('active','word-hi');
   cell(r,c).classList.add('active');
@@ -220,26 +235,24 @@ function highlight(r,c){
   if(!w){const od=aDir==='H'?'V':'H';w=wordFor(r,c,od);if(w)aDir=od;}
   aWord=w||null;
   if(w){
-    const l=w.word.length;
-    for(let i=0;i<l;i++){
+    [...w.word].forEach((_,i)=>{
       const wr=w.row+(w.dir==='V'?i:0),wc=w.col+(w.dir==='H'?i:0);
       if(!(wr===r&&wc===c))cell(wr,wc).classList.add('word-hi');
-    }
-    // highlight clue
-    document.querySelectorAll('.clue-item').forEach(el=>el.classList.toggle('active',+el.dataset.num===w.num&&el.dataset.dir===w.dir));
+    });
+    document.querySelectorAll('.clue-item').forEach(el=>
+      el.classList.toggle('active',+el.dataset.num===w.num&&el.dataset.dir===w.dir));
   }
 }
 
-// Turkish uppercase map
 function tupper(s){
-  return s.toUpperCase().replace(/i/g,'İ').replace(/ı/g,'I');
+  const map={'i':'İ','ı':'I','ğ':'Ğ','ş':'Ş','ç':'Ç','ö':'Ö','ü':'Ü'};
+  return s.split('').map(ch=>map[ch]||ch.toUpperCase()).join('');
 }
 
 function onInp(e,r,c){
   const el=inp[r][c];
-  // get last typed char
-  let raw=el.value.replace(/[^a-zA-ZçÇğĞıİöÖşŞüÜ]/g,'');
-  let ch=raw?tupper(raw[raw.length-1]):'';
+  const raw=el.value.replace(/\s/g,'');
+  const ch=raw?tupper(raw[raw.length-1]):'';
   el.value=ch;
   user[r][c]=ch;
   if(ch)advance(r,c);
@@ -248,21 +261,21 @@ function onInp(e,r,c){
 
 function onKey(e,r,c){
   if(e.key==='Backspace'){
-    if(!inp[r][c].value){user[r][c]='';retreat(r,c);}
+    if(!inp[r][c].value){retreat(r,c);}
     else{inp[r][c].value='';user[r][c]='';}
     e.preventDefault();
-  } else if(e.key==='ArrowRight'){move(r,c,0,1);e.preventDefault();}
-  else if(e.key==='ArrowLeft') {move(r,c,0,-1);e.preventDefault();}
-  else if(e.key==='ArrowDown') {move(r,c,1,0);e.preventDefault();}
-  else if(e.key==='ArrowUp')   {move(r,c,-1,0);e.preventDefault();}
-  else if(e.key==='Tab'){e.preventDefault();nextWord(e.shiftKey);}
+  }
+  else if(e.key==='ArrowRight'){e.preventDefault();move(r,c,0,1);}
+  else if(e.key==='ArrowLeft') {e.preventDefault();move(r,c,0,-1);}
+  else if(e.key==='ArrowDown') {e.preventDefault();move(r,c,1,0);}
+  else if(e.key==='ArrowUp')   {e.preventDefault();move(r,c,-1,0);}
+  else if(e.key==='Tab')       {e.preventDefault();nextWord(e.shiftKey);}
 }
 
 function move(r,c,dr,dc){
   const nr=r+dr,nc=c+dc;
   if(nr>=0&&nr<ROWS&&nc>=0&&nc<COLS&&open[nr][nc])inp[nr][nc].focus();
 }
-
 function advance(r,c){
   const dr=aDir==='V'?1:0,dc=aDir==='H'?1:0;
   let nr=r+dr,nc=c+dc;
@@ -293,11 +306,8 @@ function nextWord(rev=false){
 
 function checkAll(){
   let correct=0,total=0;
-  const done=new Set();
   for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
     if(!open[r][c])continue;
-    const k=r*COLS+c;
-    if(done.has(k)){continue;}done.add(k);
     total++;
     const cl=cell(r,c);
     cl.classList.remove('wrong','correct-cell');
@@ -308,15 +318,12 @@ function checkAll(){
   const msg=document.getElementById('message');
   if(correct===total){msg.textContent='🎉 Tebrikler! Bulmacayı tamamladınız!';msg.style.color='#15803d';}
   else{msg.textContent=`${correct}/${total} hücre doğru — devam edin!`;msg.style.color='var(--blue)';}
-  // mark solved words
   WORDS.forEach(w=>{
-    const solved=[...w.word].every((_,i)=>{
+    const ok=[...w.word].every((_,i)=>{
       const r=w.row+(w.dir==='V'?i:0),c=w.col+(w.dir==='H'?i:0);
       return user[r][c]===sol[r][c];
     });
-    document.querySelectorAll(`.clue-item[data-num="${w.num}"][data-dir="${w.dir}"]`).forEach(el=>{
-      el.classList.toggle('solved',solved);
-    });
+    document.querySelectorAll(`.clue-item[data-num="${w.num}"][data-dir="${w.dir}"]`).forEach(el=>el.classList.toggle('solved',ok));
   });
   updateBar(correct,total);
 }
@@ -347,9 +354,7 @@ function resetAll(){
 function updateBar(correct,total){
   if(correct===undefined){
     let f=0,t=0;
-    for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
-      if(!open[r][c])continue;t++;if(user[r][c])f++;
-    }
+    for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){if(!open[r][c])continue;t++;if(user[r][c])f++;}
     document.getElementById('progress-bar').style.width=t?`${Math.round(f/t*100)}%`:'0%';
   } else {
     document.getElementById('progress-bar').style.width=total?`${Math.round(correct/total*100)}%`:'0%';
