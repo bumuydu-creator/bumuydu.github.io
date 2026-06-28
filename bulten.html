@@ -1,538 +1,408 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pop Kültür Nabız Bülteni | Mayıs 2026</title>
-    <link rel="icon" type="image/png" href="favicon.png">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap');
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="https://bumuydu-creator.github.io/bumuydu.github.io/favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frekans Kaydı — Haziran 2026 | Bu Muydu?</title>
+<meta name="description" content="21–27 Haziran haftasının kültür-sanat-gündem özeti.">
+<meta name="theme-color" content="#1a1611">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,480;0,9..144,600;1,9..144,340;1,9..144,480&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --soil-0: #1a1611; --soil-0-deep: #120f0b; --soil-1: #241c14;
+    --bedrock: #172a2c; --bedrock-deep: #0f1e20;
+    --ink: #f3ede0; --ink-dim: #c9bfa9; --ink-faint: #8a8071;
+    --amber: #dd9a45; --amber-deep: #a86b22; --rust: #b14a31; --mineral: #7fc1b6;
+    --line: rgba(243,237,224,0.12); --line-strong: rgba(243,237,224,0.24);
+    --serif: "Fraunces", serif; --sans: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--soil-0); color: var(--ink); font-family: var(--sans); line-height: 1.72; overflow-x: hidden; }
+  img { display: block; max-width: 100%; }
+  a { color: var(--amber); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  ::selection { background: var(--rust); color: var(--ink); }
 
-        :root {
-            --bg: #0e0d0b;
-            --surface: #141310;
-            --surface-2: #1c1a17;
-            --border: #2a2721;
-            --accent: #c8622a;
-            --accent-muted: #9e4c20;
-            --accent-dim: #3d2010;
-            --cream: #e8e0d0;
-            --cream-muted: #9e9486;
-            --cream-dim: #5a5348;
-            --white: #f5f0e8;
-        }
+  .progress-bar { position: fixed; top: 0; left: 0; height: 2px; width: 0%; background: linear-gradient(90deg, var(--amber), var(--rust), var(--mineral)); z-index: 300; transition: width 0.1s linear; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+  .site-header { padding: 2.2rem 7vw 1.6rem; display: flex; align-items: center; gap: 0.8rem; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: rgba(26,22,17,0.92); backdrop-filter: blur(8px); z-index: 200; }
+  .site-logo { font-family: var(--mono); font-size: 0.82rem; letter-spacing: 0.1em; color: var(--amber); text-transform: uppercase; }
+  .site-logo span { color: var(--ink-faint); }
 
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--bg);
-            color: var(--cream);
-            line-height: 1.75;
-            padding: 40px 40px;
-        }
+  .hero { min-height: 92vh; display: flex; flex-direction: column; justify-content: flex-end; position: relative; overflow: hidden; }
+  .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; filter: grayscale(25%) brightness(0.55); }
+  .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(26,22,17,0.15) 0%, rgba(26,22,17,0.05) 35%, rgba(26,22,17,0.72) 68%, var(--soil-0) 100%); }
+  .hero-content { position: relative; z-index: 2; padding: 0 7vw 8vh; max-width: 860px; }
+  .eyebrow { font-family: var(--mono); font-size: 0.76rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--amber); display: inline-block; margin-bottom: 1.1rem; }
+  .hero h1 { font-family: var(--serif); font-size: clamp(2.4rem, 6.5vw, 5rem); font-weight: 480; line-height: 1.05; letter-spacing: -0.02em; margin: 0 0 1.4rem; }
+  .hero h1 em { font-style: italic; color: var(--amber); font-weight: 340; }
+  .hero-deck { font-size: clamp(1rem, 1.8vw, 1.18rem); color: var(--ink-dim); max-width: 54ch; line-height: 1.6; margin: 0; }
+  .hero-meta { display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 2.4rem; font-family: var(--mono); font-size: 0.76rem; color: var(--ink-faint); padding-top: 1.6rem; border-top: 1px solid var(--line); }
 
-        .container {
-            max-width: 960px;
-            margin: 0 auto;
-        }
+  .essay-body { max-width: 1100px; margin: 0 auto; padding: 0 7vw; }
 
-        .header {
-            border: 1px solid var(--border);
-            padding: 60px 48px 50px;
-            margin-bottom: 0;
-            position: relative;
-            background: var(--surface);
-        }
+  .prose { max-width: 64ch; }
+  .prose p { font-size: clamp(1rem, 1.4vw, 1.08rem); color: var(--ink-dim); margin: 0 0 1.5rem; }
+  .prose p:first-child { color: var(--ink); }
+  .prose strong { color: var(--ink); font-weight: 500; }
+  .prose em { color: var(--amber); font-style: italic; }
 
-        .header-eyebrow {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 20px;
-        }
+  .section-marker { display: flex; align-items: baseline; gap: 1rem; margin: 7vh 0 2.2rem; }
+  .section-marker .num { font-family: var(--mono); font-size: 0.74rem; color: var(--ink-faint); letter-spacing: 0.06em; flex-shrink: 0; padding-top: 0.2rem; }
+  .section-marker h2 { font-family: var(--serif); font-size: clamp(1.7rem, 3.5vw, 2.5rem); font-weight: 480; line-height: 1.1; letter-spacing: -0.015em; margin: 0; color: var(--ink); }
+  .section-marker h2 em { font-style: italic; color: var(--amber); font-weight: 340; }
 
-        .header h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 44px;
-            font-weight: 900;
-            line-height: 1.05;
-            color: var(--white);
-            margin-bottom: 16px;
-        }
+  .float-right { float: right; width: clamp(220px, 38%, 400px); margin: 0.4rem 0 2rem 2.4rem; shape-outside: margin-box; }
+  .float-left { float: left; width: clamp(200px, 36%, 380px); margin: 0.4rem 2.4rem 2rem 0; shape-outside: margin-box; }
+  .float-right img, .float-left img { width: 100%; border-radius: 3px; filter: grayscale(15%) brightness(0.88); border: 1px solid var(--line-strong); }
+  .img-caption { font-family: var(--mono); font-size: 0.68rem; color: var(--ink-faint); margin-top: 0.5rem; line-height: 1.4; }
+  .clearfix::after { content: ""; display: table; clear: both; }
 
-        .header h1 em {
-            font-style: italic;
-            color: var(--accent);
-        }
+  .fullbleed-wrap { position: relative; margin: 6vh calc(-7vw) 0; overflow: hidden; }
+  .fullbleed-wrap img { width: 100%; height: clamp(320px, 52vh, 620px); object-fit: cover; object-position: center 25%; filter: grayscale(20%) brightness(0.72); display: block; }
+  .fullbleed-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(26,22,17,0.0) 0%, rgba(26,22,17,0.0) 45%, var(--soil-0) 100%); }
+  .on-image-text { position: absolute; bottom: 0; left: 0; right: 0; padding: 0 7vw 4vh; z-index: 2; }
+  .on-image-text blockquote { font-family: var(--serif); font-size: clamp(1.3rem, 3vw, 2rem); font-style: italic; font-weight: 340; color: var(--ink); margin: 0; max-width: 56ch; line-height: 1.35; text-shadow: 0 2px 24px rgba(0,0,0,0.6); }
+  .on-image-text cite { display: block; font-family: var(--mono); font-size: 0.74rem; font-style: normal; color: var(--amber); margin-top: 0.7rem; letter-spacing: 0.05em; }
 
-        .header-sub {
-            font-size: 13px;
-            font-weight: 300;
-            margin-bottom: 32px;
-            max-width: 380px;
-        }
+  .split-section { display: grid; grid-template-columns: 1fr 1fr; gap: 4vw; align-items: center; margin: 7vh 0; }
+  .split-section.reverse { direction: rtl; }
+  .split-section.reverse > * { direction: ltr; }
+  .split-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; object-position: center top; border-radius: 3px; filter: grayscale(12%) brightness(0.85); border: 1px solid var(--line-strong); }
+  .split-text .prose { max-width: 100%; }
 
-        .header-meta {
-            display: flex;
-            gap: 24px;
-            align-items: center;
-            border-top: 1px solid var(--border);
-            padding-top: 24px;
-            flex-wrap: wrap;
-        }
+  .theory-aside { border-left: 2px solid var(--amber); padding: 1.2rem 1.6rem; margin: 2.4rem 0; background: rgba(221,154,69,0.04); border-radius: 0 4px 4px 0; }
+  .theory-aside p { font-family: var(--serif); font-style: italic; font-size: 1.1rem; color: var(--ink-dim); margin: 0; line-height: 1.5; }
+  .theory-aside cite { display: block; font-family: var(--mono); font-size: 0.72rem; font-style: normal; color: var(--amber); margin-top: 0.6rem; letter-spacing: 0.04em; }
 
-        .meta-date {
-            font-size: 12px;
-            font-weight: 500;
-            letter-spacing: 0.12em;
-            color: var(--cream-muted);
-            text-transform: uppercase;
-        }
+  .callout { border-left: 2px solid var(--amber); padding: 1.1rem 1.5rem; background: rgba(221,154,69,0.04); margin: 2rem 0; max-width: 64ch; }
+  .callout p { font-size: clamp(0.9rem, 1.2vw, 1rem); color: var(--ink-dim); margin: 0; line-height: 1.6; }
+  .callout strong { color: var(--ink); font-weight: 500; }
 
-        .meta-dot {
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: var(--accent);
-        }
+  .bul-list { list-style: none; margin: 1rem 0 1.8rem; padding: 0; max-width: 64ch; }
+  .bul-list li { padding: 0.75rem 0 0.75rem 1.4rem; position: relative; font-size: clamp(0.9rem, 1.2vw, 1rem); color: var(--ink-dim); border-bottom: 1px solid var(--line); line-height: 1.5; }
+  .bul-list li:last-child { border-bottom: none; }
+  .bul-list li::before { content: '→'; position: absolute; left: 0; color: var(--amber); font-size: 0.8rem; }
+  .bul-list strong { color: var(--ink); font-weight: 500; }
 
-        .meta-issue {
-            font-size: 12px;
-            font-weight: 500;
-            letter-spacing: 0.12em;
-            color: var(--cream-dim);
-            text-transform: uppercase;
-        }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.2rem 0 1.8rem; max-width: 64ch; }
+  .tag { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; border: 1px solid var(--amber-deep); color: var(--amber); padding: 0.3rem 0.7rem; }
 
-        .section {
-            border: 1px solid var(--border);
-            border-top: none;
-            padding: 48px 48px;
-            background: var(--surface);
-        }
+  .band { background: var(--amber); color: var(--soil-0-deep); padding: 1.1rem 1.5rem; margin: 2rem 0; font-family: var(--mono); font-size: 0.82rem; letter-spacing: 0.04em; font-weight: 500; max-width: 64ch; }
+  .band a { color: var(--soil-0-deep); text-decoration: underline; }
 
-        .section-number {
-            font-family: 'Playfair Display', serif;
-            font-size: 52px;
-            font-weight: 900;
-            color: var(--accent-dim);
-            line-height: 1;
-            margin-bottom: 4px;
-            display: block;
-        }
+  .section-divider { border: none; border-top: 1px solid var(--line); margin: 6vh 0; }
 
-        .section-label {
-            font-size: 10px;
-            font-weight: 600;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 20px;
-        }
+  .conclusion-band { background: linear-gradient(135deg, var(--bedrock) 0%, var(--bedrock-deep) 100%); border-top: 1px solid rgba(127,193,182,0.2); border-bottom: 1px solid rgba(127,193,182,0.2); padding: 7vh 7vw; margin: 8vh calc(-7vw); }
+  .conclusion-band h2 { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 480; color: var(--mineral); margin: 0 0 1.4rem; line-height: 1.15; }
+  .conclusion-band .prose p { color: var(--ink-dim); }
+  .conclusion-band .prose p:first-child { color: var(--ink); }
 
-        h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 26px;
-            font-weight: 700;
-            color: var(--white);
-            line-height: 1.2;
-            margin-bottom: 20px;
-        }
+  .social-note { padding: 4vh 0; border-top: 1px solid var(--line); margin-top: 6vh; }
+  .social-note-title { font-family: var(--mono); font-size: 0.68rem; font-weight: 500; letter-spacing: 0.28em; text-transform: uppercase; color: var(--amber); margin-bottom: 1rem; }
+  .social-note p { font-size: 0.88rem; color: var(--ink-faint); margin-bottom: 1.2rem; }
+  .social-links { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .social-link { display: inline-block; border: 1px solid var(--line-strong); color: var(--ink-faint); padding: 0.35rem 0.9rem; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; }
+  .social-link:hover { border-color: var(--amber); color: var(--amber); }
 
-        h2 em {
-            font-style: italic;
-            color: var(--accent);
-        }
+  .site-footer { padding: 6vh 7vw; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1.2rem; font-family: var(--mono); font-size: 0.76rem; color: var(--ink-faint); }
+  .footer-links { display: flex; flex-wrap: wrap; gap: 1.2rem; }
+  .footer-links a { color: var(--ink-faint); }
+  .footer-links a:hover { color: var(--amber); }
 
-        h3 {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin: 32px 0 12px;
-        }
-
-        p {
-            font-size: 13px;
-            font-weight: 300;
-        }
-
-        strong {
-            font-weight: 600;
-            color: var(--white);
-        }
-
-        em {
-            font-style: italic;
-        }
-
-        .callout {
-            border-left: 3px solid var(--accent);
-            padding: 20px 24px;
-            background: var(--surface-2);
-            margin: 24px 0;
-        }
-
-        .callout p {
-            margin: 0;
-            font-size: 14px;
-        }
-
-        .quote {
-            padding: 32px 0;
-            margin: 24px 0;
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .quote-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 18px;
-            font-style: italic;
-            color: var(--white);
-            line-height: 1.5;
-            margin-bottom: 0 !important;
-        }
-
-        ul {
-            list-style: none;
-            margin: 12px 0 20px;
-        }
-
-        li {
-            padding: 10px 0 10px 20px;
-            position: relative;
-            font-size: 13px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        li:last-child { border-bottom: none; }
-
-        li::before {
-            content: '→';
-            position: absolute;
-            left: 0;
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        .tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin: 16px 0 24px;
-        }
-
-        .tag {
-            display: inline-block;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            padding: 5px 12px;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-        }
-
-        .band {
-            background: var(--accent);
-            color: #0e0d0b;
-            padding: 20px 24px;
-            margin: 24px 0;
-            font-size: 14px;
-            letter-spacing: 0.04em;
-        }
-
-        .rule {
-            border: none;
-            border-top: 1px solid var(--border);
-            margin: 0;
-        }
-
-        .footer {
-            border: 1px solid var(--border);
-            border-top: 1px solid var(--accent);
-            padding: 40px 48px;
-            background: var(--surface);
-        }
-
-        .footer-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--white);
-            margin-bottom: 8px;
-        }
-
-        .footer p {
-            font-size: 13px;
-            color: var(--cream-dim);
-            margin-bottom: 4px;
-        }
-
-        .social-note {
-            border: 1px solid var(--border);
-            border-top: none;
-            padding: 32px 48px;
-            background: var(--surface-2);
-        }
-
-        .social-note-title {
-            font-size: 10px;
-            font-weight: 600;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 16px;
-        }
-
-        .social-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .social-link {
-            display: inline-block;
-            border: 1px solid var(--border);
-            color: var(--cream-muted);
-            padding: 6px 14px;
-            font-size: 11px;
-            font-weight: 500;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            text-decoration: none;
-            transition: border-color 0.2s, color 0.2s;
-        }
-
-        .social-link:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        @media (max-width: 600px) {
-            .header, .section, .footer, .social-note { padding: 36px 24px; }
-            .header h1 { font-size: 34px; }
-        }
-    </style>
+  @media (max-width: 720px) {
+    .split-section { grid-template-columns: 1fr; }
+    .split-section.reverse { direction: ltr; }
+    .float-right, .float-left { float: none; width: 100%; margin: 0 0 1.6rem; }
+    .on-image-text blockquote { font-size: 1.1rem; }
+    .conclusion-band { padding: 5vh 7vw; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
 </head>
 <body>
-    <div class="container">
 
- <!-- HEADER -->
-<div class="header">
-    <a href="https://bumuydu-creator.github.io/bumuydu.github.io/index.html" 
-       style="display:inline-block;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#c8e000;text-decoration:none;letter-spacing:0.08em;margin-bottom:20px;">
-       ← Bu Muydu?
-    </a>
-    <div class="header-eyebrow">Kültür · Trend · Analiz</div>
-    <h1 style="font-family:'Playfair Display',serif;font-size:38px;font-weight:900;color:var(--white);margin-bottom:8px;">Frekans Kaydı Bülten</h1>
-    <p style="font-size:13px;font-weight:400;color:var(--cream-muted);letter-spacing:0.08em;margin-bottom:20px;">Sarsıntılar · Sinyaller · Notlar — <em>Bu muydu? Bülten</em></p>
-    <p class="header-sub">2026'nın trendlerini takip ettiğiniz bülten.</p>
-    <div class="header-meta">
-        <span class="meta-date">3 Mayıs 2026</span>
-        <div class="meta-dot"></div>
-        <span class="meta-issue">Mayıs Sayısı - 1</span>
-        <div class="meta-dot"></div>
-        <a href="https://uansalyangoz.substack.com/" target="_blank" style="font-size:12px;font-weight:500;letter-spacing:0.12em;color:var(--accent);text-transform:uppercase;text-decoration:none;">Substack Bülten →</a>
+<div class="progress-bar" id="progress-bar" aria-hidden="true"></div>
+
+<header class="site-header">
+  <span class="site-logo">
+    <a href="https://bumuydu-creator.github.io/bumuydu.github.io/index.html" style="color:var(--amber);font-family:var(--mono);font-size:0.82rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;">Bu Muydu?</a>
+    <span> — Frekans Kaydı</span>
+  </span>
+</header>
+
+<!-- HERO: src'ye kendi görselini ekle -->
+<section class="hero">
+  <img class="hero-img"
+       src="GORSEL_EKLE.jpeg"
+       alt="Frekans Kaydı Haziran 2026" />
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <span class="eyebrow">Bu Muydu? — Bülten</span>
+    <h1>Frekans Kaydı<br><em>Haziran 2026</em></h1>
+    <p class="hero-deck">
+      Sarsıntılar · Sinyaller · Notlar — 21–27 Haziran haftasının kültür-sanat-gündem özeti.
+    </p>
+    <div class="hero-meta">
+      <span>27 Haziran 2026</span>
+      <span>Spor · Sinema · Bilim · Sanat</span>
+      <span>Türkiye Kültür Gündemi</span>
     </div>
+  </div>
+</section>
+
+<div class="essay-body">
+
+  <!-- 01 — SPOR -->
+  <div class="section-marker" style="margin-top: 8vh;">
+    <span class="num">01</span>
+    <h2>Dünya Kupası'nda<br><em>Türkiye zaferi</em></h2>
+  </div>
+
+  <div class="prose clearfix">
+    <!-- sağda yüzen görsel — src'ye kendi görselini ekle -->
+    <figure class="float-right">
+      <img src="GORSEL_EKLE.jpeg" alt="Dünya Kupası 2026" />
+      <figcaption class="img-caption">FIFA Dünya Kupası 2026, Kuzey Amerika.</figcaption>
+    </figure>
+
+    <p>FIFA Dünya Kupası 2026 Kuzey Amerika'da (ABD, Kanada, Meksika) sürüyor. Türkiye Milli Takımı Group D'de mücadele veriyor; <strong>25-26 Haziran'da oynanan ABD maçında Kaan Ayhan'ın son dakika golüyle 3-2 galip geldi.</strong> Bu zafer Türk kamuoyunda büyük heyecan yarattı.</p>
+    <p>Haftanın diğer büyük haberleri: Venezuela'da ikiz depremler binlerce kayıpa neden oldu; uluslararası yardım çabaları devam ediyor. SpaceX IPO'su ve Marilyn Monroe'nun 100. doğum yılı kutlamaları da manşetlerde yer buldu.</p>
+  </div>
+
+  <div class="callout">
+    <p><strong>Spor ve kültür kesişimi:</strong> Dünya Kupası heyecanı bu hafta kültürel gündemi de domine etti. Türkiye'nin ABD galibiyeti maç günü sosyal medyayı, kahvehaneleri ve caddeleri doldurdu.</p>
+  </div>
+
 </div>
 
-        <!-- 01 — DÜNYA & SİYASET -->
-        <div class="section">
-            <span class="section-number">01</span>
-            <div class="section-label">Dünya & Siyaset</div>
-            <h2>İran Savaşı 60. Günde:<br><em>Trump "Bitti" Dedi, Kongre İnanmadı</em></h2>
+<!-- FULLBLEED 1 — src'ye kendi görselini ekle -->
+<div class="fullbleed-wrap">
+  <img src="GORSEL_EKLE.jpeg" alt="Dünya Kupası atmosferi" />
+  <div class="fullbleed-overlay"></div>
+  <div class="on-image-text">
+    <blockquote>
+      "Maç günü şehrin nabzı değişiyor — Dünya Kupası heyecanı kültürel gündemi domine ediyor."
+      <cite>— Frekans Kaydı, Haziran 2026</cite>
+    </blockquote>
+  </div>
+</div>
 
-            <p>Trump yönetimi İran savaşının sona erdiğini ilan etti; ancak Kongre'deki War Powers Resolution <strong>60 günlük süre dolmasına rağmen</strong> Senatonun Cumhuriyetçileri tarafından altı kez engellendi. Hürmüz Boğazı'ndaki karşılıklı blokajlar fiilen sürüyor; Trump, İran'ın en son barış teklifini reddetti.</p>
+<div class="essay-body">
 
-            <div class="callout">
-                <p><strong>Boğaz Ekonomisi:</strong> IEA bu krizi "son 25 yılın en büyük enerji arz şoku" olarak tanımladı. ABD'de benzin fiyatları 4,30 dolar/galon seviyesine yaklaşırken küresel gübre fiyatlarının ilk yarıda yüzde 15-20 yükselmesi bekleniyor. Savaşın toplam maliyeti 25 milyar doları aştı.</p>
-            </div>
+  <hr class="section-divider">
 
-            <p>İran cephesinde Devrim Muhafızları'ndan <strong>14 kayıp haberi</strong> gelirken Tahran ekonomisi baskı altında ama direnç sürdürüyor. ABD Donanması İran'a ait kargo ve petrol gemilerine el koyduğunu açıkladı; Trump bunu sosyal medyada "zafer" olarak duyurdu.</p>
+  <!-- 02 — SİNEMA -->
+  <div class="section-marker">
+    <span class="num">02</span>
+    <h2>Haziran sonu perdesi:<br><em>reboot'lar ve reset'ler</em></h2>
+  </div>
 
-            <h3>Diğer Gündem Başlıkları</h3>
-            <ul>
-                <li><strong>Gazze:</strong> Ateşkes ilanından bu yana 800'den fazla sivil hayatını kaybetti. İsrail yeni haritalarla Gazze'nin büyük bölümünü kontrol altında gösteriyor; Güney Lübnan'da saldırılar sürüyor</li>
-                <li><strong>Küresel Sumud filosu:</strong> İsrail'in saldırısının ardından aktivistler Girit üzerinden Türkiye'ye getirildi; İstanbul'a inişleri bekleniyor</li>
-                <li><strong>Türkiye–Fransa:</strong> Fransa'nın Yunanistan ve Kıbrıs ile derinleştirdiği askeri iş birliği Ankara'nın tepkisine neden oldu</li>
-                <li><strong>ABD iç politika:</strong> Ulusal borç GSYİH'yi geçti; Spirit Airlines iflas başvurusunda bulundu; 1 Mayıs protestoları dünya genelinde işçi hakları talebiyle yapıldı</li>
-                <li><strong>Basın özgürlüğü:</strong> RSF 2026 endeksinde Türkiye 180 ülke arasında 163. sıraya geriledi — son 25 yılın en düşük seviyesi</li>
-            </ul>
+  <div class="prose clearfix">
+    <!-- solda yüzen görsel — src'ye kendi görselini ekle -->
+    <figure class="float-left">
+      <img src="GORSEL_EKLE.jpeg" alt="Haziran 2026 sinema" />
+      <figcaption class="img-caption">Haziran sonu vizyonu.</figcaption>
+    </figure>
 
-            <div class="quote">
-                <p class="quote-text">Boğaz kapandığında yalnızca petrol akmıyor; güven, ticaret ve diplomatik dil de donup kalıyor.</p>
-            </div>
-        </div>
+    <p>Haziran sonu büyük stüdyo yapımlarıyla dolu. <strong>Supergirl</strong> DC evrenini sıfırlıyor; <strong>Couture</strong> (Angelina Jolie) moda dünyasını hicvediyor; <strong>Masters of the Universe</strong> ve <strong>Jackass: Best and Last</strong> aksiyon-nostalji cephesinde. Scary Movie reboot'ları da geliyor. Spielberg'in yeni sci-fi projesi haftanın en çok konuşulan geliştirme haberi.</p>
+  </div>
 
-        <hr class="rule">
+  <ul class="bul-list">
+    <li><strong>Supergirl</strong> — DC evreni reset'i; yeni oyuncu kadrosuyla taze bir başlangıç iddiası taşıyor</li>
+    <li><strong>Couture</strong> — Angelina Jolie'li moda satiri; BBC Culture bu haftanın en çok tartışılan yapımı seçti</li>
+    <li><strong>Masters of the Universe</strong> — Nostalji dalgasını süren bir yapım; 80'ler çocukları için</li>
+    <li><strong>Jackass: Best and Last</strong> — Serinin veda filmi olacağı söyleniyor</li>
+    <li><strong>Scary Movie reboot'ları</strong> — Parodi türünün yeniden canlanma hamlesi</li>
+  </ul>
 
-        <!-- 02 — TÜRKİYE -->
-        <div class="section">
-            <span class="section-number">02</span>
-            <div class="section-label">Türkiye Gündemi</div>
-            <h2>Fırsat Mı, Tuzak Mı?<br><em>İran'ın Zayıflaması ve Türkiye</em></h2>
+  <div class="callout">
+    <p><strong>Türkiye'den:</strong> İlhan Şen ve Cemre Baysel'in başrollerini paylaştığı Karadeniz temalı <em>Kalbimin Rotası Karadeniz</em> mini-dizisinin çekimleri Temmuz'da başlıyor.</p>
+  </div>
 
-            <p>28 Şubat saldırılarından bu yana değişen bölgesel denge, Türkiye'yi hem tehdit hem fırsatla karşı karşıya bıraktı. Türk yetkililer <strong>İstanbul'u bölgesel finans merkezi</strong> olarak konumlandırmaya çalışırken Körfez ekonomilerindeki sarsıntıdan pay almak istiyor. IMF'nin Nisan 2026 tahminleri de bu hamleye zemin hazırlıyor: Türkiye'nin nominal GSYİH'sinin <strong>1,64 trilyon dolara</strong> ulaşarak Endonezya'yı geçmesi ve küresel sıralamada 16. olması bekleniyor.</p>
+  <hr class="section-divider">
 
-            <div class="callout">
-                <p><strong>Aile ve Nüfus Vizyonu:</strong> Cumhurbaşkanı Erdoğan, Haliç Kongre Merkezi'nde "Aile ve Nüfus 10 Yılı Vizyonu"nu tanıttı. 2024'te doğurganlık oranı 1,48'e geriledi, yıllık doğum sayısı 1 milyonun altına düştü. Strateji; evlilik teşviki, çok çocuklu ailelere destek ve kırsal kalkınma ekseninde beş öncelikli alanda şekilleniyor.</p>
-            </div>
+  <!-- 03 — KİTAP & BİLİM -->
+  <div class="section-marker">
+    <span class="num">03</span>
+    <h2>Bu haftanın<br><em>meraklı listesi</em></h2>
+  </div>
 
-            <h3>Ekonomi ve Diğer Gelişmeler</h3>
-            <ul>
-                <li><strong>Enerji faturası:</strong> İran krizinin tetiklediği petrol fiyatı artışı Türkiye'nin cari açığını ve rezerv kullanımını zorluyor</li>
-                <li><strong>Kültür Yolu Festivali:</strong> Şanlıurfa'dan başlayıp 26 şehri kapsayacak festival devam ediyor; 15 Kasım'da Adana'da kapanacak</li>
-                <li><strong>Kürt faktörü:</strong> İran'ın zayıflamasıyla birlikte bölgedeki Kürt dinamikleri Türkiye'nin dış politika hesaplarını karmaşıklaştırıyor</li>
-            </ul>
-        </div>
-
-        <hr class="rule">
-
-        <!-- 03 — SİNEMA & DİZİ -->
-        <div class="section">
-            <span class="section-number">03</span>
-            <div class="section-label">Sinema & Dizi</div>
-            <h2>Mayıs Perdesi Açılıyor:<br><em>Prada'dan Mortal Kombat'a</em></h2>
-
-            <p>Mayıs sinema takvimi kalabalık. <strong>The Devil Wears Prada 2</strong>, <strong>Animal Farm</strong> (Andy Serkis'in animasyonu, Seth Rogen ve Glenn Close seslendirmesiyle), <strong>Mortal Kombat II</strong> ve <strong>In the Grey</strong> (Henry Cavill, Jake Gyllenhaal) hafta sonu vizyona giriyor ya da yakında geliyor.</p>
-
-            <h3>Mayıs'ta Vizyondaki Öne Çıkanlar</h3>
-            <ul>
-                <li><strong>The Devil Wears Prada 2</strong> — Orijinalin nostalji katsayısı yüksek; ne kadar tutacak, göreceğiz</li>
-                <li><strong>Animal Farm</strong> — Orwell'in distopyası modern animasyonla yeniden; PG sınıflandırmasıyla aile seyircisini de hedefliyor</li>
-                <li><strong>Mortal Kombat II</strong> — Aksiyon-fantezi kitlesi için büyük beklenti</li>
-                <li><strong>In the Grey</strong> — Henry Cavill ve Jake Gyllenhaal bir arada; Mayıs'ın erkek egemen aksiyon rekabeti</li>
-                <li><strong>Star Wars: The Mandalorian and Grogu</strong> — Yılın en beklenen yapımlarından; Disney'in gişe hamlesi</li>
-                <li><strong>007 First Light</strong> — IO Interactive'in James Bond oyunu 27 Mayıs'ta; serinin yeni nesil yorumu</li>
-            </ul>
-
-            <div class="callout">
-                <p><strong>Trend:</strong> Haftalık yayınlanan dizilere dönüş hızlanıyor. Binge-watching dönemi yavaş kapanıyor; haftada bir bölüm heyecanı kültleşmiş içerik üretimine zemin hazırlıyor.</p>
-            </div>
-
-            <div class="quote">
-                <p class="quote-text">Mayıs perdesi nostalji ile yeni mitler arasında sallanıyor — sequel'lar ve reboot'lar galaksinin yeni hammaddesi.</p>
-            </div>
-        </div>
-
-        <hr class="rule">
-
-        <!-- 04 — MODA -->
-        <div class="section">
-            <span class="section-number">04</span>
-            <div class="section-label">Moda & Estetik</div>
-            <h2>Met Gala Yarın:<br><em>"Fashion Is Art"</em></h2>
-
-            <p>4 Mayıs Pazartesi akşamı moda dünyasının en büyük gecesi. 2026 Met Gala'sının teması <strong>"Costume Art"</strong>, dress code ise <strong>"Fashion Is Art"</strong>. Co-chair'lar: <strong>Beyoncé, Nicole Kidman, Venus Williams ve Anna Wintour.</strong> Tek bilet fiyatı bu yıl 100.000 dolara yükseldi. Kostüm Enstitüsü'nün "Costume Art" sergisi 10 Mayıs'ta kapılarını açıyor; Andrew Bolton'ın küratörlüğünü üstlendiği sergi 5.000 yıllık moda tarihini işleyecek.</p>
-
-            <div class="callout">
-                <p><strong>Kim gidiyor?</strong> Sabrina Carpenter, Teyana Taylor ve daha pek çok isim onaylı konuklar arasında. Sosyal medya şimdiden "en iyi giyinen" tartışmasıyla kaynıyor. Zendaya'nın davetiyeyi reddettiğine dair iddialar ise merakla gündemde.</p>
-            </div>
-
-            <h3>Mayıs 2026 Moda Gündemi</h3>
-            <div class="tags">
-                <span class="tag">Costume Art</span>
-                <span class="tag">Fashion Is Art</span>
-                <span class="tag">Utility Chic</span>
-                <span class="tag">Retro Summer</span>
-            </div>
-            <ul>
-                <li><strong>Mayıs lansmanları:</strong> Yeni koleksiyonlar, store açılışları ve Chanel Métiers d'Art etkisiyle şekillenen 2026 trendleri ELLE ve Vogue'da yer buluyor</li>
-                <li><strong>Renk paleti:</strong> Teal, cherry red ve cobalt blue sezonu domine ediyor</li>
-                <li><strong>Anti-AI estetiği:</strong> Yapay zekanın mükemmelliğine tepki olarak kasıtlı kusurlar, el işçiliği ve "messy" estetik yükseliyor</li>
-            </ul>
-        </div>
-
-        <hr class="rule">
-
-        <!-- 05 — BİLİM -->
-        <div class="section">
-            <span class="section-number">05</span>
-            <div class="section-label">Bilim & Doğa</div>
-            <h2>Newton Sınavı Geçti,<br><em>Gezegen Yine Uyardı</em></h2>
-
-            <p>Gürültülü siyasetin gölgesinde bilim durmaksızın ilerledi. Newton'ın yerçekimi yasası <strong>tarihin en büyük testinden</strong> başarıyla çıktı — Nature ve AAAS bu haftanın en çok okunan haberi oldu. Öte yandan yeni iklim modelleri sıcak-kurak krizlerin <strong>küresel nüfusun yüzde 28'ini</strong> etkileyeceğini ve bu olayların beş kata kadar artabileceğini gösteriyor; risk düşük gelirli tropik ülkelerde yoğunlaşıyor.</p>
-
-            <h3>Bu Haftanın Bilim Gündemi</h3>
-            <ul>
-                <li><strong>Artemis II:</strong> Uzun süredir planlanan insanlı ay görevi aktif aşamaya girdi — 2026 uzay biliminin öne çıkan hikâyesi</li>
-                <li><strong>Dışgezegenler ve su:</strong> Yeni araştırma, çöl gezegenlerin yaşamı barındırma ihtimalini düşürüyor; bilim kurgu senaryoları zorlanıyor</li>
-                <li><strong>CERN "penguen" bozunmaları:</strong> Standart Model'i kırabilecek egzotik parçacıklara dair yeni bulgular gündemde</li>
-                <li><strong>Süpernova mekanizması:</strong> Astronomlar evrende bilinen en parlak yıldız patlamalarını tetikleyen mekanizmayı keşfetmiş olabilir</li>
-            </ul>
-
-            <div class="quote">
-                <p class="quote-text">Politikalar savaş açarken fizik yasaları çalışmaya devam ediyor — ve bu hafta Newton da sınavı geçti.</p>
-            </div>
-        </div>
-
-        <hr class="rule">
-
-        <!-- 06 — EDEBİYAT & KÜLTÜR -->
-        <div class="section">
-            <span class="section-number">06</span>
-            <div class="section-label">Edebiyat & Genel Kültür</div>
-            <h2>Mayıs Kitapları<br><em>ve Sanatın Büyük Sergileri</em></h2>
-
-            <h3>Mayıs 2026 Edebiyat Gündemi</h3>
-            <div class="tags">
-                <span class="tag">Literary Fiction</span>
-                <span class="tag">Romance</span>
-                <span class="tag">Essays</span>
-                <span class="tag">Speculative</span>
-            </div>
-            <ul>
-                <li><strong>Our Perfect Storm</strong> — Carley Fortune; Goodreads'in mayıs listesinde 1 numara</li>
-                <li><strong>The Things We Never Say</strong> — Elizabeth Strout; B&N Reads'in mayıs önerisi</li>
-                <li><strong>The Land and Its People: Essays</strong> — David Sedaris; denemede haftanın ağır topu</li>
-                <li><strong>Enormous Wings</strong> — Laurie Frankel; 5 Mayıs çıkışı, spekülatif tona sahip çağdaş kurgu</li>
-                <li><strong>A Long and Speaking Silence</strong> — Nghi Vo; fantezi kurgu okuyucularının radarında</li>
-            </ul>
-
-            <div class="callout">
-                <p>Belki de bu kadar çok gerçeklik ve veri içinde, kendimize kaçacak <strong>hayali odalar inşa etmeye</strong> her zamankinden daha çok ihtiyaç duyuyoruz. Goodreads listelerini romantik kurgu ve spekülatif türün domine etmesi boşuna değil.</p>
-            </div>
-
-            <h3>Sanat Sergileri</h3>
-            <ul>
-                <li><strong>Metamorphoses</strong> — Rijksmuseum, Amsterdam; 25 Mayıs'a kadar</li>
-                <li><strong>Frida Kahlo retrospektifi</strong> — Museum of Fine Arts, Houston; yılın en çok konuşulan sanat olaylarından biri</li>
-                <li><strong>Amy Sherald: American Sublime</strong> — High Museum of Art; ulusal turne Mayıs'ta Atlanta'ya uğruyor</li>
-                <li><strong>Manosphere: Masculinity Now</strong> — Artsy'nin "kaçırma" listesinde; güncel siyasi iklimi tartışmaya açıyor</li>
-                <li><strong>Met Gala bağlantılı "Costume Art" sergisi</strong> — 10 Mayıs'ta Metropolitan Museum'da açılıyor</li>
-            </ul>
-
-            <h3>PS5: Mayıs Oyun Takvimi</h3>
-            <p>PlayStation Mayıs'ı sekiz oyunla karşılıyor. <strong>Mixtape</strong> (7 Mayıs), nostaljik indie duygusuyla öne çıkıyor. <strong>Directive 8020</strong> (12 Mayıs), Supermassive'in bilim kurgu korku hamlesi. <strong>007 First Light</strong> (27 Mayıs), IO Interactive'in James Bond başlangıç hikâyesi. Oyunseverler özellikle LEGO Batman ve Bond'a heyecan duyuyor.</p>
-        </div>
-
-        <!-- SOCIAL NOTE -->
-        <div class="social-note">
-            <div class="social-note-title">Bizi Takip Edin</div>
-            <p style="font-size: 12px; color: var(--cream-dim); margin-bottom: 16px;">Bu Muydu? ve Uçan Salyangoz kanallarını takip etmeyi unutmayın. Düşüncelerinizi <strong style="color: var(--cream-muted);">iletisimbumuydu@gmail.com</strong> adresine veya Instagram'a DM yoluyla gönderebilirsiniz.</p>
-            <div class="social-links">
-                <a href="https://uansalyangoz.substack.com/" target="_blank" class="social-link">Substack →</a>
-                <a href="https://www.instagram.com/bbumuydu/" target="_blank" class="social-link">Instagram →</a>
-                <a href="https://www.youtube.com/@bumuydu" target="_blank" class="social-link">YouTube →</a>
-                <a href="https://www.tiktok.com/@buumuydu" target="_blank" class="social-link">TikTok →</a>
-                <a href="https://t.me/bu_muydu" target="_blank" class="social-link">Telegram →</a>
-            </div>
-        </div>
-
-        <!-- FOOTER -->
-        <div class="footer">
-            <div class="footer-title">Sarsıntılar · Sinyaller · Notlar</div>
-            <p>3 Mayıs 2026 · Mayıs Sayısı 1 — 2026'nın trendlerini takip ettiğiniz yer.</p>
-        </div>
-
+  <!-- split: görsel solda, metin sağda — src'ye kendi görselini ekle -->
+  <div class="split-section">
+    <div>
+      <img class="split-img" src="GORSEL_EKLE.jpeg" alt="Kitap ve bilim" />
     </div>
+    <div class="split-text">
+      <div class="prose">
+        <p>Haziran 2026'nın öne çıkan popüler bilim kitapları arasında <strong>Alice Roberts'in yeni kitabı</strong> ve simbiyoz, hormonlar temalı eserler var. New Scientist özetleri ilgi topluyor. Maggie O'Farrell'in yeni romanı, Marilyn Monroe biyografileri ve çocuk kitapları da Haziran listelerinde yer buluyor.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tags">
+    <span class="tag">Primatlar</span>
+    <span class="tag">Uzay</span>
+    <span class="tag">Yaşlanma</span>
+    <span class="tag">Epigenom</span>
+    <span class="tag">Popüler Bilim</span>
+  </div>
+
+  <ul class="bul-list">
+    <li><strong>Goril kahkahası:</strong> Araştırmacılar gorillerin gülme biçimini inceledi — primat sosyalliğine yeni bir pencere açıldı</li>
+    <li><strong>Süper-puff gezegenler:</strong> Alışılmadık düşük yoğunluklu dışgezegenler yeni teleskop verileriyle gözlemlendi</li>
+    <li><strong>Karın yağı ve yaşlanma:</strong> Yaşla birlikte değişen yağ dağılımının metabolik etkileri netleşiyor</li>
+    <li><strong>Ay'da tarım planları:</strong> NASA ve ESA ortaklığıyla Ay yüzeyinde bitki yetiştirme deneyleri gündemde</li>
+    <li><strong>Epigenom düzenleme tedavileri:</strong> Gen ifadesini düzenleyen yeni yaklaşımlar klinik denemelere girmeye başlıyor</li>
+  </ul>
+
+</div>
+
+<!-- FULLBLEED 2 — src'ye kendi görselini ekle -->
+<div class="fullbleed-wrap">
+  <img src="GORSEL_EKLE.jpeg" alt="Bilim ve keşif" />
+  <div class="fullbleed-overlay"></div>
+  <div class="on-image-text">
+    <blockquote>
+      "Bilim gürültülü siyasetin gölgesinde durmaksızın ilerliyor — bu hafta gökyüzü ve genler aynı anda konuşuldu."
+    </blockquote>
+  </div>
+</div>
+
+<div class="essay-body">
+
+  <hr class="section-divider">
+
+  <!-- 04 — SANAT & MODA -->
+  <div class="section-marker">
+    <span class="num">04</span>
+    <h2>Raphael'den<br><em>haute couture'e</em></h2>
+  </div>
+
+  <div class="prose clearfix">
+    <!-- sağda yüzen görsel — src'ye kendi görselini ekle -->
+    <figure class="float-right">
+      <img src="GORSEL_EKLE.jpeg" alt="Sanat ve moda" />
+      <figcaption class="img-caption">Haziran 2026 sanat gündemi.</figcaption>
+    </figure>
+
+    <p>Sanat dünyasında bu hafta önemli bir restorasyon başladı: <strong>Vatikan'da Raphael Loggias'ı yeniden yaşatma çalışmaları</strong> resmen açıldı. İngiltere'de The Box (Plymouth) <strong>UK Museum of the Year</strong> ödülünü kazandı.</p>
+    <p>Türkiye cephesinde: <strong>Paris Centre Pompidou iş birliğiyle İzmir'e gelen haute couture sergileri</strong> ilgi topluyor. Liste Art Fair Basel 2026'da OG Gallery ve PİLOT Türkiye'yi temsil etti.</p>
+  </div>
+
+  <div class="tags">
+    <span class="tag">Haute Couture</span>
+    <span class="tag">Restorasyon</span>
+    <span class="tag">Art Fair</span>
+    <span class="tag">Kamu Sanatı</span>
+  </div>
+
+  <ul class="bul-list">
+    <li><strong>Library of Congress:</strong> "Fashion at the Library of Congress: The Threads That Connect Us" sergisi sürüyor</li>
+    <li><strong>Helmut Newton / Prada Mode:</strong> Uluslararası moda etkinlikleri yoğunluğu devam ediyor</li>
+    <li><strong>Frida Kahlo analizleri:</strong> Güncel yorum ve retrospektif değerlendirmeler sürüyor</li>
+    <li><strong>Marina Abramović:</strong> Yeni röportajları performans sanatı gündemini tazeliyor</li>
+    <li><strong>Saint Sebastian ikonografisi:</strong> Queer sanat tarihi okumalarına dair akademik tartışmalar güncelliğini koruyor</li>
+  </ul>
+
+  <hr class="section-divider">
+
+  <!-- 05 — TÜRKİYE -->
+  <div class="section-marker">
+    <span class="num">05</span>
+    <h2>Festival yaz başlıyor:<br><em>Kültür Yolu ve Efes sahnede</em></h2>
+  </div>
+
+  <!-- split: görsel sağda, metin solda — src'ye kendi görselini ekle -->
+  <div class="split-section reverse">
+    <div>
+      <img class="split-img" src="GORSEL_EKLE.jpeg" alt="Türkiye Kültür Yolu Festivali" style="aspect-ratio: 3/4; object-position: center top;" />
+    </div>
+    <div class="split-text">
+      <div class="prose">
+        <p><strong>Türkiye Kültür Yolu Festivali</strong> 27 Haziran – 5 Temmuz tarihleri arasında Bursa, Eskişehir ve diğer şehirlerde başladı. Kültür ve Turizm Bakanlığı organizasyonuyla konserler, açık hava etkinlikleri ve sanat programları yaz sezonunu açıyor.</p>
+        <p><strong>Efes Opera ve Bale Festivali</strong> 26 Haziran – 8 Temmuz tarihleri arasında sürüyor. Tarihi Efes Antik Tiyatrosu'nda opera ve bale performansları bu haftanın kültür mimarisini oluşturuyor.</p>
+      </div>
+    </div>
+  </div>
+
+  <ul class="bul-list">
+    <li><strong>Dünya Kupası etkisi:</strong> Türkiye'nin ABD galibiyeti kültürel gündemi de domine etti; maç günlerinde şehir atmosferi değişti</li>
+    <li><strong>Yaz festival sezonu:</strong> Kültür Yolu, Efes ve yerel etkinliklerle Haziran sonu–Temmuz başı yoğun takvim sunuyor</li>
+    <li><strong>Sinema salonları:</strong> Sektör içi zorluklar ve seyirci trendleri tartışılmaya devam ediyor</li>
+    <li><strong>İklim ve kültür:</strong> Heatwave tartışmaları müze ve açık hava etkinliklerini de etkiliyor</li>
+  </ul>
+
+  <div class="band">
+    Türkiye Kültür Yolu Festivali → <a href="https://kulturyolu.gov.tr" target="_blank">kulturyolu.gov.tr</a>
+  </div>
+
+</div>
+
+<!-- FULLBLEED 3 — src'ye kendi görselini ekle -->
+<div class="fullbleed-wrap">
+  <img src="GORSEL_EKLE.jpeg" alt="Türkiye kültür festivali" />
+  <div class="fullbleed-overlay"></div>
+  <div class="on-image-text">
+    <blockquote>
+      "Her hafta bir şeylerin başlayıp bittiği bu yaz, kültür takvimi dolu dolu — yakalamak için erken davranmak gerek."
+      <cite>— Frekans Kaydı, Haziran 2026</cite>
+    </blockquote>
+  </div>
+</div>
+
+<div class="essay-body">
+  <div class="conclusion-band">
+    <h2>Bu haftanın frekansı</h2>
+    <div class="prose">
+      <p>Dünya Kupası heyecanı, yaz festival sezonu, yeni yapımlar ve bilim haberleri — Haziran sonu tek bir temayı tekrar ediyor: çoğul, hızlı, durdurulamaz.</p>
+      <p>Kültür takvimi bunaltıcı gelebilir. Ama tam da bu yüzden bir radar olmak, seçmek ve süzmek — bültenin asıl işi bu.</p>
+    </div>
+  </div>
+
+  <div class="social-note">
+    <div class="social-note-title">Bizi Takip Edin</div>
+    <p>Bu Muydu? ve Uçan Salyangoz kanallarını takip etmeyi unutmayın. Düşüncelerinizi <strong style="color:var(--ink-dim);">iletisimbumuydu@gmail.com</strong> adresine veya Instagram'a DM yoluyla gönderebilirsiniz.</p>
+    <div class="social-links">
+      <a href="https://uansalyangoz.substack.com/" target="_blank" class="social-link">Substack →</a>
+      <a href="https://www.instagram.com/bbumuydu/" target="_blank" class="social-link">Instagram →</a>
+      <a href="https://www.youtube.com/@bumuydu" target="_blank" class="social-link">YouTube →</a>
+      <a href="https://www.tiktok.com/@buumuydu" target="_blank" class="social-link">TikTok →</a>
+      <a href="https://t.me/bu_muydu" target="_blank" class="social-link">Telegram →</a>
+      <a href="https://open.spotify.com/show/6UZNypTefgFUOKD4V00FdP" target="_blank" class="social-link">Spotify →</a>
+      <a href="https://www.shopier.com/ucansalyangoz" target="_blank" class="social-link">Shopier →</a>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <span>Bu Muydu? — bumuydu-creator.github.io</span>
+  <nav class="footer-links">
+    <a href="https://www.youtube.com/@bumuydu" target="_blank" rel="noopener">YouTube</a>
+    <a href="https://www.instagram.com/bbumuydu/" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://open.spotify.com/show/6UZNypTefgFUOKD4V00FdP" target="_blank" rel="noopener">Spotify</a>
+    <a href="https://uansalyangoz.substack.com" target="_blank" rel="noopener">Substack</a>
+    <a href="https://www.shopier.com/ucansalyangoz" target="_blank" rel="noopener">Shopier</a>
+  </nav>
+</footer>
+
+<script>
+  (function(){
+    var bar = document.getElementById('progress-bar');
+    if(!bar) return;
+    function update(){
+      var scrolled = window.scrollY;
+      var total = document.body.scrollHeight - window.innerHeight;
+      if(total <= 0){ bar.style.width = '0%'; return; }
+      bar.style.width = Math.min(100, (scrolled/total)*100) + '%';
+    }
+    window.addEventListener('scroll', update, {passive: true});
+    update();
+  })();
+</script>
 </body>
 </html>
