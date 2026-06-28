@@ -194,6 +194,9 @@
   .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
 
+  /* =============================================
+     TABLET (max-width: 900px)
+  ============================================= */
   @media (max-width: 900px) {
     nav { padding: 1.2rem 1.5rem; }
     .nav-links { display: none; }
@@ -209,6 +212,177 @@
     .stats-grid { grid-template-columns: repeat(3,1fr); }
     .videos-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
   }
+
+  /* =============================================
+     MOBİL (max-width: 600px)
+  ============================================= */
+  @media (max-width: 600px) {
+    /* Cursor mobilde gizle */
+    .cursor, .cursor-ring { display: none; }
+    body { cursor: auto; font-size: 16px; }
+
+    /* NAV — logo + hamburger ikonu */
+    nav {
+      padding: 1rem 1.2rem;
+      background: rgba(10,8,4,0.97);
+    }
+    .nav-logo { font-size: 1.1rem; }
+
+    /* Mobil hamburger menü */
+    .nav-mobile-toggle {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .nav-mobile-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--gold);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .nav-links {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10,8,4,0.98);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      z-index: 200;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links a {
+      font-size: 1rem;
+      letter-spacing: 0.12em;
+    }
+    .nav-close {
+      position: absolute;
+      top: 1.2rem; right: 1.2rem;
+      font-size: 1.5rem;
+      color: var(--gold);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* HERO */
+    .hero {
+      grid-template-columns: 1fr;
+      min-height: 100svh;
+    }
+    .hero-left {
+      padding: 6rem 1.2rem 2.5rem;
+    }
+    .hero-title {
+      font-size: clamp(2.8rem, 12vw, 4rem);
+      margin-bottom: 1rem;
+    }
+    .hero-subtitle {
+      font-size: 1.05rem;
+      margin-bottom: 2rem;
+    }
+    .hero-cta {
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    .btn-primary, .btn-secondary {
+      width: 100%;
+      justify-content: center;
+      padding: 0.9rem 1.2rem;
+      font-size: 0.65rem;
+    }
+    .hero-right { height: 240px; }
+    .hero-scroll { display: none; }
+
+    /* İÇERİK GRID — 4 sütun → 1 sütun */
+    section[style*="grid-template-columns:repeat(4"] > div,
+    div[style*="grid-template-columns:repeat(4, 1fr)"] {
+      grid-template-columns: 1fr !important;
+    }
+
+    /* Ana içerik bölümü */
+    section > div[style*="grid-template-columns:repeat(4, 1fr)"] {
+      grid-template-columns: 1fr !important;
+    }
+
+    /* Yayımlanan Haberlerim featured card */
+    div[style*="grid-template-columns:repeat(auto-fit, minmax(300px, 1fr))"] {
+      grid-template-columns: 1fr !important;
+    }
+
+    /* Video grid */
+    .video-grid { grid-template-columns: 1fr !important; }
+
+    /* 4-sütun topics */
+    .topics > div[style*="grid-template-columns:repeat(4,1fr)"] {
+      grid-template-columns: 1fr !important;
+    }
+
+    /* Support cards */
+    .support { padding: 4rem 1.2rem; }
+    .support-options {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+    .support-card {
+      min-width: calc(50% - 0.4rem);
+      max-width: calc(50% - 0.4rem);
+      padding: 1.2rem 1rem;
+    }
+
+    /* Footer */
+    footer { padding: 3rem 1.2rem 1.5rem; }
+    .footer-top { grid-template-columns: 1fr; gap: 1.8rem; }
+    .footer-bottom {
+      flex-direction: column;
+      gap: 0.8rem;
+      text-align: center;
+    }
+
+    /* Genel section padding */
+    section { padding: 4rem 1.2rem; }
+    .about { padding: 4rem 1.2rem; }
+
+    /* Inline style override — 4 sütun grid'ler */
+    .content-grid-4 {
+      grid-template-columns: 1fr !important;
+    }
+
+    /* Video scroll kartları (slider) — boyutu küçült */
+    .news-track .video-card,
+    .bm-track .bm-card {
+      width: 200px !important;
+    }
+
+    /* videos-header */
+    .videos-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.8rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Papara kutusu */
+    #papara-ana { max-width: 100% !important; }
+  }
+
+  /* Çok küçük ekranlar (max-width: 380px) */
+  @media (max-width: 380px) {
+    .hero-title { font-size: 2.4rem; }
+    .support-card {
+      min-width: 100%;
+      max-width: 100%;
+    }
+  }
 </style>
 </head>
 <body>
@@ -218,7 +392,12 @@
 
 <nav>
   <a href="#" class="nav-logo">Bu Muydu?</a>
-  <ul class="nav-links">
+  <!-- Mobil hamburger butonu -->
+  <button class="nav-mobile-toggle" id="navToggle" aria-label="Menüyü Aç">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <button class="nav-close" id="navClose" aria-label="Menüyü Kapat">✕</button>
     <li><a href="https://bumuydu-creator.github.io/bumuydu.github.io/OdysseiaKurs.html" target="_blank" class="nav-patreon" style="background:#faff00;color:#0a0804;">📚 Kurslar</a></li>
     <li><a href="https://www.patreon.com/cw/Bumuydu" target="_blank" class="nav-patreon">❤ Patreon</a></li>
     <li><a href="#hakkinda">Hakkında</a></li>
@@ -237,7 +416,6 @@
       <a href="https://bumuydu-creator.github.io/bumuydu.github.io/bulten.html" class="btn-secondary">Bülten Oku</a>
       <a href="https://bumuydu-creator.github.io/bumuydu.github.io/anal%C4%B1z.html" target="_blank" class="btn-primary"><span>Haftanın yazısı</span></a>
       <a href="https://bumuydu-creator.github.io/bumuydu.github.io/kitap.html" class="btn-secondary">Labyrent Oyun</a>
-    <a href="https://bumuydu-creator.github.io/bumuydu.github.io/%C3%A7engel%20bulmaca.html" target="_blank" class="btn-primary"><span>Çengel Bulmaca Oyna</span></a>
     </div>
   </div>
   <div class="hero-right">
@@ -252,7 +430,7 @@
 
 <!-- HAKKINDA + MAKALE -->
 <section style="box-sizing:border-box;padding:2rem 1rem;display:flex;flex-direction:column;gap:2.5rem;max-width:1100px;margin:0 auto;">
-  <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:1.5rem;align-items:start;">
+  <div class="content-grid-4" style="display:grid;grid-template-columns:repeat(4, 1fr);gap:1.5rem;align-items:start;">
    <div style="display:flex;flex-direction:column;">
   <video src="https://bumuydu-creator.github.io/bumuydu.github.io/pomelli_creative_video_9_16_0625%20(2).mp4" 
     autoplay muted loop playsinline
@@ -293,9 +471,6 @@
     </div>
   </div>
 
-
-  
- 
   <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:0;">
     <div style="font-family:'Playfair Display',serif;font-size:1.3rem;color:#f5efe0;margin-bottom:0.5rem;">Yayımlanan Haberlerim</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:1.5rem;align-items:center;">
@@ -320,9 +495,6 @@
     </div>
     </div>
 
-
-
-  
   <style>
   .news-scroll { overflow: hidden; margin-top: 1.5rem; }
   .news-track {
@@ -566,7 +738,6 @@
 </div>
 
 
-  
 <!-- VIDEOS -->
 <section class="videos reveal" id="videos">
   <div class="videos-header">
@@ -648,7 +819,7 @@
 
 <!-- 4 SÜTUN -->
 <section class="topics reveal" id="topics">
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.5px;background:rgba(201,168,76,0.1);">
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.5px;background:rgba(201,168,76,0.1);" class="content-grid-4">
     <div style="background:var(--ink);padding:2rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;border-left:1px solid rgba(201,168,76,0.1);border-right:1px solid rgba(201,168,76,0.1);">
       <div class="section-label" style="justify-content:center;">Podcast</div>
       <h2 class="topics-title" style="font-size:2rem;">Sesli <span style="color:var(--gold);font-style:italic;">Düşünceler</span></h2>
@@ -782,79 +953,22 @@
 
 <div style="overflow:hidden;">
   <div class="bm-track">
-
-    <div class="bm-card">
-      <span class="bm-tag tag-mit">Mitoloji</span>
-      <p class="bm-title">Başlık 1</p>
-      <p class="bm-desc">Açıklama buraya.</p>
-    </div>
-
-    <div class="bm-card">
-      <span class="bm-tag tag-fel">Felsefe</span>
-      <p class="bm-title">Başlık 2</p>
-      <p class="bm-desc">Açıklama buraya.</p>
-    </div>
-
-    <div class="bm-card">
-      <span class="bm-tag tag-ede">Edebiyat</span>
-      <p class="bm-title">Başlık 3</p>
-      <p class="bm-desc">Açıklama buraya.</p>
-    </div>
-
-    <div class="bm-card">
-      <span class="bm-tag tag-tar">Tarih</span>
-      <p class="bm-title">Başlık 4</p>
-      <p class="bm-desc">Açıklama buraya.</p>
-    </div>
-
-    <div class="bm-card">
-      <span class="bm-tag tag-yap">Yapay Zeka</span>
-      <p class="bm-title">Başlık 5</p>
-      <p class="bm-desc">Açıklama buraya.</p>
-    </div>
-
-    <div class="bm-card">
-      <span class="bm-tag tag-tbil">Tarih · Bilim</span>
-      <p class="bm-title">Başlık 6</p>
-      <p class="bm-desc">Açıklama buraya.</p>
-    </div>
-
-    <!-- Sonsuz döngü kopyaları — aşağıdaki 6 kartı yukarıdakilerle aynı yap -->
-    <div class="bm-card">
-      <span class="bm-tag tag-mit">Mitoloji</span>
-      <p class="bm-title">Başlık 1</p>
-      <p class="bm-desc">Açıklama buraya.</p>
-    </div>
-    <div class="bm-card">
-      <span class="bm-tag tag-fel">Felsefe</span>
-      <p class="bm-title">Başlık 2</p>
-      <p class="bm-desc">Açıklama buraya.</p>
-    </div>
-    <div class="bm-card">
-      <span class="bm-tag tag-ede">Edebiyat</span>
-      <p class="bm-title">Başlık 3</p>
-      <p class="bm-desc">Açıklama buraya.</p>
-    </div>
-    <div class="bm-card">
-      <span class="bm-tag tag-tar">Tarih</span>
-      <p class="bm-title">Başlık 4</p>
-      <p class="bm-desc">Açıklama buraya.</p>
-    </div>
-    <div class="bm-card">
-      <span class="bm-tag tag-yap">Yapay Zeka</span>
-      <p class="bm-title">Başlık 5</p>
-      <p class="bm-desc">Açıklama buraya.</p>
-    </div>
-    <div class="bm-card">
-      <span class="bm-tag tag-tbil">Tarih · Bilim</span>
-      <p class="bm-title">Başlık 6</p>
-      <p class="bm-desc">Açıklama buraya.</p>
-    </div>
-
+    <div class="bm-card"><span class="bm-tag tag-mit">Mitoloji</span><p class="bm-title">Başlık 1</p><p class="bm-desc">Açıklama buraya.</p></div>
+    <div class="bm-card"><span class="bm-tag tag-fel">Felsefe</span><p class="bm-title">Başlık 2</p><p class="bm-desc">Açıklama buraya.</p></div>
+    <div class="bm-card"><span class="bm-tag tag-ede">Edebiyat</span><p class="bm-title">Başlık 3</p><p class="bm-desc">Açıklama buraya.</p></div>
+    <div class="bm-card"><span class="bm-tag tag-tar">Tarih</span><p class="bm-title">Başlık 4</p><p class="bm-desc">Açıklama buraya.</p></div>
+    <div class="bm-card"><span class="bm-tag tag-yap">Yapay Zeka</span><p class="bm-title">Başlık 5</p><p class="bm-desc">Açıklama buraya.</p></div>
+    <div class="bm-card"><span class="bm-tag tag-tbil">Tarih · Bilim</span><p class="bm-title">Başlık 6</p><p class="bm-desc">Açıklama buraya.</p></div>
+    <div class="bm-card"><span class="bm-tag tag-mit">Mitoloji</span><p class="bm-title">Başlık 1</p><p class="bm-desc">Açıklama buraya.</p></div>
+    <div class="bm-card"><span class="bm-tag tag-fel">Felsefe</span><p class="bm-title">Başlık 2</p><p class="bm-desc">Açıklama buraya.</p></div>
+    <div class="bm-card"><span class="bm-tag tag-ede">Edebiyat</span><p class="bm-title">Başlık 3</p><p class="bm-desc">Açıklama buraya.</p></div>
+    <div class="bm-card"><span class="bm-tag tag-tar">Tarih</span><p class="bm-title">Başlık 4</p><p class="bm-desc">Açıklama buraya.</p></div>
+    <div class="bm-card"><span class="bm-tag tag-yap">Yapay Zeka</span><p class="bm-title">Başlık 5</p><p class="bm-desc">Açıklama buraya.</p></div>
+    <div class="bm-card"><span class="bm-tag tag-tbil">Tarih · Bilim</span><p class="bm-title">Başlık 6</p><p class="bm-desc">Açıklama buraya.</p></div>
   </div>
 </div>
 </section>
-  
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-top">
@@ -890,13 +1004,21 @@
 </footer>
 
 <script>
+  // Cursor — sadece mouse varsa çalışsın
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
   let mx = 0, my = 0, rx = 0, ry = 0;
+  let hasMouse = false;
   document.addEventListener('mousemove', e => {
+    if (!hasMouse) { hasMouse = true; cursor.style.display = 'block'; ring.style.display = 'block'; }
     mx = e.clientX; my = e.clientY;
     cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
   });
+  // Touch cihazlarda cursor gizle
+  document.addEventListener('touchstart', () => {
+    cursor.style.display = 'none';
+    ring.style.display = 'none';
+  }, { once: true });
   function animateRing() {
     rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
     ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
@@ -907,9 +1029,28 @@
     el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%,-50%) scale(2.5)'; ring.style.transform = 'translate(-50%,-50%) scale(1.5)'; ring.style.borderColor = 'rgba(201,168,76,0.8)'; });
     el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.borderColor = 'rgba(201,168,76,0.4)'; });
   });
+
+  // Mobil hamburger menü
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  const navClose = document.getElementById('navClose');
+  if (navToggle) {
+    navToggle.addEventListener('click', () => navLinks.classList.add('open'));
+  }
+  if (navClose) {
+    navClose.addEventListener('click', () => navLinks.classList.remove('open'));
+  }
+  // Menü linkine tıklayınca kapat
+  navLinks && navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => navLinks.classList.remove('open'));
+  });
+
+  // Reveal on scroll
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.1 });
   reveals.forEach(r => observer.observe(r));
+
+  // Smooth scroll
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => { const target = document.querySelector(a.getAttribute('href')); if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); } });
   });
