@@ -401,9 +401,18 @@
     padding: 8vh 7vw;
     margin: 9vh calc(-7vw) 0;
   }
+
+  /* başlık + fiyat kartı aynı satırda */
+  .course-top-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 4vw;
+    align-items: start;
+  }
+
   .course-intro {
     max-width: 70ch;
-    margin: 0 0 5vh;
+    margin: 0;
   }
   .course-intro .eyebrow { margin-bottom: 0.9rem; }
   .course-intro h2 {
@@ -432,11 +441,9 @@
     max-width: 58ch;
   }
 
-  .course-grid {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    gap: 4vw;
-    align-items: start;
+  /* müfredat: tam genişlik, fiyat kartının altında */
+  .roadmap-full {
+    margin-top: 6vh;
   }
 
   /* curriculum / roadmap list */
@@ -507,8 +514,6 @@
     border-radius: 6px;
     padding: 0;
     overflow: hidden;
-    position: sticky;
-    top: 7rem;
   }
   .pc-thumb {
     position: relative;
@@ -746,8 +751,8 @@
     .on-image-text blockquote { font-size: 1.1rem; }
     .conclusion-band { padding: 5vh 7vw; }
     .course-band { padding: 6vh 7vw; margin-top: 6vh; }
-    .course-grid { grid-template-columns: 1fr; }
-    .price-card { position: static; margin-top: 3vh; }
+    .course-top-grid { grid-template-columns: 1fr; }
+    .price-card { margin-top: 3vh; }
     .header-cta { display: none; }
     .mobile-buy-bar { display: flex; }
     body { padding-bottom: 4.6rem; }
@@ -1061,62 +1066,6 @@
     </ul>
   </div>
 
-</div>
-
-    <!-- FİYAT KARTI -->
-    <div>
-      <div class="price-card">
-        <div class="pc-thumb">
-          <span class="pc-thumb-tag">Mitoloji</span>
-          <img src="https://bumuydu-creator.github.io/bumuydu.github.io/homerus2.jpeg" alt="Odysseia Kursu" />
-        </div>
-        <div class="pc-body">
-          <span class="pc-eyebrow">Bu Muydu? — Kurs</span>
-          <h3>Odysseia: Bir Eve Dönüş Destanı</h3>
-          <div class="price-row">
-            <span class="old-price">₺1.650</span>
-            <span class="new-price">₺990</span>
-          </div>
-          <span class="price-discount">%40 indirim</span>
-
-          <a class="pc-cta" href="#">Hemen Al</a>
-          <a class="pc-cta-secondary" href="#">Sepete Ekle</a>
-
-          <ul class="pc-specs">
-            <li>3 ders, 3+ saat video içerik</li>
-            <li>Satın alımdan itibaren 1 yıl erişim</li>
-            <li>İlk ders ücretsiz — kayıt olmadan izleyebilirsiniz</li>
-            <li>Düzenli canlı buluşma ve soru-cevap imkânı</li>
-          </ul>
-
-          <div class="pc-stats">
-            <span><span class="dot">●</span> 3+ Saat</span>
-            <span><span class="dot">●</span> 3 Ders</span>
-            <span><span class="dot">●</span> 1000+</span>
-          </div>
-
-          <div class="pc-faq">
-            <details>
-              <summary>Eğitimlere nasıl erişebilirim?</summary>
-              <p>Satın aldıktan sonra hesabınızla giriş yaparak video içeriklere anında erişebilirsiniz.</p>
-            </details>
-            <details>
-              <summary>Erişim süresi ne kadar?</summary>
-              <p>Satın aldığınız derslere 1 yıl boyunca erişebilir, bu süre içinde dilediğiniz kadar tekrar izleyebilirsiniz.</p>
-            </details>
-            <details>
-              <summary>Canlı dersler var mı?</summary>
-              <p>Evet. Düzenli aralıklarla online buluşmalar yapılır; bu buluşmalarda sorularınızı doğrudan yöneltebilirsiniz.</p>
-            </details>
-            <details>
-              <summary>İade politikanız nedir?</summary>
-              <p>Satın alım tarihinden itibaren 14 gün içinde iade talep edebilirsiniz.</p>
-            </details>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- FOOTER -->
