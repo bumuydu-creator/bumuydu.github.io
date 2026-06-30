@@ -406,16 +406,25 @@
 
   /* başlık + fiyat kartı aynı satırda */
   .course-top-grid {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    gap: 4vw;
-    align-items: start;
+    display: block;
     max-width: 1100px;
     margin: 0 auto;
   }
 
+  /* iki fiyat kutusu yan yana */
+  .pricing-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.4rem;
+    margin-top: 3rem;
+    padding-top: 2.6rem;
+    border-top: 1px solid var(--line);
+    align-items: stretch;
+  }
+  .pricing-row .price-card { position: static; }
+
   .course-intro {
-    max-width: 70ch;
+    max-width: 100%;
     margin: 0;
   }
   .course-intro .eyebrow { margin-bottom: 0.9rem; }
@@ -596,6 +605,49 @@
   }
   .price-card .pc-cta-secondary:hover { text-decoration: none; border-color: var(--amber); color: var(--amber); }
 
+  /* ── İKİ KATMANLI FİYAT ── */
+  .pricing-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1.3rem;
+  }
+  .pricing-stack .price-card { position: static; }
+  .price-card.featured {
+    border-color: var(--amber);
+    box-shadow: inset 0 0 0 1px var(--amber);
+  }
+  .tier-tag-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.6rem;
+  }
+  .tier-badge {
+    font-family: var(--mono);
+    font-size: 0.64rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--soil-0);
+    background: var(--amber);
+    padding: 0.22rem 0.55rem;
+    border-radius: 2px;
+  }
+  .price-per {
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    color: var(--ink-faint);
+    align-self: flex-end;
+    margin-bottom: 0.35rem;
+  }
+  .tier-note {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    line-height: 1.5;
+    color: var(--ink-faint);
+    margin: 0 0 1.4rem;
+  }
+  .tier-note b { color: var(--amber); font-weight: 500; }
+
   .pc-specs {
     list-style: none;
     margin: 0 0 1.8rem; padding: 0;
@@ -732,6 +784,7 @@
     .conclusion-band { padding: 5vh 7vw; }
     .course-band { padding: 6vh 7vw; }
     .course-top-grid { grid-template-columns: 1fr; }
+    .pricing-row { grid-template-columns: 1fr; }
     .course-intro { height: auto; }
     .course-extra-list { grid-template-columns: 1fr; }
     .price-card { margin-top: 3vh; height: auto; position: static; }
@@ -752,7 +805,7 @@
 <!-- HEADER -->
 <header class="site-header">
   <a class="site-logo" href="https://bumuydu-creator.github.io/bumuydu.github.io/">Bu Muydu? <span>— Odysseia Kurs</span></a>
-  <a class="header-cta" href="#kurs">Kursa Katıl</a>
+  <a class="header-cta" href="#kurs">Kursa Katıl — ₺990</a>
 </header>
 
 <!-- KURS / FİYATLANDIRMA BÖLÜMÜ — sayfanın başında, header'ın hemen altında -->
@@ -788,42 +841,64 @@
             <summary>Canlı dersler var mı?</summary>
             <p>Evet. Düzenli aralıklarla online buluşmalar yapılır; bu buluşmalarda sorularınızı doğrudan yöneltebilirsiniz.</p>
           </details>
-         
+          <details>
+            <summary>İade politikanız nedir?</summary>
+            <p>Satın alım tarihinden itibaren 14 gün içinde iade talep edebilirsiniz.</p>
+          </details>
         </div>
       </div>
     </div>
 
-    <!-- FİYAT KARTI -->
-    <div class="price-card">
-      <div class="pc-thumb">
-        <span class="pc-thumb-tag">Mitoloji</span>
-        <img src="https://bumuydu-creator.github.io/bumuydu.github.io/homerus2.jpeg" alt="Odysseia Kursu" />
-      </div>
-      <div class="pc-body">
-        <span class="pc-eyebrow">Bu Muydu? — Kurs</span>
-        <h3>Odysseia: Bir Eve Dönüş Destanı</h3>
-        <div class="price-row">
-          <span class="old-price">₺1.650</span>
-          <span class="new-price">₺990</span>
-        </div>
+    <!-- FİYAT KARTLARI: tek seferlik + abonelik (yan yana) -->
+    <div class="pricing-row">
 
-
-        
-        <a class="pc-cta" href="https://www.shopier.com/ucansalyangoz" target="_blank" rel="noopener">Hemen Al</a>
-        <a class="pc-cta-secondary" href="#">Sepete Ekle</a>
-
-        <ul class="pc-specs">
-          <li>3 ders, 3+ saat video içerik</li>
-          <li>İlk ders ücretsiz — kayıt olmadan izleyebilirsiniz</li>
-          <li>Düzenli canlı buluşma ve soru-cevap imkânı</li>
-        </ul>
-
-        <div class="pc-stats">
-          <span><span class="dot">●</span> Hazırlık Aşamasında Saat</span>
-          <span><span class="dot">●</span>  Ders</span>
-          <span><span class="dot">●</span>  </span>
+      <!-- 1) TEK DERS — TEK SEFERLİK (Shopier) -->
+      <div class="price-card">
+        <div class="pc-body">
+          <div class="tier-tag-row">
+            <span class="pc-eyebrow" style="margin-bottom:0;">Bu Muydu? — Kurs</span>
+            <span class="tier-badge" style="background:var(--ink-faint);">Tek Seferlik</span>
+          </div>
+          <h3>Odysseia: Bir Eve Dönüş Destanı</h3>
+          <div class="price-row">
+            <span class="old-price">₺1.650</span>
+            <span class="new-price">₺990</span>
+          </div>
+          <span class="price-discount">%40 indirim</span>
+          <a class="pc-cta" href="https://www.shopier.com/ucansalyangoz" target="_blank" rel="noopener">Hemen Al</a>
+          <ul class="pc-specs">
+            <li>Ömür boyu erişim — bir kere al, senin olsun</li>
+            <li>Sadece bu ders (3 ders, 3+ saat video)</li>
+            <li>İlk ders ücretsiz — kayıt olmadan izleyebilirsiniz</li>
+          </ul>
         </div>
       </div>
+
+      <!-- 2) AYLIK ABONELİK — TÜM ERİŞİM -->
+      <div class="price-card featured">
+        <div class="pc-body">
+          <div class="tier-tag-row">
+            <span class="pc-eyebrow" style="margin-bottom:0;">Bu Muydu? — Üyelik</span>
+            <span class="tier-badge">En Kapsamlı</span>
+          </div>
+          <h3>Tüm Dersler + Yenileri</h3>
+          <div class="price-row">
+            <span class="new-price">₺249</span>
+            <span class="price-per">/ ay</span>
+          </div>
+          <a class="pc-cta" href="#">Aylık Abone Ol</a>
+          <p class="tier-note">
+            <b>Not:</b> Abonelik linkin hazır olunca butonun <b>href="#"</b> kısmını değiştir.
+          </p>
+          <ul class="pc-specs">
+            <li>Tüm derslere erişim — bu ders dahil, gelecekler dahil</li>
+            <li>Her ay yeni içerik</li>
+            <li>Düzenli canlı buluşma ve soru-cevap (Q&amp;A)</li>
+            <li>İstediğin zaman iptal</li>
+          </ul>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -852,43 +927,6 @@
     </div>
   </div>
 </section>
-
-   <!-- 2) AYLIK ABONELİK — TÜM ERİŞİM (iyzico/PayTR) -->
-      <div class="price-card featured">
-        <div class="pc-body">
-          <div class="tier-tag-row">
-            <span class="pc-eyebrow" style="margin-bottom:0;">Bu Muydu? — Üyelik</span>
-            <span class="tier-badge">En Kapsamlı</span>
-          </div>
-          <h3>Tüm Dersler + Yenileri</h3>
-          <div class="price-row">
-            <span class="new-price">₺249</span>
-            <span class="price-per">/ ay</span>
-          </div>
-          <a class="pc-cta" href="#">Aylık Abone Ol</a>
-          <p class="tier-note">
-            <b>Not:</b> Abonelik ödemesi iyzico/PayTR ile alınır. Ürün linkin hazır olunca
-            yukarıdaki butonun <b>href="#"</b> kısmını o linkle değiştir.
-          </p>
-          <ul class="pc-specs">
-            <li>Tüm derslere erişim — bu ders dahil, gelecekler dahil</li>
-            <li>Her ay yeni içerik</li>
-            <li>Düzenli canlı buluşma ve soru-cevap (Q&amp;A)</li>
-            <li>İstediğin zaman iptal</li>
-          </ul>
-        </div>
-      </div>
- 
-    </div>
-  </div>
-</div>
-
-
-
-
-
-
-  
 
 <!-- BODY -->
 <div class="essay-body">
