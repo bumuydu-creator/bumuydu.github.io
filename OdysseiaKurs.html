@@ -505,9 +505,35 @@
     background: var(--soil-0);
     border: 1px solid var(--line-strong);
     border-radius: 6px;
-    padding: 2.2rem 1.9rem;
+    padding: 0;
+    overflow: hidden;
     position: sticky;
     top: 7rem;
+  }
+  .pc-thumb {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/10;
+  }
+  .pc-thumb img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: grayscale(10%) brightness(0.85);
+  }
+  .pc-thumb-tag {
+    position: absolute;
+    top: 0.9rem; left: 0.9rem;
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--soil-0);
+    background: var(--amber);
+    padding: 0.3rem 0.6rem;
+    border-radius: 2px;
+  }
+  .price-card .pc-body {
+    padding: 1.7rem 1.9rem 2.2rem;
   }
   .price-card .pc-eyebrow {
     font-family: var(--mono);
@@ -606,6 +632,19 @@
     color: var(--amber);
     flex-shrink: 0;
   }
+
+  .pc-stats {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--line);
+    padding-top: 1.2rem;
+    margin-bottom: 1.4rem;
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    color: var(--ink-faint);
+  }
+  .pc-stats span { display: flex; align-items: center; gap: 0.4rem; }
+  .pc-stats .dot { color: var(--amber); }
 
   .pc-faq {
     border-top: 1px solid var(--line);
@@ -971,41 +1010,53 @@
     <!-- FİYAT KARTI -->
     <div>
       <div class="price-card">
-        <span class="pc-eyebrow">Bu Muydu? — Kurs</span>
-        <h3>Odysseia: Bir Eve Dönüş Destanı</h3>
-        <div class="price-row">
-          <span class="old-price">₺1.650</span>
-          <span class="new-price">₺990</span>
+        <div class="pc-thumb">
+          <span class="pc-thumb-tag">Mitoloji</span>
+          <img src="https://bumuydu-creator.github.io/bumuydu.github.io/homerus2.jpeg" alt="Odysseia Kursu" />
         </div>
-        <span class="price-discount">%40 indirim</span>
+        <div class="pc-body">
+          <span class="pc-eyebrow">Bu Muydu? — Kurs</span>
+          <h3>Odysseia: Bir Eve Dönüş Destanı</h3>
+          <div class="price-row">
+            <span class="old-price">₺1.650</span>
+            <span class="new-price">₺990</span>
+          </div>
+          <span class="price-discount">%40 indirim</span>
 
-        <a class="pc-cta" href="#">Hemen Al</a>
-        <a class="pc-cta-secondary" href="#">Sepete Ekle</a>
+          <a class="pc-cta" href="#">Hemen Al</a>
+          <a class="pc-cta-secondary" href="#">Sepete Ekle</a>
 
-        <ul class="pc-specs">
-          <li>3 ders, 3+ saat video içerik</li>
-          <li>Satın alımdan itibaren 1 yıl erişim</li>
-          <li>İlk ders ücretsiz — kayıt olmadan izleyebilirsiniz</li>
-          <li>Düzenli canlı buluşma ve soru-cevap imkânı</li>
-        </ul>
+          <ul class="pc-specs">
+            <li>3 ders, 3+ saat video içerik</li>
+            <li>Satın alımdan itibaren 1 yıl erişim</li>
+            <li>İlk ders ücretsiz — kayıt olmadan izleyebilirsiniz</li>
+            <li>Düzenli canlı buluşma ve soru-cevap imkânı</li>
+          </ul>
 
-        <div class="pc-faq">
-          <details>
-            <summary>Eğitimlere nasıl erişebilirim?</summary>
-            <p>Satın aldıktan sonra hesabınızla giriş yaparak video içeriklere anında erişebilirsiniz.</p>
-          </details>
-          <details>
-            <summary>Erişim süresi ne kadar?</summary>
-            <p>Satın aldığınız derslere 1 yıl boyunca erişebilir, bu süre içinde dilediğiniz kadar tekrar izleyebilirsiniz.</p>
-          </details>
-          <details>
-            <summary>Canlı dersler var mı?</summary>
-            <p>Evet. Düzenli aralıklarla online buluşmalar yapılır; bu buluşmalarda sorularınızı doğrudan yöneltebilirsiniz.</p>
-          </details>
-          <details>
-            <summary>İade politikanız nedir?</summary>
-            <p>Satın alım tarihinden itibaren 14 gün içinde iade talep edebilirsiniz.</p>
-          </details>
+          <div class="pc-stats">
+            <span><span class="dot">●</span> 3+ Saat</span>
+            <span><span class="dot">●</span> 3 Ders</span>
+            <span><span class="dot">●</span> 1000+</span>
+          </div>
+
+          <div class="pc-faq">
+            <details>
+              <summary>Eğitimlere nasıl erişebilirim?</summary>
+              <p>Satın aldıktan sonra hesabınızla giriş yaparak video içeriklere anında erişebilirsiniz.</p>
+            </details>
+            <details>
+              <summary>Erişim süresi ne kadar?</summary>
+              <p>Satın aldığınız derslere 1 yıl boyunca erişebilir, bu süre içinde dilediğiniz kadar tekrar izleyebilirsiniz.</p>
+            </details>
+            <details>
+              <summary>Canlı dersler var mı?</summary>
+              <p>Evet. Düzenli aralıklarla online buluşmalar yapılır; bu buluşmalarda sorularınızı doğrudan yöneltebilirsiniz.</p>
+            </details>
+            <details>
+              <summary>İade politikanız nedir?</summary>
+              <p>Satın alım tarihinden itibaren 14 gün içinde iade talep edebilirsiniz.</p>
+            </details>
+          </div>
         </div>
       </div>
     </div>
