@@ -61,6 +61,7 @@
     padding: 2.2rem 7vw 1.6rem;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 0.8rem;
     border-bottom: 1px solid var(--line);
     position: sticky; top: 0;
@@ -76,6 +77,18 @@
     text-transform: uppercase;
   }
   .site-logo span { color: var(--ink-faint); }
+  .header-cta {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--soil-0);
+    background: var(--amber);
+    padding: 0.55rem 1.1rem;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .header-cta:hover { text-decoration: none; background: var(--ink); }
 
   /* ── HERO ── */
   .hero {
@@ -146,6 +159,36 @@
     padding-top: 1.6rem;
     border-top: 1px solid var(--line);
   }
+  .hero-buy {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .btn-primary {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--soil-0);
+    background: var(--amber);
+    padding: 0.85rem 1.6rem;
+    border-radius: 2px;
+    display: inline-block;
+  }
+  .btn-primary:hover { text-decoration: none; background: var(--mineral); }
+  .price-tag {
+    font-family: var(--mono);
+    font-size: 0.92rem;
+    color: var(--ink);
+  }
+  .price-tag .old {
+    color: var(--ink-faint);
+    text-decoration: line-through;
+    margin-right: 0.5rem;
+  }
+  .price-tag .new { color: var(--amber); font-weight: 500; }
 
   /* ── BODY LAYOUT ── */
   .essay-body {
@@ -350,6 +393,250 @@
   .conclusion-band .prose p { color: var(--ink-dim); }
   .conclusion-band .prose p:first-child { color: var(--ink); }
 
+  /* ── COURSE / PRICING SECTION ── */
+  .course-band {
+    background: var(--soil-1);
+    border-top: 1px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+    padding: 8vh 7vw;
+    margin: 9vh calc(-7vw) 0;
+  }
+  .course-intro {
+    max-width: 70ch;
+    margin: 0 0 5vh;
+  }
+  .course-intro .eyebrow { margin-bottom: 0.9rem; }
+  .course-intro h2 {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 480;
+    line-height: 1.12;
+    margin: 0 0 1.3rem;
+    color: var(--ink);
+  }
+  .course-intro h2 em { font-style: italic; color: var(--amber); font-weight: 340; }
+  .course-intro p {
+    font-size: clamp(1rem, 1.4vw, 1.08rem);
+    color: var(--ink-dim);
+    max-width: 62ch;
+  }
+  .quote-note {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(1.15rem, 2vw, 1.4rem);
+    color: var(--mineral);
+    border-left: 2px solid var(--mineral);
+    padding-left: 1.4rem;
+    margin: 2rem 0 0;
+    line-height: 1.5;
+    max-width: 58ch;
+  }
+
+  .course-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 4vw;
+    align-items: start;
+  }
+
+  /* curriculum / roadmap list */
+  .roadmap-title {
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 1.6rem;
+  }
+  .roadmap-list {
+    list-style: none;
+    margin: 0; padding: 0;
+    border-top: 1px solid var(--line);
+  }
+  .roadmap-list li {
+    border-bottom: 1px solid var(--line);
+    padding: 1.1rem 0;
+    display: flex;
+    gap: 1.1rem;
+    align-items: baseline;
+  }
+  .roadmap-list .ridx {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--amber);
+    flex-shrink: 0;
+    width: 1.6rem;
+  }
+  .roadmap-list .rtext { flex: 1; }
+  .roadmap-list .rtitle {
+    font-family: var(--serif);
+    font-size: 1.06rem;
+    color: var(--ink);
+    margin: 0 0 0.25rem;
+    line-height: 1.3;
+  }
+  .roadmap-list .rdesc {
+    font-size: 0.88rem;
+    color: var(--ink-faint);
+    line-height: 1.5;
+    margin: 0;
+  }
+  .roadmap-list .rmeta {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .roadmap-list .free-tag {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--mineral);
+    border: 1px solid rgba(127,193,182,0.4);
+    border-radius: 2px;
+    padding: 0.15rem 0.4rem;
+    margin-left: 0.5rem;
+  }
+
+  /* pricing card */
+  .price-card {
+    background: var(--soil-0);
+    border: 1px solid var(--line-strong);
+    border-radius: 6px;
+    padding: 2.2rem 1.9rem;
+    position: sticky;
+    top: 7rem;
+  }
+  .price-card .pc-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 0.8rem;
+    display: block;
+  }
+  .price-card h3 {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-weight: 480;
+    color: var(--ink);
+    margin: 0 0 1.2rem;
+    line-height: 1.2;
+  }
+  .price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+    margin-bottom: 0.4rem;
+  }
+  .price-row .old-price {
+    font-family: var(--mono);
+    font-size: 1rem;
+    color: var(--ink-faint);
+    text-decoration: line-through;
+  }
+  .price-row .new-price {
+    font-family: var(--serif);
+    font-size: 2.1rem;
+    color: var(--amber);
+    font-weight: 480;
+  }
+  .price-discount {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--soil-0);
+    background: var(--mineral);
+    padding: 0.18rem 0.5rem;
+    border-radius: 2px;
+    margin-bottom: 1.6rem;
+  }
+  .price-card .pc-cta {
+    display: block;
+    text-align: center;
+    width: 100%;
+    background: var(--amber);
+    color: var(--soil-0);
+    font-family: var(--mono);
+    font-size: 0.84rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.95rem 1rem;
+    border-radius: 3px;
+    margin-bottom: 0.8rem;
+  }
+  .price-card .pc-cta:hover { text-decoration: none; background: var(--ink); }
+  .price-card .pc-cta-secondary {
+    display: block;
+    text-align: center;
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    color: var(--ink-dim);
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.85rem 1rem;
+    border-radius: 3px;
+    margin-bottom: 1.6rem;
+  }
+  .price-card .pc-cta-secondary:hover { text-decoration: none; border-color: var(--amber); color: var(--amber); }
+
+  .pc-specs {
+    list-style: none;
+    margin: 0 0 1.8rem; padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .pc-specs li {
+    font-family: var(--sans);
+    font-size: 0.86rem;
+    color: var(--ink-dim);
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+  .pc-specs li::before {
+    content: "—";
+    color: var(--amber);
+    flex-shrink: 0;
+  }
+
+  .pc-faq {
+    border-top: 1px solid var(--line);
+    padding-top: 1.4rem;
+  }
+  .pc-faq details {
+    border-bottom: 1px solid var(--line);
+    padding: 0.85rem 0;
+  }
+  .pc-faq summary {
+    font-family: var(--sans);
+    font-size: 0.86rem;
+    color: var(--ink);
+    cursor: pointer;
+    list-style: none;
+  }
+  .pc-faq summary::-webkit-details-marker { display: none; }
+  .pc-faq summary::after {
+    content: "+";
+    float: right;
+    color: var(--amber);
+    font-family: var(--mono);
+  }
+  .pc-faq details[open] summary::after { content: "–"; }
+  .pc-faq p {
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+    line-height: 1.55;
+    margin: 0.7rem 0 0;
+  }
+
   /* ── FOOTER ── */
   .site-footer {
     padding: 6vh 7vw;
@@ -369,6 +656,43 @@
   .footer-links a { color: var(--ink-faint); }
   .footer-links a:hover { color: var(--amber); }
 
+  /* ── STICKY MOBILE BUY BAR ── */
+  .mobile-buy-bar {
+    display: none;
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 250;
+    background: var(--soil-1);
+    border-top: 1px solid var(--line-strong);
+    padding: 0.8rem 5vw;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .mobile-buy-bar .mb-price {
+    font-family: var(--serif);
+    color: var(--amber);
+    font-size: 1.2rem;
+  }
+  .mobile-buy-bar .mb-old {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    color: var(--ink-faint);
+    text-decoration: line-through;
+    margin-right: 0.4rem;
+  }
+  .mobile-buy-bar a {
+    background: var(--amber);
+    color: var(--soil-0);
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.7rem 1.3rem;
+    border-radius: 3px;
+  }
+  .mobile-buy-bar a:hover { text-decoration: none; }
+
   /* ── MOBILE ── */
   @media (max-width: 720px) {
     .split-section {
@@ -382,6 +706,12 @@
     }
     .on-image-text blockquote { font-size: 1.1rem; }
     .conclusion-band { padding: 5vh 7vw; }
+    .course-band { padding: 6vh 7vw; margin-top: 6vh; }
+    .course-grid { grid-template-columns: 1fr; }
+    .price-card { position: static; margin-top: 3vh; }
+    .header-cta { display: none; }
+    .mobile-buy-bar { display: flex; }
+    body { padding-bottom: 4.6rem; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -396,6 +726,7 @@
 <!-- HEADER -->
 <header class="site-header">
   <span class="site-logo">Bu Muydu? <span>— Odysseia Kurs</span></span>
+  <a class="header-cta" href="#kurs">Kursa Katıl — ₺990</a>
 </header>
 
 <!-- HERO: homerus2.jpeg tam arkaplan -->
@@ -415,6 +746,10 @@
       <span>Tolkien</span>
       <span>Miyazaki</span>
       <span>Adorno · Horkheimer · Marcuse</span>
+    </div>
+    <div class="hero-buy">
+      <a class="btn-primary" href="#kurs">Kursu İncele</a>
+      <span class="price-tag"><span class="old">₺1.650</span><span class="new">₺990</span> — %40 indirim</span>
     </div>
   </div>
 </section>
@@ -592,6 +927,91 @@
   </div>
 </div>
 
+<!-- KURS / FİYATLANDIRMA BÖLÜMÜ -->
+<div id="kurs" class="course-band">
+  <div class="course-intro">
+    <span class="eyebrow">Kurs</span>
+    <h2>Bu okumayı <em>derse</em> dönüştürdük.</h2>
+    <p>Yukarıda okuduğunuz çözümleme, Homeros'tan Tolkien'e, oradan Miyazaki'ye uzanan daha geniş bir dersin yalnızca son durağı. Kursta Homeros'un kim olduğundan İlyada ile Odysseia'nın yapısına, sözlü gelenekten alfabenin doğuşuna, Jung'un arketiplerinden destanın kitap kitap çözümlenmesine kadar bütün bir yolculuğu birlikte yürüyoruz.</p>
+    <p class="quote-note">"Eve giden yol modern dünyanın ideolojileri, bürokrasileri ve tüketim çarkları tarafından kapatılmış olsa bile, o yönde yürümek; belki de insanı bu yabancılaşmış dünyada gerçekten insan kılan tek şeydir."</p>
+  </div>
+
+  <div class="course-grid">
+    <!-- MÜFREDAT -->
+    <div>
+      <p class="roadmap-title">Yolculuk Haritası — 3 Ders</p>
+      <ul class="roadmap-list">
+        <li>
+          <span class="ridx">01</span>
+          <div class="rtext">
+            <p class="rtitle">Homeros Kimdi? Sözden Yazıya, Mitten Tarihe <span class="free-tag">Ücretsiz</span></p>
+            <p class="rdesc">Homeros'un izini Anadolu kıyılarında sürüyoruz: doğum yeri tartışmaları, sözlü gelenek, alfabenin icadı ve İlyada ile Odysseia'nın dünya edebiyatındaki yeri.</p>
+          </div>
+          <span class="rmeta">~55dk</span>
+        </li>
+        <li>
+          <span class="ridx">02</span>
+          <div class="rtext">
+            <p class="rtitle">Mitten Psikolojiye: Jung, Arketipler ve Odysseus'un İç Dünyası</p>
+            <p class="rdesc">Bilinç, arketip ve bireyselleşme kavramlarıyla İlyada–Odysseia karşıtlığını; Kirke, Kalipso, Penelope gibi figürleri Jungcu bir gözle okuyoruz.</p>
+          </div>
+          <span class="rmeta">~40dk</span>
+        </li>
+        <li>
+          <span class="ridx">03</span>
+          <div class="rtext">
+            <p class="rtitle">Odysseia: Kitap Kitap Bir Eve Dönüş Destanı</p>
+            <p class="rdesc">Telemakhia'dan Ölüler Ülkesi'ne, Polyphemos'tan Penelope'nin sınamasına; destanın tüm yapısını, temalarını ve modern yorumlarını (Adorno, Heidegger, Tolkien, Miyazaki) baştan sona işliyoruz.</p>
+          </div>
+          <span class="rmeta">~120dk+</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- FİYAT KARTI -->
+    <div>
+      <div class="price-card">
+        <span class="pc-eyebrow">Bu Muydu? — Kurs</span>
+        <h3>Odysseia: Bir Eve Dönüş Destanı</h3>
+        <div class="price-row">
+          <span class="old-price">₺1.650</span>
+          <span class="new-price">₺990</span>
+        </div>
+        <span class="price-discount">%40 indirim</span>
+
+        <a class="pc-cta" href="#">Hemen Al</a>
+        <a class="pc-cta-secondary" href="#">Sepete Ekle</a>
+
+        <ul class="pc-specs">
+          <li>3 ders, 3+ saat video içerik</li>
+          <li>Satın alımdan itibaren 1 yıl erişim</li>
+          <li>İlk ders ücretsiz — kayıt olmadan izleyebilirsiniz</li>
+          <li>Düzenli canlı buluşma ve soru-cevap imkânı</li>
+        </ul>
+
+        <div class="pc-faq">
+          <details>
+            <summary>Eğitimlere nasıl erişebilirim?</summary>
+            <p>Satın aldıktan sonra hesabınızla giriş yaparak video içeriklere anında erişebilirsiniz.</p>
+          </details>
+          <details>
+            <summary>Erişim süresi ne kadar?</summary>
+            <p>Satın aldığınız derslere 1 yıl boyunca erişebilir, bu süre içinde dilediğiniz kadar tekrar izleyebilirsiniz.</p>
+          </details>
+          <details>
+            <summary>Canlı dersler var mı?</summary>
+            <p>Evet. Düzenli aralıklarla online buluşmalar yapılır; bu buluşmalarda sorularınızı doğrudan yöneltebilirsiniz.</p>
+          </details>
+          <details>
+            <summary>İade politikanız nedir?</summary>
+            <p>Satın alım tarihinden itibaren 14 gün içinde iade talep edebilirsiniz.</p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <footer class="site-footer">
   <span>Bu Muydu? — bumuydu-creator.github.io</span>
@@ -603,6 +1023,12 @@
     <a href="https://www.shopier.com/ucansalyangoz" target="_blank" rel="noopener">Shopier</a>
   </nav>
 </footer>
+
+<!-- MOBİL SABİT SATIN AL BARI -->
+<div class="mobile-buy-bar">
+  <span class="mb-price"><span class="mb-old">₺1.650</span>₺990</span>
+  <a href="#kurs">Kursa Git</a>
+</div>
 
 <script>
   (function(){
