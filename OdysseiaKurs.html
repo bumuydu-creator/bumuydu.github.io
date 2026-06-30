@@ -8,7 +8,7 @@
 <meta name="description" content="Odysseia, Yüzüklerin Efendisi ve Ruhların Kaçışı: her çağın kendi istismarını ve direniş biçimini nasıl ürettiğine dair bir okuma.">
 <meta name="theme-color" content="#1a1611">
 <meta property="og:url" content="https://bumuydu-creator.github.io/bumuydu.github.io/">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,480;0,9..144,600;1,9..144,340;1,9..144,480&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -76,7 +76,9 @@
     letter-spacing: 0.1em;
     color: var(--amber);
     text-transform: uppercase;
+    text-decoration: none;
   }
+  .site-logo:hover { text-decoration: none; color: var(--ink); }
   .site-logo span { color: var(--ink-faint); }
   .header-cta {
     font-family: var(--mono);
@@ -749,7 +751,7 @@
 
 <!-- HEADER -->
 <header class="site-header">
-  <span class="site-logo">Bu Muydu? <span>— Odysseia Kurs</span></span>
+  <a class="site-logo" href="https://bumuydu-creator.github.io/bumuydu.github.io/">Bu Muydu? <span>— Odysseia Kurs</span></a>
   <a class="header-cta" href="#kurs">Kursa Katıl — ₺990</a>
 </header>
 
@@ -786,7 +788,10 @@
             <summary>Canlı dersler var mı?</summary>
             <p>Evet. Düzenli aralıklarla online buluşmalar yapılır; bu buluşmalarda sorularınızı doğrudan yöneltebilirsiniz.</p>
           </details>
-          
+          <details>
+            <summary>İade politikanız nedir?</summary>
+            <p>Satın alım tarihinden itibaren 14 gün içinde iade talep edebilirsiniz.</p>
+          </details>
         </div>
       </div>
     </div>
@@ -806,7 +811,7 @@
         </div>
         <span class="price-discount">%40 indirim</span>
         <a class="pc-cta" href="https://www.shopier.com/ucansalyangoz" target="_blank" rel="noopener">Hemen Al</a>
-        
+        <a class="pc-cta-secondary" href="#">Sepete Ekle</a>
 
         <ul class="pc-specs">
           <li>3 ders, 3+ saat video içerik</li>
