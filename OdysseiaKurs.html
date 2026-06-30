@@ -407,12 +407,15 @@
     display: grid;
     grid-template-columns: 1.5fr 1fr;
     gap: 4vw;
-    align-items: start;
+    align-items: stretch;
   }
 
   .course-intro {
     max-width: 70ch;
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
   .course-intro .eyebrow { margin-bottom: 0.9rem; }
   .course-intro h2 {
@@ -441,9 +444,38 @@
     max-width: 58ch;
   }
 
-  /* müfredat: tam genişlik, fiyat kartının altında */
-  .roadmap-full {
-    margin-top: 6vh;
+  /* roadmap-extra: course-intro içindeki kalan alanı dolduran, fiyat kartıyla
+     aynı yükseğe gelen ek müfredat/bilgi bloğu */
+  .course-extra {
+    margin-top: auto;
+    padding-top: 2.4rem;
+  }
+  .course-extra-title {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 1.1rem;
+  }
+  .course-extra-list {
+    list-style: none;
+    margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.9rem 1.6rem;
+  }
+  .course-extra-list li {
+    font-size: 0.86rem;
+    color: var(--ink-dim);
+    line-height: 1.5;
+    display: flex;
+    gap: 0.6rem;
+  }
+  .course-extra-list li::before {
+    content: "—";
+    color: var(--amber);
+    flex-shrink: 0;
   }
 
   /* curriculum / roadmap list */
@@ -514,6 +546,9 @@
     border-radius: 6px;
     padding: 0;
     overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
   .pc-thumb {
     position: relative;
@@ -539,6 +574,9 @@
   }
   .price-card .pc-body {
     padding: 1.7rem 1.9rem 2.2rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
   .price-card .pc-eyebrow {
     font-family: var(--mono);
@@ -654,6 +692,7 @@
   .pc-faq {
     border-top: 1px solid var(--line);
     padding-top: 1.4rem;
+    margin-top: auto;
   }
   .pc-faq details {
     border-bottom: 1px solid var(--line);
@@ -752,7 +791,9 @@
     .conclusion-band { padding: 5vh 7vw; }
     .course-band { padding: 6vh 7vw; margin-top: 0; }
     .course-top-grid { grid-template-columns: 1fr; }
-    .price-card { margin-top: 3vh; }
+    .course-intro { height: auto; }
+    .course-extra-list { grid-template-columns: 1fr; }
+    .price-card { margin-top: 3vh; height: auto; }
     .header-cta { display: none; }
     .mobile-buy-bar { display: flex; }
     body { padding-bottom: 4.6rem; }
@@ -781,6 +822,18 @@
       <h2>Bu okumayı <em>derse</em> dönüştürdük.</h2>
       <p>Yukarıda okuduğunuz çözümleme, Homeros'tan Tolkien'e, oradan Miyazaki'ye uzanan daha geniş bir dersin yalnızca son durağı. Kursta Homeros'un kim olduğundan İlyada ile Odysseia'nın yapısına, sözlü gelenekten alfabenin doğuşuna, Jung'un arketiplerinden destanın kitap kitap çözümlenmesine kadar bütün bir yolculuğu birlikte yürüyoruz.</p>
       <p class="quote-note">"Eve giden yol modern dünyanın ideolojileri, bürokrasileri ve tüketim çarkları tarafından kapatılmış olsa bile, o yönde yürümek; belki de insanı bu yabancılaşmış dünyada gerçekten insan kılan tek şeydir."</p>
+
+      <div class="course-extra">
+        <p class="course-extra-title">Bu kursta neler var</p>
+        <ul class="course-extra-list">
+          <li>Homeros kimdir, destan geleneği nasıl şekillenir</li>
+          <li>İlyada ile Odysseia'nın yapısı ve farkları</li>
+          <li>Sözlü gelenekten alfabenin doğuşuna giden çizgi</li>
+          <li>Jung'un arketipleri üzerinden kahraman okuması</li>
+          <li>Odysseia'nın kitap kitap çözümlenmesi</li>
+          <li>Düzenli canlı buluşmalarla soru-cevap imkânı</li>
+        </ul>
+      </div>
     </div>
     <!-- FİYAT KARTI -->
     <div class="price-card">
