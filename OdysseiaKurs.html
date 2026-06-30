@@ -396,10 +396,9 @@
   /* ── COURSE / PRICING SECTION ── */
   .course-band {
     background: var(--soil-1);
-    border-top: 1px solid var(--line-strong);
     border-bottom: 1px solid var(--line-strong);
-    padding: 8vh 7vw;
-    margin: 0 calc(-7vw) 0;
+    padding: 7vh 7vw;
+    margin: 0;
   }
 
   /* başlık + fiyat kartı aynı satırda */
@@ -408,6 +407,8 @@
     grid-template-columns: 1.5fr 1fr;
     gap: 4vw;
     align-items: start;
+    max-width: 1100px;
+    margin: 0 auto;
   }
 
   .course-intro {
@@ -441,8 +442,7 @@
     max-width: 58ch;
   }
 
-  /* roadmap-extra: course-intro içindeki kalan alanı dolduran, fiyat kartıyla
-     aynı yükseğe gelen ek müfredat/bilgi bloğu */
+  /* roadmap-extra: course-intro içindeki kalan alanı dolduran ek bilgi bloğu */
   .course-extra {
     margin-top: 3rem;
     padding-top: 2.4rem;
@@ -458,7 +458,7 @@
   }
   .course-extra-list {
     list-style: none;
-    margin: 0; padding: 0;
+    margin: 0 0 2.4rem; padding: 0;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 0.9rem 1.6rem;
@@ -474,67 +474,6 @@
     content: "—";
     color: var(--amber);
     flex-shrink: 0;
-  }
-
-  /* curriculum / roadmap list */
-  .roadmap-title {
-    font-family: var(--mono);
-    font-size: 0.76rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-    margin: 0 0 1.6rem;
-  }
-  .roadmap-list {
-    list-style: none;
-    margin: 0; padding: 0;
-    border-top: 1px solid var(--line);
-  }
-  .roadmap-list li {
-    border-bottom: 1px solid var(--line);
-    padding: 1.1rem 0;
-    display: flex;
-    gap: 1.1rem;
-    align-items: baseline;
-  }
-  .roadmap-list .ridx {
-    font-family: var(--mono);
-    font-size: 0.8rem;
-    color: var(--amber);
-    flex-shrink: 0;
-    width: 1.6rem;
-  }
-  .roadmap-list .rtext { flex: 1; }
-  .roadmap-list .rtitle {
-    font-family: var(--serif);
-    font-size: 1.06rem;
-    color: var(--ink);
-    margin: 0 0 0.25rem;
-    line-height: 1.3;
-  }
-  .roadmap-list .rdesc {
-    font-size: 0.88rem;
-    color: var(--ink-faint);
-    line-height: 1.5;
-    margin: 0;
-  }
-  .roadmap-list .rmeta {
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    color: var(--ink-faint);
-    flex-shrink: 0;
-    white-space: nowrap;
-  }
-  .roadmap-list .free-tag {
-    font-family: var(--mono);
-    font-size: 0.66rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--mineral);
-    border: 1px solid rgba(127,193,182,0.4);
-    border-radius: 2px;
-    padding: 0.15rem 0.4rem;
-    margin-left: 0.5rem;
   }
 
   /* pricing card */
@@ -788,7 +727,7 @@
     }
     .on-image-text blockquote { font-size: 1.1rem; }
     .conclusion-band { padding: 5vh 7vw; }
-    .course-band { padding: 6vh 7vw; margin-top: 0; }
+    .course-band { padding: 6vh 7vw; }
     .course-top-grid { grid-template-columns: 1fr; }
     .course-intro { height: auto; }
     .course-extra-list { grid-template-columns: 1fr; }
@@ -813,7 +752,7 @@
   <a class="header-cta" href="#kurs">Kursa Katıl — ₺990</a>
 </header>
 
-<!-- KURS / FİYATLANDIRMA BÖLÜMÜ (öne alındı) -->
+<!-- KURS / FİYATLANDIRMA BÖLÜMÜ — sayfanın başında, header'ın hemen altında -->
 <div id="kurs" class="course-band">
   <div class="course-top-grid">
     <div class="course-intro">
@@ -832,20 +771,39 @@
           <li>Odysseia'nın kitap kitap çözümlenmesi</li>
           <li>Düzenli canlı buluşmalarla soru-cevap imkânı</li>
         </ul>
-        
-        
-        
+      </div>
+    </div>
+
+    <!-- FİYAT KARTI -->
+    <div class="price-card">
+      <div class="pc-thumb">
+        <span class="pc-thumb-tag">Mitoloji</span>
+        <img src="https://bumuydu-creator.github.io/bumuydu.github.io/homerus2.jpeg" alt="Odysseia Kursu" />
+      </div>
+      <div class="pc-body">
+        <span class="pc-eyebrow">Bu Muydu? — Kurs</span>
+        <h3>Odysseia: Bir Eve Dönüş Destanı</h3>
+        <div class="price-row">
+          <span class="old-price">₺1.650</span>
+          <span class="new-price">₺990</span>
+        </div>
+        <span class="price-discount">%40 indirim</span>
+        <a class="pc-cta" href="#">Hemen Al</a>
+        <a class="pc-cta-secondary" href="#">Sepete Ekle</a>
+
         <ul class="pc-specs">
           <li>3 ders, 3+ saat video içerik</li>
           <li>Satın alımdan itibaren 1 yıl erişim</li>
           <li>İlk ders ücretsiz — kayıt olmadan izleyebilirsiniz</li>
           <li>Düzenli canlı buluşma ve soru-cevap imkânı</li>
         </ul>
+
         <div class="pc-stats">
           <span><span class="dot">●</span> 3+ Saat</span>
           <span><span class="dot">●</span> 3 Ders</span>
           <span><span class="dot">●</span> 1000+</span>
         </div>
+
         <div class="pc-faq">
           <details>
             <summary>Eğitimlere nasıl erişebilirim?</summary>
@@ -865,33 +823,6 @@
           </details>
         </div>
       </div>
-
-
-
-      
-      </div>
-    </div>
-    <!-- FİYAT KARTI -->
-    <div class="price-card">
-      <div class="pc-thumb">
-        <span class="pc-thumb-tag">Mitoloji</span>
-        <img src="https://bumuydu-creator.github.io/bumuydu.github.io/homerus2.jpeg" alt="Odysseia Kursu" />
-      </div>
-      <div class="pc-body">
-        <span class="pc-eyebrow">Bu Muydu? — Kurs</span>
-        <h3>Odysseia: Bir Eve Dönüş Destanı</h3>
-        <div class="price-row">
-          <span class="old-price">₺1.650</span>
-          <span class="new-price">₺990</span>
-        </div>
-        <span class="price-discount">%40 indirim</span>
-        <a class="pc-cta" href="#">Hemen Al</a>
-        <a class="pc-cta-secondary" href="#">Sepete Ekle</a>
-
-
-
-
-        
     </div>
   </div>
 </div>
@@ -1042,8 +973,7 @@
 
     <p>Chihiro'nun hikâyesi ise bizi bambaşka bir dünyaya götürür.</p>
     <p>O artık savaş aristokrasisinin ya da kırsal emeğin değil, geç kapitalist Japonya'nın orta sınıf çocuğudur. Ancak ruhlar dünyasına adım attığında sahip olduğu bütün ayrıcalıklar anlamını yitirir. Kültürel sermayesi, banyo evinin ağır fiziksel emek dünyasında hiçbir işe yaramaz. Hayatta kalabilmek için <strong>habitusunu</strong> kökten değiştirmek zorunda kalır.</p>
-    <p>Film boyunca herkesin istediği şeyi temsil eden bir figür vardır: <em>Yüzsüz</em>. Altın dağıtır. Tüketim arzularını kışkırtır. Herkesi satın alabileceğini düşünür. Odysseus gibi hesap yapar, Frodo gibi mülk sahibidir. Ama o ikisinden farklı olarak somut bir insan değildir. Arzunun kendisidir. Paranın, metanın ve tüketim toplumunun yüzsüz, biçimsiz hâlidir.
-</p>
+    <p>Film boyunca herkesin istediği şeyi temsil eden bir figür vardır: <em>Yüzsüz</em>. Altın dağıtır. Tüketim arzularını kışkırtır. Herkesi satın alabileceğini düşünür. Odysseus gibi hesap yapar, Frodo gibi mülk sahibidir. Ama o ikisinden farklı olarak somut bir insan değildir. Arzunun kendisidir. Paranın, metanın ve tüketim toplumunun yüzsüz, biçimsiz hâlidir.</p>
     <p><strong>Ama Chihiro onun altınlarını reddeder.</strong></p>
   </div>
 
