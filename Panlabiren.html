@@ -69,16 +69,6 @@
     backdrop-filter: blur(8px);
     z-index: 200;
   }
-  .site-logo {
-    font-family: var(--mono);
-    font-size: 0.82rem;
-    letter-spacing: 0.1em;
-    color: var(--amber);
-    text-transform: uppercase;
-    text-decoration: none;
-  }
-  .site-logo:hover { text-decoration: none; color: var(--ink); }
-  .site-logo span { color: var(--ink-faint); }
   .header-cta {
     font-family: var(--mono);
     font-size: 0.74rem;
@@ -92,21 +82,27 @@
   }
   .header-cta:hover { text-decoration: none; background: var(--ink); }
 
-  .site-header-left { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
-  .course-switch-link {
+  .site-header-left { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+
+  .site-logo, .current-page-chip, .course-switch-link {
     font-family: var(--mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.05em;
+    font-size: 0.76rem;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--ink-faint);
+    padding: 0.4rem 0.75rem;
+    border-radius: 3px;
     border: 1px solid var(--line-strong);
-    padding: 0.35rem 0.7rem;
-    border-radius: 2px;
     white-space: nowrap;
+    display: inline-block;
   }
+  .site-logo { color: var(--amber); text-decoration: none; border-color: rgba(250,255,0,0.35); }
+  .site-logo:hover { text-decoration: none; background: rgba(250,255,0,0.08); }
+  .current-page-chip { color: var(--ink-faint); background: rgba(243,237,224,0.04); }
+  .course-switch-link { color: var(--ink-faint); text-decoration: none; }
   .course-switch-link:hover { text-decoration: none; color: var(--amber); border-color: var(--amber); }
+
   @media (max-width: 720px) {
-    .course-switch-link { font-size: 0.62rem; padding: 0.3rem 0.55rem; }
+    .site-logo, .current-page-chip, .course-switch-link { font-size: 0.64rem; padding: 0.32rem 0.55rem; }
   }
 
   /* ── HERO ── */
@@ -534,7 +530,8 @@
 <!-- HEADER -->
 <header class="site-header">
   <div class="site-header-left">
-    <a class="site-logo" href="https://bumuydu-creator.github.io/bumuydu.github.io/">Bu Muydu? <span>— Pan'ın Labirenti Kurs</span></a>
+    <a class="site-logo" href="https://bumuydu-creator.github.io/bumuydu.github.io/">Bu Muydu?</a>
+    <span class="current-page-chip">Pan'ın Labirenti Kurs</span>
     <a class="course-switch-link" href="https://bumuydu-creator.github.io/bumuydu.github.io/OdysseiaKurs.html">Odysseia Kurs →</a>
   </div>
   <a class="header-cta" href="#kurs">Kursa Katıl</a>
