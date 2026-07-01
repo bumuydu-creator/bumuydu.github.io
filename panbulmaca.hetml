@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pan'ın Labirenti · Çengel</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #1a0f0a;
+      display: flex;
+      justify-content: center;
+      padding: 24px 12px;
+      font-family: 'Cinzel', 'Nunito', serif;
+    }
+
+    .puzzle-wrapper {
+      background: #fff;
+      padding: 0;
+      border: none;
+      box-shadow: none;
+      display: inline-block;
+    }
+
+    /* GRID — tamamen bitişik, boşluk yok */
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(27, 30px);
+      grid-template-rows: repeat(21, 30px);
+      gap: 0;
+      border-top: 1px solid #8fa9b8;
+      border-left: 1px solid #8fa9b8;
+      background: #fff;
+      width: 810px;
+      height: 630px;
+    }
+
+    .cell {
+      width: 30px;
+      height: 30px;
+      background: #fff;
+      border-right: 1px solid #8fa9b8;
+      border-bottom: 1px solid #8fa9b8;
+      box-sizing: border-box;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Cinzel', serif;
+      text-transform: uppercase;
+      color: #1f1a16;
+    }
+
+    .cell.black {
+      background: #1f1a16;
+      border-color: #8fa9b8;
+    }
+
+    .cell .num {
+      position: absolute;
+      top: 1px;
+      left: 2px;
+      font-size: 7px;
+      font-weight: 700;
+      color: #2b4f6e;
+      line-height: 1;
+      pointer-events: none;
+      font-family: 'Cinzel', serif;
+      z-index: 2;
+    }
+
+    .cell input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      text-align: center;
+      font-size: 15px;
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      color: #1f1a16;
+      text-transform: uppercase;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      z-index: 1;
+      border-radius: 0;
+      -webkit-appearance: none;
+      letter-spacing: 0.5px;
+    }
+
+    .cell input:focus {
+      background: #e3f0fa;
+      outline: 1px solid #5b8ba3;
+      z-index: 3;
+    }
+
+    /* mavi soru kutusu — aktif hücre */
+    .cell.active input {
+      background: #c6e0f0;
+    }
+
+    .cell.highlight {
+      background: #e1edf5;
+    }
+
+    .cell.correct {
+      background: #d4e6c9;
+    }
+
+    .cell.wrong {
+      background: #f7d4d4;
+      animation: shake 0.2s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-3px); }
+      75% { transform: translateX(3px); }
+    }
+
+    /* ortadaki resim — tam hücrelere oturur, boşluk yok */
+    .cell.image {
+      grid-row: 10 / 16;
+      grid-column: 9 / 16;
+      background: #f3efe8;
+      border: 1px solid #8fa9b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+      z-index: 0;
+    }
+
+    .cell.image svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: #f3efe8;
+    }
+
+    /* yan panel — ipuçları */
+    .clues-panel {
+      background: #fcf9f4;
+      padding: 18px 20px 24px 20px;
+      border: 1px solid #b8c9d3;
+      border-top: none;
+      max-width: 810px;
+      width: 100%;
+      margin-top: 0;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .clues-header {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .clues-header button {
+      flex: 1;
+      padding: 6px 0;
+      background: #dce6ed;
+      border: 1px solid #8fa9b8;
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 13px;
+      color: #1f2e3a;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: 0.1s;
+    }
+
+    .clues-header button.active {
+      background: #5b8ba3;
+      border-color: #3b6a82;
+      color: #fff;
+    }
+
+    .clue-section {
+      margin-bottom: 12px;
+    }
+
+    .clue-section h3 {
+      font-size: 13px;
+      font-family: 'Cinzel', serif;
+      color: #2b4f6e;
+      border-bottom: 1px solid #b8c9d3;
+      padding-bottom: 4px;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .clue-item {
+      display: flex;
+      gap: 6px;
+      padding: 2px 4px;
+      font-size: 13px;
+      color: #1f2e3a;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+
+    .clue-item:hover {
+      background: #e6eef5;
+    }
+
+    .clue-item .num {
+      font-weight: 800;
+      color: #3b6a82;
+      min-width: 24px;
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+    }
+
+    .clue-item.solved {
+      color: #5f7a5a;
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+
+    .clue-item.active-clue {
+      background: #c6e0f0;
+      font-weight: 700;
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px solid #d3dee6;
+    }
+
+    .btn {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 6px 18px;
+      border: 1px solid #8fa9b8;
+      background: #ecf2f7;
+      color: #1f2e3a;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: 0.1s;
+      border-radius: 0;
+    }
+
+    .btn-primary {
+      background: #2b4f6e;
+      border-color: #1f3a52;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #1f3a52;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border-color: #8fa9b8;
+    }
+
+    .btn-outline:hover {
+      background: #dce6ed;
+    }
+
+    #message {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      margin-top: 8px;
+      color: #2b4f6e;
+      min-height: 22px;
+    }
+
+    .progress-wrap {
+      margin-top: 8px;
+      background: #dce6ed;
+      height: 6px;
+      width: 100%;
+      border: 1px solid #b8c9d3;
+    }
+
+    #progress-bar {
+      height: 100%;
+      background: #5b8ba3;
+      width: 0%;
+      transition: 0.2s;
+    }
+
+    .score {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      color: #1f2e3a;
+      margin-left: 8px;
+    }
+
+    @media (max-width: 860px) {
+      #grid {
+        grid-template-columns: repeat(27, 20px);
+        grid-template-rows: repeat(21, 20px);
+        width: 540px;
+        height: 420px;
+      }
+      .cell {
+        width: 20px;
+        height: 20px;
+        font-size: 10px;
+      }
+      .cell input {
+        font-size: 11px;
+      }
+      .cell .num {
+        font-size: 5px;
+        top: 0;
+        left: 1px;
+      }
+      .cell.image {
+        grid-row: 10 / 16;
+        grid-column: 9 / 16;
+      }
+      .clues-panel {
+        padding: 12px 12px 16px;
+        max-width: 540px;
+      }
+    }
+
+    @media (max-width: 580px) {
+      #grid {
+        grid-template-columns: repeat(27, 16px);
+        grid-template-rows: repeat(21, 16px);
+        width: 432px;
+        height: 336px;
+      }
+      .cell {
+        width: 16px;
+        height: 16px;
+        font-size: 8px;
+      }
+      .cell input {
+        font-size: 8px;
+      }
+      .cell .num {
+        font-size: 4px;
+        top: 0;
+        left: 1px;
+      }
+      .cell.image {
+        grid-row: 10 / 16;
+        grid-column: 9 / 16;
+      }
+      .clues-panel {
+        padding: 8px 8px 12px;
+        max-width: 432px;
+      }
+      .clue-item {
+        font-size: 11px;
+      }
+      .btn {
+        font-size: 10px;
+        padding: 4px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="puzzle-wrapper">
+  <!-- GRID: hiç boşluk yok, çizgiler hücre kenarlarında -->
+  <div id="grid"></div>
+
+  <!-- İPUÇLARI PANELİ -->
+  <div class="clues-panel">
+    <div class="clues-header">
+      <button class="active" data-dir="H" onclick="setDirection('H')">→ YATAY</button>
+      <button data-dir="V" onclick="setDirection('V')">↓ DİKEY</button>
+    </div>
+    <div id="clue-container">
+      <div class="clue-section" id="clues-H">
+        <h3>→ Yatay</h3>
+        <div id="clue-list-H"></div>
+      </div>
+      <div class="clue-section" id="clues-V">
+        <h3>↓ Dikey</h3>
+        <div id="clue-list-V"></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-primary" onclick="checkAll()">✓ Kontrol Et</button>
+      <button class="btn btn-outline" onclick="revealCurrent()">👁 Sözcüğü Göster</button>
+      <button class="btn btn-outline" onclick="resetAll()">↺ Sıfırla</button>
+      <span class="score" id="scoreDisplay">⬜ 0 / 217</span>
+    </div>
+    <div id="message"></div>
+    <div class="progress-wrap"><div id="progress-bar" style="width:0%"></div></div>
+  </div>
+</div>
+
+<script>
+  // ------ TANIMLAR ------
+  const ROWS = 21, COLS = 27;
+  const GRID = document.getElementById('grid');
+
+  // Sözlük: kelimeler (num, dir, row, col, word, clue)
+  const WORDS = [
+    {num:1, dir:'H', row:0, col:5, word:'SAAT', clue:'Vidal\'in babadan kalma, sürekli kontrol ettiği zaman aleti'},
+    {num:2, dir:'V', row:0, col:8, word:'TEN', clue:'Ofelya\'nın açılış sahnesinde "kar beyazı" tasvir edilen unsuru'},
+    {num:3, dir:'V', row:0, col:13, word:'ÇAN', clue:'Harap ___ kulesi, filmin açılışında görünen yapı'},
+    {num:4, dir:'V', row:0, col:19, word:'TAHT', clue:'Kralın oturduğu yer'},
+    {num:5, dir:'V', row:0, col:22, word:'ANNE', clue:'Carmen\'in Ofelya için taşıdığı rol'},
+    {num:6, dir:'V', row:0, col:26, word:'ÖLÜM', clue:'Ofelya\'nın feda ederek ulaştığı ölümsüzlük eşiği'},
+    {num:7, dir:'H', row:1, col:2, word:'GÖZ', clue:'Solgun Adam\'ın avuçlarına yerleştirdiği organ'},
+    {num:8, dir:'V', row:1, col:4, word:'ZİL', clue:'Harap kilisenin çalmayan ___i'},
+    {num:9, dir:'V', row:1, col:15, word:'KİLİT', clue:'Vidal\'in dünyasını simgeleyen kontrol nesnesi'},
+    {num:10, dir:'H', row:1, col:18, word:'ZAMAN', clue:'Kronos\'un ve Vidal\'in saplantılı olduğu kavram'},
+    {num:11, dir:'H', row:1, col:24, word:'GÜL', clue:'Ölümsüzlük veren sihirli çiçek'},
+    {num:12, dir:'H', row:2, col:4, word:'İSPANYA', clue:'Filmin 1944\'te geçtiği ülke'},
+    {num:13, dir:'V', row:2, col:6, word:'PERİ', clue:'Ofelya\'ya labirentin yolunu gösteren büyülü yaratık'},
+    {num:14, dir:'V', row:2, col:10, word:'AY', clue:'Ofelya\'nın dünyasında zamanı ölçen gök cismi'},
+    {num:15, dir:'H', row:2, col:12, word:'İNCİR', clue:'Ofelya\'nın kurtarmaya çalıştığı kurumuş ağaç türü'},
+    {num:16, dir:'H', row:3, col:1, word:'KRAL', clue:'Ofelya\'nın yeraltındaki gerçek babası'},
+    {num:16v, dir:'V', row:3, col:1, word:'KURBAĞA', clue:'İncir ağacını sömüren zehirli yaratık'},
+    {num:17, dir:'H', row:3, col:17, word:'SÜT', clue:'Adamotu kökünün saklandığı kâsedeki sıvı'},
+    {num:18, dir:'V', row:3, col:18, word:'ÜZÜM', clue:'Ofelya\'nın yasağı çiğneyip yediği tanecikli meyve'},
+    {num:19, dir:'H', row:3, col:24, word:'MUM', clue:'"___larınızı yakın ve beni takip edin" - anlatıcı'},
+    {num:19v, dir:'V', row:3, col:24, word:'MERCEDES', clue:'İsyancılara yiyecek taşıyan cesur hizmetçi kadın'},
+    {num:20, dir:'V', row:4, col:8, word:'MASAL', clue:'Ofelya\'nın gerçeklikle baş etmek için sığındığı anlatı türü'},
+    {num:21, dir:'H', row:4, col:12, word:'DENİZ', clue:'Ofelya\'nın masalında insan dünyasını hayal eden prenses'},
+    {num:21v, dir:'V', row:4, col:12, word:'DUVAR', clue:'Tebeşirle üzerine kapı çizilen yüzey'},
+    {num:22, dir:'V', row:4, col:20, word:'PAN', clue:'Filmin uluslararası adında geçen Yunan tanrısı'},
+    {num:23, dir:'H', row:5, col:1, word:'RUH', clue:'Ofelya\'nın ölümden sonra da yaşamaya devam eden özü'},
+    {num:24, dir:'H', row:5, col:5, word:'VİDAL', clue:'Filmin faşist üvey baba karakteri, yüzbaşı'},
+    {num:25, dir:'H', row:5, col:20, word:'ASKER', clue:'Vidal\'in emrindeki faşist güç'},
+    {num:26, dir:'V', row:5, col:22, word:'KUM', clue:'___ saati; Faun\'un kullandığı zaman ölçer'},
+    {num:27, dir:'H', row:6, col:10, word:'SAVAŞ', clue:'İspanya İç ___ı, filmin tarihsel arka planı'},
+    {num:28, dir:'H', row:6, col:16, word:'ORMAN', clue:'Direnişçilerin (Maki) saklandığı yer'},
+    {num:29, dir:'V', row:6, col:17, word:'RÜYA', clue:'Fantazi dünyasının gerçek mi yoksa ___ mı olduğu belirsizdir'},
+    {num:30, dir:'V', row:6, col:26, word:'TEBEŞİR', clue:'Kapı çizmek için kullanılan sihirli araç'},
+    {num:31, dir:'H', row:7, col:0, word:'FAUN', clue:'Ofelya\'ya üç görev veren keçi bacaklı rehber'},
+    {num:32, dir:'H', row:7, col:5, word:'KAYA', clue:'Labirentin taştan, ___dan yapılı duvarları'},
+    {num:32v, dir:'V', row:7, col:5, word:'KİTAP', clue:'Faun\'un verdiği "Yol Ayrımları ___"'},
+    {num:33, dir:'H', row:8, col:8, word:'LABİRENT', clue:'Filme adını veren taş yapı'},
+    {num:34, dir:'V', row:8, col:15, word:'TARİH', clue:'Filmin 1944 İspanya\'sını temsil eden gerçeklik katmanı'},
+    {num:35, dir:'V', row:8, col:19, word:'KORKU', clue:'Solgun Adam\'ın uyandırdığı temel duygu'},
+    {num:36, dir:'H', row:9, col:0, word:'KAPI', clue:'Tebeşirle duvara çizilen geçiş noktası'},
+    {num:37, dir:'V', row:9, col:2, word:'PRENSES', clue:'Ofelya\'nın yeraltı krallığındaki gerçek kimliği'},
+    {num:38, dir:'H', row:9, col:15, word:'ADAMOTU', clue:'Carmen\'i iyileştirmek için kullanılan kök'},
+    {num:39, dir:'H', row:9, col:23, word:'GECE', clue:'Labirente girişin gerçekleştiği zaman dilimi'},
+    {num:40, dir:'H', row:10, col:4, word:'NAR', clue:'Solgun Adam\'ın sofrasında Ofelya\'yı ayartan yasak meyve'},
+    {num:41, dir:'H', row:11, col:19, word:'KAN', clue:'Portalın açılması için gereken "masum ___"'},
+    {num:42, dir:'V', row:12, col:0, word:'KRONOS', clue:'Çocuklarını yiyen Yunan tanrısı, zamanın laneti'},
+    {num:43, dir:'H', row:13, col:5, word:'TAŞ', clue:'Kurbağaya verilen üç sihirli ___'},
+    {num:43v, dir:'V', row:13, col:5, word:'TAVŞAN', clue:'Mercedes\'in mutfakta içini temizlediği hayvan'},
+    {num:44, dir:'H', row:14, col:0, word:'OFELYA', clue:'Filmin küçük kahramanı, gizli prenses'},
+    {num:45, dir:'V', row:14, col:19, word:'MOANNA', clue:'Yeraltı Kralı\'nın kayıp kızının adı'},
+    {num:46, dir:'H', row:15, col:9, word:'BIÇAK', clue:'Solgun Adam\'ın odasından alınması gereken kesici alet'},
+    {num:46v, dir:'V', row:15, col:9, word:'BABA', clue:'Vidal\'in olmak istediği ama başaramadığı rol'},
+    {num:47, dir:'V', row:15, col:12, word:'ATEŞ', clue:'Adamotu kökünün içinde yakılıp yok edildiği unsur'},
+    {num:48, dir:'V', row:15, col:17, word:'SFENKS', clue:'Faun\'un benzediği, bilmece soran yaratık'},
+    {num:49, dir:'V', row:15, col:22, word:'GOYA', clue:'"Oğlunu Yiyen Satürn" tablosunun ressamı'},
+    {num:50, dir:'H', row:16, col:4, word:'IŞIK', clue:'Ay ___ı, Ofelya\'nın dünyasına rehberlik eder'},
+    {num:51, dir:'H', row:16, col:17, word:'FRANCO', clue:'İspanya\'yı yöneten faşist diktatör general'},
+    {num:52, dir:'H', row:17, col:12, word:'ELBİSE', clue:'Ofelya\'nın kurbağa testinde kirlettiği kıyafeti'},
+    {num:53, dir:'H', row:18, col:4, word:'ANAHTAR', clue:'Kurbağanın midesinden çıkan sihirli nesne'},
+  ];
+
+  // Çözüm matrisi ve açık hücreler
+  const solution = Array.from({ length: ROWS }, () => Array(COLS).fill(''));
+  const isOpen = Array.from({ length: ROWS }, () => Array(COLS).fill(false));
+  const cellNum = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+
+  WORDS.forEach(w => {
+    const letters = w.word.split('');
+    letters.forEach((ch, i) => {
+      const r = w.dir === 'V' ? w.row + i : w.row;
+      const c = w.dir === 'H' ? w.col + i : w.col;
+      if (r < ROWS && c < COLS) {
+        solution[r][c] = ch;
+        isOpen[r][c] = true;
+        if (!cellNum[r][c]) cellNum[r][c] = w.num;
+      }
+    });
+  });
+
+  // Kullanıcı matrisi
+  const user = Array.from({ length: ROWS }, () => Array(COLS).fill(''));
+  const inputs = Array.from({ length: ROWS }, () => Array(COLS).fill(null));
+
+  let activeRow = -1, activeCol = -1, activeDir = 'H', activeWord = null;
+
+  // Toplam açık hücre
+  let totalOpen = 0;
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) if (isOpen[r][c]) totalOpen++;
+  document.getElementById('scoreDisplay').textContent = `⬜ 0 / ${totalOpen}`;
+
+  // ----- GRID OLUŞTURMA -----
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const div = document.createElement('div');
+      div.className = 'cell';
+      if (!isOpen[r][c]) {
+        div.classList.add('black');
+      }
+
+      // Numara
+      if (cellNum[r][c]) {
+        const span = document.createElement('span');
+        span.className = 'num';
+        span.textContent = cellNum[r][c];
+        div.appendChild(span);
+      }
+
+      // Input (sadece açık hücreler)
+      if (isOpen[r][c]) {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.maxLength = 1;
+        input.autocomplete = 'off';
+        input.autocorrect = 'off';
+        input.autocapitalize = 'characters';
+        input.spellcheck = false;
+
+        div.appendChild(input);
+        inputs[r][c] = input;
+
+        // Tıklama / focus
+        const focusHandler = (e) => {
+          e.stopPropagation();
+          input.focus();
+          setActive(r, c);
+        };
+        div.addEventListener('click', focusHandler);
+        input.addEventListener('focus', () => setActive(r, c));
+        input.addEventListener('keydown', (e) => onKey(e, r, c));
+        input.addEventListener('input', (e) => onInput(e, r, c));
+      }
+
+      // ORTA RESİM: 10-15. satır, 9-15. sütun (index: 10..15, 9..15) → 6x7 hücre
+      if (r >= 10 && r <= 15 && c >= 9 && c <= 15) {
+        // bu hücreleri image olarak işaretle, içine SVG koy
+        div.classList.add('image');
+        // sadece ilk hücrede (10,9) SVG'yi koy, diğerleri boş
+        if (r === 10 && c === 9) {
+          const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          svg.setAttribute('viewBox', '0 0 180 180');
+          svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+          svg.innerHTML = `
+            <rect width="180" height="180" fill="#f0ebe0" />
+            <circle cx="90" cy="90" r="60" fill="#3a2c22" opacity="0.2" />
+            <path d="M90 30 L100 70 L140 70 L108 90 L120 130 L90 110 L60 130 L72 90 L40 70 L80 70 Z" fill="#5b7a5a" opacity="0.5" />
+            <circle cx="90" cy="90" r="18" fill="none" stroke="#3a2c22" stroke-width="4" />
+            <path d="M70 70 Q90 50 110 70 Q120 90 110 110 Q90 130 70 110 Q60 90 70 70" fill="none" stroke="#6f4e37" stroke-width="3" />
+            <circle cx="80" cy="80" r="4" fill="#8fa9b8" />
+            <circle cx="100" cy="80" r="4" fill="#8fa9b8" />
+            <path d="M85 95 Q90 100 95 95" stroke="#6f4e37" stroke-width="2" fill="none" />
+          `;
+          div.appendChild(svg);
+        }
+      }
+
+      GRID.appendChild(div);
+    }
+  }
+
+  // ----- YARDIMCI FONKSİYONLAR -----
+  function getCell(r, c) {
+    return GRID.children[r * COLS + c];
+  }
+
+  function wordsAt(r, c) {
+    return WORDS.filter(w => {
+      const len = w.word.length;
+      if (w.dir === 'H') return w.row === r && c >= w.col && c < w.col + len;
+      else return w.col === c && r >= w.row && r < w.row + len;
+    });
+  }
+
+  function wordFor(r, c, dir) {
+    return WORDS.find(w => {
+      const len = w.word.length;
+      if (w.dir !== dir) return false;
+      if (dir === 'H') return w.row === r && c >= w.col && c < w.col + len;
+      else return w.col === c && r >= w.row && r < w.row + len;
+    });
+  }
+
+  function setActive(r, c) {
+    activeRow = r;
+    activeCol = c;
+    // varsayılan yön: eğer burada birden fazla yön varsa, activeDir'i koru, yoksa mevcut yöne göre bul
+    const ws = wordsAt(r, c);
+    const dirs = [...new Set(ws.map(w => w.dir))];
+    if (dirs.length === 1) {
+      activeDir = dirs[0];
+    } else if (dirs.length > 1) {
+      // eğer mevcut activeDir bu hücrede yoksa diğerini al
+      if (!dirs.includes(activeDir)) activeDir = dirs[0];
+    }
+    // aktif kelimeyi güncelle
+    activeWord = wordFor(r, c, activeDir);
+    highlight(r, c);
+  }
+
+  function highlight(r, c) {
+    // tüm vurguları temizle
+    for (let i = 0; i < ROWS; i++) {
+      for (let j = 0; j < COLS; j++) {
+        getCell(i, j).classList.remove('active', 'highlight');
+      }
+    }
+    if (r < 0 || c < 0) return;
+    getCell(r, c).classList.add('active');
+
+    const w = wordFor(r, c, activeDir);
+    if (w) {
+      activeWord = w;
+      const letters = w.word.split('');
+      letters.forEach((_, i) => {
+        const wr = w.dir === 'V' ? w.row + i : w.row;
+        const wc = w.dir === 'H' ? w.col + i : w.col;
+        if (wr !== r || wc !== c) {
+          getCell(wr, wc).classList.add('highlight');
+        }
+      });
+      // ipuçlarında aktif
+      document.querySelectorAll('.clue-item').forEach(el => {
+        el.classList.toggle('active-clue', +el.dataset.num === w.num && el.dataset.dir === w.dir);
+      });
+    } else {
+      activeWord = null;
+    }
+  }
+
+  function onInput(e, r, c) {
+    const input = inputs[r][c];
+    let val = input.value.toUpperCase().replace(/[^A-ZÇĞİÖŞÜ]/g, '');
+    if (val.length > 1) val = val.slice(-1);
+    input.value = val;
+    user[r][c] = val;
+    if (val) advance(r, c);
+    updateProgress();
+  }
+
+  function onKey(e, r, c) {
+    if (e.key === 'Backspace') {
+      if (!inputs[r][c].value) {
+        retreat(r, c);
+      } else {
+        inputs[r][c].value = '';
+        user[r][c] = '';
+      }
+      e.preventDefault();
+    } else if (e.key === 'ArrowRight') { e.preventDefault(); move(r, c, 0, 1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); move(r, c, 0, -1); }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); move(r, c, 1, 0); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); move(r, c, -1, 0); }
+    else if (e.key === 'Tab') { e.preventDefault(); nextWord(e.shiftKey); }
+  }
+
+  function move(r, c, dr, dc) {
+    const nr = r + dr, nc = c + dc;
+    if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS && isOpen[nr][nc]) {
+      inputs[nr][nc].focus();
+    }
+  }
+
+  function advance(r, c) {
+    const dr = activeDir === 'V' ? 1 : 0;
+    const dc = activeDir === 'H' ? 1 : 0;
+    let nr = r + dr, nc = c + dc;
+    while (nr < ROWS && nc < COLS) {
+      if (isOpen[nr][nc]) { inputs[nr][nc].focus(); return; }
+      nr += dr; nc += dc;
+    }
+  }
+
+  function retreat(r, c) {
+    const dr = activeDir === 'V' ? -1 : 0;
+    const dc = activeDir === 'H' ? -1 : 0;
+    let nr = r + dr, nc = c + dc;
+    while (nr >= 0 && nc >= 0) {
+      if (isOpen[nr][nc]) { inputs[nr][nc].focus(); return; }
+      nr += dr; nc += dc;
+    }
+  }
+
+  function nextWord(rev = false) {
+    if (!activeWord) return;
+    const idx = WORDS.indexOf(activeWord);
+    const nw = WORDS[(idx + (rev ? -1 : 1) + WORDS.length) % WORDS.length];
+    activeDir = nw.dir;
+    inputs[nw.row][nw.col].focus();
+  }
+
+  function setDirection(dir) {
+    activeDir = dir;
+    document.querySelectorAll('.clues-header button').forEach(b => b.classList.toggle('active',
