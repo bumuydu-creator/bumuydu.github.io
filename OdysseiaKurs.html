@@ -348,8 +348,16 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--mineral);
-    display: block;
-    margin-bottom: 0.8rem;
+    display: inline-block;
+    margin-bottom: 0.4rem;
+  }
+  .quiz-progress {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.04em;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
   }
   .quiz-box-question {
     font-family: var(--serif);
@@ -375,24 +383,40 @@
   }
   .quiz-option:hover:not(:disabled) { border-color: var(--amber); color: var(--ink); }
   .quiz-option:disabled { cursor: default; }
-  .quiz-option.correct { border-color: var(--mineral); background: rgba(127,193,182,0.12); color: var(--mineral); }
-  .quiz-option.wrong { border-color: var(--rust); background: rgba(177,74,49,0.12); color: var(--rust); }
+  .quiz-option.correct { border-color: var(--mineral); background: rgba(127,193,182,0.18); color: var(--mineral); }
+  .quiz-option.wrong { border-color: var(--rust); background: rgba(177,74,49,0.18); color: var(--rust); }
   .quiz-result { display: none; margin-top: 1.1rem; padding-top: 1.1rem; border-top: 1px solid var(--line); }
   .quiz-result.show { display: block; }
   .quiz-result-text { font-family: var(--sans); font-size: 0.86rem; color: var(--ink-dim); margin: 0 0 0.9rem; line-height: 1.5; }
-  .quiz-reset {
+  .quiz-next, .quiz-reset {
     font-family: var(--mono);
     font-size: 0.74rem;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: var(--amber);
-    background: transparent;
-    border: 1px solid var(--line-strong);
+    color: var(--soil-0);
+    background: var(--amber);
+    border: none;
     border-radius: 3px;
-    padding: 0.5rem 0.9rem;
+    padding: 0.55rem 1rem;
     cursor: pointer;
   }
-  .quiz-reset:hover { border-color: var(--amber); }
+  .quiz-next:hover, .quiz-reset:hover { background: var(--mineral); }
+  .quiz-final { display: none; text-align: center; padding: 0.6rem 0 0.2rem; }
+  .quiz-final.show { display: block; }
+  .quiz-final-score {
+    font-family: var(--serif);
+    font-size: 1.8rem;
+    color: var(--amber);
+    margin: 0 0 0.5rem;
+    text-shadow: 0 2px 14px rgba(0,0,0,0.5);
+  }
+  .quiz-final-note {
+    font-family: var(--sans);
+    font-size: 0.86rem;
+    color: var(--ink-dim);
+    margin: 0 0 1.2rem;
+    line-height: 1.5;
+  }
 
   .course-extra { margin-top: 3rem; padding-top: 2.4rem; border-top: 1px solid var(--line); }
   .course-extra-title { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 1.1rem; }
@@ -511,21 +535,25 @@
           <p class="quote-note">"Eve giden yol modern dünyanın ideolojileri, bürokrasileri ve tüketim çarkları tarafından kapatılmış olsa bile, o yönde yürümek; belki de insanı bu yabancılaşmış dünyada gerçekten insan kılan tek şeydir."</p>
         </div>
 
-        <!-- TEST ET KUTUSU — metnin sağında, ayrı kutu -->
-        <div class="quiz-box">
+        <!-- TEST ET KUTUSU — 5 soruluk, tek kutu içinde ilerleyen quiz -->
+        <div class="quiz-box" id="quiz-box">
           <span class="quiz-box-eyebrow">▶ Test Et</span>
-          <p class="quiz-box-question">Adorno ve Horkheimer'a göre Odysseus, modern bireyin ilk örneği olarak neyin temsilcisidir?</p>
+          <div class="quiz-progress"><span id="quiz-step">1</span> / 5</div>
 
-          <div class="quiz-options">
-            <button class="quiz-option" data-correct="true">Hesapçı Akıl</button>
-            <button class="quiz-option">Kör Kader</button>
-            <button class="quiz-option">İlahi Güç</button>
-            <button class="quiz-option">Fiziksel Güç</button>
+          <div class="quiz-question-area" id="quiz-question-area">
+            <p class="quiz-box-question" id="quiz-question-text"></p>
+            <div class="quiz-options" id="quiz-options"></div>
+
+            <div class="quiz-result" id="quiz-result">
+              <p class="quiz-result-text" id="quiz-result-text"></p>
+              <button class="quiz-next" id="quiz-next">Sonraki Soru →</button>
+            </div>
           </div>
 
-          <div class="quiz-result">
-            <p class="quiz-result-text"></p>
-            <button class="quiz-reset">↺ Tekrar dene</button>
+          <div class="quiz-final" id="quiz-final">
+            <p class="quiz-final-score" id="quiz-final-score"></p>
+            <p class="quiz-final-note" id="quiz-final-note"></p>
+            <button class="quiz-reset" id="quiz-reset">↺ Baştan Başla</button>
           </div>
         </div>
       </div>
@@ -822,32 +850,127 @@
   })();
 
   (function(){
-    var box = document.querySelector('.quiz-box');
+    var box = document.getElementById('quiz-box');
     if(!box) return;
-    var options = box.querySelectorAll('.quiz-option');
-    var result = box.querySelector('.quiz-result');
-    var resultText = box.querySelector('.quiz-result-text');
-    var resetBtn = box.querySelector('.quiz-reset');
 
-    options.forEach(function(btn){
-      btn.addEventListener('click', function(){
-        var isCorrect = btn.dataset.correct === 'true';
-        options.forEach(function(o){
-          o.disabled = true;
-          if(o.dataset.correct === 'true') o.classList.add('correct');
-          else if(o === btn) o.classList.add('wrong');
+    var questions = [
+      {
+        q: "Adorno ve Horkheimer'a göre Odysseus, modern bireyin ilk örneği olarak neyin temsilcisidir?",
+        options: ["Hesapçı Akıl", "Kör Kader", "İlahi Güç", "Fiziksel Güç"],
+        correct: 0,
+        explain: 'Odysseus, canavarları kaba kuvvetle değil, kurnazlığı ve hesabıyla yenen "hesapçı akıl"ın temsilcisidir.'
+      },
+      {
+        q: "Tolkien'in dünyasında Sam figürü metinde neyi temsil eder?",
+        options: ["Askeri gücü", "Mülk sahipliğini", "Gündelik emeği", "Büyücülüğü"],
+        correct: 2,
+        explain: "Sam, büyük fikirlerin değil gündelik emeğin insanıdır; Frodo'nun taşıyamayacağı yükü birlikte taşır."
+      },
+      {
+        q: "Ruhların Kaçışı filminde \"Yüzsüz\" karakteri neyi simgeler?",
+        options: ["Doğaüstü bir koruyucuyu", "Tüketim toplumunun arzusunu", "Aile bağlarını", "Bilgeliği"],
+        correct: 1,
+        explain: "Yüzsüz, somut bir insan değil; paranın, metanın ve tüketim toplumunun biçimsiz hâlidir."
+      },
+      {
+        q: "Marcuse'un \"büyük reddediş\" kavramı neyi ifade eder?",
+        options: ["Şiddetle direnmeyi", "Sistemi tamamen desteklemeyi", "Toplumdan kaçmayı", "Sahte ihtiyaç ve ödülleri geri çevirmeyi"],
+        correct: 3,
+        explain: 'Chihiro\'nun altını reddetmesi, sistemin sunduğu sahte ihtiyaç ve ödülleri geri çevirmenin somutlaşmış hâlidir.'
+      },
+      {
+        q: "Yazının genel tezine göre Odysseia, Yüzüklerin Efendisi ve Ruhların Kaçışı'nı birbirine bağlayan ortak nokta nedir?",
+        options: [
+          "Hepsi aynı kahramanı anlatır",
+          "Her çağ kendi istismarını ve direniş biçimini üretir",
+          "Hepsi savaş hikâyesidir",
+          "Hepsi mitolojik canavarlarla ilgilidir"
+        ],
+        correct: 1,
+        explain: "Üç eseri yan yana getiren şey benzer olmaları değil, her birinin kendi çağının temel çelişkisini somutlaştırmasıdır."
+      }
+    ];
+
+    var current = 0;
+    var score = 0;
+    var answered = false;
+
+    var stepEl = document.getElementById('quiz-step');
+    var qArea = document.getElementById('quiz-question-area');
+    var qText = document.getElementById('quiz-question-text');
+    var qOptions = document.getElementById('quiz-options');
+    var qResult = document.getElementById('quiz-result');
+    var qResultText = document.getElementById('quiz-result-text');
+    var qNext = document.getElementById('quiz-next');
+    var qFinal = document.getElementById('quiz-final');
+    var qFinalScore = document.getElementById('quiz-final-score');
+    var qFinalNote = document.getElementById('quiz-final-note');
+    var qReset = document.getElementById('quiz-reset');
+
+    function renderQuestion(){
+      answered = false;
+      var item = questions[current];
+      stepEl.textContent = (current + 1);
+      qText.textContent = item.q;
+      qResult.classList.remove('show');
+      qOptions.innerHTML = '';
+
+      item.options.forEach(function(optText, idx){
+        var btn = document.createElement('button');
+        btn.className = 'quiz-option';
+        btn.textContent = optText;
+        btn.addEventListener('click', function(){
+          if(answered) return;
+          answered = true;
+          var isCorrect = idx === item.correct;
+          if(isCorrect) score++;
+
+          var allBtns = qOptions.querySelectorAll('.quiz-option');
+          allBtns.forEach(function(b, i){
+            b.disabled = true;
+            if(i === item.correct) b.classList.add('correct');
+            else if(i === idx) b.classList.add('wrong');
+          });
+
+          qResultText.textContent = (isCorrect ? 'Doğru. ' : 'Yanlış. ') + item.explain;
+          qNext.textContent = (current === questions.length - 1) ? 'Testi Bitir' : 'Sonraki Soru →';
+          qResult.classList.add('show');
         });
-        resultText.textContent = isCorrect
-          ? 'Doğru. Odysseus, kaba kuvveti değil kurnazlığı ve hesabı kullanarak canavarları yenen "hesapçı akıl"ın temsilcisidir.'
-          : 'Yanlış. Doğru cevap "Hesapçı Akıl" — Odysseus canavarları güçle değil, akıl ve hesapla yener.';
-        result.classList.add('show');
+        qOptions.appendChild(btn);
       });
+    }
+
+    function showFinal(){
+      qArea.style.display = 'none';
+      qFinal.classList.add('show');
+      qFinalScore.textContent = score + ' / ' + questions.length;
+
+      var note;
+      if(score === questions.length) note = 'Mükemmel — metnin tamamını kavramışsın.';
+      else if(score >= questions.length - 1) note = 'Çok iyi — küçük bir detayı kaçırmışsın.';
+      else if(score >= questions.length / 2) note = 'Fena değil — bazı bölümleri tekrar okumak iyi olabilir.';
+      else note = 'Metni bir kez daha okumanı öneririz.';
+      qFinalNote.textContent = note;
+    }
+
+    qNext.addEventListener('click', function(){
+      current++;
+      if(current >= questions.length){
+        showFinal();
+      } else {
+        renderQuestion();
+      }
     });
 
-    resetBtn.addEventListener('click', function(){
-      options.forEach(function(o){ o.disabled = false; o.classList.remove('correct','wrong'); });
-      result.classList.remove('show');
+    qReset.addEventListener('click', function(){
+      current = 0;
+      score = 0;
+      qFinal.classList.remove('show');
+      qArea.style.display = '';
+      renderQuestion();
     });
+
+    renderQuestion();
   })();
 </script>
 </body>
