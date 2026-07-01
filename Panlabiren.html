@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="https://bumuydu-creator.github.io/bumuydu.github.io/favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Labirentin Eşiği — Bu Muydu?</title>
+<meta name="description" content="Pan'ın Labirenti üzerine bir çözümleme: Kronos miti, Franco İspanyası, Goya, Faun'un muğlaklığı ve bir çocuğun itaatsizliğinde saklı direniş.">
+<meta name="theme-color" content="#1a1611">
+<meta property="og:url" content="https://bumuydu-creator.github.io/bumuydu.github.io/PaninLabirentiKurs.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,480;0,9..144,600;1,9..144,340;1,9..144,480&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --soil-0: #1a1611;
+    --soil-0-deep: #120f0b;
+    --soil-1: #241c14;
+    --bedrock: #172a2c;
+    --bedrock-deep: #0f1e20;
+    --ink: #f3ede0;
+    --ink-dim: #c9bfa9;
+    --ink-faint: #8a8071;
+    --amber: #faff00;
+    --amber-deep: #c2c500;
+    --rust: #b14a31;
+    --mineral: #7fc1b6;
+    --paper: #ece4d2;
+    --line: rgba(243,237,224,0.12);
+    --line-strong: rgba(243,237,224,0.24);
+    --serif: "Fraunces", serif;
+    --sans: "IBM Plex Sans", system-ui, sans-serif;
+    --mono: "IBM Plex Mono", monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--soil-0);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.72;
+    overflow-x: hidden;
+  }
+  img { display: block; max-width: 100%; }
+  a { color: var(--amber); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  ::selection { background: var(--rust); color: var(--ink); }
+
+  .progress-bar {
+    position: fixed; top: 0; left: 0;
+    height: 2px; width: 0%;
+    background: linear-gradient(90deg, var(--amber), var(--rust), var(--mineral));
+    z-index: 300;
+    transition: width 0.1s linear;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    padding: 2.2rem 7vw 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    border-bottom: 1px solid var(--line);
+    position: sticky; top: 0;
+    background: rgba(26,22,17,0.92);
+    backdrop-filter: blur(8px);
+    z-index: 200;
+  }
+  .site-logo {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    color: var(--amber);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .site-logo:hover { text-decoration: none; color: var(--ink); }
+  .site-logo span { color: var(--ink-faint); }
+  .header-cta {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--soil-0);
+    background: var(--amber);
+    padding: 0.55rem 1.1rem;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .header-cta:hover { text-decoration: none; background: var(--ink); }
+
+  .site-header-left { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .course-switch-link {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    border: 1px solid var(--line-strong);
+    padding: 0.35rem 0.7rem;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .course-switch-link:hover { text-decoration: none; color: var(--amber); border-color: var(--amber); }
+  @media (max-width: 720px) {
+    .course-switch-link { font-size: 0.62rem; padding: 0.3rem 0.55rem; }
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    filter: grayscale(25%) brightness(0.55);
+  }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(26,22,17,0.15) 0%,
+      rgba(26,22,17,0.05) 35%,
+      rgba(26,22,17,0.72) 68%,
+      var(--soil-0) 100%
+    );
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 7vw 8vh;
+    max-width: 860px;
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--amber);
+    display: inline-block;
+    margin-bottom: 1.1rem;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.4rem, 6.5vw, 5rem);
+    font-weight: 480;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 0 0 1.4rem;
+  }
+  .hero h1 em { font-style: italic; color: var(--amber); font-weight: 340; }
+  .hero-deck {
+    font-size: clamp(1rem, 1.8vw, 1.18rem);
+    color: var(--ink-dim);
+    max-width: 54ch;
+    line-height: 1.6;
+    margin: 0;
+  }
+  .hero-meta {
+    display: flex; gap: 2rem; flex-wrap: wrap;
+    margin-top: 2.4rem;
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    color: var(--ink-faint);
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--line);
+  }
+  .hero-buy {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .btn-primary {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--soil-0);
+    background: var(--amber);
+    padding: 0.85rem 1.6rem;
+    border-radius: 2px;
+    display: inline-block;
+  }
+  .btn-primary:hover { text-decoration: none; background: var(--mineral); }
+  .price-tag { font-family: var(--mono); font-size: 0.92rem; color: var(--ink); }
+  .price-tag .old { color: var(--ink-faint); text-decoration: line-through; margin-right: 0.5rem; }
+  .price-tag .new { color: var(--amber); font-weight: 500; }
+
+  /* ── BODY LAYOUT ── */
+  .essay-body { max-width: 1100px; margin: 0 auto; padding: 0 7vw; }
+
+  /* ── PROSE ── */
+  .prose { max-width: 64ch; }
+  .prose p {
+    font-size: clamp(1rem, 1.4vw, 1.08rem);
+    color: var(--ink-dim);
+    margin: 0 0 1.5rem;
+  }
+  .prose p:first-child { color: var(--ink); }
+  .prose strong { color: var(--ink); font-weight: 500; }
+  .prose em { color: var(--amber); font-style: italic; }
+
+  /* ── SECTION HEADINGS ── */
+  .section-marker { display: flex; align-items: baseline; gap: 1rem; margin: 7vh 0 2.2rem; }
+  .section-marker .num {
+    font-family: var(--mono); font-size: 0.74rem; color: var(--ink-faint);
+    letter-spacing: 0.06em; flex-shrink: 0; padding-top: 0.2rem;
+  }
+  .section-marker h2 {
+    font-family: var(--serif); font-size: clamp(1.7rem, 3.5vw, 2.5rem);
+    font-weight: 480; line-height: 1.1; letter-spacing: -0.015em; margin: 0; color: var(--ink);
+  }
+  .section-marker h2 em { font-style: italic; color: var(--amber); font-weight: 340; }
+
+  /* ── FLOAT IMAGES ── */
+  .float-right { float: right; width: clamp(220px, 38%, 400px); margin: 0.4rem 0 2rem 2.4rem; shape-outside: margin-box; }
+  .float-left { float: left; width: clamp(200px, 36%, 380px); margin: 0.4rem 2.4rem 2rem 0; shape-outside: margin-box; }
+  .float-right img, .float-left img {
+    width: 100%; border-radius: 3px; filter: grayscale(15%) brightness(0.88);
+    border: 1px solid var(--line-strong);
+  }
+  .img-caption { font-family: var(--mono); font-size: 0.68rem; color: var(--ink-faint); margin-top: 0.5rem; line-height: 1.4; }
+  .clearfix::after { content: ""; display: table; clear: both; }
+
+  /* ── FULL-BLEED IMAGE ── */
+  .fullbleed-wrap { position: relative; margin: 6vh calc(-7vw) 0; overflow: hidden; }
+  .fullbleed-wrap img {
+    width: 100%; height: clamp(320px, 52vh, 620px); object-fit: cover;
+    object-position: center 25%; filter: grayscale(20%) brightness(0.72); display: block;
+  }
+  .fullbleed-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(26,22,17,0.0) 0%, rgba(26,22,17,0.0) 45%, var(--soil-0) 100%);
+  }
+  .on-image-text { position: absolute; bottom: 0; left: 0; right: 0; padding: 0 7vw 4vh; z-index: 2; }
+  .on-image-text blockquote {
+    font-family: var(--serif); font-size: clamp(1.3rem, 3vw, 2rem); font-style: italic;
+    font-weight: 340; color: var(--ink); margin: 0; max-width: 56ch; line-height: 1.35;
+    text-shadow: 0 2px 24px rgba(0,0,0,0.6);
+  }
+  .on-image-text cite {
+    display: block; font-family: var(--mono); font-size: 0.74rem; font-style: normal;
+    color: var(--amber); margin-top: 0.7rem; letter-spacing: 0.05em;
+  }
+
+  /* ── SPLIT ── */
+  .split-section { display: grid; grid-template-columns: 1fr 1fr; gap: 4vw; align-items: center; margin: 7vh 0; }
+  .split-section.reverse { direction: rtl; }
+  .split-section.reverse > * { direction: ltr; }
+  .split-img {
+    width: 100%; aspect-ratio: 3/4; object-fit: cover; object-position: center top;
+    border-radius: 3px; filter: grayscale(12%) brightness(0.85); border: 1px solid var(--line-strong);
+  }
+  .split-text .prose { max-width: 100%; }
+
+  /* ── THEORY ASIDE ── */
+  .theory-aside {
+    border-left: 2px solid var(--amber); padding: 1.2rem 1.6rem; margin: 2.4rem 0;
+    background: rgba(250,255,0,0.05); border-radius: 0 4px 4px 0;
+  }
+  .theory-aside p { font-family: var(--serif); font-style: italic; font-size: 1.1rem; color: var(--ink-dim); margin: 0; line-height: 1.5; }
+  .theory-aside cite { display: block; font-family: var(--mono); font-size: 0.72rem; font-style: normal; color: var(--amber); margin-top: 0.6rem; letter-spacing: 0.04em; }
+
+  .section-divider { border: none; border-top: 1px solid var(--line); margin: 6vh 0; }
+
+  /* ── CONCLUSION BAND ── */
+  .conclusion-band {
+    background: linear-gradient(135deg, var(--bedrock) 0%, var(--bedrock-deep) 100%);
+    border-top: 1px solid rgba(127,193,182,0.2);
+    border-bottom: 1px solid rgba(127,193,182,0.2);
+    padding: 7vh 7vw; margin: 8vh calc(-7vw);
+  }
+  .conclusion-band h2 { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 480; color: var(--mineral); margin: 0 0 1.4rem; line-height: 1.15; }
+  .conclusion-band .prose p { color: var(--ink-dim); }
+  .conclusion-band .prose p:first-child { color: var(--ink); }
+
+  /* ── COURSE / PRICING ── */
+  .course-band {
+    position: relative;
+    overflow: hidden;
+    background: var(--soil-1);
+    border-bottom: 1px solid var(--line-strong);
+    padding: 7vh 7vw; margin: 0;
+  }
+  .course-band-img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 68vh;
+    object-fit: cover;
+    object-position: center 22%;
+    filter: grayscale(25%) brightness(0.42);
+    z-index: 0;
+  }
+  .course-band-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 68vh;
+    background: linear-gradient(
+      to bottom,
+      rgba(26,22,17,0.15) 0%,
+      rgba(26,22,17,0.4) 42%,
+      var(--soil-1) 100%
+    );
+    z-index: 1;
+  }
+  .course-top-grid { position: relative; z-index: 2; display: block; max-width: 1100px; margin: 0 auto; }
+
+  .pricing-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem;
+    margin-top: 3rem; padding-top: 2.6rem; border-top: 1px solid var(--line);
+    align-items: stretch;
+  }
+  .pricing-row .price-card { position: static; }
+
+  .course-intro { max-width: 100%; margin: 0; }
+  .course-intro .eyebrow { margin-bottom: 0.9rem; }
+  .course-intro h2 { font-family: var(--serif); font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 480; line-height: 1.12; margin: 0 0 1.3rem; color: var(--ink); }
+  .course-intro h2 em { font-style: italic; color: var(--amber); font-weight: 340; }
+  .course-intro p { font-size: clamp(1rem, 1.4vw, 1.08rem); color: var(--ink-dim); max-width: 62ch; }
+  .quote-note {
+    font-family: var(--serif); font-style: italic; font-size: clamp(1.15rem, 2vw, 1.4rem);
+    color: var(--mineral); border-left: 2px solid var(--mineral); padding-left: 1.4rem;
+    margin: 2rem 0 0; line-height: 1.5; max-width: 58ch;
+  }
+
+  /* ── COURSE-INTRO GRID: metin solda, quiz kutusu sağda ── */
+  .course-intro-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 2.6rem;
+    align-items: start;
+  }
+  .course-intro-text .eyebrow { margin-bottom: 0.9rem; }
+  .course-intro-text h2,
+  .course-intro-text p:first-of-type {
+    text-shadow: 0 2px 18px rgba(0,0,0,0.55);
+  }
+
+  /* ── TEST ET KUTUSU ── */
+  .quiz-box {
+    padding: 1.6rem 1.8rem;
+    background: rgba(26,22,17,0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid var(--line-strong);
+    border-left: 2px solid var(--mineral);
+    border-radius: 0 6px 6px 0;
+  }
+  .quiz-box-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mineral);
+    display: inline-block;
+    margin-bottom: 0.4rem;
+  }
+  .quiz-progress {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.04em;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  }
+  .quiz-box-question {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-weight: 480;
+    color: var(--ink);
+    margin: 0 0 1.2rem;
+    line-height: 1.4;
+    text-shadow: 0 2px 14px rgba(0,0,0,0.5);
+  }
+  .quiz-options { display: flex; flex-direction: column; gap: 0.6rem; }
+  .quiz-option {
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    color: var(--ink-dim);
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    padding: 0.7rem 1rem;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .quiz-option:hover:not(:disabled) { border-color: var(--amber); color: var(--ink); }
+  .quiz-option:disabled { cursor: default; }
+  .quiz-option.correct { border-color: var(--mineral); background: rgba(127,193,182,0.18); color: var(--mineral); }
+  .quiz-option.wrong { border-color: var(--rust); background: rgba(177,74,49,0.18); color: var(--rust); }
+  .quiz-result { display: none; margin-top: 1.1rem; padding-top: 1.1rem; border-top: 1px solid var(--line); }
+  .quiz-result.show { display: block; }
+  .quiz-result-text { font-family: var(--sans); font-size: 0.86rem; color: var(--ink-dim); margin: 0 0 0.9rem; line-height: 1.5; }
+  .quiz-next, .quiz-reset {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--soil-0);
+    background: var(--amber);
+    border: none;
+    border-radius: 3px;
+    padding: 0.55rem 1rem;
+    cursor: pointer;
+  }
+  .quiz-next:hover, .quiz-reset:hover { background: var(--mineral); }
+  .quiz-final { display: none; text-align: center; padding: 0.6rem 0 0.2rem; }
+  .quiz-final.show { display: block; }
+  .quiz-final-score {
+    font-family: var(--serif);
+    font-size: 1.8rem;
+    color: var(--amber);
+    margin: 0 0 0.5rem;
+    text-shadow: 0 2px 14px rgba(0,0,0,0.5);
+  }
+  .quiz-final-note {
+    font-family: var(--sans);
+    font-size: 0.86rem;
+    color: var(--ink-dim);
+    margin: 0 0 1.2rem;
+    line-height: 1.5;
+  }
+
+  .course-extra { margin-top: 3rem; padding-top: 2.4rem; border-top: 1px solid var(--line); }
+  .course-extra-title { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 1.1rem; }
+  .course-extra-list { list-style: none; margin: 0 0 2.4rem; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.9rem 1.6rem; }
+  .course-extra-list li { font-size: 0.86rem; color: var(--ink-dim); line-height: 1.5; display: flex; gap: 0.6rem; }
+  .course-extra-list li::before { content: "—"; color: var(--amber); flex-shrink: 0; }
+
+  /* pricing card */
+  .price-card {
+    background: var(--soil-0); border: 1px solid var(--line-strong); border-radius: 6px;
+    padding: 0; overflow: hidden; display: flex; flex-direction: column;
+  }
+  .price-card.featured { border-color: var(--amber); box-shadow: inset 0 0 0 1px var(--amber); }
+  .tier-tag-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; }
+  .tier-badge {
+    font-family: var(--mono); font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--soil-0); background: var(--amber); padding: 0.22rem 0.55rem; border-radius: 2px;
+  }
+  .price-per { font-family: var(--mono); font-size: 0.9rem; color: var(--ink-faint); align-self: flex-end; margin-bottom: 0.35rem; }
+  .tier-note { font-family: var(--mono); font-size: 0.68rem; line-height: 1.5; color: var(--ink-faint); margin: 0 0 1.4rem; }
+  .tier-note b { color: var(--amber); font-weight: 500; }
+  .price-card .pc-body { padding: 1.7rem 1.9rem 2.2rem; flex: 1; display: flex; flex-direction: column; }
+  .price-card .pc-eyebrow { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); margin-bottom: 0.8rem; display: block; }
+  .price-card h3 { font-family: var(--serif); font-size: 1.5rem; font-weight: 480; color: var(--ink); margin: 0 0 1.2rem; line-height: 1.2; }
+  .price-row { display: flex; align-items: baseline; gap: 0.7rem; margin-bottom: 0.4rem; }
+  .price-row .old-price { font-family: var(--mono); font-size: 1rem; color: var(--ink-faint); text-decoration: line-through; }
+  .price-row .new-price { font-family: var(--serif); font-size: 2.1rem; color: var(--amber); font-weight: 480; }
+  .price-discount { display: inline-block; font-family: var(--mono); font-size: 0.7rem; color: var(--soil-0); background: var(--mineral); padding: 0.18rem 0.5rem; border-radius: 2px; margin-bottom: 1.6rem; }
+  .price-card .pc-cta {
+    display: block; text-align: center; width: 100%; background: var(--amber); color: var(--soil-0);
+    font-family: var(--mono); font-size: 0.84rem; letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 0.95rem 1rem; border-radius: 3px; margin-bottom: 0.8rem;
+  }
+  .price-card .pc-cta:hover { text-decoration: none; background: var(--ink); }
+
+  .pc-specs { list-style: none; margin: 0.8rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+  .pc-specs li { font-family: var(--sans); font-size: 0.86rem; color: var(--ink-dim); display: flex; align-items: baseline; gap: 0.6rem; }
+  .pc-specs li::before { content: "—"; color: var(--amber); flex-shrink: 0; }
+
+  .pc-faq { border-top: 1px solid var(--line); padding-top: 1.4rem; margin-top: 0; }
+  .pc-faq details { border-bottom: 1px solid var(--line); padding: 0.85rem 0; }
+  .pc-faq summary { font-family: var(--sans); font-size: 0.86rem; color: var(--ink); cursor: pointer; list-style: none; }
+  .pc-faq summary::-webkit-details-marker { display: none; }
+  .pc-faq summary::after { content: "+"; float: right; color: var(--amber); font-family: var(--mono); }
+  .pc-faq details[open] summary::after { content: "–"; }
+  .pc-faq p { font-size: 0.82rem; color: var(--ink-faint); line-height: 1.55; margin: 0.7rem 0 0; }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    padding: 6vh 7vw; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap;
+    justify-content: space-between; align-items: center; gap: 1.2rem;
+    font-family: var(--mono); font-size: 0.76rem; color: var(--ink-faint);
+  }
+  .footer-links { display: flex; flex-wrap: wrap; gap: 1.2rem; }
+  .footer-links a { color: var(--ink-faint); }
+  .footer-links a:hover { color: var(--amber); }
+
+  /* ── STICKY MOBILE BUY BAR ── */
+  .mobile-buy-bar {
+    display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 250;
+    background: var(--soil-1); border-top: 1px solid var(--line-strong);
+    padding: 0.8rem 5vw; align-items: center; justify-content: space-between; gap: 1rem;
+  }
+  .mobile-buy-bar .mb-price { font-family: var(--serif); color: var(--amber); font-size: 1.2rem; }
+  .mobile-buy-bar .mb-old { font-family: var(--mono); font-size: 0.74rem; color: var(--ink-faint); text-decoration: line-through; margin-right: 0.4rem; }
+  .mobile-buy-bar a {
+    background: var(--amber); color: var(--soil-0); font-family: var(--mono); font-size: 0.76rem;
+    text-transform: uppercase; letter-spacing: 0.05em; padding: 0.7rem 1.3rem; border-radius: 3px;
+  }
+  .mobile-buy-bar a:hover { text-decoration: none; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 720px) {
+    .split-section { grid-template-columns: 1fr; }
+    .split-section.reverse { direction: ltr; }
+    .float-right, .float-left { float: none; width: 100%; margin: 0 0 1.6rem; }
+    .on-image-text blockquote { font-size: 1.1rem; }
+    .conclusion-band { padding: 5vh 7vw; }
+    .course-band { padding: 6vh 7vw; }
+    .pricing-row { grid-template-columns: 1fr; }
+    .course-extra-list { grid-template-columns: 1fr; }
+    .course-intro-grid { grid-template-columns: 1fr; }
+    .quiz-box { margin-top: 2rem; }
+    .header-cta { display: none; }
+    .mobile-buy-bar { display: flex; }
+    body { padding-bottom: 4.6rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress-bar" aria-hidden="true"></div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="site-header-left">
+    <a class="site-logo" href="https://bumuydu-creator.github.io/bumuydu.github.io/">Bu Muydu? <span>— Pan'ın Labirenti Kurs</span></a>
+    <a class="course-switch-link" href="https://bumuydu-creator.github.io/bumuydu.github.io/OdysseiaKurs.html">Odysseia Kurs →</a>
+  </div>
+  <a class="header-cta" href="#kurs">Kursa Katıl</a>
+</header>
+
+<!-- KURS / FİYATLANDIRMA BÖLÜMÜ -->
+<div id="kurs" class="course-band">
+  <img class="course-band-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Barberini_Faun_front_Glyptothek_Munich_218_n2.jpg?width=1600" alt="Barberini Faun - antik heykel" />
+  <div class="course-band-overlay"></div>
+  <div class="course-top-grid">
+    <div class="course-intro">
+
+      <div class="course-intro-grid">
+        <div class="course-intro-text">
+          <span class="eyebrow">Kurs</span>
+          <h2>Bu okumayı <em>derse</em> dönüştürdük.</h2>
+          <p>Yukarıda okuduğunuz çözümleme, Pan'ın Labirenti'ni bir savaş ya da korku filmi olmaktan çıkarıp, mitolojinin, tarihin ve masalın kesiştiği bir eşik olarak okuyan daha geniş bir dersin yalnızca girişi. Kursta Kronos mitinden Franco İspanyası'na, Propp'un masal biçimbiliminden Van Gennep'in geçiş ritüellerine, Goya'nın Satürn'ünden Faun'un muğlaklığına kadar filmi sahne sahne, sembol sembol birlikte çözüyoruz.</p>
+          <p class="quote-note">"Ölümsüzlük, ölüme herhangi bir önem vermeyi reddetme eylemidir… Sadece ölmeye cesaret ederseniz gerçek ölümsüzlüğe ulaşırsınız."</p>
+        </div>
+
+        <!-- TEST ET KUTUSU — 5 soruluk, tek kutu içinde ilerleyen quiz -->
+        <div class="quiz-box" id="quiz-box">
+          <span class="quiz-box-eyebrow">▶ Test Et</span>
+          <div class="quiz-progress"><span id="quiz-step">1</span> / 5</div>
+
+          <div class="quiz-question-area" id="quiz-question-area">
+            <p class="quiz-box-question" id="quiz-question-text"></p>
+            <div class="quiz-options" id="quiz-options"></div>
+
+            <div class="quiz-result" id="quiz-result">
+              <p class="quiz-result-text" id="quiz-result-text"></p>
+              <button class="quiz-next" id="quiz-next">Sonraki Soru →</button>
+            </div>
+          </div>
+
+          <div class="quiz-final" id="quiz-final">
+            <p class="quiz-final-score" id="quiz-final-score"></p>
+            <p class="quiz-final-note" id="quiz-final-note"></p>
+            <button class="quiz-reset" id="quiz-reset">↺ Baştan Başla</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-extra">
+        <p class="course-extra-title">Bu kursta neler var</p>
+        <ul class="course-extra-list">
+          <li>Kronos mitinden Vidal'e: babalığın tiranik modeli</li>
+          <li>Franco İspanyası'nın tarihsel zemini ve Maquis direnişi</li>
+          <li>Propp, Van Gennep, Turner: masalın biçimi ve geçiş ritüelleri</li>
+          <li>Faun, Solgun Adam ve Goya: sembol sembol bir okuma</li>
+          <li>Ofelia'nın üç sınavı, sahne sahne çözümleme</li>
+          <li>Düzenli canlı buluşmalarla soru-cevap imkânı</li>
+        </ul>
+
+        <div class="pc-faq">
+          <details>
+            <summary>Eğitimlere nasıl erişebilirim?</summary>
+            <p>Satın aldıktan sonra hesabınızla giriş yaparak video içeriklere anında erişebilirsiniz.</p>
+          </details>
+          <details>
+            <summary>Erişim süresi ne kadar?</summary>
+            <p>Satın aldığınız derslere 1 yıl boyunca erişebilir, bu süre içinde dilediğiniz kadar tekrar izleyebilirsiniz.</p>
+          </details>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- FİYAT KARTLARI: tek seferlik + abonelik (yan yana) -->
+    <div class="pricing-row">
+
+      <!-- 1) TEK DERS — TEK SEFERLİK (Shopier) -->
+      <div class="price-card">
+        <div class="pc-body">
+          <div class="tier-tag-row">
+            <span class="pc-eyebrow" style="margin-bottom:0;">Bu Muydu? — Kurs</span>
+            <span class="tier-badge" style="background:var(--ink-faint);">Tek Seferlik</span>
+          </div>
+          <h3>Pan'ın Labirenti: Karanlığın Ortasında Bir Masal</h3>
+          <div class="price-row">
+            <span class="old-price">₺</span>
+            <span class="new-price">₺</span>
+          </div>
+
+          <a class="pc-cta" href="https://www.shopier.com/ucansalyangoz" target="_blank" rel="noopener">Hemen Al</a>
+          <ul class="pc-specs">
+            <li>Ömür boyu erişim — bir kere al, senin olsun</li>
+            <li>Sadece bu ders (8 ders, 3+ saat video)</li>
+            <li>Her ders 12-30 dakika arası</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 2) AYLIK ABONELİK — TÜM ERİŞİM -->
+      <div class="price-card featured">
+        <div class="pc-body">
+          <div class="tier-tag-row">
+            <span class="pc-eyebrow" style="margin-bottom:0;">Bu Muydu? — Üyelik</span>
+            <span class="tier-badge">En Kapsamlı</span>
+          </div>
+          <h3>Tüm Dersler + Yenileri</h3>
+          <div class="price-row">
+            <span class="new-price">₺</span>
+            <span class="price-per">/ ay</span>
+          </div>
+          <a class="pc-cta" href="patreon.com/cw/Bumuydu" target="_blank" rel="noopener">Aylık Abone Ol</a>
+          <ul class="pc-specs">
+            <li>Tüm derslere erişim — bu ders dahil, gelecekler dahil</li>
+            <li>Her ay yeni içerik</li>
+            <li></li>
+            <li></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- HERO: Barberini Faun tam arkaplan -->
+<section class="hero">
+  <img class="hero-img"
+       src="https://commons.wikimedia.org/wiki/Special:FilePath/Barberini_Faun_front_Glyptothek_Munich_218_n2.jpg?width=1600"
+       alt="Barberini Faun - antik heykel" />
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <span class="eyebrow">Bu Muydu? — Analiz</span>
+    <h1>Ofelia'yı<br>itaati değil,<br><em>itaatsizliği</em><br>kurtarır.</h1>
+    <p class="hero-deck">
+      Pan'ın Labirenti — Franco İspanyası, Kronos miti ve bir çocuğun gerçekliğe karşı kurduğu masal arasında bir eşik.
+    </p>
+    <div class="hero-meta">
+      <span>Pan'ın Labirenti</span>
+      <span>Guillermo del Toro</span>
+      <span>1944 — Franco İspanyası</span>
+      <span>Propp · Turner · Todorov</span>
+    </div>
+    <div class="hero-buy">
+      <a class="btn-primary" href="#kurs">Kursu İncele</a>
+      <span class="price-tag"><span class="old">₺</span><span class="new">₺</span> </span>
+    </div>
+  </div>
+</section>
+
+<!-- BODY -->
+<div class="essay-body">
+
+  <div class="section-marker" style="margin-top: 8vh;">
+    <span class="num"></span>
+    <h2>Kronos'un <em>iki yüzü</em></h2>
+  </div>
+
+  <div class="prose clearfix">
+    <figure class="float-right">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Francisco_de_Goya,_Saturno_devorando_a_su_hijo_(1819-1823).jpg?width=1400"
+           alt="Goya - Oğlunu Yiyen Satürn" />
+      <figcaption class="img-caption">Goya, Oğlunu Yiyen Satürn (1819-1823) — Vidal'in mitolojik aynası.</figcaption>
+    </figure>
+
+    <p>Yüzbaşı Vidal yalnızca kurgusal bir faşist değildir. O, Franco'nun özünü — Kronos'u — temsil eder.</p>
+    <p>Mitolojik kökene inersek: Ouranos, oğlunun onu devireceğine dair bir kehanetten korkup çocuklarını Toprak Ana'nın rahmine geri iter. Kronos kaçar, babasını hadım ederek tahttan indirir — ve aynı korkuyla, bu kez kendi çocuklarını yemeye başlar.</p>
+    <p>Vidal de böyle bir "Zaman Baba"dır. Babasının ölüm anında parçaladığı saati sürekli kontrol eder; oğluna <strong>"onurlu"</strong> bir miras bırakma takıntısıyla hareket eder. Ofelia'nın hayal dünyasında zaman ayın hareketleriyle, kum saatleriyle akarken; Vidal'in dünyasında her şey köstekli saatin tıkırtısına bağlıdır.</p>
+  </div>
+
+</div>
+
+<!-- FULLBLEED: Goya Satürn -->
+<div class="fullbleed-wrap">
+  <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Francisco_de_Goya,_Saturno_devorando_a_su_hijo_(1819-1823).jpg?width=1400" alt="Goya'nın Satürn tablosu" style="object-position: center 20%;" />
+  <div class="fullbleed-overlay"></div>
+  <div class="on-image-text">
+    <blockquote>
+      "Solgun Adam'ın gözleri yoktur; yalnızca dokunabildiğini algılar. Vidal de öyle — maddi olanın dışında hiçbir gerçeklik tanımaz."
+      <cite>— Goya'nın Satürn'ünü izleyerek</cite>
+    </blockquote>
+  </div>
+</div>
+
+<div class="essay-body">
+
+  <div class="prose" style="margin-top: 4vh;">
+    <p>Solgun Adam'ın ini çocuk ayakkabılarıyla doludur. Yarım daire biçimli şömine, filmin 1944'te geçmesiyle birleşince Holokost'un imgelerini çağrıştırır. Bu yaratık yalnızca mitolojik bir çağrışım değil, tarihsel şiddetin de cismani bir temsilcisidir.</p>
+    <p>Mercedes'in filmin sonunda Vidal'e söylediği tek cümle bu laneti kırar: <em>"Oğlun adını bile bilmeyecek."</em> Vidal yalnızca ölmez; uğruna her şeyi feda ettiği hatırlanma hayalini de kaybeder.</p>
+  </div>
+
+  <hr class="section-divider">
+
+  <div class="section-marker">
+    <span class="num"></span>
+    <h2>Faun: ne <em>rehber</em> ne düşman</h2>
+  </div>
+
+  <div class="split-section">
+    <div>
+      <img class="split-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Barberini_Faun_front_Glyptothek_Munich_218_n1.jpg?width=1400" alt="Faun heykeli - Pan'ın Labirenti" />
+    </div>
+    <div class="split-text">
+      <div class="prose">
+        <p>Vidal keskin, katı hatlarla çizilmiş mutlak bir kötülüktür. Faun ise tam tersi: belirsiz, sınayan, yoruma açık.</p>
+        <p>Doug Jones'un canlandırdığı bu yaratık, Narnia'nın sevimli Bay Tumnus'undan çok uzaktadır — kemiksi, grotesk, güven telkin etmeyen bir varlıktır. Bazen nazik bir rehber gibi yaklaşır, bazen sert ve tehditkâr bir ton takınır.</p>
+        <p>İlginçtir: filmin İspanyolca adı <em>El laberinto del fauno</em>'dur, "Pan" değil. Del Toro, uluslararası pazardaki başlığın doğrudan Yunan tanrısı Pan'a gönderme olmadığını, yalnızca faun figürünün kültürel çağrışımını güçlendirmek için seçildiğini belirtir.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="prose clearfix">
+    <figure class="float-right">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Barberini_Faun_side_Glyptothek_Munich_218.jpg?width=900" alt="Faun - yan profil" />
+      <figcaption class="img-caption">Faun: ne tam rehber, ne tam düşman.</figcaption>
+    </figure>
+
+    <p>Antropolog Victor Turner'ın "liminalite" kavramı tam burada işler. Faun, iki dünya arasında kalan, ne tamamen içeride ne tamamen dışarıda olan bir eşik-varlığıdır — tıpkı ruh gibi, tıpkı İspanya'nın kendisi gibi: ne tamamen iyi, ne tamamen kötü.</p>
+
+    <div class="theory-aside">
+      <p>Fantezi ile gerçek arasındaki sınırlar bulanıklaşır; bu alan iki dünya, iki tür ve iki anlatı arasında bir geçiş sağlar.</p>
+      <cite>— Victor Turner'ın eşik (liminalite) teorisini izleyerek</cite>
+    </div>
+
+    <p>Faun'un verdiği "Yol Ayrımları Kitabı" da bu belirsizliği taşır: boş sayfalar yalnızca Ofelia'nın kararlarına göre canlanır. Kitap ona ne yapacağını söylemez; onu kendi hakikatine götürecek basamakları açar.</p>
+  </div>
+
+</div>
+
+<!-- FULLBLEED: Faun -->
+<div class="fullbleed-wrap">
+  <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Barberini_Faun_front_Glyptothek_Munich_218_n1.jpg?width=1400" alt="Faun heykeli" style="object-position: center 15%;" />
+  <div class="fullbleed-overlay"></div>
+  <div class="on-image-text">
+    <blockquote>
+      "Amaç kaybolmak değil, yolunu ve kendini bulmaktır."
+      <cite>— Guillermo del Toro</cite>
+    </blockquote>
+  </div>
+</div>
+
+<div class="essay-body">
+
+  <hr class="section-divider">
+
+  <div class="section-marker">
+    <span class="num"></span>
+    <h2>Labirent: <em>eşik</em> ve sınav</h2>
+  </div>
+
+  <div class="prose clearfix">
+    <figure class="float-left">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Theseus_Minotaur_Mosaic.jpg" alt="Theseus ve Minotauros mozaiği" />
+      <figcaption class="img-caption">Antik labirent: dönüşümün ve tehlikenin ortak mekânı.</figcaption>
+    </figure>
+
+    <p>Labirent antik çağlardan beri hem dönüşümün hem doğaüstü bilgeliğin sembolüdür. Ama karanlık bir yüzü de vardır: mitolojide Minotauros'u barındırdığı gibi, filmde de Vidal'i — kontrol altına alınması gereken kaosu — içinde taşır.</p>
+    <p>Ofelia'nın üç görevi — kurbağadan anahtarı almak, Solgun Adam'dan bıçağı almak, masum kanı sunmak — antropolog Van Gennep'in "Geçiş Törenleri" şemasını izler: ayrılma, eşikte kalma, dönüş.</p>
+    <p>Ama son sınavda Ofelia itaat etmez. Faun'un "masum birinin kanı" buyruğuna karşı çıkar, kardeşini kurban etmeyi reddeder. Filmin ahlaki ekseni tam bu noktada kurulur: <strong>itaatsizlik</strong>, filmin asıl erdemi hâline gelir.</p>
+  </div>
+
+  <div class="theory-aside" style="max-width: 64ch;">
+    <p>Labirent, Ofelia'nın kutsallığa, ölümsüzlüğe ve mutlak gerçekliğe geçtiği bir eşik alanıdır.</p>
+    <cite>— Mircea Eliade'yi izleyerek</cite>
+  </div>
+
+  <hr class="section-divider">
+
+  <div class="section-marker">
+    <span class="num"></span>
+    <h2>Mutfağın <em>direnişi</em></h2>
+  </div>
+
+  <div class="split-section reverse">
+    <div>
+      <img class="split-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Diego_Velazquez_-_An_Old_Woman_Cooking_Eggs_-_Google_Art_Project.jpg?width=1200" alt="Velázquez - Yaşlı Kadın Yumurta Pişiriyor" style="object-position: center top;" />
+    </div>
+    <div class="split-text">
+      <div class="prose">
+        <p>Vidal'in dünyası tamamen erkeklerin egemenliğindedir; kadınların varlığını zar zor kabul eder. Karısını ve üvey kızını karşılarken kullandığı çoğul, resmi "Bienvenidos" hitabı bile bunu ele verir.</p>
+        <p>Bu baskının karşısına Mercedes çıkar. Mutfakta — kök sebze doğrayan, tavşan temizleyen yaşlı kadınların arasında — hayatını riske atarak direnişçilere yiyecek ve ilaç taşır. Bu sahne, Velázquez'in "Yaşlı Kadın Yumurta Pişiriyor" tablosunu anımsatan bir estetik derinlik taşır.</p>
+        <p>Mercedes'in küçük bıçağı ile Ofelia'nın tebeşiri aynı işlevi görür: ikisi de kendi dünyalarında hayatta kalmak için icat ettikleri araçlardır. Biri mutfakta, biri masalda — ama ikisi de gündelik emeğin sessiz direnişini taşır.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SONUÇ BANDI -->
+<div class="essay-body">
+  <div class="conclusion-band">
+    <h2>Gerçeklik mi daha karanlıktır, yoksa masal mı daha dürüst?</h2>
+    <div class="prose">
+      <p>Del Toro izleyiciyi kandırmaz: bu pembe bir kaçış hikâyesi değildir. Ama masal, gerçekliğin ağırlığını hafifletmek için değil, onunla yüzleşmek için var olur.</p>
+      <p>Ofelia'nın itaatsizliği — üzümü yemesi, elbiseyi umursamaması, kardeşini kurban etmeyi reddetmesi — filmin tek gerçek kahramanlık anlarıdır. Vidal'in düzeni saatlere, kilitlere ve zorla itaate dayanırken, Ofelia'nın direnişi kendi seçimlerine dayanır.</p>
+      <p>Film kurguyla biter. <strong>Ama tarih gerçektir.</strong></p>
+      <p style="color: var(--ink-faint); font-style: italic; font-family: var(--mono); font-size: 0.84rem;">Mumları söndürürken, labirentten çıkmayı unutma.</p>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <span>Bu Muydu? — bumuydu-creator.github.io</span>
+  <nav class="footer-links">
+    <a href="https://www.youtube.com/@bumuydu" target="_blank" rel="noopener">YouTube</a>
+    <a href="https://www.instagram.com/bbumuydu/" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://open.spotify.com/show/6UZNypTefgFUOKD4V00FdP" target="_blank" rel="noopener">Spotify</a>
+    <a href="https://uansalyangoz.substack.com" target="_blank" rel="noopener">Substack</a>
+    <a href="https://www.shopier.com/ucansalyangoz" target="_blank" rel="noopener">Shopier</a>
+  </nav>
+</footer>
+
+<!-- MOBİL SABİT SATIN AL BARI -->
+<div class="mobile-buy-bar">
+  <span class="mb-price"><span class="mb-old">₺</span>₺</span>
+  <a href="#kurs">Kursa Git</a>
+</div>
+
+<script>
+  (function(){
+    var bar = document.getElementById('progress-bar');
+    if(!bar) return;
+    function update(){
+      var scrolled = window.scrollY;
+      var total = document.body.scrollHeight - window.innerHeight;
+      if(total <= 0){ bar.style.width = '0%'; return; }
+      bar.style.width = Math.min(100, (scrolled/total)*100) + '%';
+    }
+    window.addEventListener('scroll', update, {passive: true});
+    update();
+  })();
+
+  (function(){
+    var box = document.getElementById('quiz-box');
+    if(!box) return;
+
+    var questions = [
+      {
+        q: "Yüzbaşı Vidal, mitolojik olarak hangi figürü temsil eder?",
+        options: ["Zeus", "Kronos", "Hades", "Ouranos"],
+        correct: 1,
+        explain: "Vidal, çocuklarını yiyerek tahtını koruyan Kronos'un lanetini — tiranik ve müdahaleci baba modelini — temsil eder."
+      },
+      {
+        q: "Faun'un Ofelia'ya verdiği \"Yol Ayrımları Kitabı\" nasıl işler?",
+        options: ["Sadece bir süs eşyasıdır", "Boş sayfaları Ofelia'nın kararlarına göre canlanır", "Vidal'e ait gizli bir belgedir", "Yalnızca resimlerden oluşur"],
+        correct: 1,
+        explain: "Kitap ona ne yapacağını söylemez; boş sayfalar yalnızca Ofelia'nın kendi kararlarıyla anlam kazanır."
+      },
+      {
+        q: "Solgun Adam sahnesi hangi tabloyla doğrudan görsel bir bağ kurar?",
+        options: ["Velázquez'in Yaşlı Kadın Yumurta Pişiriyor'u", "Goya'nın Oğlunu Yiyen Satürn'ü", "Rembrandt'ın Gece Bekçileri'", "Dalí'nin Belleğin Azmi'"],
+        correct: 1,
+        explain: "Solgun Adam'ın grotesk vahşeti, Goya'nın 'Oğlunu Yiyen Satürn' tablosundaki imgenin sinemadaki yankısıdır."
+      },
+      {
+        q: "Ofelia'nın son sınavında filmin ahlaki ekseni neye dayanır?",
+        options: ["Faun'un emrine koşulsuz itaat etmesine", "Kardeşini kurban etmeyi reddetmesine", "Vidal'e \"baba\" demeyi kabul etmesine", "Labirentten kaçmasına"],
+        correct: 1,
+        explain: "Ofelia, Faun'un 'masum kan' buyruğuna karşı çıkar; itaatsizliği filmin asıl erdemine dönüşür."
+      },
+      {
+        q: "Antropolog Victor Turner'ın \"liminalite\" kavramı filmde en çok neyle ilişkilendirilir?",
+        options: ["Vidal'in saatiyle", "Labirent ve Faun'un ara-varlık niteliğiyle", "Mercedes'in bıçağıyla", "Carmen'in hamileliğiyle"],
+        correct: 1,
+        explain: "Faun ve labirent, iki dünya arasında kalan, ne tamamen içeride ne tamamen dışarıda olan eşik-varlıklardır."
+      }
+    ];
+
+    var current = 0;
+    var score = 0;
+    var answered = false;
+
+    var stepEl = document.getElementById('quiz-step');
+    var qArea = document.getElementById('quiz-question-area');
+    var qText = document.getElementById('quiz-question-text');
+    var qOptions = document.getElementById('quiz-options');
+    var qResult = document.getElementById('quiz-result');
+    var qResultText = document.getElementById('quiz-result-text');
+    var qNext = document.getElementById('quiz-next');
+    var qFinal = document.getElementById('quiz-final');
+    var qFinalScore = document.getElementById('quiz-final-score');
+    var qFinalNote = document.getElementById('quiz-final-note');
+    var qReset = document.getElementById('quiz-reset');
+
+    function renderQuestion(){
+      answered = false;
+      var item = questions[current];
+      stepEl.textContent = (current + 1);
+      qText.textContent = item.q;
+      qResult.classList.remove('show');
+      qOptions.innerHTML = '';
+
+      item.options.forEach(function(optText, idx){
+        var btn = document.createElement('button');
+        btn.className = 'quiz-option';
+        btn.textContent = optText;
+        btn.addEventListener('click', function(){
+          if(answered) return;
+          answered = true;
+          var isCorrect = idx === item.correct;
+          if(isCorrect) score++;
+
+          var allBtns = qOptions.querySelectorAll('.quiz-option');
+          allBtns.forEach(function(b, i){
+            b.disabled = true;
+            if(i === item.correct) b.classList.add('correct');
+            else if(i === idx) b.classList.add('wrong');
+          });
+
+          qResultText.textContent = (isCorrect ? 'Doğru. ' : 'Yanlış. ') + item.explain;
+          qNext.textContent = (current === questions.length - 1) ? 'Testi Bitir' : 'Sonraki Soru →';
+          qResult.classList.add('show');
+        });
+        qOptions.appendChild(btn);
+      });
+    }
+
+    function showFinal(){
+      qArea.style.display = 'none';
+      qFinal.classList.add('show');
+      qFinalScore.textContent = score + ' / ' + questions.length;
+
+      var note;
+      if(score === questions.length) note = 'Mükemmel — labirentin her köşesini kavramışsın.';
+      else if(score >= questions.length - 1) note = 'Çok iyi — küçük bir detayı kaçırmışsın.';
+      else if(score >= questions.length / 2) note = 'Fena değil — bazı bölümleri tekrar okumak iyi olabilir.';
+      else note = 'Metni bir kez daha okumanı öneririz.';
+      qFinalNote.textContent = note;
+    }
+
+    qNext.addEventListener('click', function(){
+      current++;
+      if(current >= questions.length){
+        showFinal();
+      } else {
+        renderQuestion();
+      }
+    });
+
+    qReset.addEventListener('click', function(){
+      current = 0;
+      score = 0;
+      qFinal.classList.remove('show');
+      qArea.style.display = '';
+      renderQuestion();
+    });
+
+    renderQuestion();
+  })();
+</script>
+</body>
+</html>
