@@ -270,11 +270,36 @@
 
   /* ── COURSE / PRICING ── */
   .course-band {
+    position: relative;
+    overflow: hidden;
     background: var(--soil-1);
     border-bottom: 1px solid var(--line-strong);
     padding: 7vh 7vw; margin: 0;
   }
-  .course-top-grid { display: block; max-width: 1100px; margin: 0 auto; }
+  .course-band-img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 68vh;
+    object-fit: cover;
+    object-position: center 22%;
+    filter: grayscale(25%) brightness(0.42);
+    z-index: 0;
+  }
+  .course-band-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 68vh;
+    background: linear-gradient(
+      to bottom,
+      rgba(26,22,17,0.15) 0%,
+      rgba(26,22,17,0.4) 42%,
+      var(--soil-1) 100%
+    );
+    z-index: 1;
+  }
+  .course-top-grid { position: relative; z-index: 2; display: block; max-width: 1100px; margin: 0 auto; }
 
   .pricing-row {
     display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem;
@@ -302,11 +327,17 @@
     align-items: start;
   }
   .course-intro-text .eyebrow { margin-bottom: 0.9rem; }
+  .course-intro-text h2,
+  .course-intro-text p:first-of-type {
+    text-shadow: 0 2px 18px rgba(0,0,0,0.55);
+  }
 
   /* ── TEST ET KUTUSU ── */
   .quiz-box {
     padding: 1.6rem 1.8rem;
-    background: var(--soil-0);
+    background: rgba(26,22,17,0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     border: 1px solid var(--line-strong);
     border-left: 2px solid var(--mineral);
     border-radius: 0 6px 6px 0;
@@ -327,6 +358,7 @@
     color: var(--ink);
     margin: 0 0 1.2rem;
     line-height: 1.4;
+    text-shadow: 0 2px 14px rgba(0,0,0,0.5);
   }
   .quiz-options { display: flex; flex-direction: column; gap: 0.6rem; }
   .quiz-option {
@@ -466,6 +498,8 @@
 
 <!-- KURS / FİYATLANDIRMA BÖLÜMÜ -->
 <div id="kurs" class="course-band">
+  <img class="course-band-img" src="https://bumuydu-creator.github.io/bumuydu.github.io/homerus2.jpeg" alt="Homerus - antik figür" />
+  <div class="course-band-overlay"></div>
   <div class="course-top-grid">
     <div class="course-intro">
 
