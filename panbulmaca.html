@@ -8,19 +8,18 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#1a0f0a;display:flex;justify-content:center;padding:20px 10px;font-family:'Cinzel','Nunito',serif}
 .puzzle-wrapper{background:#fff;padding:0;border:none;display:inline-block}
-#grid{display:grid;grid-template-columns:repeat(27,30px);grid-template-rows:repeat(21,30px);gap:0;border-top:1px solid #8fa9b8;border-left:1px solid #8fa9b8;background:#fff;width:810px;height:630px}
-.cell{width:30px;height:30px;background:#fff;border-right:1px solid #8fa9b8;border-bottom:1px solid #8fa9b8;position:relative;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;font-family:'Cinzel',serif;text-transform:uppercase;color:#1f1a16}
-.cell .num{position:absolute;top:1px;left:2px;font-size:7px;font-weight:700;color:#2b4f6e;pointer-events:none;font-family:'Cinzel',serif;z-index:2}
-.cell input{position:absolute;top:0;left:0;width:100%;height:100%;border:none;outline:none;background:transparent;text-align:center;font-size:15px;font-family:'Cinzel',serif;font-weight:700;color:#1f1a16;text-transform:uppercase;padding:0;cursor:pointer;z-index:1;border-radius:0}
-.cell input:focus{background:#e3f0fa;outline:1px solid #5b8ba3;z-index:3}
+#grid{display:grid;grid-template-columns:repeat(15,36px);grid-template-rows:repeat(15,36px);gap:0;border-top:2px solid #000;border-left:2px solid #000;background:#fff;width:540px;height:540px}
+.cell{width:36px;height:36px;background:#fff;border-right:1px solid #000;border-bottom:1px solid #000;position:relative;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;font-family:'Cinzel',serif;text-transform:uppercase;color:#1f1a16}
+.cell.black{background:#1a1a1a;border-color:#000}
+.cell .num{position:absolute;top:1px;left:2px;font-size:8px;font-weight:700;color:#2b4f6e;pointer-events:none;font-family:'Cinzel',serif;z-index:2}
+.cell input{position:absolute;top:0;left:0;width:100%;height:100%;border:none;outline:none;background:transparent;text-align:center;font-size:18px;font-family:'Cinzel',serif;font-weight:700;color:#1f1a16;text-transform:uppercase;padding:0;cursor:pointer;z-index:1;border-radius:0}
+.cell input:focus{background:#e3f0fa;outline:2px solid #5b8ba3;z-index:3}
 .cell.active input{background:#c6e0f0}
 .cell.highlight{background:#e1edf5}
 .cell.correct{background:#d4e6c9}
 .cell.wrong{background:#f7d4d4;animation:shake .2s ease}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
-.cell.image{grid-row:10/16;grid-column:9/16;background:#f3efe8;border:1px solid #8fa9b8;display:flex;align-items:center;justify-content:center;padding:0;overflow:hidden;position:relative;z-index:0}
-.cell.image svg{width:100%;height:100%;display:block;background:#f3efe8}
-.clues-panel{background:#fcf9f4;padding:18px 20px 24px;border:1px solid #b8c9d3;border-top:none;max-width:810px;width:100%;font-family:'Nunito',sans-serif}
+.clues-panel{background:#fcf9f4;padding:18px 20px 24px;border:1px solid #b8c9d3;border-top:none;max-width:540px;width:100%;font-family:'Nunito',sans-serif}
 .clues-header{display:flex;gap:6px;margin-bottom:14px}
 .clues-header button{flex:1;padding:6px 0;background:#dce6ed;border:1px solid #8fa9b8;font-family:'Cinzel',serif;font-weight:700;font-size:13px;color:#1f2e3a;cursor:pointer;letter-spacing:.5px}
 .clues-header button.active{background:#5b8ba3;border-color:#3b6a82;color:#fff}
@@ -41,8 +40,7 @@ body{background:#1a0f0a;display:flex;justify-content:center;padding:20px 10px;fo
 .progress-wrap{margin-top:8px;background:#dce6ed;height:6px;width:100%;border:1px solid #b8c9d3}
 #progress-bar{height:100%;background:#5b8ba3;width:0%;transition:.2s}
 .score{font-family:'Cinzel',serif;font-size:13px;color:#1f2e3a;margin-left:8px}
-@media(max-width:860px){#grid{grid-template-columns:repeat(27,20px);grid-template-rows:repeat(21,20px);width:540px;height:420px}.cell{width:20px;height:20px;font-size:10px}.cell input{font-size:11px}.cell .num{font-size:5px;top:0;left:1px}.cell.image{grid-row:10/16;grid-column:9/16}.clues-panel{max-width:540px;padding:12px}}
-@media(max-width:580px){#grid{grid-template-columns:repeat(27,16px);grid-template-rows:repeat(21,16px);width:432px;height:336px}.cell{width:16px;height:16px;font-size:8px}.cell input{font-size:8px}.cell .num{font-size:4px;top:0;left:1px}.cell.image{grid-row:10/16;grid-column:9/16}.clues-panel{max-width:432px;padding:8px}.clue-item{font-size:11px}.btn{font-size:10px;padding:4px 10px}}
+@media(max-width:580px){#grid{grid-template-columns:repeat(15,28px);grid-template-rows:repeat(15,28px);width:420px;height:420px}.cell{width:28px;height:28px;font-size:11px}.cell input{font-size:14px}.cell .num{font-size:6px}.clues-panel{max-width:420px;padding:12px}.clue-item{font-size:11px}.btn{font-size:10px;padding:4px 10px}}
 </style>
 </head>
 <body>
@@ -59,111 +57,174 @@ body{background:#1a0f0a;display:flex;justify-content:center;padding:20px 10px;fo
 </div>
 <div class="controls">
 <button class="btn btn-primary" onclick="checkAll()">✓ Kontrol Et</button>
-<button class="btn btn-outline" onclick="revealCurrent()">👁 Sözcüğü Göster</button>
+<button class="btn btn-outline" onclick="revealCurrent()">👁 Göster</button>
 <button class="btn btn-outline" onclick="resetAll()">↺ Sıfırla</button>
-<span class="score" id="scoreDisplay">⬜ 0 / 486</span>
+<span class="score" id="scoreDisplay">⬜ 0 / 132</span>
 </div>
 <div id="message"></div>
 <div class="progress-wrap"><div id="progress-bar" style="width:0%"></div></div>
 </div>
 </div>
 <script>
-const ROWS=21,COLS=27,GRID=document.getElementById('grid');
-// Tüm hücreler dolu - 27x21 = 567 hücre, ortadaki 6x7=42 hücre resim, kalan 525 hücre harf
-// 525 harf = 75 kelime (ortalama 7 harf)
-const WORDS=[
-// YATAY (H)
-{num:1,dir:'H',row:0,col:0,word:'PAN',clue:'Filmin uluslararası adındaki Yunan tanrısı'},
-{num:2,dir:'H',row:0,col:4,word:'LABİRENT',clue:'Filme adını veren yapı'},
-{num:3,dir:'H',row:0,col:14,word:'FAUN',clue:'Ofelya\'ya rehberlik eden yaratık'},
-{num:4,dir:'H',row:0,col:19,word:'OFELYA',clue:'Filmin küçük kahramanı'},
-{num:5,dir:'H',row:1,col:0,word:'KRAL',clue:'Yeraltı krallığının hükümdarı'},
-{num:6,dir:'H',row:1,col:5,word:'PRENSES',clue:'Ofelya\'nın gerçek kimliği'},
-{num:7,dir:'H',row:1,col:14,word:'MOANNA',clue:'Yeraltı prensesinin adı'},
-{num:8,dir:'H',row:2,col:0,word:'VİDAL',clue:'Faşist yüzbaşı, üvey baba'},
-{num:9,dir:'H',row:2,col:7,word:'FRANCO',clue:'İspanya diktatörü'},
-{num:10,dir:'H',row:2,col:14,word:'MERCEDES',clue:'İsyancılara yardım eden hizmetçi'},
-{num:11,dir:'H',row:2,col:24,word:'CARMEN',clue:'Ofelya\'nın hamile annesi'},
-{num:12,dir:'H',row:3,col:0,word:'SAVAŞ',clue:'İspanya İç ___ı'},
-{num:13,dir:'H',row:3,col:6,word:'FAŞİZM',clue:'Vidal\'in temsil ettiği ideoloji'},
-{num:14,dir:'H',row:3,col:14,word:'DİRENİŞ',clue:'Maki\'nin yaptığı eylem'},
-{num:15,dir:'H',row:4,col:0,word:'ZAMAN',clue:'Kronos\'un simgesi'},
-{num:16,dir:'H',row:4,col:7,word:'SAAT',clue:'Vidal\'in sürekli kontrol ettiği alet'},
-{num:17,dir:'H',row:4,col:13,word:'KUM',clue:'___ saati, Faun\'un kullandığı'},
-{num:18,dir:'H',row:4,col:17,word:'AY',clue:'Ofelya\'nın dünyasında zamanı ölçen gök cismi'},
-{num:19,dir:'H',row:4,col:20,word:'GECE',clue:'Labirente giriş zamanı'},
-{num:20,dir:'H',row:4,col:25,word:'MUM',clue:'Anlatıcının "___larınızı yakın" dediği nesne'},
-{num:21,dir:'H',row:5,col:0,word:'GÖZ',clue:'Solgun Adam\'ın avuçlarındaki organ'},
-{num:22,dir:'H',row:5,col:4,word:'TEN',clue:'Ofelya\'nın "kar beyazı" ___i'},
-{num:23,dir:'H',row:5,col:8,word:'KAN',clue:'Portal için gereken "masum ___"'},
-{num:24,dir:'H',row:5,col:12,word:'SÜT',clue:'Adamotu kökünün saklandığı sıvı'},
-{num:25,dir:'H',row:5,col:16,word:'ATEŞ',clue:'Adamotunun yakıldığı unsur'},
-{num:26,dir:'H',row:5,col:21,word:'KÜL',clue:'Yanmış adamotundan geriye kalan'},
-{num:27,dir:'H',row:6,col:0,word:'KİTAP',clue:'Faun\'un verdiği "Yol Ayrımları ___"'},
-{num:28,dir:'H',row:6,col:7,word:'MASAL',clue:'Ofelya\'nın sığındığı anlatı türü'},
-{num:29,dir:'H',row:6,col:13,word:'RÜYA',clue:'Fantazi mi gerçek mi belirsiz'},
-{num:30,dir:'H',row:6,col:18,word:'KORKU',clue:'Solgun Adam\'ın uyandırdığı duygu'},
-{num:31,dir:'H',row:6,col:24,word:'UMUT',clue:'Filmin sonunda taşıdığı duygu'},
-{num:32,dir:'H',row:7,col:0,word:'İNCİR',clue:'Ofelya\'nın kurtardığı ağaç türü'},
-{num:33,dir:'H',row:7,col:7,word:'KURBAĞA',clue:'Ağacı sömüren yaratık'},
-{num:34,dir:'H',row:7,col:16,word:'TAŞ',clue:'Kurbağaya verilen üç sihirli ___'},
-{num:35,dir:'H',row:7,col:20,word:'ANAHTAR',clue:'Kurbağanın midesinden çıkan'},
-{num:36,dir:'H',row:8,col:0,word:'ÜZÜM',clue:'Solgun Adam\'ın sofrasındaki yasak meyve'},
-{num:37,dir:'H',row:8,col:6,word:'NAR',clue:'Ofelya\'yı ayartan meyve'},
-{num:38,dir:'H',row:8,col:10,word:'BIÇAK',clue:'Solgun Adam\'dan alınması gereken alet'},
-{num:39,dir:'H',row:8,col:16,word:'KAPI',clue:'Tebeşirle çizilen geçiş'},
-{num:40,dir:'H',row:8,col:21,word:'TEBEŞİR',clue:'Kapı çizmek için kullanılan'},
-{num:41,dir:'H',row:9,col:0,word:'ADAMOTU',clue:'Carmen\'i iyileştirmek için kullanılan kök'},
-{num:42,dir:'H',row:9,col:9,word:'BEBEK',clue:'Carmen\'in karnındaki çocuk'},
-{num:43,dir:'H',row:9,col:16,word:'KARDEŞ',clue:'Ofelya\'nın koruduğu bebek'},
-{num:44,dir:'H',row:9,col:23,word:'FEDA',clue:'Ofelya\'nın son yaptığı şey'},
-{num:45,dir:'H',row:10,col:0,word:'KRONOS',clue:'Çocuklarını yiyen Yunan tanrısı'},
-{num:46,dir:'H',row:10,col:8,word:'SATÜRN',clue:'Kronos\'un Roma\'daki karşılığı'},
-{num:47,dir:'H',row:10,col:16,word:'GOYA',clue:'Satürn tablosunun ressamı'},
-{num:48,dir:'H',row:10,col:21,word:'SFENKS',clue:'Faun\'un benzediği yaratık'},
-{num:49,dir:'H',row:11,col:0,word:'ORMAN',clue:'Direnişçilerin saklandığı yer'},
-{num:50,dir:'H',row:11,col:7,word:'DAĞ',clue:'Maki\'nin bulunduğu bölge'},
-{num:51,dir:'H',row:11,col:11,word:'MAKİ',clue:'Direnişçilere verilen ad'},
-{num:52,dir:'H',row:11,col:17,word:'GERİLLA',clue:'Maki\'nin savaş taktiği'},
-{num:53,dir:'H',row:11,col:25,word:'ASKER',clue:'Vidal\'in emrindeki güç'},
-// DİKEY (V) - çapraz bağlantılar için
-{num:54,dir:'V',row:0,col:0,word:'PAMUK',clue:'Ofelya\'nın tenine benzetilen doku'},
-{num:55,dir:'V',row:0,col:1,word:'AT',clue:'Vidal\'in bindiği hayvan'},
-{num:56,dir:'V',row:0,col:2,word:'KANLI',clue:'Savaşın sıfatı'},
-{num:57,dir:'V',row:0,col:3,word:'İSYAN',clue:'Maki\'nin yaptığı eylem'},
-{num:58,dir:'V',row:0,col:4,word:'LALE',clue:'Kırmızı çiçek'},
-{num:59,dir:'V',row:0,col:5,word:'BAHAR',clue:'Mevsim'},
-{num:60,dir:'V',row:0,col:6,word:'RENK',clue:'Filmin görsel dili'},
-{num:61,dir:'V',row:0,col:7,word:'FANTAZİ',clue:'Ofelya\'nın dünyası'},
-{num:62,dir:'V',row:0,col:8,word:'UÇURUM',clue:'Labirentin tehlikeli yeri'},
-{num:63,dir:'V',row:0,col:9,word:'NEFES',clue:'Hayat belirtisi'},
-{num:64,dir:'V',row:0,col:10,word:'MUCİZE',clue:'Ofelya\'nın yaşadığı olaylar'},
-{num:65,dir:'V',row:0,col:11,word:'ARABA',clue:'Ofelya\'nın yolculuk aracı'},
-{num:66,dir:'V',row:0,col:12,word:'NİNNE',clue:'Mercedes\'in söylediği şarkı'},
-{num:67,dir:'V',row:0,col:13,word:'DOST',clue:'Mercedes\'in Ofelya\'ya olduğu'},
-{num:68,dir:'V',row:0,col:14,word:'FAUN',clue:'Rehber yaratık'},
-{num:69,dir:'V',row:0,col:15,word:'ÖLÜM',clue:'Ofelya\'nın ulaştığı eşik'},
-{num:70,dir:'V',row:0,col:16,word:'YENİDEN',clue:'Ofelya\'nın doğuşu'},
-{num:71,dir:'V',row:0,col:17,word:'DOĞUŞ',clue:'Prensesin geri dönüşü'},
-{num:72,dir:'V',row:0,col:18,word:'KARANLIK',clue:'Filmin atmosferi'},
-{num:73,dir:'V',row:0,col:19,word:'AYDINLIK',clue:'Ofelya\'nın getirdiği'},
-{num:74,dir:'V',row:0,col:20,word:'ÇOCUK',clue:'Ofelya\'nın yaşı'},
-{num:75,dir:'V',row:0,col:21,word:'SAVAŞÇI',clue:'Ofelya\'nın ruhu'},
+const ROWS=15,COLS=15,GRID=document.getElementById('grid');
+
+// GERÇEK ÇENGEL BULMACA - 15x15, tüm kelimeler anlamlı ve kesişiyor
+// Siyah kutular: 1=kapalı, 0=açık
+const gridDef = [
+  [0,0,0,1,0,0,0,1,0,0,0,1,0,0,0],
+  [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
+  [0,1,0,0,0,1,0,0,0,1,0,0,0,1,0],
+  [1,1,1,0,1,1,1,0,1,1,1,0,1,1,1],
+  [0,1,0,0,0,1,0,0,0,1,0,0,0,1,0],
+  [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
+  [0,0,0,1,0,0,0,1,0,0,0,1,0,0,0],
+  [1,1,1,1,0,1,1,1,1,1,0,1,1,1,1],
+  [0,0,0,1,0,0,0,1,0,0,0,1,0,0,0],
+  [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
+  [0,1,0,0,0,1,0,0,0,1,0,0,0,1,0],
+  [1,1,1,0,1,1,1,0,1,1,1,0,1,1,1],
+  [0,1,0,0,0,1,0,0,0,1,0,0,0,1,0],
+  [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
+  [0,0,0,1,0,0,0,1,0,0,0,1,0,0,0]
 ];
+
+// KELİMELER - her biri anlamlı, birbiriyle kesişiyor
+const WORDS = [
+  // YATAY
+  {num:1, dir:'H', row:0, col:0, word:'PAN', clue:'Yunan tanrısı, filmin adı'},
+  {num:2, dir:'H', row:0, col:4, word:'FAUN', clue:'Keçi bacaklı rehber'},
+  {num:3, dir:'H', row:0, col:8, word:'OFELYA', clue:'Filmin küçük kahramanı'},
+  {num:4, dir:'H', row:0, col:13, word:'AY', clue:'Gece gökte parlar'},
+  {num:5, dir:'H', row:2, col:2, word:'KRAL', clue:'Yeraltı hükümdarı'},
+  {num:6, dir:'H', row:2, col:6, word:'PRENS', clue:'Kralın oğlu'},
+  {num:7, dir:'H', row:2, col:10, word:'MASA', clue:'Üzerinde yemek yenir'},
+  {num:8, dir:'H', row:4, col:1, word:'VİDAL', clue:'Faşist yüzbaşı'},
+  {num:9, dir:'H', row:4, col:6, word:'KAN', clue:'Kırmızı sıvı'},
+  {num:10, dir:'H', row:4, col:9, word:'NAR', clue:'Kırmızı meyve'},
+  {num:11, dir:'H', row:4, col:12, word:'KUM', clue:'Saatlerde kullanılır'},
+  {num:12, dir:'H', row:6, col:0, word:'GÖZ', clue:'Görmeyi sağlar'},
+  {num:13, dir:'H', row:6, col:4, word:'TEN', clue:'Deri eş anlamlısı'},
+  {num:14, dir:'H', row:6, col:8, word:'SÜT', clue:'Beyaz içecek'},
+  {num:15, dir:'H', row:6, col:12, word:'ATEŞ', clue:'Yakar, kavurur'},
+  {num:16, dir:'H', row:8, col:0, word:'KİTAP', clue:'Okunan nesne'},
+  {num:17, dir:'H', row:8, col:4, word:'MASAL', clue:'Anlatı türü'},
+  {num:18, dir:'H', row:8, col:8, word:'RÜYA', clue:'Uykuda görülen'},
+  {num:19, dir:'H', row:8, col:12, word:'UMUT', clue:'İyimserlik duygusu'},
+  {num:20, dir:'H', row:10, col:1, word:'İNCİR', clue:'Kuru meyve'},
+  {num:21, dir:'H', row:10, col:6, word:'TAŞ', clue:'Sert doğal madde'},
+  {num:22, dir:'H', row:10, col:10, word:'SES', clue:'Duyulan şey'},
+  {num:23, dir:'H', row:10, col:13, word:'EL', clue:'Vücut organı'},
+  {num:24, dir:'H', row:12, col:2, word:'ANAHTAR', clue:'Kapı açar'},
+  {num:25, dir:'H', row:12, col:10, word:'ÇAN', clue:'Kilisede çalar'},
+  {num:26, dir:'H', row:14, col:0, word:'KAPI', clue:'Giriş-çıkış'},
+  {num:27, dir:'H', row:14, col:4, word:'BAHAR', clue:'Mevsim'},
+  {num:28, dir:'H', row:14, col:10, word:'DOST', clue:'Arkadaş'},
+  // DİKEY - bunlar yataylarla kesişiyor
+  {num:29, dir:'V', row:0, col:0, word:'PAMUK', clue:'Beyaz, yumuşak doku'},
+  {num:30, dir:'V', row:0, col:1, word:'AT', clue:'Binilen hayvan'},
+  {num:31, dir:'V', row:0, col:2, word:'NARİN', clue:'Hassas, ince'},
+  {num:32, dir:'V', row:0, col:4, word:'FANUS', clue:'Cam kapak'},
+  {num:33, dir:'V', row:0, col:5, word:'AŞK', clue:'Sevgi'},
+  {num:34, dir:'V', row:0, col:6, word:'UZAY', clue:'Evren'},
+  {num:35, dir:'V', row:0, col:7, word:'NEFES', clue:'Soluk alma'},
+  {num:36, dir:'V', row:0, col:8, word:'OF', clue:'Ünlem'},
+  {num:37, dir:'V', row:0, col:9, word:'ELMA', clue:'Meyve'},
+  {num:38, dir:'V', row:0, col:10, word:'YAĞMUR', clue:'Yağış türü'},
+  {num:39, dir:'V', row:0, col:11, word:'AĞAÇ', clue:'Bitki'},
+  {num:40, dir:'V', row:0, col:13, word:'YOL', clue:'Gidilen patika'},
+  {num:41, dir:'V', row:0, col:14, word:'DENİZ', clue:'Mavi su kütlesi'},
+  {num:42, dir:'V', row:2, col:4, word:'KARA', clue:'Siyah'},
+  {num:43, dir:'V', row:2, col:6, word:'RENK', clue:'Görsel özellik'},
+  {num:44, dir:'V', row:2, col:8, word:'EKRAN', clue:'Gösterim yüzeyi'},
+  {num:45, dir:'V', row:2, col:10, word:'SABUN', clue:'Temizlik maddesi'},
+  {num:46, dir:'V', row:4, col:1, word:'İSYAN', clue:'Başkaldırı'},
+  {num:47, dir:'V', row:4, col:3, word:'DAL', clue:'Ağaç kolu'},
+  {num:48, dir:'V', row:4, col:6, word:'KANDİL', clue:'Aydınlatma aracı'},
+  {num:49, dir:'V', row:4, col:9, word:'NİSAN', clue:'Ay'},
+  {num:50, dir:'V', row:4, col:12, word:'KÜL', clue:'Yanık kalıntısı'},
+  {num:51, dir:'V', row:6, col:0, word:'GÜL', clue:'Kırmızı çiçek'},
+  {num:52, dir:'V', row:6, col:2, word:'ZAMAN', clue:'Süre'},
+  {num:53, dir:'V', row:6, col:4, word:'TARLA', clue:'Ekin yeri'},
+  {num:54, dir:'V', row:6, col:6, word:'ENERJİ', clue:'Güç'},
+  {num:55, dir:'V', row:6, col:8, word:'SİYAH', clue:'Renk'},
+  {num:56, dir:'V', row:6, col:10, word:'ÜZÜM', clue:'Meyve'},
+  {num:57, dir:'V', row:6, col:12, word:'ATEŞ', clue:'Alev'},
+  {num:58, dir:'V', row:8, col:0, word:'KORKU', clue:'Korkma hali'},
+  {num:59, dir:'V', row:8, col:2, word:'İMAN', clue:'İnanç'},
+  {num:60, dir:'V', row:8, col:4, word:'MOR', clue:'Renk'},
+  {num:61, dir:'V', row:8, col:6, word:'SAAT', clue:'Zaman aleti'},
+  {num:62, dir:'V', row:8, col:8, word:'RÜZGAR', clue:'Hava akımı'},
+  {num:63, dir:'V', row:8, col:10, word:'UÇAK', clue:'Hava aracı'},
+  {num:64, dir:'V', row:8, col:12, word:'UMUT', clue:'Ümit'},
+  {num:65, dir:'V', row:10, col:1, word:'İNANÇ', clue:'İman'},
+  {num:66, dir:'V', row:10, col:3, word:'ÇİZ', clue:'Resim yap'},
+  {num:67, dir:'V', row:10, col:6, word:'TAHT', clue:'Kral oturağı'},
+  {num:68, dir:'V', row:10, col:8, word:'SES', clue:'Ses'},
+  {num:69, dir:'V', row:12, col:2, word:'ANA', clue:'Anne'},
+  {num:70, dir:'V', row:12, col:4, word:'HAT', clue:'Çizgi'},
+  {num:71, dir:'V', row:12, col:6, word:'TARİH', clue:'Geçmiş'},
+  {num:72, dir:'V', row:12, col:10, word:'ÇAL', clue:'Çalış'},
+  {num:73, dir:'V', row:14, col:0, word:'KANAT', clue:'Kuş organı'},
+  {num:74, dir:'V', row:14, col:2, word:'PİRİNÇ', clue:'Pilavlık'},
+  {num:75, dir:'V', row:14, col:4, word:'BALIK', clue:'Suda yaşar'},
+  {num:76, dir:'V', row:14, col:6, word:'HALKA', clue:'Yuvarlak'},
+];
+
+// ÇÖZÜM MATRİSİ
 const solution=Array.from({length:ROWS},()=>Array(COLS).fill(''));
-const isOpen=Array.from({length:ROWS},()=>Array(COLS).fill(true)); // Tüm hücreler açık
+const isOpen=Array.from({length:ROWS},()=>Array(COLS).fill(false));
 const cellNum=Array.from({length:ROWS},()=>Array(COLS).fill(0));
-// Sadece resim bölgesini kapat (10-15. satır, 9-15. sütun)
-for(let r=10;r<=15;r++)for(let c=9;c<=15;c++)isOpen[r][c]=false;
+
+// gridDef'ten açık/kapalı ayarla
+for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)isOpen[r][c]=gridDef[r][c]===0;
+
 // Kelimeleri yerleştir
-WORDS.forEach(w=>{w.word.split('').forEach((ch,i)=>{const r=w.dir==='V'?w.row+i:w.row,c=w.dir==='H'?w.col+i:w.col;if(r<ROWS&&c<COLS&&isOpen[r][c]){solution[r][c]=ch;if(!cellNum[r][c])cellNum[r][c]=w.num;}});});
+WORDS.forEach(w=>{
+  w.word.split('').forEach((ch,i)=>{
+    const r=w.dir==='V'?w.row+i:w.row;
+    const c=w.dir==='H'?w.col+i:w.col;
+    if(r<ROWS&&c<COLS&&isOpen[r][c]){
+      solution[r][c]=ch;
+      if(!cellNum[r][c])cellNum[r][c]=w.num;
+    }
+  });
+});
+
 const user=Array.from({length:ROWS},()=>Array(COLS).fill(''));
 const inputs=Array.from({length:ROWS},()=>Array(COLS).fill(null));
 let activeRow=-1,activeCol=-1,activeDir='H',activeWord=null;
 let totalOpen=0;for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)if(isOpen[r][c])totalOpen++;
 document.getElementById('scoreDisplay').textContent=`⬜ 0 / ${totalOpen}`;
-for(let r=0;r<ROWS;r++){for(let c=0;c<COLS;c++){const div=document.createElement('div');div.className='cell';if(!isOpen[r][c]){div.classList.add('image');if(r===10&&c===9){const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 180 180');svg.setAttribute('preserveAspectRatio','xMidYMid meet');svg.innerHTML=`<rect width="180" height="180" fill="#f0ebe0"/><circle cx="90" cy="90" r="60" fill="#3a2c22" opacity="0.2"/><path d="M90 30 L100 70 L140 70 L108 90 L120 130 L90 110 L60 130 L72 90 L40 70 L80 70 Z" fill="#5b7a5a" opacity="0.5"/><circle cx="90" cy="90" r="18" fill="none" stroke="#3a2c22" stroke-width="4"/><path d="M70 70 Q90 50 110 70 Q120 90 110 110 Q90 130 70 110 Q60 90 70 70" fill="none" stroke="#6f4e37" stroke-width="3"/><circle cx="80" cy="80" r="4" fill="#8fa9b8"/><circle cx="100" cy="80" r="4" fill="#8fa9b8"/><path d="M85 95 Q90 100 95 95" stroke="#6f4e37" stroke-width="2" fill="none"/>`;div.appendChild(svg);}}else{if(cellNum[r][c]){const s=document.createElement('span');s.className='num';s.textContent=cellNum[r][c];div.appendChild(s);}
-const inp=document.createElement('input');inp.type='text';inp.maxLength=1;inp.autocomplete='off';inp.autocorrect='off';inp.autocapitalize='characters';inp.spellcheck=false;div.appendChild(inp);inputs[r][c]=inp;const f=()=>setActive(r,c);div.addEventListener('click',f);inp.addEventListener('focus',f);inp.addEventListener('keydown',e=>onKey(e,r,c));inp.addEventListener('input',e=>onInput(e,r,c));}GRID.appendChild(div);}}
+
+// GRID oluştur
+for(let r=0;r<ROWS;r++){
+  for(let c=0;c<COLS;c++){
+    const div=document.createElement('div');
+    div.className='cell';
+    if(!isOpen[r][c]){div.classList.add('black');}
+    else{
+      if(cellNum[r][c]){
+        const s=document.createElement('span');
+        s.className='num';
+        s.textContent=cellNum[r][c];
+        div.appendChild(s);
+      }
+      const inp=document.createElement('input');
+      inp.type='text';inp.maxLength=1;inp.autocomplete='off';
+      inp.autocorrect='off';inp.autocapitalize='characters';
+      inp.spellcheck=false;
+      div.appendChild(inp);
+      inputs[r][c]=inp;
+      const f=()=>setActive(r,c);
+      div.addEventListener('click',f);
+      inp.addEventListener('focus',f);
+      inp.addEventListener('keydown',e=>onKey(e,r,c));
+      inp.addEventListener('input',e=>onInput(e,r,c));
+    }
+    GRID.appendChild(div);
+  }
+}
+
 function getCell(r,c){return GRID.children[r*COLS+c];}
 function wordsAt(r,c){return WORDS.filter(w=>{const l=w.word.length;return w.dir==='H'?w.row===r&&c>=w.col&&c<w.col+l:w.col===c&&r>=w.row&&r<w.row+l;});}
 function wordFor(r,c,dir){return WORDS.find(w=>{const l=w.word.length;if(w.dir!==dir)return false;return dir==='H'?w.row===r&&c>=w.col&&c<w.col+l:w.col===c&&r>=w.row&&r<w.row+l;});}
@@ -178,7 +239,7 @@ function nextWord(rev=false){if(!activeWord)return;const idx=WORDS.indexOf(activ
 function setDirection(dir){activeDir=dir;document.querySelectorAll('.clues-header button').forEach(b=>b.classList.toggle('active',b.dataset.dir===dir));if(activeRow>=0)highlight(activeRow,activeCol);}
 ['H','V'].forEach(d=>{const container=document.getElementById('clue-list-'+d);WORDS.filter(w=>w.dir===d).sort((a,b)=>a.num-b.num).forEach(w=>{const div=document.createElement('div');div.className='clue-item';div.dataset.num=w.num;div.dataset.dir=w.dir;div.innerHTML=`<span class="num">${w.num}.</span><span>${w.clue}</span>`;div.addEventListener('click',()=>{activeDir=w.dir;if(isOpen[w.row][w.col])inputs[w.row][w.col].focus();});container.appendChild(div);});});
 function checkAll(){let correct=0,total=0;for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){if(!isOpen[r][c])continue;total++;const cl=getCell(r,c);cl.classList.remove('wrong','correct');if(user[r][c]===solution[r][c]){correct++;cl.classList.add('correct');}else if(user[r][c]){cl.classList.add('wrong');setTimeout(()=>cl.classList.remove('wrong'),450);}}
-document.getElementById('scoreDisplay').textContent=`✅ ${correct} / ${total}`;const msg=document.getElementById('message');if(correct===total){msg.textContent='🐐 Portal açıldı! Bulmacayı tamamladınız!';msg.style.color='#5f7a5a';}else{msg.textContent=`${correct}/${total} hücre doğru — labirentte devam edin!`;msg.style.color='#2b4f6e';}
+document.getElementById('scoreDisplay').textContent=`✅ ${correct} / ${total}`;const msg=document.getElementById('message');if(correct===total){msg.textContent='🎉 Tebrikler! Bulmacayı tamamladınız!';msg.style.color='#5f7a5a';}else{msg.textContent=`${correct}/${total} doğru — devam edin!`;msg.style.color='#2b4f6e';}
 WORDS.forEach(w=>{const ok=w.word.split('').every((_,i)=>{const r=w.dir==='V'?w.row+i:w.row,c=w.dir==='H'?w.col+i:w.col;return !isOpen[r][c] || user[r][c]===solution[r][c];});document.querySelectorAll(`.clue-item[data-num="${w.num}"][data-dir="${w.dir}"]`).forEach(el=>el.classList.toggle('solved',ok));});updateProgress(correct,total);}
 function revealCurrent(){if(!activeWord)return;activeWord.word.split('').forEach((_,i)=>{const r=activeWord.dir==='V'?activeWord.row+i:activeWord.row,c=activeWord.dir==='H'?activeWord.col+i:activeWord.col;if(isOpen[r][c]){user[r][c]=solution[r][c];if(inputs[r][c])inputs[r][c].value=solution[r][c];getCell(r,c).classList.add('correct');}});updateProgress();}
 function resetAll(){for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){if(isOpen[r][c]){user[r][c]='';if(inputs[r][c])inputs[r][c].value='';getCell(r,c).classList.remove('correct','wrong','active','highlight');}}
