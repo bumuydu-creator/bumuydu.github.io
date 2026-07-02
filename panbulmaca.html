@@ -1151,7 +1151,12 @@
                     {activeWord ? (
                       <div class="mt-1">
                         <h3 class="font-serif font-black text-base text-white tracking-wide">
-                          {activeWord.num}. {activeWord.dir === 'H' ? 'Yatay' : 'Dikey'} (Terim: <span class="text-[#c9a24b]">{activeWord.word}</span>)
+                          {activeWord.num}. {activeWord.dir === 'H' ? 'Yatay' : 'Dikey'}{' '}
+                          {checkWordSolved(activeWord) ? (
+                            <>(Terim: <span class="text-[#c9a24b]">{activeWord.word}</span>)</>
+                          ) : (
+                            <span class="text-[#c9a24b]/70 font-sans text-xs">({activeWord.word.length} Harfli)</span>
+                          )}
                         </h3>
                         <p class="text-[#efe4cf]/90 mt-1 font-sans text-sm md:text-base leading-relaxed">
                           "{activeWord.clue}"
@@ -1352,7 +1357,7 @@
                                           ? 'text-emerald-500/80 line-through' 
                                           : 'text-[#c9a24b]'
                                     }`}>
-                                      {w.word}
+                                      {isSolved ? w.word : `${w.word.length} Harfli`}
                                     </span>
                                     {isSolved && <span class="text-[8px] px-1 bg-[#7a1f1f] text-white rounded uppercase font-bold leading-relaxed shrink-0">✓</span>}
                                     {isActive && <span class="text-[8px] px-1 bg-[#c9a24b] text-black rounded uppercase font-bold leading-relaxed shrink-0">Seçili</span>}
@@ -1418,7 +1423,7 @@
                                           ? 'text-emerald-500/80 line-through' 
                                           : 'text-[#c9a24b]'
                                     }`}>
-                                      {w.word}
+                                      {isSolved ? w.word : `${w.word.length} Harfli`}
                                     </span>
                                     {isSolved && <span class="text-[8px] px-1 bg-[#7a1f1f] text-white rounded uppercase font-bold leading-relaxed shrink-0">✓</span>}
                                     {isActive && <span class="text-[8px] px-1 bg-[#c9a24b] text-black rounded uppercase font-bold leading-relaxed shrink-0">Seçili</span>}
