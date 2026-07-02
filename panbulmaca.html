@@ -1083,85 +1083,103 @@
 
                 {/* TAB 1: SYMBOLS INTERACTIVE READER */}
                 {activeTab === 'reader' && (
-                  <div class="bg-[#15110f] border border-[#3a2c22] rounded-b-xl flex flex-col flex-1 shadow-2xl relative max-h-[750px] overflow-hidden">
+                  <div class="bg-[#15110f] border border-[#3a2c22] rounded-b-xl flex flex-col flex-1 shadow-2xl relative max-h-[750px] overflow-hidden min-h-[400px]">
                     <div class="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#c9a24b_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
                     
-                    {/* Reader Search */}
-                    <div class="p-4 border-b border-[#3a2c22]/50 bg-[#0d0b0a]/70 relative z-10">
-                      <div class="relative">
-                        <span class="absolute left-3 top-2.5 text-[#8a7266]">
-                          <Search />
-                        </span>
-                        <input 
-                          type="text"
-                          placeholder="Analizde terim/kelime ara..."
-                          value={readerSearch}
-                          onChange={(e) => setReaderSearch(e.target.value)}
-                          class="w-full pl-9 pr-4 py-2 bg-[#1a1412] border border-[#3a2c22] rounded-lg text-xs outline-none text-[#efe4cf] placeholder-[#8a7266] focus:border-[#c9a24b] transition-colors font-mono"
-                        />
+                    {!showPostGameClues ? (
+                      <div class="flex-1 flex flex-col items-center justify-center p-6 text-center bg-[#0d0b0a]/90 relative z-10 space-y-4">
+                        <span class="text-5xl animate-pulse">🔒</span>
+                        <h3 class="font-serif font-black text-lg tracking-widest text-[#c9a24b] uppercase">
+                          Semboller Rehberi Mühürlü
+                        </h3>
+                        <p class="text-[#efe4cf]/80 text-xs md:text-sm leading-relaxed max-w-xs font-sans">
+                          Bu kadim analiz ve sembol rehberi, bulmaca devam ederken mühürlenmiştir.
+                        </p>
+                        <p class="text-[#8a7266] text-[11px] leading-relaxed max-w-xs italic font-serif">
+                          Rehberi okumak ve gizemleri keşfetmek için önce bulmacayı tamamlayın ya da yukarıdaki <span class="text-[#c9a24b] font-bold">"Kontrol Et"</span> butonu ile kontrol gerçekleştirin.
+                        </p>
+                        <div class="w-16 h-0.5 bg-gradient-to-r from-transparent via-[#c9a24b]/40 to-transparent" />
                       </div>
-                    </div>
-
-                    {/* Reading Areas */}
-                    <div class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 scroll-smooth scrollbar-stone" ref={readerScrollRef}>
-                      {SECTIONS.filter(section => 
-                        section.title.toLowerCase().includes(readerSearch.toLowerCase()) ||
-                        section.keywords.some(k => k.toLowerCase().includes(readerSearch.toLowerCase())) ||
-                        section.paragraphs.some(p => p.toLowerCase().includes(readerSearch.toLowerCase()))
-                      ).map((section) => (
-                        <div 
-                          key={section.id} 
-                          id={`section-${section.id}`}
-                          onClick={() => setSelectedSectionId(section.id)}
-                          className={`p-4 rounded-xl border transition-all ${
-                            selectedSectionId === section.id 
-                              ? 'bg-[#2b1712] border-[#c9a24b]/40 shadow-md' 
-                              : 'bg-[#1a1412] border-[#3a2c22]/40 hover:bg-[#251b18] hover:border-[#c9a24b]/20'
-                          }`}
-                        >
-                          <div class="flex items-center justify-between gap-2 border-b border-[#3a2c22]/40 pb-2 mb-3">
-                            <h4 class="font-serif font-black text-sm tracking-wide text-[#efe4cf] flex items-center gap-1.5">
-                              <span class="text-[#c9a24b] text-[10px]">♦</span> {section.title}
-                            </h4>
-                            <Compass className={`w-4 h-4 text-[#c9a24b]/60 ${selectedSectionId === section.id ? 'animate-spin' : ''}`} />
-                          </div>
-
-                          <div class="space-y-3">
-                            {section.paragraphs.map((p, pIdx) => (
-                              <p key={pIdx} class="text-xs md:text-[13px] text-[#efe4cf]/85 leading-relaxed text-justify">
-                                {renderParagraphWithHighlights(p, section.keywords)}
-                              </p>
-                            ))}
-                          </div>
-
-                          {/* Keywords section links */}
-                          <div class="mt-4 pt-3 border-t border-[#3a2c22]/35 flex flex-wrap gap-1.5 items-center">
-                            <span class="text-[9px] uppercase tracking-widest text-[#8a7266] font-semibold mr-1">Terimler:</span>
-                            {section.keywords.map(kw => {
-                              const wordObj = WORDS.find(w => w.word === kw);
-                              const isSolved = wordObj ? checkWordSolved(wordObj) : false;
-                              return (
-                                <button
-                                  key={kw}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleKeywordClick(kw);
-                                  }}
-                                  className={`px-2 py-0.5 rounded text-[10px] font-mono flex items-center gap-1 transition-all cursor-pointer ${
-                                    isSolved 
-                                      ? 'bg-emerald-950/40 border border-emerald-800/40 text-emerald-300 hover:bg-emerald-900/40' 
-                                      : 'bg-[#2b1712] border border-[#c9a24b]/20 text-[#c9a24b] hover:bg-[#3a1414] hover:text-[#efe4cf]'
-                                  }`}
-                                >
-                                  <span>{kw}</span>
-                                  {isSolved ? '✓' : '✧'}
-                                </button>
-                              );
-                            })}
+                    ) : (
+                      <>
+                        {/* Reader Search */}
+                        <div class="p-4 border-b border-[#3a2c22]/50 bg-[#0d0b0a]/70 relative z-10">
+                          <div class="relative">
+                            <span class="absolute left-3 top-2.5 text-[#8a7266]">
+                              <Search />
+                            </span>
+                            <input 
+                              type="text"
+                              placeholder="Analizde terim/kelime ara..."
+                              value={readerSearch}
+                              onChange={(e) => setReaderSearch(e.target.value)}
+                              class="w-full pl-9 pr-4 py-2 bg-[#1a1412] border border-[#3a2c22] rounded-lg text-xs outline-none text-[#efe4cf] placeholder-[#8a7266] focus:border-[#c9a24b] transition-colors font-mono"
+                            />
                           </div>
                         </div>
-                      ))}
-                    </div>
+
+                        {/* Reading Areas */}
+                        <div class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 scroll-smooth scrollbar-stone" ref={readerScrollRef}>
+                          {SECTIONS.filter(section => 
+                            section.title.toLowerCase().includes(readerSearch.toLowerCase()) ||
+                            section.keywords.some(k => k.toLowerCase().includes(readerSearch.toLowerCase())) ||
+                            section.paragraphs.some(p => p.toLowerCase().includes(readerSearch.toLowerCase()))
+                          ).map((section) => (
+                            <div 
+                              key={section.id} 
+                              id={`section-${section.id}`}
+                              onClick={() => setSelectedSectionId(section.id)}
+                              className={`p-4 rounded-xl border transition-all ${
+                                selectedSectionId === section.id 
+                                  ? 'bg-[#2b1712] border-[#c9a24b]/40 shadow-md' 
+                                  : 'bg-[#1a1412] border-[#3a2c22]/40 hover:bg-[#251b18] hover:border-[#c9a24b]/20'
+                              }`}
+                            >
+                              <div class="flex items-center justify-between gap-2 border-b border-[#3a2c22]/40 pb-2 mb-3">
+                                <h4 class="font-serif font-black text-sm tracking-wide text-[#efe4cf] flex items-center gap-1.5">
+                                  <span class="text-[#c9a24b] text-[10px]">♦</span> {section.title}
+                                </h4>
+                                <Compass className={`w-4 h-4 text-[#c9a24b]/60 ${selectedSectionId === section.id ? 'animate-spin' : ''}`} />
+                              </div>
+
+                              <div class="space-y-3">
+                                {section.paragraphs.map((p, pIdx) => (
+                                  <p key={pIdx} class="text-xs md:text-[13px] text-[#efe4cf]/85 leading-relaxed text-justify">
+                                    {renderParagraphWithHighlights(p, section.keywords)}
+                                  </p>
+                                ))}
+                              </div>
+
+                              {/* Keywords section links */}
+                              <div class="mt-4 pt-3 border-t border-[#3a2c22]/35 flex flex-wrap gap-1.5 items-center">
+                                <span class="text-[9px] uppercase tracking-widest text-[#8a7266] font-semibold mr-1">Terimler:</span>
+                                {section.keywords.map(kw => {
+                                  const wordObj = WORDS.find(w => w.word === kw);
+                                  const isSolved = wordObj ? checkWordSolved(wordObj) : false;
+                                  return (
+                                    <button
+                                      key={kw}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleKeywordClick(kw);
+                                      }}
+                                      className={`px-2 py-0.5 rounded text-[10px] font-mono flex items-center gap-1 transition-all cursor-pointer ${
+                                        isSolved 
+                                          ? 'bg-emerald-950/40 border border-emerald-800/40 text-emerald-300 hover:bg-emerald-900/40' 
+                                          : 'bg-[#2b1712] border border-[#c9a24b]/20 text-[#c9a24b] hover:bg-[#3a1414] hover:text-[#efe4cf]'
+                                      }`}
+                                    >
+                                      <span>{kw}</span>
+                                      {isSolved ? '✓' : '✧'}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
                   </div>
                 )}
 
