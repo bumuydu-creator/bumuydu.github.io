@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radar — Döngü Parlaklığı Rutinim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F6F1E7;
+    --ink:#2E2A24;
+    --ink-soft:#5C564C;
+    --sage:#5B7553;
+    --rose:#C4785E;
+    --yellow:#E8C468;
+    --line:#DCD3C0;
+    --card:#FBF8F2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    line-height:1.6;
+  }
+  .wrap{
+    max-width:680px;
+    margin:0 auto;
+    padding:64px 24px 96px;
+  }
+
+  /* ---- Hero / radar motif ---- */
+  .hero{
+    position:relative;
+    padding:40px 0 32px;
+    margin-bottom:8px;
+  }
+  .radar-rings{
+    position:absolute;
+    top:-30px;
+    right:-40px;
+    width:180px;
+    height:180px;
+    opacity:0.55;
+    z-index:0;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--sage);
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:18px;
+    position:relative;
+    z-index:1;
+  }
+  .signal-dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--rose);
+    position:relative;
+  }
+  .signal-dot::after{
+    content:'';
+    position:absolute;
+    inset:-5px;
+    border-radius:50%;
+    border:1px solid var(--rose);
+    opacity:0.5;
+    animation:pulse 2.4s ease-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .signal-dot::after{animation:none;}
+  }
+  @keyframes pulse{
+    0%{transform:scale(0.6);opacity:0.6;}
+    100%{transform:scale(2.4);opacity:0;}
+  }
+  h1{
+    font-family:'Fraunces', serif;
+    font-optical-sizing:auto;
+    font-weight:500;
+    font-size:clamp(32px,5vw,44px);
+    line-height:1.12;
+    margin:0 0 18px;
+    max-width:11ch;
+    position:relative;
+    z-index:1;
+  }
+  .lede{
+    font-size:17px;
+    color:var(--ink-soft);
+    max-width:52ch;
+    margin:0;
+    position:relative;
+    z-index:1;
+  }
+
+  /* ---- snail-trail divider ---- */
+  .trail{
+    height:20px;
+    margin:44px 0;
+    background-image: radial-gradient(circle, var(--line) 1.6px, transparent 1.7px);
+    background-size: 14px 14px;
+    background-position: 0 center;
+    opacity:0.9;
+  }
+
+  .day-split{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:36px;
+  }
+  @media (max-width:640px){
+    .day-split{
+      grid-template-columns:1fr;
+      gap:44px;
+    }
+  }
+
+  h2{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:23px;
+    margin:0 0 4px;
+  }
+  .section-note{
+    font-size:14px;
+    color:var(--ink-soft);
+    margin:0 0 20px;
+  }
+
+  /* ---- routine cards ---- */
+  .routine-grid{
+    display:grid;
+    gap:12px;
+  }
+  .step{
+    display:grid;
+    grid-template-columns:28px 1fr;
+    gap:14px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px 16px;
+  }
+  .step .num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--sage);
+    padding-top:2px;
+  }
+  .step .what{
+    font-weight:600;
+    font-size:15px;
+    margin:0 0 3px;
+  }
+  .step .why{
+    font-size:14px;
+    color:var(--ink-soft);
+    margin:0;
+  }
+
+  /* ---- food chips ---- */
+  .chip-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:14px;
+  }
+  .chip{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    padding:6px 12px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--ink);
+  }
+
+  /* ---- weekly table ---- */
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:8px;
+    font-size:14.5px;
+  }
+  th{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    text-align:left;
+    padding:0 12px 10px 0;
+    border-bottom:1px solid var(--line);
+  }
+  td{
+    padding:12px 12px 12px 0;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  td.day{
+    font-weight:600;
+    white-space:nowrap;
+    color:var(--rose);
+  }
+  tr:last-child td{border-bottom:none;}
+
+  .callout{
+    background:var(--card);
+    border-left:3px solid var(--sage);
+    border-radius:6px;
+    padding:16px 18px;
+    font-size:14.5px;
+    color:var(--ink-soft);
+    margin-top:28px;
+  }
+
+  /* ---- legal / disclaimer ---- */
+  .legal{
+    margin-top:56px;
+    padding-top:28px;
+    border-top:1px dashed var(--line);
+  }
+  .legal-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+  .legal p{
+    font-size:13px;
+    line-height:1.65;
+    color:var(--ink-soft);
+    margin:0 0 10px;
+  }
+  .legal p:last-child{margin-bottom:0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <svg class="radar-rings" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="90" cy="90" r="86" fill="none" stroke="#5B7553" stroke-width="1"/>
+      <circle cx="90" cy="90" r="60" fill="none" stroke="#5B7553" stroke-width="1"/>
+      <circle cx="90" cy="90" r="34" fill="none" stroke="#5B7553" stroke-width="1"/>
+      <circle cx="90" cy="90" r="10" fill="#C4785E"/>
+    </svg>
+    <div class="eyebrow"><span class="signal-dot"></span> radar — bu ay yakaladığım sinyal</div>
+    <h1>Döngü Öncesi Parlaklık Rutinim</h1>
+    <p class="lede">Cildimde ara sıra fark ettiğim o doğal aydınlığı diğer günlere de taşımak için denediğim küçük bir rutin bu. Bilimsel bir reçete değil; ancak kendi gözlemlerim sonucunda, yapay zekâyla birlikte tartışarak ve araştırarak formüle döktüm. Tamamen kendi gözlemim. Belki size de bir şey ifade eder.</p>
+  </div>
+
+  <div class="trail"></div>
+
+  <div class="day-split">
+    <section class="day-col">
+      <h2>Sabah</h2>
+      <p class="section-note">Temizlik + dolaşım + nem, bu sırayla.</p>
+      <div class="routine-grid">
+        <div class="step">
+          <span class="num">01</span>
+          <div><p class="what">Ilık su ile yıka, soğuk suyla durula</p><p class="why">Ilık su kir ve yağı iyi çözer; soğuk durulama damarları toparlayıp anlık canlılık verir.</p></div>
+        </div>
+        <div class="step">
+          <span class="num">02</span>
+          <div><p class="what">Niasinamid serum</p><p class="why">Mikro dolaşımı destekler, ten tonunu eşitler.</p></div>
+        </div>
+        <div class="step">
+          <span class="num">03</span>
+          <div><p class="what">Hyaluronik asit</p><p class="why">Nemli cilde uygulanınca su tutma kapasitesini artırır.</p></div>
+        </div>
+        <div class="step">
+          <span class="num">04</span>
+          <div><p class="what">Skualan veya jojoba yağı</p><p class="why">Cildin kendi yağına benzer, dengeyi bozmadan besler. Yağlı ciltte 1-2 damla yeterli.</p></div>
+        </div>
+        <div class="step">
+          <span class="num">05</span>
+          <div><p class="what">Güneş kremi</p><p class="why">Şart — aksi halde önceki adımların etkisi azalır.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="day-col">
+      <h2>Akşam</h2>
+      <p class="section-note">Gün boyu birikeni temizle, dolaşımı tazele.</p>
+      <div class="routine-grid">
+        <div class="step">
+          <span class="num">01</span>
+          <div><p class="what">Ilık su ile nazik temizlik</p><p class="why">Sıcak su kullanma, cilt bariyerini bozar.</p></div>
+        </div>
+        <div class="step">
+          <span class="num">02</span>
+          <div><p class="what">2-3 dakika yüz masajı</p><p class="why">Parmak ucu ya da gua sha ile — kan akışını mekanik olarak artırır.</p></div>
+        </div>
+        <div class="step">
+          <span class="num">03</span>
+          <div><p class="what">Aloe vera jeli</p><p class="why">İnce bir tabaka — hafif nem ve rahatlatıcı etki.</p></div>
+        </div>
+        <div class="step">
+          <span class="num">04</span>
+          <div><p class="what">Gliserin bazlı gece kremi</p><p class="why">Uyku sırasında nemi kilitler. İstersen 1-2 damla skualan ekleyerek yoğunlaştır.</p></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="trail"></div>
+
+  <section>
+    <h2>Günlük beslenme</h2>
+    <p class="section-note">Rutine her gün eklenebilecek küçük seçimler.</p>
+    <div class="routine-grid">
+      <div class="step">
+        <span class="num">•</span>
+        <div><p class="what">Sabah</p><p class="why">Bol su (uyanır uyanmaz 1 bardak) + yeşil çay.</p></div>
+      </div>
+      <div class="step">
+        <span class="num">•</span>
+        <div><p class="what">Ara öğün</p><p class="why">Bir avuç ceviz veya keten tohumu (omega-3).</p></div>
+      </div>
+      <div class="step">
+        <span class="num">•</span>
+        <div><p class="what">Herhangi bir öğün</p><p class="why">Kırmızı biber, portakal, kivi gibi C vitamini kaynağı.</p></div>
+      </div>
+      <div class="step">
+        <span class="num">•</span>
+        <div><p class="what">Gün boyu</p><p class="why">Toplam su tüketimini yüksek tut (salatalık, kereviz gibi sulu sebzeler de sayılır).</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="trail"></div>
+
+  <section>
+    <h2>Haftalık plan</h2>
+    <p class="section-note">Her günün bir odağı var — hepsini aynı gün yapmaya çalışmıyorum.</p>
+    <table>
+      <thead>
+        <tr><th>Gün</th><th>Cilt odağı</th><th>Beslenme odağı</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="day">Pzt</td><td>Yüz masajı + gua sha</td><td>Nar veya kırmızı üzüm</td></tr>
+        <tr><td class="day">Sal</td><td>Hyaluronik asit ağırlıklı nem</td><td>Somon / omega-3 kaynağı</td></tr>
+        <tr><td class="day">Çar</td><td>Hafif peeling</td><td>Yaban mersini</td></tr>
+        <tr><td class="day">Per</td><td>Aloe vera maskesi (10 dk)</td><td>Avokado</td></tr>
+        <tr><td class="day">Cum</td><td>Skualan / jojoba yağı</td><td>Koyu çikolata (%70+)</td></tr>
+        <tr><td class="day">Cmt</td><td>Dinlenme — sade nemlendirici</td><td>Karpuz, salatalık</td></tr>
+        <tr><td class="day">Paz</td><td>Değerlendirme + uzun masaj</td><td>Bol su, hafif beslenme</td></tr>
+      </tbody>
+    </table>
+    <div class="callout">Yeni bir ürünü rutine eklerken 3-4 gün ara veriyorum, cildimin nasıl tepki verdiğini öyle anlıyorum. Aktif içerikleri (niasinamid, C vitamini, peeling) aynı anda üst üste kullanmıyorum.</div>
+  </section>
+
+  <div class="legal">
+    <div class="legal-label">Şerh</div>
+    <p>Bu sayfada paylaşılanlar tıbbi tavsiye, teşhis veya tedavi önerisi değildir; yalnızca kendi kişisel gözlem ve deneyimlerimi yansıtır. Herkesin cildi ve hormonal döngüsü farklı tepki verebilir.</p>
+    <p>Cilt sorunlarınız, alerjileriniz veya adet döngünüzle ilgili endişeleriniz varsa lütfen bir dermatolog veya kadın hastalıkları uzmanına danışın. Yeni bir ürünü kullanmadan önce cildinizin küçük bir bölgesinde test etmenizi öneririm.</p>
+    <p>Bu içerik "olduğu gibi" paylaşılmıştır; uygulanmasından doğabilecek sonuçlardan sorumluluk kabul edilmez.</p>
+  </div>
+
+</div>
+</body>
+</html>
