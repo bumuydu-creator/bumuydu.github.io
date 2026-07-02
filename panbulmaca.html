@@ -839,6 +839,23 @@
                         {/* LEFT COLUMN: CROSSWORD AND CONTROLS */}
                         <section className="lg:col-span-7 xl:col-span-8 flex flex-col gap-4">
                             
+                            {/* PERSISTENT STATUS MESSAGE BOARD */}
+                            {message && (
+                                <div className={`p-3.5 rounded-xl border flex items-center justify-between gap-3 text-xs md:text-sm shadow ${
+                                    message.type === 'success' 
+                                        ? 'bg-emerald-950/40 border-emerald-900/60 text-emerald-200' 
+                                        : message.type === 'error' 
+                                            ? 'bg-red-950/40 border-red-900/40 text-red-200' 
+                                            : 'bg-[#051c14] border border-emerald-900/40 text-emerald-200'
+                                }`}>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-lg">{message.type === 'success' ? '🐐' : message.type === 'error' ? '⚡' : '📜'}</span>
+                                        <span>{message.text}</span>
+                                    </div>
+                                    <button onClick={() => setMessage(null)} className="text-emerald-600 hover:text-emerald-400 px-1 font-mono text-xs cursor-pointer">Kapat</button>
+                                </div>
+                            )}
+
                             {/* CONTROL BAR */}
                             <div className="bg-[#051c14]/90 border border-emerald-900/40 backdrop-blur rounded-xl p-3 flex flex-wrap gap-2 items-center justify-between shadow-lg relative z-10">
                                 <div className="flex items-center gap-2">
@@ -1055,23 +1072,6 @@
                                     )}
                                 </div>
                             </div>
-
-                            {/* PERSISTENT STATUS MESSAGE BOARD */}
-                            {message && (
-                                <div className={`p-3.5 rounded-xl border flex items-center justify-between gap-3 text-xs md:text-sm shadow ${
-                                    message.type === 'success' 
-                                        ? 'bg-emerald-950/40 border-emerald-900/60 text-emerald-200' 
-                                        : message.type === 'error' 
-                                            ? 'bg-red-950/40 border-red-900/40 text-red-200' 
-                                            : 'bg-[#051c14] border border-emerald-900/40 text-emerald-200'
-                                }`}>
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-lg">{message.type === 'success' ? '🐐' : message.type === 'error' ? '⚡' : '📜'}</span>
-                                        <span>{message.text}</span>
-                                    </div>
-                                    <button onClick={() => setMessage(null)} className="text-emerald-600 hover:text-emerald-400 px-1 font-mono text-xs cursor-pointer">Kapat</button>
-                                </div>
-                            )}
 
                         </section>
 
