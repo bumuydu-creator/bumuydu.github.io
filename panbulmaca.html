@@ -354,7 +354,7 @@
 
         // UI toggles
         const [showIntro, setShowIntro] = useState(true);
-        const [activeTab, setActiveTab] = useState('reader');
+        const [activeTab, setActiveTab] = useState('clues');
         const [readerSearch, setReaderSearch] = useState('');
         const [selectedSectionId, setSelectedSectionId] = useState('intro');
         const [solvedWordCount, setSolvedWordCount] = useState(0);
@@ -1131,7 +1131,7 @@
                       >
                         <img 
                           src={artImgSrc} 
-                          onError={() => setArtImgSrc("https://raw.githubusercontent.com/bumuydu-creator/bumuydu.github.io/refs/heads/main/pan%201.png")}
+                          onError={() => setArtImgSrc("https://images.unsplash.com/photo-1518005020951-eccb494ad742?q=80&w=1000&auto=format&fit=crop")}
                           class="w-full h-full object-cover transition-transform duration-700 hover:scale-105 opacity-80 hover:opacity-100" 
                           alt="Labyrinth Portal Graphic" 
                           referrerpolicy="no-referrer"
@@ -1298,66 +1298,142 @@
                     <div class="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#c9a24b_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
                     
                     <div class="border-b border-[#3a2c22]/40 pb-3 mb-3 flex items-center justify-between">
-                      <h3 class="font-serif font-black text-sm tracking-widest uppercase text-[#c9a24b]">Tüm İpuçları Listesi</h3>
-                      <span class="text-[10px] bg-[#1a1412] border border-[#3a2c22]/30 px-2 py-0.5 rounded text-[#8a7266] font-mono">Toplam {WORDS.length}</span>
+                      <h3 class="font-serif font-black text-sm tracking-widest uppercase text-[#c9a24b]">Bulmaca Soruları</h3>
+                      <span class="text-[10px] bg-[#1a1412] border border-[#3a2c22]/30 px-2 py-0.5 rounded text-[#8a7266] font-mono">Toplam {WORDS.length} Soru</span>
                     </div>
 
-                    <div class="flex-1 overflow-y-auto space-y-2 pr-1 scrollbar-stone">
-                      {WORDS.sort((a, b) => a.num - b.num).map((w) => {
-                        const isSolved = checkWordSolved(w);
-                        const isActive = activeWord?.num === w.num && activeWord?.dir === w.dir;
-
-                        return (
-                          <div 
-                            key={`${w.num}-${w.dir}`}
-                            onClick={() => {
-                              setActiveWord(w);
-                              setDirection(w.dir);
-                              setFocusedCell({ r: w.row, c: w.col });
-                              setTimeout(() => {
-                                inputRefs.current[`${w.row},${w.col}`]?.focus();
-                              }, 30);
-                            }}
-                            className={`p-3 rounded-lg border text-left cursor-pointer transition-all flex items-start gap-3 ${
-                              isActive 
-                                ? 'bg-[#2b1712] border-[#c9a24b]/30 shadow-inner text-[#efe4cf]' 
-                                : isSolved 
-                                  ? 'bg-[#1a1412] border-white/5 opacity-60 text-[#8a7266] hover:opacity-90' 
-                                  : 'bg-[#1a1412] border-white/5 hover:bg-[#251b18]'
-                            }`}
-                          >
-                            <span class={`px-2 py-1 rounded text-xs font-serif font-black ${
-                              isActive
-                                ? 'bg-[#1a0d0d] text-[#c9a24b]'
-                                : isSolved 
-                                  ? 'bg-emerald-950/30 text-emerald-400' 
-                                  : 'bg-[#2b1712] text-[#c9a24b]'
-                            }`}>
-                              {w.num}.{w.dir}
-                            </span>
-                            <div class="flex-1">
-                              <div class="flex items-center justify-between gap-2">
-                                <span class={`text-[11px] font-bold tracking-widest uppercase ${
-                                  isActive
-                                    ? 'text-white'
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1 min-h-0 overflow-hidden">
+                      {/* Yatay Sorular (Across - H) */}
+                      <div class="flex flex-col min-h-0">
+                        <div class="flex items-center gap-1.5 pb-2 mb-2 border-b border-[#3a2c22]/40">
+                          <span class="text-[#c9a24b] text-xs font-serif font-black tracking-widest uppercase">Yatay Sorular (→)</span>
+                          <span class="text-[10px] bg-[#1a1412] border border-[#3a2c22]/30 px-1.5 py-0.5 rounded text-[#8a7266] font-mono">
+                            {WORDS.filter(w => w.dir === 'H').length}
+                          </span>
+                        </div>
+                        <div class="flex-1 overflow-y-auto space-y-2 pr-1 scrollbar-stone h-[450px]">
+                          {WORDS.filter(w => w.dir === 'H').sort((a, b) => a.num - b.num).map((w) => {
+                            const isSolved = checkWordSolved(w);
+                            const isActive = activeWord?.num === w.num && activeWord?.dir === w.dir;
+                            return (
+                              <div 
+                                key={`${w.num}-${w.dir}`}
+                                onClick={() => {
+                                  setActiveWord(w);
+                                  setDirection(w.dir);
+                                  setFocusedCell({ r: w.row, c: w.col });
+                                  setTimeout(() => {
+                                    inputRefs.current[`${w.row},${w.col}`]?.focus();
+                                  }, 50);
+                                }}
+                                class={`p-3 rounded-lg border text-left cursor-pointer transition-all flex items-start gap-3 ${
+                                  isActive 
+                                    ? 'bg-[#2b1712] border-[#c9a24b]/30 shadow-inner text-[#efe4cf]' 
                                     : isSolved 
-                                      ? 'text-emerald-500/80 line-through' 
-                                      : 'text-[#c9a24b]'
+                                      ? 'bg-[#1a1412] border-white/5 opacity-60 text-[#8a7266] hover:opacity-90' 
+                                      : 'bg-[#1a1412] border-[#3a2c22]/20 hover:bg-[#251b18]'
+                                }`}
+                              >
+                                <span class={`px-2 py-1 rounded text-xs font-serif font-black shrink-0 ${
+                                  isActive
+                                    ? 'bg-[#1a0d0d] text-[#c9a24b]'
+                                    : isSolved 
+                                      ? 'bg-emerald-950/30 text-emerald-400' 
+                                      : 'bg-[#2b1712] text-[#c9a24b]'
                                 }`}>
-                                  {w.word}
+                                  {w.num}
                                 </span>
-                                {isSolved && <span class="text-[8px] px-1 bg-[#7a1f1f] text-white rounded uppercase font-bold leading-relaxed">Çözüldü</span>}
-                                {isActive && <span class="text-[8px] px-1 bg-[#c9a24b] text-black rounded uppercase font-bold leading-relaxed">Seçili</span>}
+                                <div class="flex-1 min-w-0">
+                                  <div class="flex items-center justify-between gap-1">
+                                    <span class={`text-[11px] font-bold tracking-widest uppercase truncate ${
+                                      isActive
+                                        ? 'text-white'
+                                        : isSolved 
+                                          ? 'text-emerald-500/80 line-through' 
+                                          : 'text-[#c9a24b]'
+                                    }`}>
+                                      {w.word}
+                                    </span>
+                                    {isSolved && <span class="text-[8px] px-1 bg-[#7a1f1f] text-white rounded uppercase font-bold leading-relaxed shrink-0">✓</span>}
+                                    {isActive && <span class="text-[8px] px-1 bg-[#c9a24b] text-black rounded uppercase font-bold leading-relaxed shrink-0">Seçili</span>}
+                                  </div>
+                                  <p class={`text-xs mt-1 italic font-sans leading-relaxed ${
+                                    isActive ? 'text-[#efe4cf]' : 'text-[#8a7266]'
+                                  }`}>
+                                    {w.clue}
+                                  </p>
+                                </div>
                               </div>
-                              <p class={`text-xs mt-1 italic font-sans leading-relaxed ${
-                                isActive ? 'text-[#efe4cf]' : 'text-[#8a7266]'
-                              }`}>
-                                {w.clue}
-                              </p>
-                            </div>
-                          </div>
-                        );
-                      })}
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Dikey Sorular (Down - V) */}
+                      <div class="flex flex-col min-h-0">
+                        <div class="flex items-center gap-1.5 pb-2 mb-2 border-b border-[#3a2c22]/40">
+                          <span class="text-[#c9a24b] text-xs font-serif font-black tracking-widest uppercase">Dikey Sorular (↓)</span>
+                          <span class="text-[10px] bg-[#1a1412] border border-[#3a2c22]/30 px-1.5 py-0.5 rounded text-[#8a7266] font-mono">
+                            {WORDS.filter(w => w.dir === 'V').length}
+                          </span>
+                        </div>
+                        <div class="flex-1 overflow-y-auto space-y-2 pr-1 scrollbar-stone h-[450px]">
+                          {WORDS.filter(w => w.dir === 'V').sort((a, b) => a.num - b.num).map((w) => {
+                            const isSolved = checkWordSolved(w);
+                            const isActive = activeWord?.num === w.num && activeWord?.dir === w.dir;
+                            return (
+                              <div 
+                                key={`${w.num}-${w.dir}`}
+                                onClick={() => {
+                                  setActiveWord(w);
+                                  setDirection(w.dir);
+                                  setFocusedCell({ r: w.row, c: w.col });
+                                  setTimeout(() => {
+                                    inputRefs.current[`${w.row},${w.col}`]?.focus();
+                                  }, 50);
+                                }}
+                                class={`p-3 rounded-lg border text-left cursor-pointer transition-all flex items-start gap-3 ${
+                                  isActive 
+                                    ? 'bg-[#2b1712] border-[#c9a24b]/30 shadow-inner text-[#efe4cf]' 
+                                    : isSolved 
+                                      ? 'bg-[#1a1412] border-white/5 opacity-60 text-[#8a7266] hover:opacity-90' 
+                                      : 'bg-[#1a1412] border-[#3a2c22]/20 hover:bg-[#251b18]'
+                                }`}
+                              >
+                                <span class={`px-2 py-1 rounded text-xs font-serif font-black shrink-0 ${
+                                  isActive
+                                    ? 'bg-[#1a0d0d] text-[#c9a24b]'
+                                    : isSolved 
+                                      ? 'bg-emerald-950/30 text-emerald-400' 
+                                      : 'bg-[#2b1712] text-[#c9a24b]'
+                                }`}>
+                                  {w.num}
+                                </span>
+                                <div class="flex-1 min-w-0">
+                                  <div class="flex items-center justify-between gap-1">
+                                    <span class={`text-[11px] font-bold tracking-widest uppercase truncate ${
+                                      isActive
+                                        ? 'text-white'
+                                        : isSolved 
+                                          ? 'text-emerald-500/80 line-through' 
+                                          : 'text-[#c9a24b]'
+                                    }`}>
+                                      {w.word}
+                                    </span>
+                                    {isSolved && <span class="text-[8px] px-1 bg-[#7a1f1f] text-white rounded uppercase font-bold leading-relaxed shrink-0">✓</span>}
+                                    {isActive && <span class="text-[8px] px-1 bg-[#c9a24b] text-black rounded uppercase font-bold leading-relaxed shrink-0">Seçili</span>}
+                                  </div>
+                                  <p class={`text-xs mt-1 italic font-sans leading-relaxed ${
+                                    isActive ? 'text-[#efe4cf]' : 'text-[#8a7266]'
+                                  }`}>
+                                    {w.clue}
+                                  </p>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
