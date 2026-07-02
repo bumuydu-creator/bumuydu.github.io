@@ -303,16 +303,54 @@
 
         // Core states
         const [grid, setGrid] = useState([]);
-        const [userLetters, setUserLetters] = useState(() =>
-          Array.from({ length: ROWS }, () => Array(COLS).fill('')
-        ));
-        const [validation, setValidation] = useState(() =>
-          Array.from({ length: ROWS }, () => Array(COLS).fill(null))
-        );
+        const [cellSize, setCellSize] = useState(32);
+        const [showHints, setShowHints] = useState(false);
+        const [userLetters, setUserLetters] = useState(() => {
+          const saved = localStorage.getItem('pan_crossword_letters');
+          if (saved) {
+            try {
+              const parsed = JSON.parse(saved);
+              if (parsed && parsed.length === ROWS && parsed[0].length === COLS) {
+                return parsed;
+              }
+            } catch (e) {
+              console.error(e);
+            }
+          }
+          return Array.from({ length: ROWS }, () => Array(COLS).fill(''));
+        });
+        const [validation, setValidation] = useState(() => {
+          const saved = localStorage.getItem('pan_crossword_validation');
+          if (saved) {
+            try {
+              const parsed = JSON.parse(saved);
+              if (parsed && parsed.length === ROWS && parsed[0].length === COLS) {
+                return parsed;
+              }
+            } catch (e) {
+              console.error(e);
+            }
+          }
+          return Array.from({ length: ROWS }, () => Array(COLS).fill(null));
+        });
+
+        // Save progress to local storage
+        useEffect(() => {
+          if (userLetters && userLetters.length > 0) {
+            localStorage.setItem('pan_crossword_letters', JSON.stringify(userLetters));
+          }
+        }, [userLetters]);
+
+        useEffect(() => {
+          if (validation && validation.length > 0) {
+            localStorage.setItem('pan_crossword_validation', JSON.stringify(validation));
+          }
+        }, [validation]);
 
         const [activeWord, setActiveWord] = useState(WORDS[0]);
         const [direction, setDirection] = useState('H');
         const [focusedCell, setFocusedCell] = useState(null);
+        const [hoveredClue, setHoveredClue] = useState(null);
 
         // UI toggles
         const [showIntro, setShowIntro] = useState(true);
@@ -379,7 +417,7 @@
           return true;
         };
 
-        // Construct Grid and calculate positions (pure crossword: letters + blocked + center art)
+        // Construct Grid and calculate positions
         const initGrid = () => {
           const initialGrid = Array.from({ length: ROWS }, (_, r) =>
             Array.from({ length: COLS }, (_, c) => ({
@@ -412,6 +450,92 @@
             }
           });
 
+          // 3. Smart positioning for clues
+          const clueCellMap = new Map();
+
+          const isCellFree = (r, c) => {
+            if (r < 0 || r >= ROWS || c < 0 || c >= COLS) return false;
+            const cell = initialGrid[r][c];
+            if (cell.type === 'letter' || cell.type === 'center_art') return false;
+            if (clueCellMap.has(`${r},${c}`)) return false;
+            return true;
+          };
+
+          WORDS.forEach((w) => {
+            let placed = false;
+            const r = w.row;
+            const c = w.col;
+
+            // 1. Try to place at standard position directly before/above the first letter
+            if (w.dir === 'H') {
+              if (isCellFree(r, c - 1)) {
+                clueCellMap.set(`${r},${c - 1}`, { r, c: c - 1, dir: 'H', num: w.num, text: w.clue });
+                placed = true;
+              }
+            } else {
+              if (isCellFree(r - 1, c)) {
+                clueCellMap.set(`${r - 1},${c}`, { r: r - 1, c, dir: 'V', num: w.num, text: w.clue });
+                placed = true;
+              }
+            }
+
+            // 2. Try adjacent cells to the first letter (sharing an edge: above, below, left, right)
+            if (!placed) {
+              const adjacentToFirst = [
+                [r - 1, c], // above
+                [r + 1, c], // below
+                [r, c - 1], // left
+                [r, c + 1]  // right
+              ];
+              for (const [ar, ac] of adjacentToFirst) {
+                if (isCellFree(ar, ac)) {
+                  clueCellMap.set(`${ar},${ac}`, { r: ar, c: ac, dir: w.dir, num: w.num, text: w.clue });
+                  placed = true;
+                  break;
+                }
+              }
+            }
+
+            // 3. Try adjacent cells sharing an edge with ANY subsequent letter of the word
+            if (!placed) {
+              const len = w.word.length;
+              for (let i = 1; i < len; i++) {
+                const lr = r + (w.dir === 'V' ? i : 0);
+                const lc = c + (w.dir === 'H' ? i : 0);
+                const adjacentToLetter = [
+                  [lr - 1, lc], // above
+                  [lr + 1, lc], // below
+                  [lr, lc - 1], // left
+                  [lr, lc + 1]  // right
+                ];
+                for (const [ar, ac] of adjacentToLetter) {
+                  if (isCellFree(ar, ac)) {
+                    clueCellMap.set(`${ar},${ac}`, { r: ar, c: ac, dir: w.dir, num: w.num, text: w.clue });
+                    placed = true;
+                    break;
+                  }
+                }
+                if (placed) break;
+              }
+            }
+          });
+
+          // Insert calculated clue cells into the grid structure
+          clueCellMap.forEach((info, key) => {
+            const [r, c] = key.split(',').map(Number);
+            const targetWord = WORDS.find(word => word.num === info.num && word.dir === info.dir);
+            initialGrid[r][c] = {
+              type: 'clue',
+              row: r,
+              col: c,
+              clueText: info.text,
+              clueDir: info.dir,
+              clueNum: info.num,
+              targetRow: targetWord?.row,
+              targetCol: targetWord?.col,
+            };
+          });
+
           return initialGrid;
         };
 
@@ -425,9 +549,76 @@
           }
         };
 
+        // Handle cell focusing (triggered on focus of input)
+        const handleCellFocus = (r, c, cell) => {
+          setFocusedCell({ r, c });
+
+          // Dynamically find words passing through this cell and sync activeWord
+          const wordsAtCell = WORDS.filter(w => {
+            const len = w.word.length;
+            if (w.dir === 'H') {
+              return w.row === r && c >= w.col && c < w.col + len;
+            } else {
+              return w.col === c && r >= w.row && r < w.row + len;
+            }
+          });
+
+          if (wordsAtCell.length > 0) {
+            // Keep current active word if it passes through this cell
+            const currentActiveIsHere = wordsAtCell.some(w => w.word === activeWord?.word);
+            if (!currentActiveIsHere) {
+              const matchingWord = wordsAtCell.find(w => w.dir === direction) || wordsAtCell[0];
+              setActiveWord(matchingWord);
+              setDirection(matchingWord.dir);
+
+              const matchingSection = SECTIONS.find(s => s.keywords.includes(matchingWord.word));
+              if (matchingSection) {
+                setSelectedSectionId(matchingSection.id);
+              }
+            }
+          }
+        };
+
+        const revealFocusedLetter = () => {
+          if (!focusedCell) {
+            setMessage({ text: "Lütfen önce bir kutu seçin.", type: 'error' });
+            return;
+          }
+          const { r, c } = focusedCell;
+          const cell = grid[r]?.[c];
+          if (cell && cell.type === 'letter') {
+            const correctLetter = cell.letter;
+            const newLetters = [...userLetters];
+            newLetters[r][c] = correctLetter;
+            setUserLetters(newLetters);
+            
+            const newValidation = [...validation];
+            newValidation[r][c] = 'correct';
+            setValidation(newValidation);
+
+            setMessage({ text: `✓ Harf açıldı: "${correctLetter}"`, type: 'success' });
+          }
+        };
+
         // Grid cell click handler
         const handleCellClick = (r, c, cell) => {
-          if (cell.type === 'letter') {
+          if (cell.type === 'clue') {
+            const targetW = WORDS.find(w => w.num === cell.clueNum && w.dir === cell.clueDir);
+            if (targetW) {
+              setActiveWord(targetW);
+              setDirection(targetW.dir);
+              setFocusedCell({ r: targetW.row, c: targetW.col });
+
+              const matchingSection = SECTIONS.find(s => s.keywords.includes(targetW.word));
+              if (matchingSection) {
+                setSelectedSectionId(matchingSection.id);
+              }
+
+              setTimeout(() => {
+                inputRefs.current[`${targetW.row},${targetW.col}`]?.focus();
+              }, 35);
+            }
+          } else if (cell.type === 'letter') {
             const wordsAtCell = WORDS.filter(w => {
               const len = w.word.length;
               if (w.dir === 'H') {
@@ -453,20 +644,6 @@
             }
             setFocusedCell({ r, c });
           }
-        };
-
-        // Select a word directly (used by side clue lists)
-        const selectWord = (w) => {
-          setActiveWord(w);
-          setDirection(w.dir);
-          setFocusedCell({ r: w.row, c: w.col });
-          const matchingSection = SECTIONS.find(s => s.keywords.includes(w.word));
-          if (matchingSection) {
-            setSelectedSectionId(matchingSection.id);
-          }
-          setTimeout(() => {
-            inputRefs.current[`${w.row},${w.col}`]?.focus();
-          }, 35);
         };
 
         // Text typing handler
@@ -551,10 +728,13 @@
         const handleKeywordClick = (wordText) => {
           const wordObj = WORDS.find(w => w.word === wordText);
           if (wordObj) {
-            selectWord(wordObj);
+            setActiveWord(wordObj);
+            setDirection(wordObj.dir);
+            setFocusedCell({ r: wordObj.row, c: wordObj.col });
             setActiveTab('reader');
 
             setTimeout(() => {
+              inputRefs.current[`${wordObj.row},${wordObj.col}`]?.focus();
               inputRefs.current[`${wordObj.row},${wordObj.col}`]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 60);
 
@@ -609,7 +789,7 @@
         // Reveal solution for the currently selected active word
         const revealCurrentWord = () => {
           if (!activeWord) {
-            setMessage({ text: "Lütfen önce bir kelime veya ipucu seçin.", type: 'error' });
+            setMessage({ text: "Lütfen önce bir kelime veya hücre seçin.", type: 'error' });
             return;
           }
 
@@ -694,44 +874,6 @@
           });
         };
 
-        // Split clue lists by direction, sorted by number (classic crossword style)
-        const acrossClues = [...WORDS].filter(w => w.dir === 'H').sort((a, b) => a.num - b.num);
-        const downClues = [...WORDS].filter(w => w.dir === 'V').sort((a, b) => a.num - b.num);
-
-        const renderClueItem = (w) => {
-          const isSolved = checkWordSolved(w);
-          const isActive = activeWord?.num === w.num && activeWord?.dir === w.dir;
-          return (
-            <div
-              key={`${w.num}-${w.dir}`}
-              onClick={() => selectWord(w)}
-              className={`px-2.5 py-2 rounded-lg border text-left cursor-pointer transition-all flex items-start gap-2 ${
-                isActive
-                  ? 'bg-[#2b1712] border-[#c9a24b]/40 shadow-inner text-[#efe4cf]'
-                  : isSolved
-                    ? 'bg-[#15110f] border-white/5 opacity-55 text-[#8a7266] hover:opacity-90'
-                    : 'bg-[#15110f] border-white/5 hover:bg-[#1f1714] hover:border-[#c9a24b]/20'
-              }`}
-            >
-              <span className={`shrink-0 mt-0.5 min-w-[20px] text-center px-1 py-0.5 rounded text-[10px] font-serif font-black ${
-                isActive
-                  ? 'bg-[#1a0d0d] text-[#c9a24b]'
-                  : isSolved
-                    ? 'bg-emerald-950/30 text-emerald-400'
-                    : 'bg-[#2b1712] text-[#c9a24b]'
-              }`}>
-                {w.num}
-              </span>
-              <p className={`text-[11px] leading-snug italic font-sans flex-1 ${
-                isActive ? 'text-[#efe4cf]' : isSolved ? 'line-through text-[#6b5a4f]' : 'text-[#c9b8a8]'
-              }`}>
-                {w.clue}
-                {isSolved && <span class="not-italic ml-1 text-emerald-500">✓</span>}
-              </p>
-            </div>
-          );
-        };
-
         return (
           <div id="app-root" class="min-h-screen bg-[#0d0b0a] text-[#efe4cf] font-sans relative overflow-x-hidden flex flex-col justify-between">
             
@@ -766,10 +908,10 @@
             </header>
 
             {/* MAIN CONTENT WORKSPACE */}
-            <main id="app-main" class="relative z-10 flex-1 grid grid-cols-1 xl:grid-cols-12 gap-6 p-4 md:p-6 max-w-[1600px] mx-auto w-full">
+            <main id="app-main" class="relative z-10 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 p-4 md:p-6 max-w-7xl mx-auto w-full">
               
               {/* CROSSWORD PANEL */}
-              <section id="crossword-container" class="xl:col-span-5 flex flex-col gap-4">
+              <section id="crossword-container" class="lg:col-span-7 xl:col-span-8 flex flex-col gap-4">
                 
                 {/* TOOLBAR */}
                 <div class="bg-[#1a1412]/90 border border-[#3a2c22] backdrop-blur rounded-xl p-3 flex flex-wrap gap-2 items-center justify-between shadow-lg relative z-10">
@@ -788,9 +930,40 @@
                     >
                       <Eye /> Kelimeyi Göster
                     </button>
+                    <button 
+                      onClick={revealFocusedLetter}
+                      class="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#1f1512] hover:bg-[#2d1f1b] text-amber-300 rounded-lg text-xs font-serif font-black tracking-widest uppercase border border-amber-500/20 hover:border-amber-500/50 transition-all shadow cursor-pointer"
+                      title="Seçili kutunun doğru harfini göster"
+                    >
+                      ✨ Harf Al
+                    </button>
+                    <button 
+                      onClick={() => setShowHints(!showHints)}
+                      class={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-serif font-black tracking-widest uppercase border transition-all shadow cursor-pointer ${
+                        showHints 
+                          ? 'bg-amber-950/40 border-amber-500/60 text-amber-200 hover:bg-amber-900/50' 
+                          : 'bg-[#15110f] border-[#3a2c22]/50 text-[#8a7266] hover:text-[#efe4cf] hover:border-amber-500/30'
+                      }`}
+                      title="Tüm bulmaca için ipucu harfleri göster/gizle"
+                    >
+                      💡 İpucu Harfler ({showHints ? "Açık" : "Kapalı"})
+                    </button>
                   </div>
 
-                  <div class="flex items-center gap-2">
+                  <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-1.5 bg-[#15110f] border border-[#3a2c22]/50 px-2.5 py-1 rounded-lg">
+                      <span class="text-[9px] text-[#8a7266] uppercase tracking-wider font-semibold">Büyüklük:</span>
+                      <input 
+                        type="range" 
+                        min="24" 
+                        max="48" 
+                        value={cellSize} 
+                        onChange={(e) => setCellSize(Number(e.target.value))} 
+                        class="w-16 accent-[#c9a24b] h-1 bg-[#1a1412] rounded-lg cursor-pointer" 
+                      />
+                      <span class="text-[9px] font-mono text-[#c9a24b]">{cellSize}px</span>
+                    </div>
+
                     <button 
                       onClick={resetAll}
                       class="flex items-center gap-1.5 px-3 py-1.5 bg-[#15110f] hover:bg-[#251f1c] text-[#8a7266] hover:text-[#efe4cf] rounded-lg text-xs font-sans font-bold border border-[#3a2c22]/50 hover:border-[#c9a24b]/30 transition-all cursor-pointer"
@@ -808,14 +981,19 @@
                   <div class="overflow-auto max-w-full max-h-[600px] rounded-lg border border-[#3a2c22] p-2 bg-[#0d0b0a] shadow-[inset_0_0_30px_rgba(0,0,0,0.9)] scrollbar-stone">
                     <div 
                       id="crossword-grid" 
-                      class="grid gap-[2px] bg-[#0a0807] p-2 relative rounded-md border border-[#c9a24b]/20"
+                      class="grid gap-[1px] bg-[#221a16] p-2 relative rounded-md border border-[#c9a24b]/20"
                       style={{ 
-                        gridTemplateColumns: `repeat(${COLS}, minmax(28px, 1fr))`,
-                        gridTemplateRows: `repeat(${ROWS}, minmax(28px, 1fr))`
+                        gridTemplateColumns: `repeat(${COLS}, minmax(${cellSize}px, 1fr))`,
+                        gridTemplateRows: `repeat(${ROWS}, minmax(${cellSize}px, 1fr))`
                       }}
                     >
                       {grid.map((rowArr, r) => 
                         rowArr.map((cell, c) => {
+                          // Prevent rendering inside the center art bounding box
+                          if (r >= 9 && r <= 14 && c >= 8 && c <= 14) {
+                            return null;
+                          }
+
                           if (cell.type === 'letter') {
                             const isFocused = focusedCell?.r === r && focusedCell?.c === c;
                             const isActive = isCellInActiveWord(r, c);
@@ -825,20 +1003,26 @@
                               <div 
                                 key={`${r},${c}`}
                                 onClick={() => handleCellClick(r, c, cell)}
-                                className={`w-7 h-7 relative rounded-sm flex items-center justify-center transition-all cursor-text font-serif border shadow-sm ${
+                                style={{
+                                  width: `${cellSize}px`,
+                                  height: `${cellSize}px`,
+                                  gridRow: r + 1,
+                                  gridColumn: c + 1
+                                }}
+                                className={`relative rounded-none flex items-center justify-center transition-all cursor-text font-serif border-none ${
                                   isFocused 
-                                    ? 'bg-[#c9a24b] border-2 border-[#efe4cf] ring-2 ring-[#c9a24b]/50 z-20' 
+                                    ? 'bg-[#c9a24b] ring-2 ring-[#efe4cf] z-20 scale-105 shadow-lg shadow-amber-500/25' 
                                     : valState === 'correct'
-                                      ? 'bg-emerald-950/40 border-2 border-emerald-600/70'
+                                      ? 'bg-[#0f2e1e] text-emerald-300 font-extrabold'
                                       : valState === 'wrong'
-                                        ? 'bg-red-950/40 border-2 border-red-700/70 shake-animation'
+                                        ? 'bg-[#3a1414] text-red-300 font-extrabold shake-animation'
                                         : isActive 
-                                          ? 'bg-[#efe4cf] border-2 border-[#c9a24b] text-[#2b2420]' 
-                                          : 'bg-[#efe4cf] border border-[#2b2420]/30 text-[#2b2420] hover:bg-[#efe4cf]/90'
+                                          ? 'bg-[#fcf3db] text-[#2b1712] font-black z-10' 
+                                          : 'bg-[#efe4cf] text-[#2b2420] hover:bg-[#efe4cf]/90 font-bold'
                                 }`}
                               >
                                 {cell.numberLabel && (
-                                  <span class="absolute top-0.5 left-0.5 text-[7px] font-serif font-black text-[#7a1f1f] select-none leading-none">
+                                  <span class="absolute top-0.5 left-0.5 text-[8px] font-serif font-black text-[#7a1f1f] select-none leading-none">
                                     {cell.numberLabel}
                                   </span>
                                 )}
@@ -847,35 +1031,90 @@
                                   ref={(el) => { inputRefs.current[`${r},${c}`] = el; }}
                                   type="text"
                                   maxLength={1}
-                                  value={userLetters[r]?.[c] || ''}
-                                  onFocus={() => setFocusedCell({ r, c })}
+                                  value={userLetters[r]?.[c] || (showHints ? cell.letter : '')}
+                                  onFocus={() => handleCellFocus(r, c, cell)}
                                   onKeyDown={(e) => handleKeyDown(e, r, c)}
                                   onChange={(e) => handleInputChange(r, c, e.target.value)}
-                                  className={`w-full h-full text-center font-serif font-bold text-sm uppercase bg-transparent border-none outline-none focus:ring-0 pt-1 ${
+                                  className={`w-full h-full text-center font-serif font-bold uppercase bg-transparent border-none outline-none focus:ring-0 pt-0.5 ${
                                     isFocused 
                                       ? 'text-[#15110f]' 
                                       : valState === 'correct' 
                                         ? 'text-emerald-300 font-extrabold' 
                                         : valState === 'wrong' 
                                           ? 'text-red-400 font-extrabold' 
-                                          : 'text-[#2b2420]'
+                                          : !userLetters[r]?.[c] && showHints
+                                            ? 'text-[#7a1f1f]/50 italic font-medium'
+                                            : isActive
+                                              ? 'text-[#2b1712]'
+                                              : 'text-[#2b2420]'
                                   }`}
+                                  style={{
+                                    fontSize: `${Math.max(10, Math.floor(cellSize * 0.45))}px`
+                                  }}
                                 />
                               </div>
                             );
                           }
 
-                          if (cell.type === 'center_art') {
-                            return null; // Rendered below as a giant container to span grid cells
+                          if (cell.type === 'clue') {
+                            const isHovered = hoveredClue?.num === cell.clueNum && hoveredClue?.dir === cell.clueDir;
+                            return (
+                              <div 
+                                key={`${r},${c}`}
+                                onClick={() => handleCellClick(r, c, cell)}
+                                onMouseEnter={() => setHoveredClue({ text: cell.clueText, num: cell.clueNum, dir: cell.clueDir })}
+                                onMouseLeave={() => setHoveredClue(null)}
+                                style={{
+                                  width: `${cellSize}px`,
+                                  height: `${cellSize}px`,
+                                  gridRow: r + 1,
+                                  gridColumn: c + 1
+                                }}
+                                className={`rounded-none relative flex flex-col items-center justify-between p-0.5 cursor-help transition-all border-none group ${
+                                  isHovered 
+                                    ? 'bg-gradient-to-b from-[#7a1f1f] to-[#3a1414] scale-105 z-10 shadow-lg shadow-amber-500/20' 
+                                    : 'bg-gradient-to-b from-[#2b1712] to-[#1a0d0d]'
+                                }`}
+                              >
+                                <div class="w-full flex items-center justify-between gap-0.5 select-none">
+                                  <span style={{ fontSize: `${Math.max(6, Math.floor(cellSize * 0.22))}px` }} class="font-black font-serif text-[#c9a24b] group-hover:text-white leading-none">
+                                    {cell.clueNum}{cell.clueDir}
+                                  </span>
+                                  <span style={{ fontSize: `${Math.max(6, Math.floor(cellSize * 0.25))}px` }} class="text-[#c9a24b] font-mono leading-none">
+                                    {cell.clueDir === 'H' ? '→' : '↓'}
+                                  </span>
+                                </div>
+
+                                <div class="w-full flex flex-col gap-0.5 items-center select-none opacity-40 group-hover:opacity-100 mb-0.5">
+                                  <div class="w-10/12 h-[1px] bg-[#c9a24b]/50" />
+                                  <div class="w-8/12 h-[1px] bg-[#c9a24b]/50" />
+                                </div>
+
+                                {/* Custom HTML Tooltip triggered on hover */}
+                                <div class="hidden group-hover:block absolute bottom-full mb-1 left-1/2 -translate-x-1/2 bg-[#1a1412] border border-[#c9a24b] text-[#efe4cf] text-[10px] p-2 rounded shadow-2xl w-40 z-50 pointer-events-none">
+                                  <p class="font-bold border-b border-[#3a2c22] pb-1 mb-1 font-serif text-[#c9a24b]">
+                                    {cell.clueNum}. {cell.clueDir === 'H' ? 'Yatay' : 'Dikey'}
+                                  </p>
+                                  <p class="leading-relaxed italic font-sans">"{cell.clueText}"</p>
+                                </div>
+                              </div>
+                            );
                           }
 
-                          // Blocked Stone Cell (Dark background per immersive mockup)
+                          // Blocked cell (designed as solid dark stone walls to make the crossword feel like a contiguous medieval Labyrinth)
                           return (
                             <div 
                               key={`${r},${c}`}
-                              class="w-7 h-7 rounded-sm bg-black border border-[#1a1614] flex items-center justify-center relative shadow-inner"
+                              style={{
+                                width: `${cellSize}px`,
+                                height: `${cellSize}px`,
+                                gridRow: r + 1,
+                                gridColumn: c + 1
+                              }}
+                              className="bg-[#0f0b0a] flex items-center justify-center relative"
                             >
-                              <div class="absolute inset-0 border-[0.5px] border-[#1a1614]/40" />
+                              {/* A very subtle inner corner mark or texture to represent ancient stone masonry */}
+                              <div className="absolute inset-[1px] bg-[#070505] opacity-90" />
                             </div>
                           );
                         })
@@ -920,7 +1159,7 @@
                       </div>
                     ) : (
                       <div class="mt-1">
-                        <p class="text-[#8a7266] italic text-sm">Yandaki listeden bir ipucu seçin.</p>
+                        <p class="text-[#8a7266] italic text-sm">Bulmacadaki bir kelimeye veya clue hücresine tıklayın.</p>
                       </div>
                     )}
                   </div>
@@ -942,126 +1181,186 @@
                 )}
               </section>
 
-              {/* CLUE LISTS PANEL — YATAY / DİKEY SIDE BY SIDE */}
-              <section id="clue-lists-panel" class="xl:col-span-3 flex flex-col gap-2">
-                <div class="bg-[#0a0807] border border-[#3a2c22] rounded-xl px-3 py-2.5 flex items-center justify-between">
-                  <h3 class="font-serif font-black text-xs tracking-widest uppercase text-[#c9a24b]">İpuçları</h3>
-                  <span class="text-[9px] bg-[#1a1412] border border-[#3a2c22]/30 px-2 py-0.5 rounded text-[#8a7266] font-mono">{WORDS.length} kelime</span>
-                </div>
-                <div class="grid grid-cols-2 gap-2 flex-1 min-h-0">
-                  {/* YATAY (Across) column */}
-                  <div class="bg-[#15110f] border border-[#3a2c22] rounded-xl flex flex-col overflow-hidden shadow-xl">
-                    <div class="px-2.5 py-2 border-b border-[#3a2c22]/50 bg-[#1a0d0d] flex items-center gap-1.5 shrink-0">
-                      <span class="text-[#c9a24b] text-xs">→</span>
-                      <h4 class="text-[10px] font-serif font-black tracking-widest uppercase text-[#efe4cf]">Yatay</h4>
-                    </div>
-                    <div class="flex-1 overflow-y-auto p-1.5 space-y-1 scrollbar-stone max-h-[700px]">
-                      {acrossClues.map(renderClueItem)}
-                    </div>
-                  </div>
-
-                  {/* DİKEY (Down) column */}
-                  <div class="bg-[#15110f] border border-[#3a2c22] rounded-xl flex flex-col overflow-hidden shadow-xl">
-                    <div class="px-2.5 py-2 border-b border-[#3a2c22]/50 bg-[#1a0d0d] flex items-center gap-1.5 shrink-0">
-                      <span class="text-[#c9a24b] text-xs">↓</span>
-                      <h4 class="text-[10px] font-serif font-black tracking-widest uppercase text-[#efe4cf]">Dikey</h4>
-                    </div>
-                    <div class="flex-1 overflow-y-auto p-1.5 space-y-1 scrollbar-stone max-h-[700px]">
-                      {downClues.map(renderClueItem)}
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              {/* SYMBOLS READER PANEL */}
-              <section id="companion-reader-panel" class="xl:col-span-4 flex flex-col gap-4">
+              {/* COMPANION SIDE PANEL CONTAINER */}
+              <section id="companion-reader-panel" class="lg:col-span-5 xl:col-span-4 flex flex-col gap-4">
                 
-                <div class="bg-[#0a0807] border-b border-[#3a2c22] p-0.5 flex w-full rounded-t-xl">
-                  <div class="flex-1 py-2.5 text-xs uppercase tracking-widest flex items-center justify-center gap-2 border-b-2 border-[#c9a24b] bg-[#1a1412] text-white font-bold">
+                {/* TABS SELECTOR */}
+                <div class="bg-[#0a0807] border-b border-[#3a2c22] p-0.5 flex w-full">
+                  <button
+                    onClick={() => setActiveTab('reader')}
+                    class={`flex-1 py-2.5 text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                      activeTab === 'reader' 
+                        ? 'border-b-2 border-[#c9a24b] bg-[#1a1412] text-white font-bold' 
+                        : 'text-[#8a7266] hover:bg-[#1a1412]/50 hover:text-white'
+                    }`}
+                  >
                     <BookOpen /> Semboller Rehberi
-                  </div>
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('clues')}
+                    class={`flex-1 py-2.5 text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                      activeTab === 'clues' 
+                        ? 'border-b-2 border-[#c9a24b] bg-[#1a1412] text-white font-bold' 
+                        : 'text-[#8a7266] hover:bg-[#1a1412]/50 hover:text-white'
+                    }`}
+                  >
+                    <ListFilter /> İpucu Listesi
+                  </button>
                 </div>
 
-                <div class="bg-[#15110f] border border-[#3a2c22] rounded-b-xl flex flex-col flex-1 shadow-2xl relative max-h-[800px] overflow-hidden -mt-4">
-                  <div class="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#c9a24b_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
-                  
-                  {/* Reader Search */}
-                  <div class="p-4 border-b border-[#3a2c22]/50 bg-[#0d0b0a]/70 relative z-10">
-                    <div class="relative">
-                      <span class="absolute left-3 top-2.5 text-[#8a7266]">
-                        <Search />
-                      </span>
-                      <input 
-                        type="text"
-                        placeholder="Analizde terim/kelime ara..."
-                        value={readerSearch}
-                        onChange={(e) => setReaderSearch(e.target.value)}
-                        class="w-full pl-9 pr-4 py-2 bg-[#1a1412] border border-[#3a2c22] rounded-lg text-xs outline-none text-[#efe4cf] placeholder-[#8a7266] focus:border-[#c9a24b] transition-colors font-mono"
-                      />
+                {/* TAB 1: SYMBOLS INTERACTIVE READER */}
+                {activeTab === 'reader' && (
+                  <div class="bg-[#15110f] border border-[#3a2c22] rounded-b-xl flex flex-col flex-1 shadow-2xl relative max-h-[750px] overflow-hidden">
+                    <div class="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#c9a24b_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
+                    
+                    {/* Reader Search */}
+                    <div class="p-4 border-b border-[#3a2c22]/50 bg-[#0d0b0a]/70 relative z-10">
+                      <div class="relative">
+                        <span class="absolute left-3 top-2.5 text-[#8a7266]">
+                          <Search />
+                        </span>
+                        <input 
+                          type="text"
+                          placeholder="Analizde terim/kelime ara..."
+                          value={readerSearch}
+                          onChange={(e) => setReaderSearch(e.target.value)}
+                          class="w-full pl-9 pr-4 py-2 bg-[#1a1412] border border-[#3a2c22] rounded-lg text-xs outline-none text-[#efe4cf] placeholder-[#8a7266] focus:border-[#c9a24b] transition-colors font-mono"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Reading Areas */}
+                    <div class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 scroll-smooth scrollbar-stone" ref={readerScrollRef}>
+                      {SECTIONS.filter(section => 
+                        section.title.toLowerCase().includes(readerSearch.toLowerCase()) ||
+                        section.keywords.some(k => k.toLowerCase().includes(readerSearch.toLowerCase())) ||
+                        section.paragraphs.some(p => p.toLowerCase().includes(readerSearch.toLowerCase()))
+                      ).map((section) => (
+                        <div 
+                          key={section.id} 
+                          id={`section-${section.id}`}
+                          onClick={() => setSelectedSectionId(section.id)}
+                          className={`p-4 rounded-xl border transition-all ${
+                            selectedSectionId === section.id 
+                              ? 'bg-[#2b1712] border-[#c9a24b]/40 shadow-md' 
+                              : 'bg-[#1a1412] border-[#3a2c22]/40 hover:bg-[#251b18] hover:border-[#c9a24b]/20'
+                          }`}
+                        >
+                          <div class="flex items-center justify-between gap-2 border-b border-[#3a2c22]/40 pb-2 mb-3">
+                            <h4 class="font-serif font-black text-sm tracking-wide text-[#efe4cf] flex items-center gap-1.5">
+                              <span class="text-[#c9a24b] text-[10px]">♦</span> {section.title}
+                            </h4>
+                            <Compass className={`w-4 h-4 text-[#c9a24b]/60 ${selectedSectionId === section.id ? 'animate-spin' : ''}`} />
+                          </div>
+
+                          <div class="space-y-3">
+                            {section.paragraphs.map((p, pIdx) => (
+                              <p key={pIdx} class="text-xs md:text-[13px] text-[#efe4cf]/85 leading-relaxed text-justify">
+                                {renderParagraphWithHighlights(p, section.keywords)}
+                              </p>
+                            ))}
+                          </div>
+
+                          {/* Keywords section links */}
+                          <div class="mt-4 pt-3 border-t border-[#3a2c22]/35 flex flex-wrap gap-1.5 items-center">
+                            <span class="text-[9px] uppercase tracking-widest text-[#8a7266] font-semibold mr-1">Terimler:</span>
+                            {section.keywords.map(kw => {
+                              const wordObj = WORDS.find(w => w.word === kw);
+                              const isSolved = wordObj ? checkWordSolved(wordObj) : false;
+                              return (
+                                <button
+                                  key={kw}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleKeywordClick(kw);
+                                  }}
+                                  className={`px-2 py-0.5 rounded text-[10px] font-mono flex items-center gap-1 transition-all cursor-pointer ${
+                                    isSolved 
+                                      ? 'bg-emerald-950/40 border border-emerald-800/40 text-emerald-300 hover:bg-emerald-900/40' 
+                                      : 'bg-[#2b1712] border border-[#c9a24b]/20 text-[#c9a24b] hover:bg-[#3a1414] hover:text-[#efe4cf]'
+                                  }`}
+                                >
+                                  <span>{kw}</span>
+                                  {isSolved ? '✓' : '✧'}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
+                )}
 
-                  {/* Reading Areas */}
-                  <div class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 scroll-smooth scrollbar-stone" ref={readerScrollRef}>
-                    {SECTIONS.filter(section => 
-                      section.title.toLowerCase().includes(readerSearch.toLowerCase()) ||
-                      section.keywords.some(k => k.toLowerCase().includes(readerSearch.toLowerCase())) ||
-                      section.paragraphs.some(p => p.toLowerCase().includes(readerSearch.toLowerCase()))
-                    ).map((section) => (
-                      <div 
-                        key={section.id} 
-                        id={`section-${section.id}`}
-                        onClick={() => setSelectedSectionId(section.id)}
-                        className={`p-4 rounded-xl border transition-all ${
-                          selectedSectionId === section.id 
-                            ? 'bg-[#2b1712] border-[#c9a24b]/40 shadow-md' 
-                            : 'bg-[#1a1412] border-[#3a2c22]/40 hover:bg-[#251b18] hover:border-[#c9a24b]/20'
-                        }`}
-                      >
-                        <div class="flex items-center justify-between gap-2 border-b border-[#3a2c22]/40 pb-2 mb-3">
-                          <h4 class="font-serif font-black text-sm tracking-wide text-[#efe4cf] flex items-center gap-1.5">
-                            <span class="text-[#c9a24b] text-[10px]">♦</span> {section.title}
-                          </h4>
-                          <Compass className={`w-4 h-4 text-[#c9a24b]/60 ${selectedSectionId === section.id ? 'animate-spin' : ''}`} />
-                        </div>
+                {/* TAB 2: CLUES COMPLETE LIST */}
+                {activeTab === 'clues' && (
+                  <div class="bg-[#15110f] border border-[#3a2c22] rounded-b-xl p-4 flex flex-col flex-1 shadow-2xl relative max-h-[750px] overflow-hidden">
+                    <div class="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#c9a24b_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
+                    
+                    <div class="border-b border-[#3a2c22]/40 pb-3 mb-3 flex items-center justify-between">
+                      <h3 class="font-serif font-black text-sm tracking-widest uppercase text-[#c9a24b]">Tüm İpuçları Listesi</h3>
+                      <span class="text-[10px] bg-[#1a1412] border border-[#3a2c22]/30 px-2 py-0.5 rounded text-[#8a7266] font-mono">Toplam {WORDS.length}</span>
+                    </div>
 
-                        <div class="space-y-3">
-                          {section.paragraphs.map((p, pIdx) => (
-                            <p key={pIdx} class="text-xs md:text-[13px] text-[#efe4cf]/85 leading-relaxed text-justify">
-                              {renderParagraphWithHighlights(p, section.keywords)}
-                            </p>
-                          ))}
-                        </div>
+                    <div class="flex-1 overflow-y-auto space-y-2 pr-1 scrollbar-stone">
+                      {WORDS.sort((a, b) => a.num - b.num).map((w) => {
+                        const isSolved = checkWordSolved(w);
+                        const isActive = activeWord?.num === w.num && activeWord?.dir === w.dir;
 
-                        {/* Keywords section links */}
-                        <div class="mt-4 pt-3 border-t border-[#3a2c22]/35 flex flex-wrap gap-1.5 items-center">
-                          <span class="text-[9px] uppercase tracking-widest text-[#8a7266] font-semibold mr-1">Terimler:</span>
-                          {section.keywords.map(kw => {
-                            const wordObj = WORDS.find(w => w.word === kw);
-                            const isSolved = wordObj ? checkWordSolved(wordObj) : false;
-                            return (
-                              <button
-                                key={kw}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleKeywordClick(kw);
-                                }}
-                                className={`px-2 py-0.5 rounded text-[10px] font-mono flex items-center gap-1 transition-all cursor-pointer ${
-                                  isSolved 
-                                    ? 'bg-emerald-950/40 border border-emerald-800/40 text-emerald-300 hover:bg-emerald-900/40' 
-                                    : 'bg-[#2b1712] border border-[#c9a24b]/20 text-[#c9a24b] hover:bg-[#3a1414] hover:text-[#efe4cf]'
-                                }`}
-                              >
-                                <span>{kw}</span>
-                                {isSolved ? '✓' : '✧'}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    ))}
+                        return (
+                          <div 
+                            key={`${w.num}-${w.dir}`}
+                            onClick={() => {
+                              setActiveWord(w);
+                              setDirection(w.dir);
+                              setFocusedCell({ r: w.row, c: w.col });
+                              setTimeout(() => {
+                                inputRefs.current[`${w.row},${w.col}`]?.focus();
+                              }, 30);
+                            }}
+                            className={`p-3 rounded-lg border text-left cursor-pointer transition-all flex items-start gap-3 ${
+                              isActive 
+                                ? 'bg-[#2b1712] border-[#c9a24b]/30 shadow-inner text-[#efe4cf]' 
+                                : isSolved 
+                                  ? 'bg-[#1a1412] border-white/5 opacity-60 text-[#8a7266] hover:opacity-90' 
+                                  : 'bg-[#1a1412] border-white/5 hover:bg-[#251b18]'
+                            }`}
+                          >
+                            <span class={`px-2 py-1 rounded text-xs font-serif font-black ${
+                              isActive
+                                ? 'bg-[#1a0d0d] text-[#c9a24b]'
+                                : isSolved 
+                                  ? 'bg-emerald-950/30 text-emerald-400' 
+                                  : 'bg-[#2b1712] text-[#c9a24b]'
+                            }`}>
+                              {w.num}.{w.dir}
+                            </span>
+                            <div class="flex-1">
+                              <div class="flex items-center justify-between gap-2">
+                                <span class={`text-[11px] font-bold tracking-widest uppercase ${
+                                  isActive
+                                    ? 'text-white'
+                                    : isSolved 
+                                      ? 'text-emerald-500/80 line-through' 
+                                      : 'text-[#c9a24b]'
+                                }`}>
+                                  {w.word}
+                                </span>
+                                {isSolved && <span class="text-[8px] px-1 bg-[#7a1f1f] text-white rounded uppercase font-bold leading-relaxed">Çözüldü</span>}
+                                {isActive && <span class="text-[8px] px-1 bg-[#c9a24b] text-black rounded uppercase font-bold leading-relaxed">Seçili</span>}
+                              </div>
+                              <p class={`text-xs mt-1 italic font-sans leading-relaxed ${
+                                isActive ? 'text-[#efe4cf]' : 'text-[#8a7266]'
+                              }`}>
+                                {w.clue}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
+                )}
               </section>
             </main>
 
@@ -1099,7 +1398,7 @@
                       Elinizdeki bu uygulama, Guillermo del Toro'nun şaheseri <strong>"Pan'ın Labirenti"</strong> filmine adanmış bir arketipsel analiz ve interaktif çengel bulmacadır:
                     </p>
                     <ul class="list-disc pl-5 space-y-2 text-[#efe4cf]/70">
-                      <li><strong>Çengel Bulmaca Grid:</strong> İpuçları artık grid'in yanında, klasik bulmaca düzeninde <span class="text-[#c9a24b] font-serif font-bold">Yatay</span> ve <span class="text-[#c9a24b] font-serif font-bold">Dikey</span> olarak iki ayrı listede sıralanır. Bir ipucuna tıklayarak ilgili kelimeyi grid üzerinde seçebilir ve harfleri klavyenizden girebilirsiniz.</li>
+                      <li><strong>Çengel Bulmaca Grid:</strong> Kelimelerin ipuçları doğrudan grid hücrelerinin içerisindedir. Hücrelere tıklayarak harfleri klavyenizden girebilirsiniz.</li>
                       <li><strong>Semboller Rehberi:</strong> Sağ panelde filmin geniş arketipsel ve sembolik analizi yer almaktadır. Metin içindeki <span class="text-[#c9a24b] font-serif font-bold">altı çizili terimlere</span> tıklayarak kelimeleri bulmaca üzerinde anında konumlandırabilirsiniz!</li>
                       <li><strong>Merkez Görseli:</strong> Labyrinth'in ruhunu yansıtan o muhteşem gotik illüstrasyon, bulmacanın tam ortasından size yol gösterecek.</li>
                     </ul>
