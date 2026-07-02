@@ -360,6 +360,14 @@
         const [solvedWordCount, setSolvedWordCount] = useState(0);
         const [totalLetterCells, setTotalLetterCells] = useState(0);
         const [isCompleted, setIsCompleted] = useState(false);
+        const [showPostGameClues, setShowPostGameClues] = useState(() => {
+          const saved = localStorage.getItem('pan_crossword_show_post_game_clues');
+          return saved === 'true';
+        });
+
+        useEffect(() => {
+          localStorage.setItem('pan_crossword_show_post_game_clues', String(showPostGameClues));
+        }, [showPostGameClues]);
         
         const [message, setMessage] = useState({
           text: "Labirente hoş geldiniz. İlk kelimeyi seçip harfleri doldurmaya başlayın.",
@@ -671,16 +679,17 @@
           }
 
           setValidation(newValidation);
+          setShowPostGameClues(true);
 
           if (correctCells === totalLetterCells) {
             setIsCompleted(true);
             setMessage({
-              text: "🐐 Portal açıldı! Labirenti başarıyla tamamladınız ve yeraltı krallığına yükseldiniz!",
+              text: "🐐 Portal açıldı! Labirenti başarıyla tamamladınız ve yeraltı krallığına yükseldiniz! Tüm soruların ipuçları karşılaştırmanız için aşağıda açıldı.",
               type: 'success'
             });
           } else {
             setMessage({
-              text: `✓ Kontrol edildi: ${correctCells} / ${totalLetterCells} doğru harf yerleştirildi. Yanlış harfler kırmızıyla gösterildi.`,
+              text: `✓ Kontrol edildi: ${correctCells} / ${totalLetterCells} doğru harf yerleştirildi. Yanlış harfler kırmızıyla gösterildi. Tüm soruların ipuçları karşılaştırmanız için şimdi açıldı!`,
               type: correctCells > 0 ? 'info' : 'error'
             });
           }
@@ -721,6 +730,7 @@
             setActiveWord(WORDS[0]);
             setFocusedCell(null);
             setIsCompleted(false);
+            setShowPostGameClues(false);
             setMessage({
               text: "Bulmaca temizlendi. Labirenti baştan çözmeye hazırsınız.",
               type: 'info'
@@ -1014,13 +1024,19 @@
                             <span class="text-[#c9a24b]/70 font-sans text-xs">({activeWord.word.length} Harfli)</span>
                           )}
                         </h3>
-                        <p class="text-[#efe4cf]/90 mt-1 font-sans text-sm md:text-base leading-relaxed">
-                          "{activeWord.clue}"
-                        </p>
+                        {showPostGameClues ? (
+                          <p class="text-[#efe4cf]/90 mt-1 font-sans text-sm md:text-base leading-relaxed">
+                            "{activeWord.clue}"
+                          </p>
+                        ) : (
+                          <p class="text-[#8a7266]/95 mt-1.5 font-sans text-xs md:text-sm leading-relaxed italic bg-[#1f1512] p-2.5 rounded border border-[#c9a24b]/10">
+                            🔒 <span class="text-[#efe4cf]/80 font-semibold font-serif">Doğrudan ipucu gizli!</span> Bu kelimeyi çözmek için sağdaki <span class="text-[#c9a24b] font-serif font-bold">Semboller Rehberi</span>'ni okuyun ve ilgili terimleri bulun. Bulmaca bittiğinde (Kontrol Et'e tıkladığınızda) tüm ipuçları karşılaştırma için açılacaktır.
+                          </p>
+                        )}
                       </div>
                     ) : (
                       <div class="mt-1">
-                        <p class="text-[#8a7266] italic text-sm">Bulmacadaki bir kelimeye veya clue hücresine tıklayın.</p>
+                        <p class="text-[#8a7266] italic text-sm">Bulmacadaki bir kelimeye veya hücreye tıklayın.</p>
                       </div>
                     )}
                   </div>
@@ -1218,11 +1234,17 @@
                                     {isSolved && <span class="text-[8px] px-1 bg-[#7a1f1f] text-white rounded uppercase font-bold leading-relaxed shrink-0">✓</span>}
                                     {isActive && <span class="text-[8px] px-1 bg-[#c9a24b] text-black rounded uppercase font-bold leading-relaxed shrink-0">Seçili</span>}
                                   </div>
-                                  <p class={`text-xs mt-1 italic font-sans leading-relaxed ${
-                                    isActive ? 'text-[#efe4cf]' : 'text-[#8a7266]'
-                                  }`}>
-                                    {w.clue}
-                                  </p>
+                                  {showPostGameClues ? (
+                                    <p class={`text-xs mt-1 italic font-sans leading-relaxed ${
+                                      isActive ? 'text-[#efe4cf]' : 'text-[#8a7266]'
+                                    }`}>
+                                      {w.clue}
+                                    </p>
+                                  ) : (
+                                    <p class="text-[10px] mt-1.5 font-sans leading-relaxed text-[#8a7266]/70 italic">
+                                      🔒 İpucu bulmaca bitiminde açılacaktır.
+                                    </p>
+                                  )}
                                 </div>
                               </div>
                             );
@@ -1284,11 +1306,17 @@
                                     {isSolved && <span class="text-[8px] px-1 bg-[#7a1f1f] text-white rounded uppercase font-bold leading-relaxed shrink-0">✓</span>}
                                     {isActive && <span class="text-[8px] px-1 bg-[#c9a24b] text-black rounded uppercase font-bold leading-relaxed shrink-0">Seçili</span>}
                                   </div>
-                                  <p class={`text-xs mt-1 italic font-sans leading-relaxed ${
-                                    isActive ? 'text-[#efe4cf]' : 'text-[#8a7266]'
-                                  }`}>
-                                    {w.clue}
-                                  </p>
+                                  {showPostGameClues ? (
+                                    <p class={`text-xs mt-1 italic font-sans leading-relaxed ${
+                                      isActive ? 'text-[#efe4cf]' : 'text-[#8a7266]'
+                                    }`}>
+                                      {w.clue}
+                                    </p>
+                                  ) : (
+                                    <p class="text-[10px] mt-1.5 font-sans leading-relaxed text-[#8a7266]/70 italic">
+                                      🔒 İpucu bulmaca bitiminde açılacaktır.
+                                    </p>
+                                  )}
                                 </div>
                               </div>
                             );
