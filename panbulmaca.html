@@ -265,7 +265,7 @@
         }
 
         function App() {
-            const [artImgSrc, setArtImgSrc] = useState('https://images.unsplash.com/photo-1518005020951-eccb494ad742?q=80&w=1000&auto=format&fit=crop');
+            const [artImgSrc, setArtImgSrc] = useState('https://raw.githubusercontent.com/bumuydu-creator/bumuydu.github.io/refs/heads/main/pan%201.png');
             const [grid, setGrid] = useState([]);
             const [cellSize, setCellSize] = useState(32);
             const [showHints, setShowHints] = useState(false);
@@ -345,28 +345,24 @@
                 localStorage.setItem('pan_crossword_show_post_game_clues', String(showPostGameClues));
             }, [showPostGameClues]);
 
-            // Unlock submit handler (uses SHA-256 and secure obfuscated Base64 mappings, ensuring no plain-text passwords exist in source code)
+            // Unlock submit handler (uses SHA-256 one-way hashing only — no reversible encoding is stored,
+            // so the passcodes cannot be recovered from the page source)
             const handleUnlock = async (e) => {
                 if (e) e.preventDefault();
                 const cleanCode = normalizeInput(passcode);
                 
-                // Obfuscated Base64 encoding fallback mapping (completely secure from plain-text source search)
-                const base64Code = btoa(cleanCode);
-                const validBase64 = ['T0ZFTFlBMTk0NA==', 'UEFOMTk0NA==', 'QkVUTU9SUkExOTQ0'];
-                let isMatched = validBase64.includes(base64Code);
+                let isMatched = false;
 
-                if (!isMatched) {
-                    try {
-                        const hash = await sha256(cleanCode);
-                        const validHashes = [
-                            '8cdab050127c00a5f4925501e81a20b37ae3520b55e5ed9718326b52a1fa058a',
-                            'df1ebab01e24acafd7b68fe6655ddca22bc5b5e445ad9a03187dfa2d23fc2ec1',
-                            '969a1a55314cba95c36b1aa6a482ee350feb95e7450dbbce5295d2428d3d7a86'
-                        ];
-                        isMatched = validHashes.includes(hash);
-                    } catch (err) {
-                        console.warn("Crypto Subtle digest failed.", err);
-                    }
+                try {
+                    const hash = await sha256(cleanCode);
+                    const validHashes = [
+                        '8cdab050127c00a5f4925501e81a20b37ae3520b55e5ed9718326b52a1fa058a',
+                        'df1ebab01e24acafd7b68fe6655ddca22bc5b5e445ad9a03187dfa2d23fc2ec1',
+                        '969a1a55314cba95c36b1aa6a482ee350feb95e7450dbbce5295d2428d3d7a86'
+                    ];
+                    isMatched = validHashes.includes(hash);
+                } catch (err) {
+                    console.warn("Crypto Subtle digest failed.", err);
                 }
 
                 if (isMatched) {
@@ -755,7 +751,7 @@
                                         type="text" 
                                         value={passcode}
                                         onChange={(e) => setPasscode(e.target.value)}
-                                        placeholder="Örn: OFELYA1944" 
+                                        placeholder="Katılım kodunu girin"
                                         className="w-full bg-[#020a06] border border-emerald-900/60 rounded-xl px-4 py-3 text-center text-white placeholder-emerald-800/60 font-mono tracking-widest uppercase outline-none focus:border-emerald-500 transition-all text-sm"
                                     />
                                 </div>
@@ -995,7 +991,7 @@
                                         >
                                             <img 
                                                 src={artImgSrc} 
-                                                onError={() => setArtImgSrc("https://images.unsplash.com/photo-1518005020951-eccb494ad742?q=80&w=1000&auto=format&fit=crop")}
+                                                onError={() => setArtImgSrc("https://raw.githubusercontent.com/bumuydu-creator/bumuydu.github.io/refs/heads/main/pan%201.png")}
                                                 className="object-cover transition-transform duration-700 hover:scale-105 opacity-85 hover:opacity-100" 
                                                 alt="Labyrinth Portal Graphic" 
                                                 style={{
