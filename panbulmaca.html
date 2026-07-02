@@ -864,15 +864,34 @@
                                         <span className="text-emerald-400">✨</span> Harf Al
                                     </button>
                                     <button 
-                                        onClick={() => setShowHints(!showHints)}
+                                        onClick={() => {
+                                            if (!isCompleted) {
+                                                setMessage({
+                                                    text: "🔒 İpuçları Kilitli! Harf ipuçları ancak tüm bulmaca başarıyla çözüldükten sonra açılabilir.",
+                                                    type: 'error'
+                                                });
+                                                return;
+                                            }
+                                            setShowHints(!showHints);
+                                        }}
                                         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-serif font-black tracking-widest uppercase border transition-all cursor-pointer ${
-                                            showHints 
-                                                ? 'bg-emerald-950/60 border-emerald-500/60 text-emerald-200' 
-                                                : 'bg-[#030d09] border-emerald-950 text-emerald-700 hover:text-emerald-400'
+                                            !isCompleted
+                                                ? 'bg-[#030d09]/40 border-emerald-950/40 text-emerald-800/60 cursor-not-allowed'
+                                                : showHints 
+                                                    ? 'bg-emerald-950/60 border-emerald-500/60 text-emerald-200' 
+                                                    : 'bg-[#030d09] border-emerald-950 text-emerald-700 hover:text-emerald-400'
                                         }`}
-                                        title="İpucu harflerini göster"
+                                        title={isCompleted ? "İpucu harflerini göster" : "İpuçları bulmaca tamamlandıktan sonra açılır"}
                                     >
-                                        <span>👁️</span> İpuçları
+                                        {isCompleted ? (
+                                            <>
+                                                <span>👁️</span> İpuçları ({showHints ? "Açık" : "Kapalı"})
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span>🔒</span> İpuçları (Kilitli)
+                                            </>
+                                        )}
                                     </button>
                                 </div>
 
