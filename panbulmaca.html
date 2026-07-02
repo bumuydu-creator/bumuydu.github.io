@@ -997,7 +997,7 @@
                       >
                         <img 
                           src={artImgSrc} 
-                          onError={() => setArtImgSrc("https://raw.githubusercontent.com/bumuydu-creator/bumuydu.github.io/refs/heads/main/pan%201.png")}
+                          onError={() => setArtImgSrc("https://images.unsplash.com/photo-1518005020951-eccb494ad742?q=80&w=1000&auto=format&fit=crop")}
                           class="w-full h-full object-cover transition-transform duration-700 hover:scale-105 opacity-80 hover:opacity-100" 
                           alt="Labyrinth Portal Graphic" 
                           referrerpolicy="no-referrer"
@@ -1018,21 +1018,17 @@
                       <div class="mt-1">
                         <h3 class="font-serif font-black text-base text-white tracking-wide">
                           {activeWord.num}. {activeWord.dir === 'H' ? 'Yatay' : 'Dikey'}{' '}
-                          {checkWordSolved(activeWord) ? (
+                          {showPostGameClues ? (
                             <>(Terim: <span class="text-[#c9a24b]">{activeWord.word}</span>)</>
                           ) : (
-                            <span class="text-[#c9a24b]/70 font-sans text-xs">({activeWord.word.length} Harfli)</span>
+                            <span class="text-[#c9a24b]/70 font-sans text-xs">
+                              ({activeWord.word.length} Harfli{checkWordSolved(activeWord) && " - Çözüldü"})
+                            </span>
                           )}
                         </h3>
-                        {showPostGameClues ? (
-                          <p class="text-[#efe4cf]/90 mt-1 font-sans text-sm md:text-base leading-relaxed">
-                            "{activeWord.clue}"
-                          </p>
-                        ) : (
-                          <p class="text-[#8a7266]/95 mt-1.5 font-sans text-xs md:text-sm leading-relaxed italic bg-[#1f1512] p-2.5 rounded border border-[#c9a24b]/10">
-                            🔒 <span class="text-[#efe4cf]/80 font-semibold font-serif">Doğrudan ipucu gizli!</span> Bu kelimeyi çözmek için sağdaki <span class="text-[#c9a24b] font-serif font-bold">Semboller Rehberi</span>'ni okuyun ve ilgili terimleri bulun. Bulmaca bittiğinde (Kontrol Et'e tıkladığınızda) tüm ipuçları karşılaştırma için açılacaktır.
-                          </p>
-                        )}
+                        <p class="text-[#efe4cf]/90 mt-1.5 font-sans text-sm md:text-base leading-relaxed">
+                          "{activeWord.clue}"
+                        </p>
                       </div>
                     ) : (
                       <div class="mt-1">
@@ -1229,22 +1225,16 @@
                                           ? 'text-emerald-500/80 line-through' 
                                           : 'text-[#c9a24b]'
                                     }`}>
-                                      {isSolved ? w.word : `${w.word.length} Harfli`}
+                                      {isSolved && showPostGameClues ? w.word : `${w.word.length} Harfli`}
                                     </span>
                                     {isSolved && <span class="text-[8px] px-1 bg-[#7a1f1f] text-white rounded uppercase font-bold leading-relaxed shrink-0">✓</span>}
                                     {isActive && <span class="text-[8px] px-1 bg-[#c9a24b] text-black rounded uppercase font-bold leading-relaxed shrink-0">Seçili</span>}
                                   </div>
-                                  {showPostGameClues ? (
-                                    <p class={`text-xs mt-1 italic font-sans leading-relaxed ${
-                                      isActive ? 'text-[#efe4cf]' : 'text-[#8a7266]'
-                                    }`}>
-                                      {w.clue}
-                                    </p>
-                                  ) : (
-                                    <p class="text-[10px] mt-1.5 font-sans leading-relaxed text-[#8a7266]/70 italic">
-                                      🔒 İpucu bulmaca bitiminde açılacaktır.
-                                    </p>
-                                  )}
+                                  <p class={`text-xs mt-1 italic font-sans leading-relaxed ${
+                                    isActive ? 'text-[#efe4cf]' : 'text-[#8a7266]'
+                                  }`}>
+                                    {w.clue}
+                                  </p>
                                 </div>
                               </div>
                             );
@@ -1301,22 +1291,16 @@
                                           ? 'text-emerald-500/80 line-through' 
                                           : 'text-[#c9a24b]'
                                     }`}>
-                                      {isSolved ? w.word : `${w.word.length} Harfli`}
+                                      {isSolved && showPostGameClues ? w.word : `${w.word.length} Harfli`}
                                     </span>
                                     {isSolved && <span class="text-[8px] px-1 bg-[#7a1f1f] text-white rounded uppercase font-bold leading-relaxed shrink-0">✓</span>}
                                     {isActive && <span class="text-[8px] px-1 bg-[#c9a24b] text-black rounded uppercase font-bold leading-relaxed shrink-0">Seçili</span>}
                                   </div>
-                                  {showPostGameClues ? (
-                                    <p class={`text-xs mt-1 italic font-sans leading-relaxed ${
-                                      isActive ? 'text-[#efe4cf]' : 'text-[#8a7266]'
-                                    }`}>
-                                      {w.clue}
-                                    </p>
-                                  ) : (
-                                    <p class="text-[10px] mt-1.5 font-sans leading-relaxed text-[#8a7266]/70 italic">
-                                      🔒 İpucu bulmaca bitiminde açılacaktır.
-                                    </p>
-                                  )}
+                                  <p class={`text-xs mt-1 italic font-sans leading-relaxed ${
+                                    isActive ? 'text-[#efe4cf]' : 'text-[#8a7266]'
+                                  }`}>
+                                    {w.clue}
+                                  </p>
                                 </div>
                               </div>
                             );
@@ -1401,7 +1385,7 @@
 
                   <img 
                     src={artImgSrc} 
-                    onError={() => setArtImgSrc("https://raw.githubusercontent.com/bumuydu-creator/bumuydu.github.io/refs/heads/main/pan%201.png")}
+                    onError={() => setArtImgSrc("https://images.unsplash.com/photo-1518005020951-eccb494ad742?q=80&w=1000&auto=format&fit=crop")}
                     class="w-48 h-48 mx-auto object-cover rounded-full border-4 border-[#c9a24b]/40 shadow-2xl mb-5"
                     alt="Portal Gate Illustration"
                   />
