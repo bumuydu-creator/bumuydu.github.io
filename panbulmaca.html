@@ -306,7 +306,7 @@
         const [cellSize, setCellSize] = useState(32);
         const [showHints, setShowHints] = useState(false);
         const [userLetters, setUserLetters] = useState(() => {
-          const saved = localStorage.getItem('pan_crossword_letters');
+          const saved = localStorage.getItem('pan_crossword_letters_v2');
           if (saved) {
             try {
               const parsed = JSON.parse(saved);
@@ -320,7 +320,7 @@
           return Array.from({ length: ROWS }, () => Array(COLS).fill(''));
         });
         const [validation, setValidation] = useState(() => {
-          const saved = localStorage.getItem('pan_crossword_validation');
+          const saved = localStorage.getItem('pan_crossword_validation_v2');
           if (saved) {
             try {
               const parsed = JSON.parse(saved);
@@ -337,13 +337,13 @@
         // Save progress to local storage
         useEffect(() => {
           if (userLetters && userLetters.length > 0) {
-            localStorage.setItem('pan_crossword_letters', JSON.stringify(userLetters));
+            localStorage.setItem('pan_crossword_letters_v2', JSON.stringify(userLetters));
           }
         }, [userLetters]);
 
         useEffect(() => {
           if (validation && validation.length > 0) {
-            localStorage.setItem('pan_crossword_validation', JSON.stringify(validation));
+            localStorage.setItem('pan_crossword_validation_v2', JSON.stringify(validation));
           }
         }, [validation]);
 
@@ -450,92 +450,8 @@
             }
           });
 
-          // 3. Smart positioning for clues
-          const clueCellMap = new Map();
-
-          const isCellFree = (r, c) => {
-            if (r < 0 || r >= ROWS || c < 0 || c >= COLS) return false;
-            const cell = initialGrid[r][c];
-            if (cell.type === 'letter' || cell.type === 'center_art') return false;
-            if (clueCellMap.has(`${r},${c}`)) return false;
-            return true;
-          };
-
-          WORDS.forEach((w) => {
-            let placed = false;
-            const r = w.row;
-            const c = w.col;
-
-            // 1. Try to place at standard position directly before/above the first letter
-            if (w.dir === 'H') {
-              if (isCellFree(r, c - 1)) {
-                clueCellMap.set(`${r},${c - 1}`, { r, c: c - 1, dir: 'H', num: w.num, text: w.clue });
-                placed = true;
-              }
-            } else {
-              if (isCellFree(r - 1, c)) {
-                clueCellMap.set(`${r - 1},${c}`, { r: r - 1, c, dir: 'V', num: w.num, text: w.clue });
-                placed = true;
-              }
-            }
-
-            // 2. Try adjacent cells to the first letter (sharing an edge: above, below, left, right)
-            if (!placed) {
-              const adjacentToFirst = [
-                [r - 1, c], // above
-                [r + 1, c], // below
-                [r, c - 1], // left
-                [r, c + 1]  // right
-              ];
-              for (const [ar, ac] of adjacentToFirst) {
-                if (isCellFree(ar, ac)) {
-                  clueCellMap.set(`${ar},${ac}`, { r: ar, c: ac, dir: w.dir, num: w.num, text: w.clue });
-                  placed = true;
-                  break;
-                }
-              }
-            }
-
-            // 3. Try adjacent cells sharing an edge with ANY subsequent letter of the word
-            if (!placed) {
-              const len = w.word.length;
-              for (let i = 1; i < len; i++) {
-                const lr = r + (w.dir === 'V' ? i : 0);
-                const lc = c + (w.dir === 'H' ? i : 0);
-                const adjacentToLetter = [
-                  [lr - 1, lc], // above
-                  [lr + 1, lc], // below
-                  [lr, lc - 1], // left
-                  [lr, lc + 1]  // right
-                ];
-                for (const [ar, ac] of adjacentToLetter) {
-                  if (isCellFree(ar, ac)) {
-                    clueCellMap.set(`${ar},${ac}`, { r: ar, c: ac, dir: w.dir, num: w.num, text: w.clue });
-                    placed = true;
-                    break;
-                  }
-                }
-                if (placed) break;
-              }
-            }
-          });
-
-          // Insert calculated clue cells into the grid structure
-          clueCellMap.forEach((info, key) => {
-            const [r, c] = key.split(',').map(Number);
-            const targetWord = WORDS.find(word => word.num === info.num && word.dir === info.dir);
-            initialGrid[r][c] = {
-              type: 'clue',
-              row: r,
-              col: c,
-              clueText: info.text,
-              clueDir: info.dir,
-              clueNum: info.num,
-              targetRow: targetWord?.row,
-              targetCol: targetWord?.col,
-            };
-          });
-
+          // Clue cells are no longer embedded in the grid to avoid hover visual clutter and prefilled appearances.
+          // The words themselves now form a perfectly contiguous connected crossword maze.
           return initialGrid;
         };
 
@@ -602,23 +518,7 @@
 
         // Grid cell click handler
         const handleCellClick = (r, c, cell) => {
-          if (cell.type === 'clue') {
-            const targetW = WORDS.find(w => w.num === cell.clueNum && w.dir === cell.clueDir);
-            if (targetW) {
-              setActiveWord(targetW);
-              setDirection(targetW.dir);
-              setFocusedCell({ r: targetW.row, c: targetW.col });
-
-              const matchingSection = SECTIONS.find(s => s.keywords.includes(targetW.word));
-              if (matchingSection) {
-                setSelectedSectionId(matchingSection.id);
-              }
-
-              setTimeout(() => {
-                inputRefs.current[`${targetW.row},${targetW.col}`]?.focus();
-              }, 35);
-            }
-          } else if (cell.type === 'letter') {
+          if (cell.type === 'letter') {
             const wordsAtCell = WORDS.filter(w => {
               const len = w.word.length;
               if (w.dir === 'H') {
@@ -981,10 +881,10 @@
                   <div class="overflow-auto max-w-full max-h-[600px] rounded-lg border border-[#3a2c22] p-2 bg-[#0d0b0a] shadow-[inset_0_0_30px_rgba(0,0,0,0.9)] scrollbar-stone">
                     <div 
                       id="crossword-grid" 
-                      class="grid gap-[1px] bg-[#221a16] p-2 relative rounded-md border border-[#c9a24b]/20"
+                      class="grid gap-0 bg-transparent p-2 relative rounded-md border border-[#c9a24b]/10"
                       style={{ 
-                        gridTemplateColumns: `repeat(${COLS}, minmax(${cellSize}px, 1fr))`,
-                        gridTemplateRows: `repeat(${ROWS}, minmax(${cellSize}px, 1fr))`
+                        gridTemplateColumns: `repeat(${COLS}, ${cellSize}px)`,
+                        gridTemplateRows: `repeat(${ROWS}, ${cellSize}px)`
                       }}
                     >
                       {grid.map((rowArr, r) => 
@@ -1009,13 +909,13 @@
                                   gridRow: r + 1,
                                   gridColumn: c + 1
                                 }}
-                                className={`relative rounded-none flex items-center justify-center transition-all cursor-text font-serif border-none ${
+                                className={`relative rounded-none flex items-center justify-center transition-all cursor-text font-serif border border-[#3a2c22]/40 ${
                                   isFocused 
                                     ? 'bg-[#c9a24b] ring-2 ring-[#efe4cf] z-20 scale-105 shadow-lg shadow-amber-500/25' 
                                     : valState === 'correct'
-                                      ? 'bg-[#0f2e1e] text-emerald-300 font-extrabold'
+                                      ? 'bg-[#0f2e1e] text-emerald-300 font-extrabold border-emerald-500/20'
                                       : valState === 'wrong'
-                                        ? 'bg-[#3a1414] text-red-300 font-extrabold shake-animation'
+                                        ? 'bg-[#3a1414] text-red-300 font-extrabold shake-animation border-red-500/20'
                                         : isActive 
                                           ? 'bg-[#fcf3db] text-[#2b1712] font-black z-10' 
                                           : 'bg-[#efe4cf] text-[#2b2420] hover:bg-[#efe4cf]/90 font-bold'
@@ -1031,6 +931,10 @@
                                   ref={(el) => { inputRefs.current[`${r},${c}`] = el; }}
                                   type="text"
                                   maxLength={1}
+                                  autoComplete="off"
+                                  autoCorrect="off"
+                                  autoCapitalize="characters"
+                                  spellCheck="false"
                                   value={userLetters[r]?.[c] || (showHints ? cell.letter : '')}
                                   onFocus={() => handleCellFocus(r, c, cell)}
                                   onKeyDown={(e) => handleKeyDown(e, r, c)}
@@ -1056,52 +960,7 @@
                             );
                           }
 
-                          if (cell.type === 'clue') {
-                            const isHovered = hoveredClue?.num === cell.clueNum && hoveredClue?.dir === cell.clueDir;
-                            return (
-                              <div 
-                                key={`${r},${c}`}
-                                onClick={() => handleCellClick(r, c, cell)}
-                                onMouseEnter={() => setHoveredClue({ text: cell.clueText, num: cell.clueNum, dir: cell.clueDir })}
-                                onMouseLeave={() => setHoveredClue(null)}
-                                style={{
-                                  width: `${cellSize}px`,
-                                  height: `${cellSize}px`,
-                                  gridRow: r + 1,
-                                  gridColumn: c + 1
-                                }}
-                                className={`rounded-none relative flex flex-col items-center justify-between p-0.5 cursor-help transition-all border-none group ${
-                                  isHovered 
-                                    ? 'bg-gradient-to-b from-[#7a1f1f] to-[#3a1414] scale-105 z-10 shadow-lg shadow-amber-500/20' 
-                                    : 'bg-gradient-to-b from-[#2b1712] to-[#1a0d0d]'
-                                }`}
-                              >
-                                <div class="w-full flex items-center justify-between gap-0.5 select-none">
-                                  <span style={{ fontSize: `${Math.max(6, Math.floor(cellSize * 0.22))}px` }} class="font-black font-serif text-[#c9a24b] group-hover:text-white leading-none">
-                                    {cell.clueNum}{cell.clueDir}
-                                  </span>
-                                  <span style={{ fontSize: `${Math.max(6, Math.floor(cellSize * 0.25))}px` }} class="text-[#c9a24b] font-mono leading-none">
-                                    {cell.clueDir === 'H' ? '→' : '↓'}
-                                  </span>
-                                </div>
-
-                                <div class="w-full flex flex-col gap-0.5 items-center select-none opacity-40 group-hover:opacity-100 mb-0.5">
-                                  <div class="w-10/12 h-[1px] bg-[#c9a24b]/50" />
-                                  <div class="w-8/12 h-[1px] bg-[#c9a24b]/50" />
-                                </div>
-
-                                {/* Custom HTML Tooltip triggered on hover */}
-                                <div class="hidden group-hover:block absolute bottom-full mb-1 left-1/2 -translate-x-1/2 bg-[#1a1412] border border-[#c9a24b] text-[#efe4cf] text-[10px] p-2 rounded shadow-2xl w-40 z-50 pointer-events-none">
-                                  <p class="font-bold border-b border-[#3a2c22] pb-1 mb-1 font-serif text-[#c9a24b]">
-                                    {cell.clueNum}. {cell.clueDir === 'H' ? 'Yatay' : 'Dikey'}
-                                  </p>
-                                  <p class="leading-relaxed italic font-sans">"{cell.clueText}"</p>
-                                </div>
-                              </div>
-                            );
-                          }
-
-                          // Blocked cell (designed as solid dark stone walls to make the crossword feel like a contiguous medieval Labyrinth)
+                          // Blocked cell (render as completely transparent/empty space so letter cells form a beautifully connected layout)
                           return (
                             <div 
                               key={`${r},${c}`}
@@ -1111,11 +970,8 @@
                                 gridRow: r + 1,
                                 gridColumn: c + 1
                               }}
-                              className="bg-[#0f0b0a] flex items-center justify-center relative"
-                            >
-                              {/* A very subtle inner corner mark or texture to represent ancient stone masonry */}
-                              <div className="absolute inset-[1px] bg-[#070505] opacity-90" />
-                            </div>
+                              className="pointer-events-none bg-transparent"
+                            />
                           );
                         })
                       )}
