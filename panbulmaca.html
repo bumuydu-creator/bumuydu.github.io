@@ -265,7 +265,7 @@
         }
 
         function App() {
-            const [artImgSrc, setArtImgSrc] = useState('https://images.unsplash.com/photo-1518005020951-eccb494ad742?q=80&w=1000&auto=format&fit=crop');
+            const [artImgSrc, setArtImgSrc] = useState('https://raw.githubusercontent.com/bumuydu-creator/bumuydu.github.io/refs/heads/main/pan%201.png');
             const [grid, setGrid] = useState([]);
             const [cellSize, setCellSize] = useState(32);
             const [showHints, setShowHints] = useState(false);
@@ -995,7 +995,7 @@
                                         >
                                             <img 
                                                 src={artImgSrc} 
-                                                onError={() => setArtImgSrc("https://images.unsplash.com/photo-1518005020951-eccb494ad742?q=80&w=1000&auto=format&fit=crop")}
+                                                onError={() => setArtImgSrc("https://raw.githubusercontent.com/bumuydu-creator/bumuydu.github.io/refs/heads/main/pan%201.png")}
                                                 className="object-cover transition-transform duration-700 hover:scale-105 opacity-85 hover:opacity-100" 
                                                 alt="Labyrinth Portal Graphic" 
                                                 style={{
