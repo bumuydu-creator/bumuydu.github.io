@@ -265,7 +265,7 @@
         }
 
         function App() {
-            const [artImgSrc, setArtImgSrc] = useState('https://raw.githubusercontent.com/bumuydu-creator/bumuydu.github.io/refs/heads/main/pan%201.png');
+            const [artImgSrc, setArtImgSrc] = useState('https://images.unsplash.com/photo-1518005020951-eccb494ad742?q=80&w=1000&auto=format&fit=crop');
             const [grid, setGrid] = useState([]);
             const [cellSize, setCellSize] = useState(32);
             const [showHints, setShowHints] = useState(false);
@@ -755,7 +755,7 @@
                                         type="text" 
                                         value={passcode}
                                         onChange={(e) => setPasscode(e.target.value)}
-                                        placeholder=OFELYA1944
+                                        placeholder="Örn: OFELYA1944" 
                                         className="w-full bg-[#020a06] border border-emerald-900/60 rounded-xl px-4 py-3 text-center text-white placeholder-emerald-800/60 font-mono tracking-widest uppercase outline-none focus:border-emerald-500 transition-all text-sm"
                                     />
                                 </div>
@@ -995,7 +995,7 @@
                                         >
                                             <img 
                                                 src={artImgSrc} 
-                                                onError={() => setArtImgSrc("https://raw.githubusercontent.com/bumuydu-creator/bumuydu.github.io/refs/heads/main/pan%201.png")}
+                                                onError={() => setArtImgSrc("https://images.unsplash.com/photo-1518005020951-eccb494ad742?q=80&w=1000&auto=format&fit=crop")}
                                                 className="object-cover transition-transform duration-700 hover:scale-105 opacity-85 hover:opacity-100" 
                                                 alt="Labyrinth Portal Graphic" 
                                                 style={{
