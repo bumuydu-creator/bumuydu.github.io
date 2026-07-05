@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Otuz iki pikselin mirası — Bu Muydu?</title>
+<meta name="description" content="Bir iflasın eşiğinden doğan kırmızı şapkalı bir figür, nasıl olur da bir kültürün ortak miti haline gelir? Mario'nun doğuşu, kahramanlık mitleri ve bir kuşağın hafızası üzerine.">
+<meta property="og:title" content="Otuz iki pikselin mirası — Bu Muydu?">
+<meta property="og:description" content="Bir iflasın eşiğinden doğan kırmızı şapkalı bir figür, nasıl olur da bir kültürün ortak miti haline gelir?">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0804;
+    --parchment: #f5f0e8;
+    --gold: #e8ff00;
+    --rust: #8b3a2a;
+    --ash: #2a2520;
+    --smoke: #6b6560;
+    --cream: #ede8de;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: var(--ink);
+    color: var(--parchment);
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.75;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9000; opacity: 0.35;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1.2rem 4rem;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(10,8,4,0.95);
+    border-bottom: 1px solid rgba(232,255,0,0.08);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 900;
+    letter-spacing: 0.05em; color: var(--gold); text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+  .nav-links a {
+    font-family: 'Space Mono', monospace; font-size: 0.68rem;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--smoke); text-decoration: none; transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-patreon {
+    color: var(--ink) !important;
+    background: var(--gold);
+    padding: 0.4rem 1rem !important;
+    font-weight: 700;
+  }
+
+  /* ARTICLE HERO */
+  .post-hero {
+    padding: 5rem 4rem 3rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .section-label {
+    font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::before { content: ''; display: block; width: 30px; height: 1px; background: var(--gold); }
+  .post-meta {
+    font-family: 'Space Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em;
+    color: var(--smoke); margin-bottom: 1.6rem; text-transform: uppercase;
+  }
+  .post-title {
+    font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 900; line-height: 1.1; letter-spacing: -0.01em; margin-bottom: 1.5rem;
+  }
+  .post-title em { font-style: italic; color: var(--gold); }
+  .post-excerpt {
+    font-family: 'Crimson Text', serif; font-size: 1.25rem; font-style: italic;
+    color: var(--smoke); max-width: 640px; margin-bottom: 2rem;
+  }
+  .post-tags { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .post-tags span {
+    font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--gold); border: 1px solid rgba(232,255,0,0.3);
+    padding: 0.3rem 0.8rem; border-radius: 20px;
+  }
+
+  .cover-placeholder {
+    max-width: 900px; margin: 0 auto 3rem; padding: 0 4rem;
+  }
+  .placeholder-box {
+    display: flex; align-items: center; justify-content: center;
+    border: 1px dashed rgba(232,255,0,0.35);
+    background: repeating-linear-gradient(45deg, var(--ash), var(--ash) 12px, #201c17 12px, #201c17 24px);
+    color: var(--smoke);
+    font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.08em;
+    text-transform: uppercase; text-align: center; border-radius: 10px;
+  }
+
+  /* POST BODY */
+  .post-body {
+    max-width: 720px; margin: 0 auto; padding: 0 4rem 5rem;
+  }
+  .post-body p {
+    color: var(--cream); margin-bottom: 1.6rem; font-size: 1.12rem;
+  }
+  .post-body em { color: var(--gold); font-style: italic; }
+  .post-body strong { color: var(--gold); font-weight: 600; }
+
+  .pull-quote {
+    font-family: 'Playfair Display', serif; font-size: 1.5rem; font-style: italic;
+    color: var(--cream); line-height: 1.5; padding: 0.4rem 0 0.4rem 1.5rem;
+    border-left: 3px solid var(--gold); margin: 2.5rem 0;
+  }
+
+  figure.post-figure { margin: 2.5rem 0; }
+  figure.post-figure figcaption {
+    font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em;
+    color: var(--smoke); text-transform: uppercase; margin-top: 0.6rem; text-align: center;
+  }
+
+  hr.divider { border: none; border-top: 1px solid rgba(232,255,0,0.12); margin: 3rem 0; }
+
+  /* END BLOCKS */
+  .end-block { margin-bottom: 2.5rem; }
+  .end-block h2 {
+    font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900;
+    color: var(--cream); margin-bottom: 1rem;
+  }
+  .end-block h2 em { color: var(--gold); font-style: italic; }
+  .card-row {
+    display: flex; gap: 1.5rem; align-items: flex-start; flex-wrap: wrap;
+  }
+  .card-row .placeholder-box { width: 180px; height: 240px; flex-shrink: 0; }
+  .card-row .placeholder-box.wide { width: 100%; max-width: 100%; height: 200px; }
+  .card-text { flex: 1; min-width: 220px; }
+  .card-text .tag {
+    font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; display: block;
+  }
+  .card-text p { color: var(--smoke); font-style: italic; font-size: 1rem; }
+  .card-text .book-title { font-family: 'Playfair Display', serif; color: var(--cream); font-size: 1.1rem; font-weight: 700; margin-bottom: 0.4rem; font-style: normal; }
+
+  /* SUPPORT (reused from site) */
+  .support { background: var(--ash); text-align: center; padding: 4.5rem 2rem; margin-top: 1rem; }
+  .support-title { font-family: 'Playfair Display', serif; font-size: clamp(1.7rem, 3vw, 2.4rem); font-weight: 900; margin-bottom: 0.8rem; }
+  .support-title em { font-style: italic; color: var(--gold); }
+  .support-text { color: var(--smoke); font-style: italic; margin-bottom: 2rem; font-size: 1rem; }
+  .support-options { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .support-card {
+    border: 1px solid rgba(232,255,0,0.2); padding: 1.4rem 1.3rem; min-width: 140px; max-width: 170px;
+    transition: all 0.3s; text-decoration: none; color: inherit; display: block;
+  }
+  .support-card:hover { border-color: var(--gold); background: rgba(232,255,0,0.05); }
+  .support-card.patreon-card { border-color: rgba(255,66,77,0.5); background: rgba(255,66,77,0.05); }
+  .support-card-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.2rem; color: var(--cream); }
+  .support-card-desc { font-size: 0.8rem; color: var(--smoke); font-style: italic; }
+
+  /* FOOTER */
+  footer { background: #050403; padding: 3rem 4rem 2rem; border-top: 1px solid rgba(232,255,0,0.1); }
+  .footer-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 3rem; margin-bottom: 2.5rem; }
+  .footer-brand .nav-logo { font-size: 1.6rem; display: block; margin-bottom: 1rem; }
+  .footer-brand p { color: var(--smoke); font-style: italic; font-size: 0.9rem; line-height: 1.6; }
+  .footer-col h4 { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 0.5rem; }
+  .footer-col ul li a { color: var(--smoke); text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
+  .footer-col ul li a:hover { color: var(--gold); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1.2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-bottom p { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--smoke); opacity: 0.5; }
+  .social-links { display: flex; gap: 1.2rem; }
+  .social-links a { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--smoke); text-decoration: none; }
+  .social-links a:hover { color: var(--gold); }
+
+  @media (max-width: 700px) {
+    nav { padding: 1rem 1.2rem; }
+    .nav-links { display: none; }
+    .post-hero, .cover-placeholder, .post-body { padding-left: 1.2rem; padding-right: 1.2rem; }
+    .footer-top { grid-template-columns: 1fr; gap: 1.8rem; }
+    footer { padding: 2.5rem 1.2rem 1.5rem; }
+    .card-row .placeholder-box { width: 100%; height: 180px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Bu Muydu?</a>
+  <ul class="nav-links">
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="https://www.patreon.com/cw/Bumuydu" target="_blank" class="nav-patreon">❤ Patreon</a></li>
+    <li><a href="iletisim.html">İletişim</a></li>
+  </ul>
+</nav>
+
+<article>
+  <div class="post-hero">
+    <div class="section-label">Kültür · Oyun</div>
+    <p class="post-meta">5 Temmuz 2026 · 9 dakikalık okuma</p>
+    <h1 class="post-title">Otuz iki pikselin <em>mirası</em></h1>
+    <p class="post-excerpt">Bir iflasın eşiğinden doğan kırmızı şapkalı bir figür, nasıl olur da bir kültürün ortak miti haline gelir? Mario'nun doğuşu, kahramanlık mitleri ve bir kuşağın hafızası üzerine.</p>
+    <div class="post-tags"><span>kültür sanat</span><span>oyun</span><span>mitoloji</span></div>
+  </div>
+
+  <div class="cover-placeholder">
+    <div class="placeholder-box" style="aspect-ratio:16/9;">[KAPAK GÖRSELİ — buraya yüklenecek]</div>
+  </div>
+
+  <div class="post-body">
+
+    <p class="pull-quote">Bir kahramanın büyüklüğü boyunda değil, kaç kez düşüp yeniden zıplayabildiğindedir.</p>
+
+    <p>1980'in son aylarında New Jersey'deki bir depoda tuhaf bir manzara vardı: iki bin adet oyun makinesi, hiç açılmamış kutularında tozlanıyordu. Nintendo'nun Amerika macerasını yürütmekle görevlendirilen genç yönetici Minoru Arakawa, <em>Radar Scope</em> adlı ilk büyük bahsini kaybetmişti. Şirketin geleceği, satılamayan bu makinelerin arkasında sıkışıp kalmıştı. Japonya'daki merkez, çözümü deneyimli bir tasarımcıya değil, o güne dek yalnızca oyuncak çizen ve arcade kabinlerini boyayan 29 yaşında bir çalışana emanet etti: Shigeru Miyamoto. Elindeki malzeme acınacak haldeydi — yana çevrilmiş bir monitör, tek bir joystick, bir düğme, üç renk. Miyamoto bu yoksullukla, dünyanın hâlâ hatırladığı bir hikâye kurdu: sıradan bir adam, dev bir yaratık, kurtarılmayı bekleyen biri. 1981'de <em>Donkey Kong</em> olarak sahneye çıkan bu kurgu, birkaç yıl içinde kırmızı şapkalı bir tesisatçıya, yani Mario'ya dönüşecekti. Bir iflasın eşiğinden doğan karakter, sonunda Coca-Cola'dan daha tanınır hale geldi.</p>
+
+    <figure class="post-figure">
+      <div class="placeholder-box" style="aspect-ratio:16/9;">[GÖRSEL — buraya yüklenecek]</div>
+      <figcaption>1981, Donkey Kong'un doğduğu yıl</figcaption>
+    </figure>
+
+    <p>Bu satırları yazarken aklıma Joseph Campbell'ın kahramanın yolculuğu üzerine geliştirdiği düşünce geliyor durmadan. Campbell'a göre her kültür, kendi çağının kaygılarını ve özlemlerini taşıyacak bir kahraman icat eder; mitolojinin malzemesi tanrılar değil, sıradanlığın içinden sıyrılıp anlam kazanan figürlerdir. Mario tam da böyle bir sıyrılmadır. 1980'lerin Japonyası, ekonomik bir mucizenin ve teknolojik bir sarhoşluğun ortasındayken, kimsenin fark etmeden yarattığı bu göbekli, bıyıklı, hiç de kahramanca görünmeyen figür, tesadüfen değil tam da o dönemin iyimserliğiyle yüklü olduğu için yapışkan bir mite dönüştü. Campbell'ın işaret ettiği gibi, mit her zaman krallardan değil, bazen bir depodaki iflasın telaşından da doğabilir.</p>
+
+    <p>Kendi hayatımdan küçük bir sahne: kardeşimle tek bir kumandayı paylaşarak oturduğumuz o eski televizyonun önünü hâlâ hatırlıyorum. Sırayla oynardık, kaybeden hemen "bir tur daha" derdi, kazanan bile bunu itiraz etmeden kabul ederdi çünkü asıl mesele kazanmak değil, o borulardan geçip bir sonraki dünyaya ulaşmaktı. Mario'yla ilk tanıştığım an bir "oyun deneyimi" değildi aslında; kardeşlik dediğimiz o sabırlı nöbetleşmenin küçük bir provasıydı. Bugün bir çocuğun elinde aynı kırmızı şapkayı gördüğümde, otuz yıl önceki o sırayı bekleme halinin hâlâ değişmediğini fark ediyorum.</p>
+
+    <figure class="post-figure">
+      <div class="placeholder-box" style="aspect-ratio:16/9;">[GÖRSEL — buraya yüklenecek]</div>
+    </figure>
+
+    <p>Mario'ya faydacı gözle bakanlar onu yalnızca bir pazarlama makinesi olarak görür: lisanslı oyuncaklar, mısır gevrekleri, tişörtler, nostaljiyi paraya çeviren bitmez tükenmez bir ürün hattı. Bu bakış yanlış değil ama eksik. Çünkü Mario'yu yalnızca bir marka olarak okumak, onun neden hâlâ bir çocuğun elinde aynı heyecanı yarattığını açıklayamaz. Asıl değeri görenler için Mario, bir dönemin — neon ışıklı, hızla büyüyen, kendine aşırı güvenen bir Japonya'nın — kazara bıraktığı en dürüst belge gibidir. Üstelik bu mirasın gölgeli tarafını da unutmamak gerekir: kurtarılmayı bekleyen prenses klişesi, onlarca yıl boyunca oyunların kadın karakterlere biçtiği pasif rolün de bir kanıtıdır. Bir kültürel simgeyi gerçekten önemsemek, onu eleştirmekten vazgeçmek değil, tam tersine onun neyi taşıdığını görmektir.</p>
+
+    <p class="pull-quote">Bir kahramanın büyüklüğü boyunda değil, kaç kez düşüp yeniden zıplayabildiğindedir.</p>
+
+    <hr class="divider">
+
+    <div class="end-block">
+      <h2>Bu hafta <em>rafta</em></h2>
+      <div class="card-row">
+        <div class="placeholder-box">[KİTAP KAPAĞI]</div>
+        <div class="card-text">
+          <span class="tag">Kitap · Jeff Ryan</span>
+          <p class="book-title">Super Mario: How Nintendo Conquered America</p>
+          <p>Mario'nun bir depodaki iflastan küresel bir ikona dönüşme sürecini, şirket içi rekabetleri ve pazarlama kararlarını ayrıntılarıyla anlatan, meraklısı için doyurucu bir kültür tarihi.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="end-block">
+      <h2>Bir <em>cümle</em></h2>
+      <p class="pull-quote" style="font-size:1.2rem;">Joseph Campbell'ın hatırlattığı gibi: kahraman her zaman devasa değildir, bazen yalnızca eşiği geçmeye cesaret eden sıradan biridir.</p>
+    </div>
+
+    <div class="end-block">
+      <h2>Kısa <em>not</em></h2>
+      <div class="card-row">
+        <div class="placeholder-box wide">[HABER GÖRSELİ — buraya yüklenecek]</div>
+      </div>
+      <p style="margin-top:1rem; color:var(--cream);">Nintendo, geçtiğimiz yıl Kyoto yakınlarındaki Uji'de kapılarını açan Nintendo Museum ile şirketin oyuncak üreticiliğinden bugünkü küresel markasına uzanan tarihini ziyaretçilerle buluşturuyor. Koleksiyonda Game &amp; Watch'tan Famicom'a, ilk Mario kartuşlarına kadar geniş bir arşiv yer alıyor — kırmızı şapkalı tesisatçının doğduğu o mütevazı depoya meraklısı için sembolik bir dönüş.</p>
+    </div>
+
+  </div>
+</article>
+
+<section class="support">
+  <div class="section-label" style="justify-content:center;">Destek Ol</div>
+  <h2 class="support-title">Bu yazıyı beğendiysen<br><em>Bu Muydu?'yu büyüt</em></h2>
+  <p class="support-text">Reklamsız, bağımsız içerik üretmek ancak sizin desteğinizle mümkün.</p>
+  <div class="support-options">
+    <a href="https://www.patreon.com/cw/Bumuydu" target="_blank" class="support-card patreon-card">
+      <div class="support-card-title">Patreon</div>
+      <div class="support-card-desc">Aylık destek ol</div>
+    </a>
+    <a href="https://www.youtube.com/@bumuydu?sub_confirmation=1" target="_blank" class="support-card">
+      <div class="support-card-title">Abone Ol</div>
+      <div class="support-card-desc">Ücretsiz, en büyük destek</div>
+    </a>
+    <a href="https://uansalyangoz.substack.com/" target="_blank" class="support-card">
+      <div class="support-card-title">Substack</div>
+      <div class="support-card-desc">Yazılar & bülten</div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo">Bu Muydu?</a>
+      <p>Masal, felsefe, tarih ve yapay zekanın kesiştiği noktada derinlikli Türkçe içerik. Her video bir soru işaretiyle başlar.</p>
+    </div>
+    <div class="footer-col">
+      <h4>İçerikler</h4>
+      <ul>
+        <li><a href="index.html#videos">Son Videolar</a></li>
+        <li><a href="index.html#topics">Konular</a></li>
+        <li><a href="blog.html">Yazılar</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Bağlantı</h4>
+      <ul>
+        <li><a href="https://www.youtube.com/@bumuydu" target="_blank">YouTube</a></li>
+        <li><a href="https://www.patreon.com/c/Bumuydu" target="_blank">Patreon</a></li>
+        <li><a href="iletisim.html">İletişim</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Bu Muydu? — Tüm hakları saklıdır.</p>
+    <div class="social-links">
+      <a href="https://www.youtube.com/@bumuydu" target="_blank">YouTube</a>
+      <a href="https://www.patreon.com/c/Bumuydu" target="_blank">Patreon</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
