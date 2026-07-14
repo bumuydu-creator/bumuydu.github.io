@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perde Arkası · Odysseia Kurs</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Cinzel+Decorative:wght@700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+  :root{
+    --ink:#0a0f1c;
+    --sea-deep:#0f1e35;
+    --sea-mid:#16304f;
+    --wine:#6e2027;
+    --gold:#c9a227;
+    --gold-light:#e8cd7a;
+    --bone:#ede6d3;
+    --bronze:#8c6a3f;
+    --max-w:880px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink); color:var(--bone);
+    font-family:'EB Garamond', serif; font-size:19px; line-height:1.7;
+  }
+  h1,h2,.eyebrow,.nav-mark,.entry-date{ font-family:'Cinzel', serif; letter-spacing:.04em; }
+  a{ color:inherit; text-decoration:none; }
+  ::selection{ background:var(--gold); color:var(--ink); }
+
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 6vw;
+    background:rgba(10,15,28,.92);
+    border-bottom:1px solid rgba(201,162,39,.2);
+    backdrop-filter:blur(6px);
+  }
+  .nav-mark{ font-size:19px; font-weight:800; color:var(--gold-light); display:flex; align-items:center; gap:10px; }
+  .nav-mark .glyph{
+    width:30px; height:30px; border:1.5px solid var(--gold); border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:14px; color:var(--gold);
+  }
+  .nav-back{ font-size:14px; letter-spacing:.08em; text-transform:uppercase; color:var(--bone); opacity:.75; }
+  .nav-back:hover{ opacity:1; color:var(--gold-light); }
+
+  .hero{
+    padding:90px 6vw 60px; text-align:center;
+    background:radial-gradient(ellipse at 50% -20%, var(--sea-mid) 0%, var(--ink) 65%);
+  }
+  .eyebrow{ font-size:13px; letter-spacing:.3em; text-transform:uppercase; color:var(--gold); }
+  .hero h1{
+    font-family:'Cinzel Decorative','Cinzel',serif;
+    font-size:clamp(34px,6vw,58px); margin:18px 0 20px; color:var(--bone);
+  }
+  .hero p{ max-width:560px; margin:0 auto; color:#cfc6ac; font-style:italic; font-size:20px; }
+
+  .meander{
+    height:0; margin:0 6vw; border-top:1px dashed rgba(201,162,39,.35);
+  }
+
+  .log{ max-width:var(--max-w); margin:0 auto; padding:70px 6vw 120px; }
+
+  .entry{
+    position:relative; padding-left:38px; margin-bottom:80px;
+    border-left:1px solid rgba(201,162,39,.3);
+  }
+  .entry:last-child{ margin-bottom:0; }
+  .entry::before{
+    content:''; position:absolute; left:-6px; top:4px; width:11px; height:11px;
+    border-radius:50%; background:var(--ink); border:2px solid var(--gold);
+  }
+  .entry-date{ font-size:13px; letter-spacing:.15em; text-transform:uppercase; color:var(--gold); }
+  .entry-tag{
+    display:inline-block; margin-left:10px; padding:2px 10px; font-size:11px;
+    letter-spacing:.1em; text-transform:uppercase; border:1px solid var(--bronze);
+    color:var(--bronze); border-radius:2px; font-family:'EB Garamond',serif; font-style:italic;
+  }
+  .entry h2{ font-size:26px; margin:16px 0 14px; color:var(--gold-light); }
+  .entry p{ color:#d8c9b0; margin-bottom:16px; }
+  .entry p:last-of-type{ margin-bottom:0; }
+
+  .media-frame{
+    margin:22px 0; padding:12px; border:1px solid var(--bronze);
+    background:var(--sea-deep); position:relative;
+  }
+  .media-frame::before, .media-frame::after{
+    content:''; position:absolute; left:-1px; right:-1px; height:2px; background:var(--gold);
+  }
+  .media-frame::before{ top:-1px; }
+  .media-frame::after{ bottom:-1px; }
+  .media-frame video, .media-frame img{ width:100%; display:block; background:#000; }
+  .media-caption{
+    margin-top:12px; font-size:15px; font-style:italic; color:#b9ae92; text-align:center;
+  }
+
+  .prompt-box{
+    margin:18px 0; padding:18px 22px; background:rgba(201,162,39,.06);
+    border-left:2px solid var(--gold); font-style:italic; color:#e0d4b5; font-size:17px;
+  }
+  .prompt-box .label{
+    display:block; font-family:'Cinzel',serif; font-style:normal; font-size:12px;
+    letter-spacing:.15em; text-transform:uppercase; color:var(--gold); margin-bottom:8px;
+  }
+
+  .placeholder-entry{
+    opacity:.5; border-left-style:dashed;
+  }
+  .placeholder-entry::before{ border-style:dashed; }
+  .placeholder-entry h2{ color:var(--bronze); }
+  .placeholder-entry p{ font-style:italic; }
+
+  footer{
+    padding:50px 6vw; text-align:center; border-top:1px solid rgba(201,162,39,.2);
+  }
+  footer .fine{ font-size:13px; color:var(--bronze); font-style:italic; }
+  footer a.back-link{
+    display:inline-block; margin-top:16px; font-size:14px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--gold-light);
+  }
+  footer a.back-link:hover{ text-decoration:underline; }
+
+  @media (max-width:600px){
+    .entry{ padding-left:26px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-mark"><span class="glyph">Ω</span> PERDE ARKASI</div>
+  <a href="OdysseiaKurs.html" class="nav-back">← Odysseia Kurs'a Dön</a>
+</header>
+
+<section class="hero">
+  <span class="eyebrow">Bir Kursun Yapım Günlüğü</span>
+  <h1>Perde Arkası</h1>
+  <p>Odysseia Kurs'un hazırlık sürecinden notlar, denemeler ve yarım kalmış
+    fikirler — kronolojik sırayla.</p>
+</section>
+
+<div class="meander"></div>
+
+<div class="log">
+
+  <article class="entry">
+    <div class="entry-date">14 Temmuz 2026 <span class="entry-tag">Video Denemesi</span></div>
+    <h2>Yıldızların Altında Süzülüş</h2>
+    <p>Claude ile yapılan ilk görsel denemelerden biri: Odysseus'un gemisi,
+      açık denizde, tepesinde yıldızlarla süzülürken. Kursun görsel dilini
+      ararken atılan ilk adımlardan.</p>
+    <div class="prompt-box">
+      <span class="label">Verilen Yönerge</span>
+      Odysseus'u denizde bir gemide, yıldızların altında süzülürken göster.
+    </div>
+    <div class="media-frame">
+      <video controls preload="metadata">
+        <source src="https://bumuydu-creator.github.io/bumuydu.github.io/download.mp4" type="video/mp4">
+        Tarayıcınız video etiketini desteklemiyor.
+      </video>
+    </div>
+    <p class="media-caption">İlk deneme — AI ile üretilen sahne, henüz kursa
+      entegre edilmedi.</p>
+  </article>
+
+  <article class="entry placeholder-entry">
+    <div class="entry-date">Yakında <span class="entry-tag">Not</span></div>
+    <h2>Sıradaki Kayıt</h2>
+    <p>Yeni bir video, görsel ya da not eklendiğinde buraya bir sonraki
+      günlük girişi olarak eklenecek.</p>
+  </article>
+
+</div>
+
+<footer>
+  <p class="fine">"Anlat bana Musa, o çok yönlü adamı..." — Odysseia, I. Rhapsodi</p>
+  <a href="OdysseiaKurs.html" class="back-link">Odysseia Kurs Sayfasına Dön</a>
+</footer>
+
+</body>
+</html>
