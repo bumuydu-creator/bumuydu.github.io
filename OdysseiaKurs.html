@@ -345,6 +345,44 @@
     text-shadow: 0 2px 18px rgba(0,0,0,0.55);
   }
 
+  /* ── GEMİ ŞERİDİ (ship-strip) — course-intro'nun en üstünde, grid'in dışında ── */
+  .ship-strip{
+    position:relative;
+    height:140px;
+    overflow:hidden;
+    margin-bottom: 2.4rem;
+    border-radius: 4px;
+    background:radial-gradient(ellipse at 50% 120%, var(--bedrock) 0%, var(--soil-1) 70%);
+    border-bottom:1px solid var(--line-strong);
+  }
+  .ship-strip .wave{
+    position:absolute; bottom:0; left:0; width:200%; height:100%;
+    border-radius:45%;
+    animation:ship-swell var(--dur,14s) ease-in-out infinite;
+  }
+  .ship-strip .wave.w1{ background:var(--bedrock); --dur:16s; height:60%; opacity:.7; }
+  .ship-strip .wave.w2{ background:var(--rust);    --dur:22s; height:40%; opacity:.18; animation-direction:reverse; }
+  .ship-strip .wave.w3{ background:var(--mineral); --dur:19s; height:75%; opacity:.14; }
+  @keyframes ship-swell{
+    0%{ transform:translateX(-25%) translateY(0) rotate(0deg); }
+    50%{ transform:translateX(-50%) translateY(-2%) rotate(1deg); }
+    100%{ transform:translateX(-25%) translateY(0) rotate(0deg); }
+  }
+  .ship-strip .ship{
+    position:absolute; bottom:22%; left:-8%;
+    width:60px; z-index:1;
+    animation:ship-sail 26s linear infinite;
+    filter:drop-shadow(0 2px 6px rgba(0,0,0,.5));
+  }
+  @keyframes ship-sail{
+    0%{ left:-8%; transform:translateY(0); }
+    50%{ transform:translateY(-6px); }
+    100%{ left:106%; transform:translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .ship-strip .wave, .ship-strip .ship{ animation:none; }
+  }
+
   /* ── TEST ET KUTUSU ── */
   .quiz-box {
     padding: 1.6rem 1.8rem;
@@ -534,7 +572,6 @@
     <span class="current-page-chip">Odysseia Kurs</span>
     <a class="course-switch-link" href="https://bumuydu-creator.github.io/bumuydu.github.io/Panlabiren.html">Pan'ın Labirenti Kurs →</a>
     <a class="course-switch-link" href="https://bumuydu-creator.github.io/bumuydu.github.io/arkaplan%20odesa.html">Odysseia'nın Yapım Günlüğü →</a>
-
   </div>
   <a class="header-cta" href="#kurs">Kursa Katıl</a>
 </header>
@@ -545,6 +582,18 @@
   <div class="course-band-overlay"></div>
   <div class="course-top-grid">
     <div class="course-intro">
+
+      <div class="ship-strip">
+        <div class="wave w1"></div>
+        <div class="wave w2"></div>
+        <div class="wave w3"></div>
+        <svg class="ship" viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 42 Q50 58 90 42 L82 48 Q50 56 18 48 Z" fill="var(--amber)"/>
+          <line x1="50" y1="10" x2="50" y2="42" stroke="var(--amber)" stroke-width="2"/>
+          <path d="M51 12 L78 30 L51 34 Z" fill="var(--ink)" opacity="0.9"/>
+          <path d="M49 14 L26 30 L49 33 Z" fill="var(--ink-dim)" opacity="0.75"/>
+        </svg>
+      </div>
 
       <div class="course-intro-grid">
         <div class="course-intro-text">
