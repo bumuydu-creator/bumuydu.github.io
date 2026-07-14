@@ -125,6 +125,12 @@
   @media (max-width:600px){
     .entry{ padding-left:26px; }
   }
+
+  /* Görünmez Spotify oynatıcı — sayfada yer kaplamaz, hiçbir şeyi bozmaz */
+  #bg-music-mount{
+    position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+    overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+  }
 </style>
 </head>
 <body>
@@ -178,6 +184,42 @@
   <p class="fine">"Anlat bana Musa, o çok yönlü adamı..." — Odysseia, I. Rhapsodi</p>
   <a href="OdysseiaKurs.html" class="back-link">Odysseia Kurs Sayfasına Dön</a>
 </footer>
+
+<!-- Görünmez fon müziği: sayfaya ilk dokunuşta (tık / kaydırma / tuş) çalmaya başlar.
+     Tarayıcılar kullanıcı etkileşimi olmadan sesli otomatik oynatmaya izin vermiyor,
+     bu yüzden gerçek anlamda "sayfa açılır açılmaz" sesli çalma mümkün değil. -->
+<div id="bg-music-mount"></div>
+<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
+<script>
+  window.onSpotifyIframeApiReady = (IFrameAPI) => {
+    const element = document.getElementById('bg-music-mount');
+    const options = {
+      uri: 'spotify:album:4BvOUAggSPAimOL6gdA48e',
+      width: '1',
+      height: '1'
+    };
+    let controller = null;
+
+    IFrameAPI.createController(element, options, (EmbedController) => {
+      controller = EmbedController;
+    });
+
+    function startMusicOnce(){
+      if (controller) {
+        controller.play();
+      }
+      document.removeEventListener('click', startMusicOnce);
+      document.removeEventListener('touchstart', startMusicOnce);
+      document.removeEventListener('scroll', startMusicOnce);
+      document.removeEventListener('keydown', startMusicOnce);
+    }
+
+    document.addEventListener('click', startMusicOnce, { once: true });
+    document.addEventListener('touchstart', startMusicOnce, { once: true });
+    document.addEventListener('scroll', startMusicOnce, { once: true, passive: true });
+    document.addEventListener('keydown', startMusicOnce, { once: true });
+  };
+</script>
 
 </body>
 </html>
