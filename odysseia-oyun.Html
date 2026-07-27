@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Odysseia · Nostos Yolu</title>
+<style>
+  :root{
+    --deep-sea:#0a1826;
+    --night:#050d16;
+    --bronze:#c08a3e;
+    --terracotta:#a3491f;
+    --parchment:#ece0c4;
+    --seafoam:#3f7d6d;
+    --danger:#b5423a;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{width:100%; height:100%; overflow:hidden; background:var(--night); font-family: Georgia, 'Times New Roman', serif;}
+  #wrap{position:relative; width:100vw; height:100vh;}
+  canvas{display:block; width:100%; height:100%;}
+
+  #hud{
+    position:absolute; top:0; left:0; right:0;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:18px 26px;
+    color:var(--parchment);
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    font-size:13px;
+    pointer-events:none;
+    text-shadow:0 2px 6px rgba(0,0,0,.6);
+  }
+  #hud .title{font-size:20px; letter-spacing:.18em; color:var(--bronze);}
+  #progress{display:flex; gap:8px;}
+  .dot{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--bronze); background:transparent;}
+  .dot.done{background:var(--bronze);}
+
+  #hint{
+    position:absolute; bottom:18px; left:26px;
+    color:var(--parchment); opacity:.65; font-size:12px; letter-spacing:.05em;
+    pointer-events:none;
+  }
+
+  #overlay{
+    position:absolute; inset:0; background:rgba(5,13,22,.88);
+    display:none; align-items:center; justify-content:center; flex-direction:column;
+    color:var(--parchment); text-align:center; padding:20px;
+  }
+  #overlay.show{display:flex;}
+  #overlay h2{font-size:26px; letter-spacing:.12em; color:var(--bronze); margin-bottom:6px;}
+  #overlay p.lede{max-width:520px; opacity:.8; font-size:14px; line-height:1.6; margin-bottom:26px;}
+
+  .bar-track{
+    position:relative; width:420px; max-width:80vw; height:26px;
+    border:1.5px solid var(--bronze); border-radius:3px; overflow:hidden;
+    background:rgba(255,255,255,.03); margin-bottom:22px;
+  }
+  .bar-zone{position:absolute; top:0; bottom:0; background:rgba(63,125,109,.55); border-left:1px solid var(--seafoam); border-right:1px solid var(--seafoam);}
+  .bar-indicator{position:absolute; top:-4px; width:4px; height:34px; background:var(--terracotta);}
+
+  button.act{
+    font-family:inherit; letter-spacing:.1em; text-transform:uppercase; font-size:13px;
+    background:transparent; border:1.5px solid var(--bronze); color:var(--parchment);
+    padding:12px 26px; cursor:pointer; border-radius:2px; transition:.15s;
+  }
+  button.act:hover{background:var(--bronze); color:var(--night);}
+  button.act.danger{border-color:var(--danger); color:var(--danger);}
+  button.act.danger:hover{background:var(--danger); color:var(--parchment);}
+
+  #resultMsg{margin-top:18px; font-size:14px; min-height:20px; color:var(--bronze);}
+  #closeOverlay{margin-top:22px; opacity:.6; font-size:12px; cursor:pointer; text-decoration:underline;}
+
+  .temptation{
+    font-size:15px; margin-bottom:14px; min-height:22px; color:var(--parchment);
+  }
+  .row{display:flex; gap:14px;}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="game"></canvas>
+
+  <div id="hud">
+    <div class="title">Ω Nostos Yolu</div>
+    <div id="progress"></div>
+  </div>
+  <div id="hint">Ok tuşları / WASD ile yelken aç · bir adaya yaklaş</div>
+
+  <div id="overlay">
+    <h2 id="ovTitle"></h2>
+    <p class="lede" id="ovLede"></p>
+    <div id="ovBody"></div>
+    <div id="resultMsg"></div>
+    <div id="closeOverlay">esc ile kapat</div>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+function resize(){ canvas.width = innerWidth; canvas.height = innerHeight; }
+resize(); addEventListener('resize', resize);
+
+// ---------- Dünya verisi (Atlas içeriğinden türetildi) ----------
+const stations = [
+  { id:'troya', name:'Truva', x:0.12, y:0.5, emoji:'🏛', type:'start', done:true,
+    lede:'Yolculuğun başladığı yer.' },
+  { id:'kyklop', name:'Kyklop Adası · Polyphemos', x:0.32, y:0.28, emoji:'👁', type:'dodge', done:false,
+    lede:'Mağaradan çıkışın tek şansı zamanlama. Kayayı doğru anda yuvarla.' },
+  { id:'sirenler', name:'Sirenler Boğazı', x:0.55, y:0.62, emoji:'🌀', type:'resist', done:false,
+    lede:'Ezgi seni çağırıyor. Dinlemek ölüm demek — direnç göster.' },
+  { id:'ithake', name:'İthake', x:0.82, y:0.42, emoji:'🏝', type:'end', done:false,
+    lede:'Yurduna dönüş — ama önce diğer sınavları geçmen gerek.' },
+];
+
+const player = { x: stations[0].x, y: stations[0].y, r: 10, speed: 0.0035 };
+const keys = {};
+addEventListener('keydown', e => { keys[e.key.toLowerCase()] = true; if(e.key==='Escape') closeOverlay(); });
+addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+
+function updateProgressHUD(){
+  const el = document.getElementById('progress');
+  el.innerHTML = stations.filter(s=>s.type!=='start').map(s=>
+    `<div class="dot ${s.done?'done':''}" title="${s.name}"></div>`).join('');
+}
+updateProgressHUD();
+
+let activeStation = null;
+let gameLoopId;
+
+function nearestStation(){
+  for(const s of stations){
+    if(s.done || s.type==='start') continue;
+    const dx = (s.x - player.x) * canvas.width;
+    const dy = (s.y - player.y) * canvas.height;
+    if(Math.hypot(dx,dy) < 42) return s;
+  }
+  // İthake only reachable if all others done
+  const ithake = stations.find(s=>s.id==='ithake');
+  if(!ithake.done){
+    const others = stations.filter(s=>s.type!=='start' && s.id!=='ithake');
+    const dx = (ithake.x - player.x) * canvas.width;
+    const dy = (ithake.y - player.y) * canvas.height;
+    if(Math.hypot(dx,dy) < 42 && others.every(o=>o.done)) return ithake;
+  }
+  return null;
+}
+
+function loop(){
+  if(!document.getElementById('overlay').classList.contains('show')){
+    const dx = (keys['arrowright']||keys['d']?1:0) - (keys['arrowleft']||keys['a']?1:0);
+    const dy = (keys['arrowdown']||keys['s']?1:0) - (keys['arrowup']||keys['w']?1:0);
+    const len = Math.hypot(dx,dy)||1;
+    player.x += (dx/len)*player.speed;
+    player.y += (dy/len)*player.speed;
+    player.x = Math.max(0.02, Math.min(0.98, player.x));
+    player.y = Math.max(0.05, Math.min(0.95, player.y));
+
+    const st = nearestStation();
+    if(st && st !== activeStation){
+      activeStation = st;
+      openStation(st);
+    }
+  }
+  draw();
+  gameLoopId = requestAnimationFrame(loop);
+}
+
+function draw(){
+  const w = canvas.width, h = canvas.height;
+  // deniz gradyanı
+  const g = ctx.createLinearGradient(0,0,0,h);
+  g.addColorStop(0,'#0a1826'); g.addColorStop(1,'#040b13');
+  ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+
+  // yıldızlar
+  ctx.fillStyle = 'rgba(236,224,196,.5)';
+  for(let i=0;i<60;i++){
+    const sx = (i*97 % w), sy = (i*53 % (h*0.5));
+    ctx.fillRect(sx, sy, 1.4, 1.4);
+  }
+
+  // adalar
+  stations.forEach(s=>{
+    const x = s.x*w, y = s.y*h;
+    ctx.beginPath();
+    ctx.arc(x,y, s.type==='start'?26:32, 0, Math.PI*2);
+    ctx.fillStyle = s.done ? 'rgba(192,138,62,.25)' : 'rgba(163,73,31,.18)';
+    ctx.strokeStyle = s.done ? '#c08a3e' : 'rgba(236,224,196,.35)';
+    ctx.lineWidth = 1.5;
+    ctx.fill(); ctx.stroke();
+    ctx.font = '22px serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(s.emoji, x, y-2);
+    ctx.font = '11px Georgia'; ctx.fillStyle = '#ece0c4';
+    ctx.fillText(s.name, x, y+40);
+  });
+
+  // oyuncu (yelkenli üçgen)
+  const px = player.x*w, py = player.y*h;
+  ctx.save();
+  ctx.translate(px,py);
+  ctx.fillStyle = '#ece0c4';
+  ctx.beginPath();
+  ctx.moveTo(0,-9); ctx.lineTo(7,7); ctx.lineTo(-7,7); ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+// ---------- Mini-oyun katmanı ----------
+const overlay = document.getElementById('overlay');
+const ovTitle = document.getElementById('ovTitle');
+const ovLede = document.getElementById('ovLede');
+const ovBody = document.getElementById('ovBody');
+const resultMsg = document.getElementById('resultMsg');
+
+function closeOverlay(){
+  overlay.classList.remove('show');
+  ovBody.innerHTML = ''; resultMsg.textContent='';
+  activeStation = null;
+  if(dodgeRAF) cancelAnimationFrame(dodgeRAF);
+}
+document.getElementById('closeOverlay').onclick = closeOverlay;
+
+function openStation(s){
+  overlay.classList.add('show');
+  ovTitle.textContent = s.name;
+  ovLede.textContent = s.lede;
+  resultMsg.textContent = '';
+  if(s.type === 'dodge') buildDodgeGame(s);
+  else if(s.type === 'resist') buildResistGame(s);
+  else if(s.type === 'end') buildEndScreen(s);
+}
+
+// -- Mini-oyun 1: zamanlama / kaçış (Kyklop) --
+let dodgeRAF;
+function buildDodgeGame(s){
+  ovBody.innerHTML = `
+    <div class="bar-track">
+      <div class="bar-zone" id="zone"></div>
+      <div class="bar-indicator" id="indicator"></div>
+    </div>
+    <button class="act" id="strikeBtn">Kayayı Yuvarla</button>
+  `;
+  const track = ovBody.querySelector('.bar-track');
+  const zoneW = 70, trackW = 420;
+  const zoneLeft = 40 + Math.random()*(trackW-zoneW-80);
+  const zone = document.getElementById('zone');
+  zone.style.left = zoneLeft+'px'; zone.style.width = zoneW+'px';
+
+  let pos = 0, dir = 1, speed = 5.2;
+  const indicator = document.getElementById('indicator');
+  function tick(){
+    pos += dir*speed;
+    if(pos > trackW-4 || pos < 0) dir *= -1;
+    indicator.style.left = pos+'px';
+    dodgeRAF = requestAnimationFrame(tick);
+  }
+  tick();
+
+  document.getElementById('strikeBtn').onclick = () => {
+    cancelAnimationFrame(dodgeRAF);
+    const hit = pos >= zoneLeft && pos <= zoneLeft+zoneW;
+    if(hit){
+      resultMsg.textContent = '✦ Kayayı tam vaktinde yuvarladın — mağaradan kaçtın.';
+      resultMsg.style.color = 'var(--seafoam)';
+      s.done = true; updateProgressHUD();
+      setTimeout(closeOverlay, 1400);
+    } else {
+      resultMsg.textContent = 'Kykop seni fark etti — tekrar dene.';
+      resultMsg.style.color = 'var(--danger)';
+      setTimeout(()=>buildDodgeGame(s), 900);
+    }
+  };
+}
+
+// -- Mini-oyun 2: dürtü kontrolü (Sirenler) --
+function buildResistGame(s){
+  let round = 0, fails = 0;
+  const lines = [
+    'Ezgi kulağına fısıldıyor: "Gel, dinle beni..."',
+    'Ses tatlılaşıyor, direksiyondan elini çekmek istiyorsun...',
+    'Son nota — en tehlikeli an bu.'
+  ];
+  function nextRound(){
+    if(round >= lines.length){
+      if(fails === 0){
+        resultMsg.textContent = '✦ Direncini korudun — boğazı sağ salim geçtin.';
+        resultMsg.style.color = 'var(--seafoam)';
+        s.done = true; updateProgressHUD();
+        setTimeout(closeOverlay, 1400);
+      } else {
+        resultMsg.textContent = `${fails} kez zayıfladın ama yine de geçtin. Tekrar dener misin?`;
+        resultMsg.style.color = 'var(--danger)';
+      }
+      ovBody.innerHTML = '';
+      return;
+    }
+    ovBody.innerHTML = `
+      <div class="temptation">${lines[round]}</div>
+      <div class="row">
+        <button class="act danger" id="listenBtn">Dinle</button>
+        <button class="act" id="resistBtn">Kulaklarını Kapat</button>
+      </div>`;
+    document.getElementById('listenBtn').onclick = () => { fails++; round++; nextRound(); };
+    document.getElementById('resistBtn').onclick = () => { round++; nextRound(); };
+  }
+  nextRound();
+}
+
+// -- Bitiş --
+function buildEndScreen(s){
+  ovBody.innerHTML = `<div style="font-size:15px; opacity:.85; margin-bottom:14px;">
+    Yıllar süren yolculuğun ardından İthake kıyısındasın.</div>`;
+  resultMsg.textContent = '🌿 Nostos tamamlandı.';
+  resultMsg.style.color = 'var(--bronze)';
+  s.done = true; updateProgressHUD();
+}
+
+loop();
+</script>
+</body>
+</html>
