@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="tr" class="dark">
+<html lang="en" class="dark">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Deep Relic — Yeraltı Mağaraları</title>
+<title>Deep Relic — Subterranean Caverns</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -119,9 +119,9 @@
 
   <script type="text/babel" data-presets="react">
 // ============================================================
-// DEEP RELIC — statik veriler + mock "kahin" üreticileri
-// (Sunucu yok: her şey istemci tarafında çalışır, böylece bu
-// oyun GitHub Pages üzerinde tek bir düz HTML dosyası olarak çalışır.)
+// DEEP RELIC — static data + mock "oracle" generators
+// (No backend: everything here runs client-side so this game
+// works as a single plain HTML file on GitHub Pages.)
 // ============================================================
 
 const THREAT_COLORS = {
@@ -132,108 +132,100 @@ const THREAT_COLORS = {
   EXTREME: '#ef4444',
 };
 
-const THREAT_LABELS = {
-  SAFE: 'GÜVENLİ',
-  LOW: 'DÜŞÜK',
-  MEDIUM: 'ORTA',
-  HIGH: 'YÜKSEK',
-  EXTREME: 'AŞIRI',
-};
-
 const RARITY_COLORS = {
-  'Sıradan': '#a1a1aa',
-  'Nadir': '#38bdf8',
-  'Kadim': '#f59e0b',
-  'Efsanevi': '#c084fc',
+  Common: '#a1a1aa',
+  Rare: '#38bdf8',
+  Ancient: '#f59e0b',
+  Mythic: '#c084fc',
 };
 
 const CATEGORY_ICONS = {
-  'Biyolojik Katalizör': 'eco',
-  'Yapısal Güçlendirme': 'foundation',
-  'Yankı Harmoniği': 'graphic_eq',
-  'Kristal Matris': 'diamond',
+  'Biological Catalyst': 'eco',
+  'Structural Reinforcement': 'foundation',
+  'Echo Harmonic': 'graphic_eq',
+  'Crystal Matrix': 'diamond',
 };
 
 const initialDelverProfile = {
   name: 'Kessa Underlight',
   level: 14,
-  title: 'Üçüncü Damarın Derin Kâşifi',
+  title: 'Deep Delver of the Third Vein',
   luminescence: 68,
   resonance: 42,
   avatarUrl: '',
-  activeDepth: 'Seviye 14 — Oyuk Damar',
+  activeDepth: 'Level 14 — The Hollow Vein',
   inventoryCapacity: 62,
 };
 
 const initialCavernNodes = [
-  { id: 'n1', name: 'Yosunlu Eşik', levelNum: 1, icon: 'cottage', description: 'Yüzey dünyasının keçeleşmiş taşa ve derinliğin ilk soğuk nefesine yerini bıraktığı nokta.', threat: 'SAFE', xPercent: 12, yPercent: 82, relicsFound: ['Çatlak Fener Parçası'] },
-  { id: 'n2', name: 'Damlataşı Çukuru', levelNum: 3, icon: 'water_drop', description: 'Mineralli suyun keçeleşmiş sarkıtlardan durmadan damladığı, her damlanın hafif bir nota mırıldandığı alçak bir oda.', threat: 'LOW', xPercent: 28, yPercent: 68, relicsFound: ['Kırık Mağara İncisi'] },
-  { id: 'n3', name: 'Uğuldayan Damar', levelNum: 6, icon: 'graphic_eq', description: 'Duymadan önce azı dişlerinde hissettiğin bir perdede titreşen bir kuvars damarı.', threat: 'MEDIUM', xPercent: 46, yPercent: 74, relicsFound: ['Rezonanslı Kırık'] },
-  { id: 'n4', name: 'Obsidyen Çatlağı', levelNum: 9, icon: 'bolt', description: 'Eski bir sarsıntıyla ikiye bölünmüş kara cam, kenarları hâlâ dokunulduğunda ılık.', threat: 'MEDIUM', xPercent: 60, yPercent: 55, relicsFound: [] },
-  { id: 'n5', name: 'Biyoışıldayan Oyuk', levelNum: 11, icon: 'auto_awesome', description: 'Mantar ışığı her yüzeyde açar, mağaranın kendisi gibi ağır ağır soluk alıp verir.', threat: 'HIGH', xPercent: 50, yPercent: 38, isCurrent: true, relicsFound: ['Fısıltı Kristali'] },
-  { id: 'n6', name: 'Rezonans Uçurumu', levelNum: 13, icon: 'landscape', description: 'Görünür bir zemini olmayan bir düşüş. Bırakılan taşlar üç saniye gecikmeli bir yankıyla geri döner.', threat: 'HIGH', xPercent: 68, yPercent: 26, isLocked: true, relicsFound: [] },
-  { id: 'n7', name: 'Batık Mihrap', levelNum: 16, icon: 'account_balance', description: 'Yarısı sular altında kalmış, hâlâ eski ayinlerle uğuldayan oyma arduvazlardan bir salon.', threat: 'EXTREME', xPercent: 34, yPercent: 16, isLocked: true, relicsFound: [] },
-  { id: 'n8', name: 'Son Yankı', levelNum: 20, icon: 'blur_circular', description: 'Bu derinliğe ulaşan kâşifler, mağaranın konuşmadan önce yanıt verdiğini söylüyor.', threat: 'EXTREME', xPercent: 14, yPercent: 6, isLocked: true, relicsFound: [] },
+  { id: 'n1', name: 'Mossy Threshold', levelNum: 1, icon: 'cottage', description: 'Where the surface world gives way to felted stone and the first cold breath of the deep.', threat: 'SAFE', xPercent: 12, yPercent: 82, relicsFound: ['Cracked Lantern Shard'] },
+  { id: 'n2', name: 'Dripstone Hollow', levelNum: 3, icon: 'water_drop', description: 'A low chamber where mineral water beads endlessly from felted stalactites, each drop humming a faint note.', threat: 'LOW', xPercent: 28, yPercent: 68, relicsFound: ['Chipped Cave Pearl'] },
+  { id: 'n3', name: 'The Humming Vein', levelNum: 6, icon: 'graphic_eq', description: 'A seam of quartz that vibrates at a pitch you feel in your molars before you hear it.', threat: 'MEDIUM', xPercent: 46, yPercent: 74, relicsFound: ['Resonant Shard'] },
+  { id: 'n4', name: 'Obsidian Fracture', levelNum: 9, icon: 'bolt', description: 'Black glass split wide by an old tremor, its edges still warm to the touch.', threat: 'MEDIUM', xPercent: 60, yPercent: 55, relicsFound: [] },
+  { id: 'n5', name: 'Bioluminescent Hollow', levelNum: 11, icon: 'auto_awesome', description: 'Fungal light blooms across every surface here, breathing slowly in and out like the cavern itself.', threat: 'HIGH', xPercent: 50, yPercent: 38, isCurrent: true, relicsFound: ['Whisper Crystal'] },
+  { id: 'n6', name: 'The Resonance Chasm', levelNum: 13, icon: 'landscape', description: 'A drop with no visible floor. Dropped stones return an echo three seconds too late.', threat: 'HIGH', xPercent: 68, yPercent: 26, isLocked: true, relicsFound: [] },
+  { id: 'n7', name: 'Sunken Chancel', levelNum: 16, icon: 'account_balance', description: 'A flooded hall of carved slate, half-submerged altars still humming with old rites.', threat: 'EXTREME', xPercent: 34, yPercent: 16, isLocked: true, relicsFound: [] },
+  { id: 'n8', name: 'The Last Echo', levelNum: 20, icon: 'blur_circular', description: 'Delvers who reach this depth report the cavern answering back before they speak.', threat: 'EXTREME', xPercent: 14, yPercent: 6, isLocked: true, relicsFound: [] },
 ];
 
 const initialGatheredItems = [
-  { id: 'i1', name: 'Biyoışıldayan Yosun', category: 'Biyolojik Katalizör', quantity: 7, icon: 'eco', color: '#34d399', rarity: 'Sıradan', description: 'Keçeleşmiş eldivenleri soluk yeşile boyayan, hafifçe ışıldayan yumuşak yosun.' },
-  { id: 'i2', name: 'Mağara İncisi', category: 'Kristal Matris', quantity: 3, icon: 'diamond', color: '#38bdf8', rarity: 'Nadir', description: 'Yüzyıllar boyunca damla damla oluşmuş pürüzsüz bir mineral küre.' },
-  { id: 'i3', name: 'Taşlaşmış Kök', category: 'Yapısal Güçlendirme', quantity: 5, icon: 'foundation', color: '#a1a1aa', rarity: 'Sıradan', description: 'Taş kadar sert kök odunu, dövülmüş demir gibi soğuk ve yoğun.' },
-  { id: 'i4', name: 'Rezonanslı Kırık', category: 'Yankı Harmoniği', quantity: 4, icon: 'graphic_eq', color: '#c084fc', rarity: 'Nadir', description: 'Kulağa yaklaştırıldığında hafifçe uğuldayan bir kuvars kıymığı.' },
-  { id: 'i5', name: 'Kadim Arduvaz Parçası', category: 'Yapısal Güçlendirme', quantity: 2, icon: 'history_edu', color: '#f59e0b', rarity: 'Kadim', description: 'Pürüzsüzleşmiş, hiçbir yaşayan kâşifin okuyamadığı runilerle kazınmış arduvaz.' },
-  { id: 'i6', name: 'Fısıltı Kristali', category: 'Kristal Matris', quantity: 1, icon: 'auto_awesome', color: '#c084fc', rarity: 'Efsanevi', description: 'Dokunulduğunda soğuk, sıkıca sarılmış yünde bile tam olarak susmayan bir kristal.' },
-  { id: 'i7', name: 'Mağara İpeği', category: 'Biyolojik Katalizör', quantity: 6, icon: 'texture', color: '#34d399', rarity: 'Nadir', description: 'İnce mantar lifi, elle sıkı bir dokuya keçeleştirilmiş, sıcak ve nefes alabilir.' },
-  { id: 'i8', name: 'Demir Damarı Cevheri', category: 'Yapısal Güçlendirme', quantity: 9, icon: 'construction', color: '#a1a1aa', rarity: 'Sıradan', description: 'Göründüğünden daha ağır, pas renkli damarlarla benekli yoğun cevher.' },
+  { id: 'i1', name: 'Bioluminescent Moss', category: 'Biological Catalyst', quantity: 7, icon: 'eco', color: '#34d399', rarity: 'Common', description: 'Soft, faintly glowing moss that stains felted gloves a pale green.' },
+  { id: 'i2', name: 'Cave Pearl', category: 'Crystal Matrix', quantity: 3, icon: 'diamond', color: '#38bdf8', rarity: 'Rare', description: 'A smooth mineral sphere formed drop by drop over centuries.' },
+  { id: 'i3', name: 'Petrified Root', category: 'Structural Reinforcement', quantity: 5, icon: 'foundation', color: '#a1a1aa', rarity: 'Common', description: 'Stone-hard root wood, cold and dense as carved iron.' },
+  { id: 'i4', name: 'Resonant Shard', category: 'Echo Harmonic', quantity: 4, icon: 'graphic_eq', color: '#c084fc', rarity: 'Rare', description: 'A splinter of quartz that hums faintly when held near the ear.' },
+  { id: 'i5', name: 'Ancient Slate Fragment', category: 'Structural Reinforcement', quantity: 2, icon: 'history_edu', color: '#f59e0b', rarity: 'Ancient', description: 'Carved slate worn smooth, etched with runes no living delver reads.' },
+  { id: 'i6', name: 'Whisper Crystal', category: 'Crystal Matrix', quantity: 1, icon: 'auto_awesome', color: '#c084fc', rarity: 'Mythic', description: 'Cold to the touch and never fully silent, even in sealed wool.' },
+  { id: 'i7', name: 'Cavern Silk', category: 'Biological Catalyst', quantity: 6, icon: 'texture', color: '#34d399', rarity: 'Rare', description: 'Fine fungal fiber, felted by hand into a warm, breathable weave.' },
+  { id: 'i8', name: 'Iron Vein Ore', category: 'Structural Reinforcement', quantity: 9, icon: 'construction', color: '#a1a1aa', rarity: 'Common', description: 'Dense ore flecked with rust-colored veins, heavier than it looks.' },
 ];
 
 const initialLoreEntries = [
-  { id: 'l1', title: 'Gölge Avcısı', subtitle: 'Sesle değil, sessizlikle avlanan bir yırtıcı', threatTag: 'YÜKSEK TEHDİT', threatColor: THREAT_COLORS.HIGH, description: 'Kâşifler, mağara sessizleştiğinde harekete geçen bir şekilden söz eder, sanki yankının yokluğuyla besleniyor gibi.', resonanceLevel: 74, category: 'Yaratıklar' },
-  { id: 'l2', title: 'Rezonans Çiçeklenmesi', subtitle: 'Sese doğru büyüyen kristaller', threatTag: 'ANOMALİ', threatColor: THREAT_COLORS.MEDIUM, description: 'Maruz kaldığı her rezonans frekansına doğru gözle görülür şekilde bükülüp uzayan nadir bir kristal oluşumu.', resonanceLevel: 61, category: 'Anomaliler' },
-  { id: 'l3', title: 'İlk Kâşiflerin Runileri', subtitle: 'En eski seferlerden kalma oyma arduvaz', threatTag: 'RUNİ', threatColor: THREAT_COLORS.SAFE, description: 'Üst mağaralarda güvenli rezonans yollarını işaretlediğine inanılan aşınmış işaretler.', resonanceLevel: 55, category: 'Runiler' },
-  { id: 'l4', title: 'Seviye 9\'un Parçalanışı', subtitle: 'Bütün bir damarı yeniden şekillendiren sarsıntı', threatTag: 'TARİH', threatColor: THREAT_COLORS.MEDIUM, description: 'Kayıtlara geçen bir deprem Obsidyen Çatlağı\'nı yararak, hiçbir haritanın çizmediği odaları ortaya çıkardı.', resonanceLevel: 48, category: 'Tarih' },
-  { id: 'l5', title: 'Kristal Derili Kurtçuklar', subtitle: 'Küçük, camsı ve şaşırtıcı derecede gürültülü', threatTag: 'DÜŞÜK TEHDİT', threatColor: THREAT_COLORS.LOW, description: 'Tek başlarına zararsız olan bu kurtçuklar, rahatsız edildiklerinde çarpılmış cam gibi çınlayan sürüler halinde toplanır.', resonanceLevel: 32, category: 'Yaratıklar' },
-  { id: 'l6', title: 'Sessiz Koro', subtitle: 'Her yankıyı yok eden bir oda', threatTag: 'ANOMALİ', threatColor: THREAT_COLORS.EXTREME, description: 'Bu oyukta çıkarılan hiçbir ses yankı olarak geri dönmez; kâşifler bunu derinden ve fiziksel olarak yanlış olarak tarif eder.', resonanceLevel: 88, category: 'Anomaliler' },
+  { id: 'l1', title: 'The Umbral Stalker', subtitle: 'A predator that hunts by silence, not sound', threatTag: 'HIGH THREAT', threatColor: THREAT_COLORS.HIGH, description: 'Delvers speak of a shape that moves only when the cavern goes quiet, as if it feeds on the absence of echo.', resonanceLevel: 74, category: 'Creatures' },
+  { id: 'l2', title: 'Resonance Bloom', subtitle: 'Crystals that grow toward sound', threatTag: 'ANOMALY', threatColor: THREAT_COLORS.MEDIUM, description: 'A rare crystal formation that visibly bends and lengthens toward whatever resonant frequency it is exposed to.', resonanceLevel: 61, category: 'Anomalies' },
+  { id: 'l3', title: 'Runes of the First Delvers', subtitle: 'Carved slate from the earliest expeditions', threatTag: 'RUNE', threatColor: THREAT_COLORS.SAFE, description: 'Weathered glyphs believed to mark safe resonance paths through the upper caverns.', resonanceLevel: 55, category: 'Runes' },
+  { id: 'l4', title: 'The Sundering of Level 9', subtitle: 'A tremor that reshaped an entire vein', threatTag: 'HISTORY', threatColor: THREAT_COLORS.MEDIUM, description: 'A recorded quake split the Obsidian Fracture open, exposing chambers no map had charted before.', resonanceLevel: 48, category: 'History' },
+  { id: 'l5', title: 'Crystal-Skin Grubs', subtitle: 'Small, glassy, and surprisingly loud', threatTag: 'LOW THREAT', threatColor: THREAT_COLORS.LOW, description: 'Harmless on their own, these grubs cluster in swarms that ring like struck glass when disturbed.', resonanceLevel: 32, category: 'Creatures' },
+  { id: 'l6', title: 'The Silent Choir', subtitle: 'A chamber that cancels every echo', threatTag: 'ANOMALY', threatColor: THREAT_COLORS.EXTREME, description: 'No sound made inside this hollow returns an echo — delvers describe it as deeply, physically wrong.', resonanceLevel: 88, category: 'Anomalies' },
 ];
 
 const initialQuests = [
-  { id: 'q1', title: 'Yosun Toplayıcı', objective: '10 Biyoışıldayan Yosun Topla', progress: 7, maxProgress: 10, reward: '+5 Parlaklık', isCompleted: false },
-  { id: 'q2', title: 'Oyuğa Ulaş', objective: 'Seviye 14\'e İn', progress: 14, maxProgress: 14, reward: '+10 Rezonans', isCompleted: true },
-  { id: 'q3', title: 'İlk Sentez', objective: 'Kademe 2 veya üstü bir kalıntı sentezle', progress: 0, maxProgress: 1, reward: '+8 Parlaklık', isCompleted: false },
-  { id: 'q4', title: 'Runi Okuyucu', objective: '3 günce kaydının şifresini çöz', progress: 1, maxProgress: 3, reward: '+6 Rezonans', isCompleted: false },
+  { id: 'q1', title: 'Moss Gatherer', objective: 'Collect 10 Bioluminescent Moss', progress: 7, maxProgress: 10, reward: '+5 Luminescence', isCompleted: false },
+  { id: 'q2', title: 'Reach the Hollow', objective: 'Descend to Level 14', progress: 14, maxProgress: 14, reward: '+10 Resonance', isCompleted: true },
+  { id: 'q3', title: 'First Synthesis', objective: 'Synthesize a Tier 2 relic or higher', progress: 0, maxProgress: 1, reward: '+8 Luminescence', isCompleted: false },
+  { id: 'q4', title: 'Rune Reader', objective: 'Decrypt 3 chronicle entries', progress: 1, maxProgress: 3, reward: '+6 Resonance', isCompleted: false },
 ];
 
 const initialSynthesizedHistory = [
   {
     id: 'h0',
-    relicName: 'Keçe Kor Muskası',
-    tier: 'Kademe 1',
+    relicName: 'Felted Ember Charm',
+    tier: 'Tier 1',
     resonanceScore: 71,
-    description: 'Sıkıca dolanmış keçe yünden yapılmış, ılık bir kor camı boncuğun etrafına sarılmış küçük bir muska.',
-    perks: ['+%10 Isı Tutma', 'Zifiri karanlıkta hafif ışıma'],
-    loreFlavor: 'Hafifçe, yeraltında yakılan ilk ateşin kokusunu taşıyor.',
-    createdTime: 'Seviye 9 seferi',
+    description: 'A small charm of felted wool wound tight around a warm ember-glass bead.',
+    perks: ['+10% Warmth Retention', 'Faint glow in total dark'],
+    loreFlavor: 'It smells, faintly, of the first fire ever lit underground.',
+    createdTime: 'Level 9 expedition',
   },
 ];
 
-// ---- Mock "kahin" üreticileri (yalnızca istemci tarafında, API anahtarı gerekmez) ----
+// ---- Mock "oracle" generators (client-side only, no API key needed) ----
 
 const DECRYPT_OPENERS = [
-  'Semboller önce direniyor, sonra dikkatli bir baş parmağın altında ıslak arduvaz gibi soyuluyor.',
-  'Anlam yüzeye çıkarken taştan yavaş ve isteksiz bir rezonans yükseliyor.',
-  'Oymadaki kristal toz fener ışığını yakalıyor ve runi sonunda yanıt veriyor.',
+  'The glyphs resist at first, then peel open like wet slate under a careful thumb.',
+  'A low resonance rises from the stone as the meaning surfaces, slow and reluctant.',
+  'The crystal dust in the carving catches your lantern light and the rune finally answers.',
 ];
 
 const DECRYPT_BODIES = [
-  'İlk kâşiflerin çökme yüzünden değil, geride bırakılmayacak kadar rezonanslı buldukları için bilerek kapattığı bir geçitten bahsediyor.',
-  'Mağaranın uğultusunu bir harita gibi okumanın bir yöntemini tarif ediyor; sessizlik güvenli zemini, ani perde değişimi tehlikeyi işaretliyor.',
-  'Işık ve sesin sanki dinliyormuş gibi davrandığı bir odayı adlandırıyor ve ona yanıt vermenin sonraki yanıtı değiştirdiği konusunda uyarıyor.',
+  'It speaks of a passage the first delvers sealed on purpose, not by collapse — a place they judged too resonant to leave open.',
+  'It describes a method for reading the cavern\'s hum as a kind of map, where silence marks safe ground and sudden pitch marks danger.',
+  'It names a chamber where light and sound behave like they are listening back, and warns that answering it changes what answers next.',
 ];
 
 const DECRYPT_CLOSERS = [
-  'Bunu kim yazdıysa unutulmasını değil, hatırlanmasını istemiş; bu da buralarda kendi başına bir uyarı sayılır.',
-  'Yakınlarda bulunan keçeye sarılı aletler, bunu kazıyanın geri dönmeyi planladığını ama hiç dönmediğini gösteriyor.',
-  'Çeviriyi güncene not ediyorsun; bazı runilerin ancak ikinci okumada tam anlamıyla çevrildiğinin farkındasın.',
+  'Whatever wrote this wanted it remembered, not hidden — which, down here, is its own kind of warning.',
+  'The felt-wrapped tools found nearby suggest whoever carved this meant to return, and never did.',
+  'You mark the translation in your ledger, aware that some runes only fully translate the second time you read them.',
 ];
 
 function mockDecrypt(entry) {
@@ -243,21 +235,21 @@ function mockDecrypt(entry) {
   return `${opener}\n\n${body}\n\n${closer}`;
 }
 
-const RELIC_ADJECTIVES = ['Işıldayan', 'Keçeli', 'Nabız Bağlı', 'Oyuk Oyma', 'Derin Dokunmuş', 'Rezonanslı', 'Yosun Sarılı', 'Kor Büyümüş'];
-const RELIC_MATERIALS = ['Obsidyen', 'Mağara İncisi', 'Kuvars', 'Arduvaz', 'Kristal', 'Kor Camı', 'Demir Kök'];
-const RELIC_NOUNS = ['Kazma', 'Miğfer', 'Muska', 'Fener', 'Zırh Eldiveni', 'Mühür', 'Pelerin İğnesi', 'Rezonatör'];
+const RELIC_ADJECTIVES = ['Luminous', 'Felted', 'Pulse-Bound', 'Hollow-Etched', 'Deep-Woven', 'Resonant', 'Mossbound', 'Cindergrown'];
+const RELIC_MATERIALS = ['Obsidian', 'Cave Pearl', 'Quartz', 'Slate', 'Crystal', 'Ember-Glass', 'Ironroot'];
+const RELIC_NOUNS = ['Pickaxe', 'Helm', 'Charm', 'Lantern', 'Gauntlet', 'Sigil', 'Cloak Pin', 'Resonator'];
 
 const PERK_POOL = [
-  '+%25 Parlaklık Yarıçapı', 'Taşın içindeki gizli damarları belirginleştirir', '+%15 Madencilik Verimi',
-  '+%30 Biyoışıma', 'Yankı gecikmesini yarıya indirir', 'Yakındaki kararsız zemini haber verir',
-  '+%20 Rezonans Kararlılığı', 'Gevşek moloz üzerinde ayak seslerini yumuşatır', 'Zifiri karanlıkta hafif görüş sağlar',
+  '+25% Luminescence Radius', 'Highlights hidden veins through stone', '+15% Mining Yield',
+  '+30% Bioluminescent Glow', 'Reduces echo delay by half', 'Warns of unstable ground nearby',
+  '+20% Resonance Stability', 'Softens footsteps on loose scree', 'Grants faint sight in total dark',
 ];
 
 const FLAVOR_POOL = [
-  'Mağara gölgelerini yatıştıran bir perdede uğulduyor.',
-  'Dokunulduğunda soğuk, bir süre elde tutulunca ısınıyor.',
-  'Kâşifler, tehlikeli bir şeye yaklaşıldıkça sessizleştiğini söylüyor.',
-  'Keçe astarından hafifçe yosun ve eski yağmur kokusu geliyor.',
+  'It hums at a pitch that calms the cave shadows.',
+  'Cold to the touch, warm in the hand after a while.',
+  'Delvers say it grows quieter the closer you are to something dangerous.',
+  'Its felted lining smells faintly of moss and old rain.',
 ];
 
 function pickN(arr, n) {
@@ -273,46 +265,46 @@ function mockSynthesize(items) {
   const adj = RELIC_ADJECTIVES[Math.floor(Math.random() * RELIC_ADJECTIVES.length)];
   const mat = RELIC_MATERIALS[Math.floor(Math.random() * RELIC_MATERIALS.length)];
   const noun = RELIC_NOUNS[Math.floor(Math.random() * RELIC_NOUNS.length)];
-  const rarityWeight = items.some((i) => i.rarity === 'Efsanevi') ? 3 : items.some((i) => i.rarity === 'Kadim') ? 2 : 1;
-  const tier = rarityWeight >= 3 ? 'Kademe 3' : rarityWeight === 2 ? 'Kademe 2' : Math.random() > 0.6 ? 'Kademe 2' : 'Kademe 1';
-  const base = tier === 'Kademe 3' ? 85 : tier === 'Kademe 2' ? 72 : 60;
+  const rarityWeight = items.some((i) => i.rarity === 'Mythic') ? 3 : items.some((i) => i.rarity === 'Ancient') ? 2 : 1;
+  const tier = rarityWeight >= 3 ? 'Tier 3' : rarityWeight === 2 ? 'Tier 2' : Math.random() > 0.6 ? 'Tier 2' : 'Tier 1';
+  const base = tier === 'Tier 3' ? 85 : tier === 'Tier 2' ? 72 : 60;
   const resonanceScore = Math.min(99, base + Math.floor(Math.random() * 15));
   const itemNames = items.map((i) => i.name.toLowerCase()).join(', ');
   return {
     relicName: `${adj} ${mat} ${noun}`,
     tier,
     resonanceScore,
-    description: `${itemNames} malzemelerinin dikkatle birleştirilmiş bir kaynaşımı, yüzeyi oyma kristal ile keçeleşmiş yün arasında değişiyor.`,
+    description: `A carefully bound fusion of ${itemNames}, its surface alternating between carved crystal and felted wool.`,
     perks: pickN(PERK_POOL, 2),
     loreFlavor: FLAVOR_POOL[Math.floor(Math.random() * FLAVOR_POOL.length)],
   };
 }
 
 const THISTLE_LINES = [
-  'Derin mağaralar hızdan çok sabrı ödüllendirir, küçük kâşif — acele etmek yalnızca karanlıkta uyuyanı uyandırır.',
-  'Keçeleşmiş yün ve parlayan kristal, buradaki tüm iş bundan ibaret: tehlikeli şeylerin etrafına sarılmış yumuşak şeyler.',
-  'Taştaki bir rezonans çatlağı, yakın zamanda bir şeyin değiştiği anlamına gelir. Üzerinden geçmeden önce ne olduğunu bilmek en iyisi.',
-  'Binlerce runi okudum ve hepsi altında aynı şeyi söylüyor: yavaş git, yolunu işaretle, geri dön.',
-  'Yosun her zamankinden parlak parlıyorsa, hava her zamankinden incedir. O derinlikte nefesine dikkat et.',
+  'The deeper caverns reward patience more than speed, little delver — rushing only wakes what sleeps in the dark.',
+  'Felted wool and glowing crystal, that\'s the whole trade down here: soft things wrapped around dangerous ones.',
+  'A resonance crack in the stone means something changed recently. Best to know what, before you step past it.',
+  'I\'ve read a thousand runes and every one says the same thing underneath: go slow, mark your path, come back.',
+  'If the moss glows brighter than usual, the air is thinner than usual. Mind your breathing at that depth.',
 ];
 
 function mockChatReply(message) {
   const lower = (message || '').toLowerCase();
-  if (lower.includes('tehlike') || lower.includes('tehdit') || lower.includes('güvenli')) {
-    return 'Tehlike burada nadiren yüksek sesle kendini duyurur — damlamanın olması gereken yerde sessizliği ya da olmaması gereken yerde ışığı izle. Gözlerinden çok rezonans okumalarına güven.';
+  if (lower.includes('danger') || lower.includes('threat') || lower.includes('safe')) {
+    return 'Danger down here rarely announces itself loudly — watch for silence where there should be dripping, or light where there should be none. Trust your resonance readings over your eyes.';
   }
-  if (lower.includes('kalıntı') || lower.includes('sentez') || lower.includes('zanaat') || lower.includes('üret')) {
-    return 'İyi bir kalıntı zorla bir araya getirilmez, ustaca birleştirilir — bir kristal matrisi bir yankı harmoniğiyle eşleştir ve yün bağlamanın nazik işini yapmasına izin ver.';
+  if (lower.includes('relic') || lower.includes('synthes') || lower.includes('craft')) {
+    return 'A good relic isn\'t forced together, it\'s coaxed — pair a crystal matrix with an echo harmonic and let the wool binding do the gentle work of holding them close.';
   }
-  if (lower.includes('runi') || lower.includes('efsane') || lower.includes('günce')) {
-    return 'Eski runiler nadiren yalan söyler ama saklarlar. Bir oymaya güvenmeden önce iki kez oku, biri kelimeler için, biri söylenmeyenler için.';
+  if (lower.includes('rune') || lower.includes('lore') || lower.includes('chronicle')) {
+    return 'The old runes rarely lie, but they do withhold. Read a carving twice before trusting it, once for the words and once for what\'s left unsaid.';
   }
   return THISTLE_LINES[Math.floor(Math.random() * THISTLE_LINES.length)];
 }
 const { useState, useEffect, useRef } = React;
 
 // ============================================================
-// Paylaşılan küçük parçalar
+// Small shared bits
 // ============================================================
 
 function Icon({ name, className = '', style = {} }) {
@@ -321,22 +313,21 @@ function Icon({ name, className = '', style = {} }) {
 
 function ThreatTag({ threat }) {
   const color = THREAT_COLORS[threat] || THREAT_COLORS.LOW;
-  const label = THREAT_LABELS[threat] || threat;
   return (
     <span
       className="font-mono text-[10px] tracking-widest uppercase px-2 py-0.5 rounded-full border"
       style={{ color, borderColor: `${color}55`, backgroundColor: `${color}1a` }}
     >
-      {label}
+      {threat}
     </span>
   );
 }
 
 const NAV_ITEMS = [
-  { id: 'map', label: 'Mağara Haritası', icon: 'map', desc: 'Derinliğin diaroması' },
-  { id: 'synthesis', label: 'Yankı Sentezi', icon: 'diamond', desc: 'Yankılardan kalıntı üret' },
-  { id: 'chronicle', label: 'Günce', icon: 'auto_stories', desc: 'Efsaneler ve çözülen sırlar' },
-  { id: 'inventory', label: 'Envanter', icon: 'inventory_2', desc: 'Toplanan malzemeler' },
+  { id: 'map', label: 'Cavern Map', icon: 'map', desc: 'Diorama of the depths' },
+  { id: 'synthesis', label: 'Echo Synthesis', icon: 'diamond', desc: 'Craft relics from echoes' },
+  { id: 'chronicle', label: 'Chronicle', icon: 'auto_stories', desc: 'Lore & decrypted secrets' },
+  { id: 'inventory', label: 'Inventory', icon: 'inventory_2', desc: 'Gathered materials' },
 ];
 
 // ============================================================
@@ -353,7 +344,7 @@ function Header({ currentView, onViewChange, luminescence, resonance, onOpenProf
           </div>
           <div className="leading-tight">
             <div className="font-display text-lg sm:text-xl tracking-tight">Deep Relic</div>
-            <div className="hidden sm:block font-mono text-[11px] text-zinc-500 tracking-wider">YERALTI MAĞARALARI</div>
+            <div className="hidden sm:block font-mono text-[11px] text-zinc-500 tracking-wider">SUBTERRANEAN CAVERNS</div>
           </div>
         </div>
 
@@ -386,7 +377,7 @@ function Header({ currentView, onViewChange, luminescence, resonance, onOpenProf
           <button
             onClick={onOpenProfile}
             className="w-10 h-10 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center hover:border-emerald-500/60 transition-colors"
-            aria-label="Kâşif profilini aç"
+            aria-label="Open delver profile"
           >
             <Icon name="person" className="text-zinc-300 text-[20px]" />
           </button>
@@ -397,7 +388,7 @@ function Header({ currentView, onViewChange, luminescence, resonance, onOpenProf
 }
 
 // ============================================================
-// SidebarNav (masaüstü)
+// SidebarNav (desktop)
 // ============================================================
 
 function SidebarNav({ currentView, onViewChange, activeDepth, resonance, onOpenQuests }) {
@@ -423,12 +414,12 @@ function SidebarNav({ currentView, onViewChange, activeDepth, resonance, onOpenQ
 
       <div className="space-y-4">
         <div className="chiseled-slab p-4">
-          <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase mb-1">Şu anda burada</div>
+          <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase mb-1">Currently at</div>
           <div className="font-display text-sm text-zinc-200">{activeDepth}</div>
         </div>
         <div>
           <div className="flex justify-between font-mono text-[11px] text-zinc-500 mb-1.5">
-            <span>REZONANS</span>
+            <span>RESONANCE</span>
             <span>{resonance}%</span>
           </div>
           <div className="resonance-crack">
@@ -440,7 +431,7 @@ function SidebarNav({ currentView, onViewChange, activeDepth, resonance, onOpenQ
           className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-zinc-700 text-sm text-zinc-300 hover:border-emerald-500/50 hover:text-emerald-400 transition-colors"
         >
           <Icon name="list_alt" className="text-[18px]" />
-          Görevleri Aç
+          Open Quests
         </button>
       </div>
     </aside>
@@ -457,21 +448,21 @@ function CavernMap({ nodes, profile, inventory, onNavigateToView, onOpenProfile 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl sm:text-3xl text-zinc-100">Mağara Diorama Haritası</h1>
-        <p className="text-zinc-500 text-sm mt-1">Şu anda rezonans kaynağı: <span className="text-emerald-400">{profile.activeDepth}</span></p>
+        <h1 className="font-display text-2xl sm:text-3xl text-zinc-100">Diorama Cavern Map</h1>
+        <p className="text-zinc-500 text-sm mt-1">Currently resonating from <span className="text-emerald-400">{profile.activeDepth}</span></p>
       </div>
 
       <div className="grid grid-cols-3 gap-3 sm:gap-4">
         <button onClick={onOpenProfile} className="bento-card p-4 text-left hover:border-amber-500/40">
-          <div className="flex items-center gap-2 text-amber-400 mb-1"><Icon name="bolt" className="text-[18px]" /><span className="font-mono text-[10px] tracking-widest uppercase text-zinc-500">Parlaklık</span></div>
+          <div className="flex items-center gap-2 text-amber-400 mb-1"><Icon name="bolt" className="text-[18px]" /><span className="font-mono text-[10px] tracking-widest uppercase text-zinc-500">Luminescence</span></div>
           <div className="font-display text-xl text-zinc-100">{profile.luminescence}%</div>
         </button>
         <button onClick={onOpenProfile} className="bento-card p-4 text-left hover:border-emerald-500/40">
-          <div className="flex items-center gap-2 text-emerald-400 mb-1"><Icon name="graphic_eq" className="text-[18px]" /><span className="font-mono text-[10px] tracking-widest uppercase text-zinc-500">Rezonans</span></div>
+          <div className="flex items-center gap-2 text-emerald-400 mb-1"><Icon name="graphic_eq" className="text-[18px]" /><span className="font-mono text-[10px] tracking-widest uppercase text-zinc-500">Resonance</span></div>
           <div className="font-display text-xl text-zinc-100">{profile.resonance}%</div>
         </button>
         <button onClick={() => onNavigateToView('inventory')} className="bento-card p-4 text-left hover:border-sky-500/40">
-          <div className="flex items-center gap-2 text-sky-400 mb-1"><Icon name="inventory_2" className="text-[18px]" /><span className="font-mono text-[10px] tracking-widest uppercase text-zinc-500">Kapasite</span></div>
+          <div className="flex items-center gap-2 text-sky-400 mb-1"><Icon name="inventory_2" className="text-[18px]" /><span className="font-mono text-[10px] tracking-widest uppercase text-zinc-500">Capacity</span></div>
           <div className="font-display text-xl text-zinc-100">{profile.inventoryCapacity}%</div>
         </button>
       </div>
@@ -511,7 +502,7 @@ function CavernMap({ nodes, profile, inventory, onNavigateToView, onOpenProfile 
                 <Icon name={node.isLocked ? 'lock' : node.icon} className="text-[18px]" style={{ color: node.isLocked ? '#71717a' : color }} />
               </div>
               <span className={`font-mono text-[10px] px-1.5 py-0.5 rounded ${node.isLocked ? 'text-zinc-600' : 'text-zinc-300'} bg-[#09090b]/80 whitespace-nowrap`}>
-                Sv.{node.levelNum}
+                Lv.{node.levelNum}
               </span>
             </button>
           );
@@ -523,8 +514,8 @@ function CavernMap({ nodes, profile, inventory, onNavigateToView, onOpenProfile 
           <div className="flex flex-wrap items-center gap-3 mb-3">
             <h3 className="font-display text-xl text-zinc-100">{selected.name}</h3>
             <ThreatTag threat={selected.threat} />
-            <span className="font-mono text-xs text-zinc-500">Seviye {selected.levelNum}</span>
-            {selected.isLocked && <span className="font-mono text-[10px] text-zinc-500 uppercase tracking-widest">Kilitli</span>}
+            <span className="font-mono text-xs text-zinc-500">Level {selected.levelNum}</span>
+            {selected.isLocked && <span className="font-mono text-[10px] text-zinc-500 uppercase tracking-widest">Locked</span>}
           </div>
           <p className="text-zinc-400 text-sm leading-relaxed mb-4">{selected.description}</p>
           {selected.relicsFound.length > 0 && (
@@ -561,7 +552,7 @@ function EchoSynthesis({ inventory, history, onAddHistory }) {
     setResult(null);
     setTimeout(() => {
       const relic = mockSynthesize(selectedItems);
-      const withMeta = { ...relic, id: `h${Date.now()}`, createdTime: 'Az önce' };
+      const withMeta = { ...relic, id: `h${Date.now()}`, createdTime: 'Just now' };
       setResult(withMeta);
       onAddHistory(withMeta);
       setSelectedIds([]);
@@ -569,18 +560,18 @@ function EchoSynthesis({ inventory, history, onAddHistory }) {
     }, 1100);
   };
 
-  const tierColor = result?.tier === 'Kademe 3' ? '#c084fc' : result?.tier === 'Kademe 2' ? '#38bdf8' : '#34d399';
+  const tierColor = result?.tier === 'Tier 3' ? '#c084fc' : result?.tier === 'Tier 2' ? '#38bdf8' : '#34d399';
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl sm:text-3xl text-zinc-100">Yankı Sentezi Atölyesi</h1>
-        <p className="text-zinc-500 text-sm mt-1">2-4 toplanmış malzemeyi birleştir ve Rezonans Kâhini onları bağlasın.</p>
+        <h1 className="font-display text-2xl sm:text-3xl text-zinc-100">Echo Synthesis Workshop</h1>
+        <p className="text-zinc-500 text-sm mt-1">Combine 2–4 gathered materials and let the Resonance Oracle bind them.</p>
       </div>
 
       <div className="grid md:grid-cols-5 gap-6">
         <div className="md:col-span-2 bento-card p-4 space-y-2 max-h-[480px] overflow-y-auto">
-          <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase px-1 pb-1">Malzemelerin</div>
+          <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase px-1 pb-1">Your materials</div>
           {inventory.map((item) => {
             const isSelected = selectedIds.includes(item.id);
             return (
@@ -610,22 +601,22 @@ function EchoSynthesis({ inventory, history, onAddHistory }) {
               <Icon name="diamond" className="text-emerald-400 text-[42px] mb-3 crystal-glow-cyan" />
               <p className="text-zinc-400 text-sm mb-5 max-w-xs">
                 {selectedItems.length === 0
-                  ? 'Başlamak için envanterinden 2-4 malzeme seç.'
-                  : `${selectedItems.length} malzeme seçildi: ${selectedItems.map((i) => i.name).join(', ')}`}
+                  ? 'Select 2–4 materials from your inventory to begin.'
+                  : `${selectedItems.length} material${selectedItems.length > 1 ? 's' : ''} selected: ${selectedItems.map((i) => i.name).join(', ')}`}
               </p>
               <button
                 onClick={handleSynthesize}
                 disabled={selectedItems.length < 2}
                 className="px-6 py-3 rounded-xl bg-emerald-500/15 border border-emerald-500/50 text-emerald-400 font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-emerald-500/25 transition-colors"
               >
-                Yankıları Sentezle
+                Synthesize Echoes
               </button>
             </>
           )}
           {loading && (
             <>
               <div className="w-10 h-10 rounded-full border-2 border-emerald-500/30 border-t-emerald-400 animate-spin mb-4" />
-              <p className="font-mono text-xs text-zinc-500 tracking-wide">Rezonans Kâhini yankılarını hizalıyor…</p>
+              <p className="font-mono text-xs text-zinc-500 tracking-wide">The Resonance Oracle is aligning your echoes…</p>
             </>
           )}
           {result && !loading && (
@@ -642,14 +633,14 @@ function EchoSynthesis({ inventory, history, onAddHistory }) {
                 {result.perks.map((p) => <span key={p} className="moss-tag">{p}</span>)}
               </div>
               <p className="text-zinc-500 text-xs italic mb-5">{result.loreFlavor}</p>
-              <button onClick={() => setResult(null)} className="text-sm text-emerald-400 hover:underline">Bir tane daha sentezle</button>
+              <button onClick={() => setResult(null)} className="text-sm text-emerald-400 hover:underline">Synthesize another</button>
             </div>
           )}
         </div>
       </div>
 
       <div>
-        <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase mb-3">Sentez güncesi</div>
+        <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase mb-3">Synthesis chronicle</div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {history.map((relic) => (
             <div key={relic.id} className="bento-card p-4">
@@ -671,14 +662,14 @@ function EchoSynthesis({ inventory, history, onAddHistory }) {
 // Chronicle
 // ============================================================
 
-const CHRONICLE_CATEGORIES = ['Tümü', 'Yaratıklar', 'Anomaliler', 'Runiler', 'Tarih'];
+const CHRONICLE_CATEGORIES = ['All', 'Creatures', 'Anomalies', 'Runes', 'History'];
 
 function Chronicle({ entries }) {
-  const [filter, setFilter] = useState('Tümü');
+  const [filter, setFilter] = useState('All');
   const [decrypted, setDecrypted] = useState({});
   const [loadingId, setLoadingId] = useState(null);
 
-  const visible = filter === 'Tümü' ? entries : entries.filter((e) => e.category === filter);
+  const visible = filter === 'All' ? entries : entries.filter((e) => e.category === filter);
 
   const handleDecrypt = (entry) => {
     setLoadingId(entry.id);
@@ -691,8 +682,8 @@ function Chronicle({ entries }) {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl sm:text-3xl text-zinc-100">Gölgeler Güncesi</h1>
-        <p className="text-zinc-500 text-sm mt-1">Derinlerden kaydedilen efsaneler, yaratıklar ve anomaliler.</p>
+        <h1 className="font-display text-2xl sm:text-3xl text-zinc-100">Chronicle of Shadows</h1>
+        <p className="text-zinc-500 text-sm mt-1">Lore, creatures, and anomalies logged from the deep.</p>
       </div>
 
       <div className="flex flex-wrap gap-2">
@@ -729,7 +720,7 @@ function Chronicle({ entries }) {
             <p className="text-zinc-400 text-sm leading-relaxed mb-3">{entry.description}</p>
             <div className="mb-3">
               <div className="flex justify-between font-mono text-[10px] text-zinc-500 mb-1">
-                <span>REZONANS SEVİYESİ</span><span>{entry.resonanceLevel}%</span>
+                <span>RESONANCE LEVEL</span><span>{entry.resonanceLevel}%</span>
               </div>
               <div className="resonance-crack">
                 <div className="resonance-fill" style={{ width: `${entry.resonanceLevel}%` }} />
@@ -749,7 +740,7 @@ function Chronicle({ entries }) {
                 className="flex items-center gap-2 text-xs font-mono tracking-wide text-emerald-400 hover:text-emerald-300 disabled:opacity-50 transition-colors"
               >
                 <Icon name={loadingId === entry.id ? 'progress_activity' : 'key'} className={`text-[16px] ${loadingId === entry.id ? 'animate-spin' : ''}`} />
-                {loadingId === entry.id ? 'Şifre çözülüyor…' : 'Sırrı çöz'}
+                {loadingId === entry.id ? 'Decrypting…' : 'Decrypt secret'}
               </button>
             )}
           </div>
@@ -770,17 +761,17 @@ function InventoryView({ inventory, capacity, onNavigateToView }) {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl sm:text-3xl text-zinc-100">Envanter</h1>
-          <p className="text-zinc-500 text-sm mt-1">Her inişte toplanan malzemeler.</p>
+          <h1 className="font-display text-2xl sm:text-3xl text-zinc-100">Inventory</h1>
+          <p className="text-zinc-500 text-sm mt-1">Materials gathered across every descent.</p>
         </div>
         <button onClick={() => onNavigateToView('synthesis')} className="flex items-center gap-2 px-4 py-2 rounded-xl border border-emerald-500/50 text-emerald-400 text-sm hover:bg-emerald-500/10 transition-colors">
-          <Icon name="diamond" className="text-[18px]" /> Sentezlemeye git
+          <Icon name="diamond" className="text-[18px]" /> Go synthesize
         </button>
       </div>
 
       <div className="bento-card p-4">
         <div className="flex justify-between font-mono text-[11px] text-zinc-500 mb-1.5">
-          <span>ÇANTA KAPASİTESİ</span><span>{capacity}%</span>
+          <span>PACK CAPACITY</span><span>{capacity}%</span>
         </div>
         <div className="resonance-crack">
           <div className="resonance-fill" style={{ width: `${capacity}%` }} />
@@ -817,12 +808,12 @@ function InventoryView({ inventory, capacity, onNavigateToView }) {
 }
 
 // ============================================================
-// DelverModal (profil, görevler, Thistle kahin sohbeti)
+// DelverModal (profile, quests, Thistle oracle chat)
 // ============================================================
 
 function DelverModal({ isOpen, onClose, profile, quests, onClaimQuest }) {
   const [messages, setMessages] = useState([
-    { from: 'thistle', text: 'Hoş geldin, kâşif. Bana derinlik hakkında sor, eski taşın izin verdiği kadarıyla yanıtlayayım.' },
+    { from: 'thistle', text: 'Well met, delver. Ask me about the deep, and I\'ll answer as best the old stone allows.' },
   ]);
   const [input, setInput] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
@@ -861,37 +852,37 @@ function DelverModal({ isOpen, onClose, profile, quests, onClaimQuest }) {
           <div>
             <div className="font-display text-xl text-zinc-100">{profile.name}</div>
             <div className="text-zinc-500 text-sm">{profile.title}</div>
-            <div className="font-mono text-[10px] text-emerald-400 tracking-widest mt-0.5">SEVİYE {profile.level}</div>
+            <div className="font-mono text-[10px] text-emerald-400 tracking-widest mt-0.5">LEVEL {profile.level}</div>
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div>
-            <div className="flex justify-between font-mono text-[10px] text-zinc-500 mb-1.5"><span>PARLAKLIK</span><span>{profile.luminescence}%</span></div>
+            <div className="flex justify-between font-mono text-[10px] text-zinc-500 mb-1.5"><span>LUMINESCENCE</span><span>{profile.luminescence}%</span></div>
             <div className="resonance-crack"><div className="resonance-fill" style={{ width: `${profile.luminescence}%`, background: '#f59e0b', boxShadow: '0 0 12px rgba(245,158,11,0.8)' }} /></div>
           </div>
           <div>
-            <div className="flex justify-between font-mono text-[10px] text-zinc-500 mb-1.5"><span>REZONANS</span><span>{profile.resonance}%</span></div>
+            <div className="flex justify-between font-mono text-[10px] text-zinc-500 mb-1.5"><span>RESONANCE</span><span>{profile.resonance}%</span></div>
             <div className="resonance-crack"><div className="resonance-fill" style={{ width: `${profile.resonance}%` }} /></div>
           </div>
         </div>
 
         <div className="mb-6">
-          <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase mb-3">Görevler</div>
+          <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase mb-3">Quests</div>
           <div className="space-y-2.5">
             {quests.map((q) => (
               <div key={q.id} className="stone-slab p-3.5">
                 <div className="flex items-center justify-between mb-1.5">
                   <span className="text-sm text-zinc-200">{q.title}</span>
                   {q.isCompleted ? (
-                    <span className="moss-tag">Tamamlandı</span>
+                    <span className="moss-tag">Completed</span>
                   ) : (
                     <button
                       onClick={() => onClaimQuest(q.id)}
                       disabled={q.progress < q.maxProgress}
                       className="font-mono text-[10px] tracking-widest uppercase text-emerald-400 disabled:text-zinc-600 disabled:cursor-not-allowed"
                     >
-                      Talep Et
+                      Claim
                     </button>
                   )}
                 </div>
@@ -905,7 +896,7 @@ function DelverModal({ isOpen, onClose, profile, quests, onClaimQuest }) {
         </div>
 
         <div>
-          <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase mb-3">Thistle'a Fısılda</div>
+          <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase mb-3">Whisper to Thistle</div>
           <div ref={scrollRef} className="stone-slab p-3.5 h-40 overflow-y-auto space-y-2.5 mb-3">
             {messages.map((m, i) => (
               <div key={i} className={`text-sm leading-relaxed ${m.from === 'user' ? 'text-zinc-300 text-right' : 'text-emerald-300/90'}`}>
@@ -913,14 +904,14 @@ function DelverModal({ isOpen, onClose, profile, quests, onClaimQuest }) {
                 {m.text}
               </div>
             ))}
-            {chatLoading && <div className="font-mono text-[10px] text-zinc-600">Thistle taşı dinliyor…</div>}
+            {chatLoading && <div className="font-mono text-[10px] text-zinc-600">Thistle is listening to the stone…</div>}
           </div>
           <div className="flex gap-2">
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              placeholder="Tehlike, kalıntı veya runiler hakkında sor…"
+              placeholder="Ask about danger, relics, or runes…"
               className="flex-1 bg-zinc-900 border border-zinc-700 rounded-xl px-3.5 py-2.5 text-sm text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500/60"
             />
             <button onClick={handleSend} className="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-500/50 flex items-center justify-center text-emerald-400 hover:bg-emerald-500/25 transition-colors shrink-0">
@@ -952,7 +943,7 @@ function MobileBottomNav({ currentView, onViewChange, onOpenProfile }) {
       ))}
       <button onClick={onOpenProfile} className="flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg text-zinc-500">
         <Icon name="person" className="text-[22px]" />
-        <span className="font-mono text-[9px]">Profil</span>
+        <span className="font-mono text-[9px]">Profile</span>
       </button>
     </nav>
   );
