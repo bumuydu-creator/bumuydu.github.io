@@ -1,0 +1,1046 @@
+<!doctype html>
+<html lang="tr" class="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Deep Relic — Yeraltı Mağaraları</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&family=Hanken+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<style>
+  body {
+    font-family: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #09090b;
+    color: #f4f4f5;
+  }
+  h1, h2, h3, h4, .font-display { font-family: 'Domine', serif; }
+  code, pre, .font-mono { font-family: 'Space Mono', monospace; }
+
+  .bento-card {
+    background-color: rgba(24, 24, 27, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(39, 39, 42, 0.8);
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .bento-card:hover { border-color: rgba(63, 63, 70, 0.9); }
+
+  .chiseled-slab {
+    position: relative;
+    background: linear-gradient(145deg, #18181b 0%, #121215 100%);
+    border: 1px solid rgba(39, 39, 42, 0.9);
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+  }
+
+  .stone-slab {
+    background: #18181b;
+    border: 1px solid #27272a;
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+  }
+
+  .cavern-grid {
+    background-image:
+      linear-gradient(rgba(16, 185, 129, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .felt-texture {
+    background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.02) 1px, transparent 0);
+    background-size: 20px 20px;
+  }
+
+  .crystal-glow-cyan { filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.55)); }
+
+  .resonance-crack {
+    height: 6px;
+    background: #18181b;
+    position: relative;
+    overflow: hidden;
+    border-radius: 9999px;
+    border: 1px solid #27272a;
+  }
+  .resonance-fill {
+    background: #10b981;
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.8);
+    height: 100%;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .moss-tag {
+    background-color: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    padding: 2px 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    border-radius: 9999px;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    display: inline-block;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.6)); transform: scale(1); }
+    50% { filter: drop-shadow(0 0 22px rgba(16, 185, 129, 0.9)); transform: scale(1.05); }
+  }
+  .active-echo { animation: pulse-glow 2.5s infinite ease-in-out; }
+
+  .rope-line {
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(39, 39, 42, 0.6) 5px, rgba(39, 39, 42, 0.6) 10px);
+    border-top: 1px solid #27272a;
+  }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #09090b; }
+  ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; border: 1px solid #3f3f46; }
+  ::-webkit-scrollbar-thumb:hover { background: #10b981; }
+
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    line-height: 1;
+    vertical-align: middle;
+  }
+</style>
+</head>
+<body class="antialiased selection:bg-emerald-500 selection:text-emerald-950 overflow-x-hidden min-h-screen">
+  <div id="root"></div>
+
+  <script type="text/babel" data-presets="react">
+// ============================================================
+// DEEP RELIC — statik veriler + mock "kahin" üreticileri
+// (Sunucu yok: her şey istemci tarafında çalışır, böylece bu
+// oyun GitHub Pages üzerinde tek bir düz HTML dosyası olarak çalışır.)
+// ============================================================
+
+const THREAT_COLORS = {
+  SAFE: '#34d399',
+  LOW: '#34d399',
+  MEDIUM: '#f59e0b',
+  HIGH: '#fb923c',
+  EXTREME: '#ef4444',
+};
+
+const THREAT_LABELS = {
+  SAFE: 'GÜVENLİ',
+  LOW: 'DÜŞÜK',
+  MEDIUM: 'ORTA',
+  HIGH: 'YÜKSEK',
+  EXTREME: 'AŞIRI',
+};
+
+const RARITY_COLORS = {
+  'Sıradan': '#a1a1aa',
+  'Nadir': '#38bdf8',
+  'Kadim': '#f59e0b',
+  'Efsanevi': '#c084fc',
+};
+
+const CATEGORY_ICONS = {
+  'Biyolojik Katalizör': 'eco',
+  'Yapısal Güçlendirme': 'foundation',
+  'Yankı Harmoniği': 'graphic_eq',
+  'Kristal Matris': 'diamond',
+};
+
+const initialDelverProfile = {
+  name: 'Kessa Underlight',
+  level: 14,
+  title: 'Üçüncü Damarın Derin Kâşifi',
+  luminescence: 68,
+  resonance: 42,
+  avatarUrl: '',
+  activeDepth: 'Seviye 14 — Oyuk Damar',
+  inventoryCapacity: 62,
+};
+
+const initialCavernNodes = [
+  { id: 'n1', name: 'Yosunlu Eşik', levelNum: 1, icon: 'cottage', description: 'Yüzey dünyasının keçeleşmiş taşa ve derinliğin ilk soğuk nefesine yerini bıraktığı nokta.', threat: 'SAFE', xPercent: 12, yPercent: 82, relicsFound: ['Çatlak Fener Parçası'] },
+  { id: 'n2', name: 'Damlataşı Çukuru', levelNum: 3, icon: 'water_drop', description: 'Mineralli suyun keçeleşmiş sarkıtlardan durmadan damladığı, her damlanın hafif bir nota mırıldandığı alçak bir oda.', threat: 'LOW', xPercent: 28, yPercent: 68, relicsFound: ['Kırık Mağara İncisi'] },
+  { id: 'n3', name: 'Uğuldayan Damar', levelNum: 6, icon: 'graphic_eq', description: 'Duymadan önce azı dişlerinde hissettiğin bir perdede titreşen bir kuvars damarı.', threat: 'MEDIUM', xPercent: 46, yPercent: 74, relicsFound: ['Rezonanslı Kırık'] },
+  { id: 'n4', name: 'Obsidyen Çatlağı', levelNum: 9, icon: 'bolt', description: 'Eski bir sarsıntıyla ikiye bölünmüş kara cam, kenarları hâlâ dokunulduğunda ılık.', threat: 'MEDIUM', xPercent: 60, yPercent: 55, relicsFound: [] },
+  { id: 'n5', name: 'Biyoışıldayan Oyuk', levelNum: 11, icon: 'auto_awesome', description: 'Mantar ışığı her yüzeyde açar, mağaranın kendisi gibi ağır ağır soluk alıp verir.', threat: 'HIGH', xPercent: 50, yPercent: 38, isCurrent: true, relicsFound: ['Fısıltı Kristali'] },
+  { id: 'n6', name: 'Rezonans Uçurumu', levelNum: 13, icon: 'landscape', description: 'Görünür bir zemini olmayan bir düşüş. Bırakılan taşlar üç saniye gecikmeli bir yankıyla geri döner.', threat: 'HIGH', xPercent: 68, yPercent: 26, isLocked: true, relicsFound: [] },
+  { id: 'n7', name: 'Batık Mihrap', levelNum: 16, icon: 'account_balance', description: 'Yarısı sular altında kalmış, hâlâ eski ayinlerle uğuldayan oyma arduvazlardan bir salon.', threat: 'EXTREME', xPercent: 34, yPercent: 16, isLocked: true, relicsFound: [] },
+  { id: 'n8', name: 'Son Yankı', levelNum: 20, icon: 'blur_circular', description: 'Bu derinliğe ulaşan kâşifler, mağaranın konuşmadan önce yanıt verdiğini söylüyor.', threat: 'EXTREME', xPercent: 14, yPercent: 6, isLocked: true, relicsFound: [] },
+];
+
+const initialGatheredItems = [
+  { id: 'i1', name: 'Biyoışıldayan Yosun', category: 'Biyolojik Katalizör', quantity: 7, icon: 'eco', color: '#34d399', rarity: 'Sıradan', description: 'Keçeleşmiş eldivenleri soluk yeşile boyayan, hafifçe ışıldayan yumuşak yosun.' },
+  { id: 'i2', name: 'Mağara İncisi', category: 'Kristal Matris', quantity: 3, icon: 'diamond', color: '#38bdf8', rarity: 'Nadir', description: 'Yüzyıllar boyunca damla damla oluşmuş pürüzsüz bir mineral küre.' },
+  { id: 'i3', name: 'Taşlaşmış Kök', category: 'Yapısal Güçlendirme', quantity: 5, icon: 'foundation', color: '#a1a1aa', rarity: 'Sıradan', description: 'Taş kadar sert kök odunu, dövülmüş demir gibi soğuk ve yoğun.' },
+  { id: 'i4', name: 'Rezonanslı Kırık', category: 'Yankı Harmoniği', quantity: 4, icon: 'graphic_eq', color: '#c084fc', rarity: 'Nadir', description: 'Kulağa yaklaştırıldığında hafifçe uğuldayan bir kuvars kıymığı.' },
+  { id: 'i5', name: 'Kadim Arduvaz Parçası', category: 'Yapısal Güçlendirme', quantity: 2, icon: 'history_edu', color: '#f59e0b', rarity: 'Kadim', description: 'Pürüzsüzleşmiş, hiçbir yaşayan kâşifin okuyamadığı runilerle kazınmış arduvaz.' },
+  { id: 'i6', name: 'Fısıltı Kristali', category: 'Kristal Matris', quantity: 1, icon: 'auto_awesome', color: '#c084fc', rarity: 'Efsanevi', description: 'Dokunulduğunda soğuk, sıkıca sarılmış yünde bile tam olarak susmayan bir kristal.' },
+  { id: 'i7', name: 'Mağara İpeği', category: 'Biyolojik Katalizör', quantity: 6, icon: 'texture', color: '#34d399', rarity: 'Nadir', description: 'İnce mantar lifi, elle sıkı bir dokuya keçeleştirilmiş, sıcak ve nefes alabilir.' },
+  { id: 'i8', name: 'Demir Damarı Cevheri', category: 'Yapısal Güçlendirme', quantity: 9, icon: 'construction', color: '#a1a1aa', rarity: 'Sıradan', description: 'Göründüğünden daha ağır, pas renkli damarlarla benekli yoğun cevher.' },
+];
+
+const initialLoreEntries = [
+  { id: 'l1', title: 'Gölge Avcısı', subtitle: 'Sesle değil, sessizlikle avlanan bir yırtıcı', threatTag: 'YÜKSEK TEHDİT', threatColor: THREAT_COLORS.HIGH, description: 'Kâşifler, mağara sessizleştiğinde harekete geçen bir şekilden söz eder, sanki yankının yokluğuyla besleniyor gibi.', resonanceLevel: 74, category: 'Yaratıklar' },
+  { id: 'l2', title: 'Rezonans Çiçeklenmesi', subtitle: 'Sese doğru büyüyen kristaller', threatTag: 'ANOMALİ', threatColor: THREAT_COLORS.MEDIUM, description: 'Maruz kaldığı her rezonans frekansına doğru gözle görülür şekilde bükülüp uzayan nadir bir kristal oluşumu.', resonanceLevel: 61, category: 'Anomaliler' },
+  { id: 'l3', title: 'İlk Kâşiflerin Runileri', subtitle: 'En eski seferlerden kalma oyma arduvaz', threatTag: 'RUNİ', threatColor: THREAT_COLORS.SAFE, description: 'Üst mağaralarda güvenli rezonans yollarını işaretlediğine inanılan aşınmış işaretler.', resonanceLevel: 55, category: 'Runiler' },
+  { id: 'l4', title: 'Seviye 9\'un Parçalanışı', subtitle: 'Bütün bir damarı yeniden şekillendiren sarsıntı', threatTag: 'TARİH', threatColor: THREAT_COLORS.MEDIUM, description: 'Kayıtlara geçen bir deprem Obsidyen Çatlağı\'nı yararak, hiçbir haritanın çizmediği odaları ortaya çıkardı.', resonanceLevel: 48, category: 'Tarih' },
+  { id: 'l5', title: 'Kristal Derili Kurtçuklar', subtitle: 'Küçük, camsı ve şaşırtıcı derecede gürültülü', threatTag: 'DÜŞÜK TEHDİT', threatColor: THREAT_COLORS.LOW, description: 'Tek başlarına zararsız olan bu kurtçuklar, rahatsız edildiklerinde çarpılmış cam gibi çınlayan sürüler halinde toplanır.', resonanceLevel: 32, category: 'Yaratıklar' },
+  { id: 'l6', title: 'Sessiz Koro', subtitle: 'Her yankıyı yok eden bir oda', threatTag: 'ANOMALİ', threatColor: THREAT_COLORS.EXTREME, description: 'Bu oyukta çıkarılan hiçbir ses yankı olarak geri dönmez; kâşifler bunu derinden ve fiziksel olarak yanlış olarak tarif eder.', resonanceLevel: 88, category: 'Anomaliler' },
+];
+
+const initialQuests = [
+  { id: 'q1', title: 'Yosun Toplayıcı', objective: '10 Biyoışıldayan Yosun Topla', progress: 7, maxProgress: 10, reward: '+5 Parlaklık', isCompleted: false },
+  { id: 'q2', title: 'Oyuğa Ulaş', objective: 'Seviye 14\'e İn', progress: 14, maxProgress: 14, reward: '+10 Rezonans', isCompleted: true },
+  { id: 'q3', title: 'İlk Sentez', objective: 'Kademe 2 veya üstü bir kalıntı sentezle', progress: 0, maxProgress: 1, reward: '+8 Parlaklık', isCompleted: false },
+  { id: 'q4', title: 'Runi Okuyucu', objective: '3 günce kaydının şifresini çöz', progress: 1, maxProgress: 3, reward: '+6 Rezonans', isCompleted: false },
+];
+
+const initialSynthesizedHistory = [
+  {
+    id: 'h0',
+    relicName: 'Keçe Kor Muskası',
+    tier: 'Kademe 1',
+    resonanceScore: 71,
+    description: 'Sıkıca dolanmış keçe yünden yapılmış, ılık bir kor camı boncuğun etrafına sarılmış küçük bir muska.',
+    perks: ['+%10 Isı Tutma', 'Zifiri karanlıkta hafif ışıma'],
+    loreFlavor: 'Hafifçe, yeraltında yakılan ilk ateşin kokusunu taşıyor.',
+    createdTime: 'Seviye 9 seferi',
+  },
+];
+
+// ---- Mock "kahin" üreticileri (yalnızca istemci tarafında, API anahtarı gerekmez) ----
+
+const DECRYPT_OPENERS = [
+  'Semboller önce direniyor, sonra dikkatli bir baş parmağın altında ıslak arduvaz gibi soyuluyor.',
+  'Anlam yüzeye çıkarken taştan yavaş ve isteksiz bir rezonans yükseliyor.',
+  'Oymadaki kristal toz fener ışığını yakalıyor ve runi sonunda yanıt veriyor.',
+];
+
+const DECRYPT_BODIES = [
+  'İlk kâşiflerin çökme yüzünden değil, geride bırakılmayacak kadar rezonanslı buldukları için bilerek kapattığı bir geçitten bahsediyor.',
+  'Mağaranın uğultusunu bir harita gibi okumanın bir yöntemini tarif ediyor; sessizlik güvenli zemini, ani perde değişimi tehlikeyi işaretliyor.',
+  'Işık ve sesin sanki dinliyormuş gibi davrandığı bir odayı adlandırıyor ve ona yanıt vermenin sonraki yanıtı değiştirdiği konusunda uyarıyor.',
+];
+
+const DECRYPT_CLOSERS = [
+  'Bunu kim yazdıysa unutulmasını değil, hatırlanmasını istemiş; bu da buralarda kendi başına bir uyarı sayılır.',
+  'Yakınlarda bulunan keçeye sarılı aletler, bunu kazıyanın geri dönmeyi planladığını ama hiç dönmediğini gösteriyor.',
+  'Çeviriyi güncene not ediyorsun; bazı runilerin ancak ikinci okumada tam anlamıyla çevrildiğinin farkındasın.',
+];
+
+function mockDecrypt(entry) {
+  const opener = DECRYPT_OPENERS[Math.floor(Math.random() * DECRYPT_OPENERS.length)];
+  const body = DECRYPT_BODIES[Math.floor(Math.random() * DECRYPT_BODIES.length)];
+  const closer = DECRYPT_CLOSERS[Math.floor(Math.random() * DECRYPT_CLOSERS.length)];
+  return `${opener}\n\n${body}\n\n${closer}`;
+}
+
+const RELIC_ADJECTIVES = ['Işıldayan', 'Keçeli', 'Nabız Bağlı', 'Oyuk Oyma', 'Derin Dokunmuş', 'Rezonanslı', 'Yosun Sarılı', 'Kor Büyümüş'];
+const RELIC_MATERIALS = ['Obsidyen', 'Mağara İncisi', 'Kuvars', 'Arduvaz', 'Kristal', 'Kor Camı', 'Demir Kök'];
+const RELIC_NOUNS = ['Kazma', 'Miğfer', 'Muska', 'Fener', 'Zırh Eldiveni', 'Mühür', 'Pelerin İğnesi', 'Rezonatör'];
+
+const PERK_POOL = [
+  '+%25 Parlaklık Yarıçapı', 'Taşın içindeki gizli damarları belirginleştirir', '+%15 Madencilik Verimi',
+  '+%30 Biyoışıma', 'Yankı gecikmesini yarıya indirir', 'Yakındaki kararsız zemini haber verir',
+  '+%20 Rezonans Kararlılığı', 'Gevşek moloz üzerinde ayak seslerini yumuşatır', 'Zifiri karanlıkta hafif görüş sağlar',
+];
+
+const FLAVOR_POOL = [
+  'Mağara gölgelerini yatıştıran bir perdede uğulduyor.',
+  'Dokunulduğunda soğuk, bir süre elde tutulunca ısınıyor.',
+  'Kâşifler, tehlikeli bir şeye yaklaşıldıkça sessizleştiğini söylüyor.',
+  'Keçe astarından hafifçe yosun ve eski yağmur kokusu geliyor.',
+];
+
+function pickN(arr, n) {
+  const copy = [...arr];
+  const out = [];
+  for (let i = 0; i < n && copy.length; i++) {
+    out.push(copy.splice(Math.floor(Math.random() * copy.length), 1)[0]);
+  }
+  return out;
+}
+
+function mockSynthesize(items) {
+  const adj = RELIC_ADJECTIVES[Math.floor(Math.random() * RELIC_ADJECTIVES.length)];
+  const mat = RELIC_MATERIALS[Math.floor(Math.random() * RELIC_MATERIALS.length)];
+  const noun = RELIC_NOUNS[Math.floor(Math.random() * RELIC_NOUNS.length)];
+  const rarityWeight = items.some((i) => i.rarity === 'Efsanevi') ? 3 : items.some((i) => i.rarity === 'Kadim') ? 2 : 1;
+  const tier = rarityWeight >= 3 ? 'Kademe 3' : rarityWeight === 2 ? 'Kademe 2' : Math.random() > 0.6 ? 'Kademe 2' : 'Kademe 1';
+  const base = tier === 'Kademe 3' ? 85 : tier === 'Kademe 2' ? 72 : 60;
+  const resonanceScore = Math.min(99, base + Math.floor(Math.random() * 15));
+  const itemNames = items.map((i) => i.name.toLowerCase()).join(', ');
+  return {
+    relicName: `${adj} ${mat} ${noun}`,
+    tier,
+    resonanceScore,
+    description: `${itemNames} malzemelerinin dikkatle birleştirilmiş bir kaynaşımı, yüzeyi oyma kristal ile keçeleşmiş yün arasında değişiyor.`,
+    perks: pickN(PERK_POOL, 2),
+    loreFlavor: FLAVOR_POOL[Math.floor(Math.random() * FLAVOR_POOL.length)],
+  };
+}
+
+const THISTLE_LINES = [
+  'Derin mağaralar hızdan çok sabrı ödüllendirir, küçük kâşif — acele etmek yalnızca karanlıkta uyuyanı uyandırır.',
+  'Keçeleşmiş yün ve parlayan kristal, buradaki tüm iş bundan ibaret: tehlikeli şeylerin etrafına sarılmış yumuşak şeyler.',
+  'Taştaki bir rezonans çatlağı, yakın zamanda bir şeyin değiştiği anlamına gelir. Üzerinden geçmeden önce ne olduğunu bilmek en iyisi.',
+  'Binlerce runi okudum ve hepsi altında aynı şeyi söylüyor: yavaş git, yolunu işaretle, geri dön.',
+  'Yosun her zamankinden parlak parlıyorsa, hava her zamankinden incedir. O derinlikte nefesine dikkat et.',
+];
+
+function mockChatReply(message) {
+  const lower = (message || '').toLowerCase();
+  if (lower.includes('tehlike') || lower.includes('tehdit') || lower.includes('güvenli')) {
+    return 'Tehlike burada nadiren yüksek sesle kendini duyurur — damlamanın olması gereken yerde sessizliği ya da olmaması gereken yerde ışığı izle. Gözlerinden çok rezonans okumalarına güven.';
+  }
+  if (lower.includes('kalıntı') || lower.includes('sentez') || lower.includes('zanaat') || lower.includes('üret')) {
+    return 'İyi bir kalıntı zorla bir araya getirilmez, ustaca birleştirilir — bir kristal matrisi bir yankı harmoniğiyle eşleştir ve yün bağlamanın nazik işini yapmasına izin ver.';
+  }
+  if (lower.includes('runi') || lower.includes('efsane') || lower.includes('günce')) {
+    return 'Eski runiler nadiren yalan söyler ama saklarlar. Bir oymaya güvenmeden önce iki kez oku, biri kelimeler için, biri söylenmeyenler için.';
+  }
+  return THISTLE_LINES[Math.floor(Math.random() * THISTLE_LINES.length)];
+}
+const { useState, useEffect, useRef } = React;
+
+// ============================================================
+// Paylaşılan küçük parçalar
+// ============================================================
+
+function Icon({ name, className = '', style = {} }) {
+  return <span className={`material-symbols-outlined ${className}`} style={style}>{name}</span>;
+}
+
+function ThreatTag({ threat }) {
+  const color = THREAT_COLORS[threat] || THREAT_COLORS.LOW;
+  const label = THREAT_LABELS[threat] || threat;
+  return (
+    <span
+      className="font-mono text-[10px] tracking-widest uppercase px-2 py-0.5 rounded-full border"
+      style={{ color, borderColor: `${color}55`, backgroundColor: `${color}1a` }}
+    >
+      {label}
+    </span>
+  );
+}
+
+const NAV_ITEMS = [
+  { id: 'map', label: 'Mağara Haritası', icon: 'map', desc: 'Derinliğin diaroması' },
+  { id: 'synthesis', label: 'Yankı Sentezi', icon: 'diamond', desc: 'Yankılardan kalıntı üret' },
+  { id: 'chronicle', label: 'Günce', icon: 'auto_stories', desc: 'Efsaneler ve çözülen sırlar' },
+  { id: 'inventory', label: 'Envanter', icon: 'inventory_2', desc: 'Toplanan malzemeler' },
+];
+
+// ============================================================
+// Header
+// ============================================================
+
+function Header({ currentView, onViewChange, luminescence, resonance, onOpenProfile }) {
+  return (
+    <header className="fixed top-0 inset-x-0 h-20 z-30 border-b border-zinc-800/80 bg-[#09090b]/85 backdrop-blur-md">
+      <div className="h-full max-w-[1600px] mx-auto px-4 sm:px-6 flex items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl chiseled-slab flex items-center justify-center crystal-glow-cyan">
+            <Icon name="diamond" className="text-emerald-400 text-[22px]" />
+          </div>
+          <div className="leading-tight">
+            <div className="font-display text-lg sm:text-xl tracking-tight">Deep Relic</div>
+            <div className="hidden sm:block font-mono text-[11px] text-zinc-500 tracking-wider">YERALTI MAĞARALARI</div>
+          </div>
+        </div>
+
+        <nav className="hidden md:flex items-center gap-1 bento-card px-1.5 py-1.5 rounded-2xl">
+          {NAV_ITEMS.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => onViewChange(item.id)}
+              className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
+                currentView === item.id ? 'bg-emerald-500/15 text-emerald-400' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/60'
+              }`}
+            >
+              <Icon name={item.icon} className="text-[18px]" />
+              {item.label}
+            </button>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-4">
+          <div className="hidden sm:flex items-center gap-4 font-mono text-xs text-zinc-400">
+            <div className="flex items-center gap-1.5">
+              <Icon name="bolt" className="text-amber-400 text-[16px]" />
+              {luminescence}%
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Icon name="graphic_eq" className="text-emerald-400 text-[16px]" />
+              {resonance}%
+            </div>
+          </div>
+          <button
+            onClick={onOpenProfile}
+            className="w-10 h-10 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center hover:border-emerald-500/60 transition-colors"
+            aria-label="Kâşif profilini aç"
+          >
+            <Icon name="person" className="text-zinc-300 text-[20px]" />
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+// ============================================================
+// SidebarNav (masaüstü)
+// ============================================================
+
+function SidebarNav({ currentView, onViewChange, activeDepth, resonance, onOpenQuests }) {
+  return (
+    <aside className="hidden md:flex flex-col fixed top-20 bottom-0 left-0 w-64 border-r border-zinc-800/80 px-5 py-6 justify-between">
+      <div className="space-y-1.5">
+        {NAV_ITEMS.map((item) => (
+          <button
+            key={item.id}
+            onClick={() => onViewChange(item.id)}
+            className={`w-full flex items-start gap-3 px-3.5 py-3 rounded-2xl text-left transition-colors ${
+              currentView === item.id ? 'bento-card border-emerald-500/40 text-emerald-400' : 'text-zinc-400 hover:bg-zinc-900/70'
+            }`}
+          >
+            <Icon name={item.icon} className="text-[20px] mt-0.5" />
+            <span>
+              <span className="block text-sm font-medium">{item.label}</span>
+              <span className="block text-[11px] text-zinc-500">{item.desc}</span>
+            </span>
+          </button>
+        ))}
+      </div>
+
+      <div className="space-y-4">
+        <div className="chiseled-slab p-4">
+          <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase mb-1">Şu anda burada</div>
+          <div className="font-display text-sm text-zinc-200">{activeDepth}</div>
+        </div>
+        <div>
+          <div className="flex justify-between font-mono text-[11px] text-zinc-500 mb-1.5">
+            <span>REZONANS</span>
+            <span>{resonance}%</span>
+          </div>
+          <div className="resonance-crack">
+            <div className="resonance-fill" style={{ width: `${resonance}%` }} />
+          </div>
+        </div>
+        <button
+          onClick={onOpenQuests}
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-zinc-700 text-sm text-zinc-300 hover:border-emerald-500/50 hover:text-emerald-400 transition-colors"
+        >
+          <Icon name="list_alt" className="text-[18px]" />
+          Görevleri Aç
+        </button>
+      </div>
+    </aside>
+  );
+}
+
+// ============================================================
+// CavernMap
+// ============================================================
+
+function CavernMap({ nodes, profile, inventory, onNavigateToView, onOpenProfile }) {
+  const [selected, setSelected] = useState(nodes.find((n) => n.isCurrent) || nodes[0]);
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="font-display text-2xl sm:text-3xl text-zinc-100">Mağara Diorama Haritası</h1>
+        <p className="text-zinc-500 text-sm mt-1">Şu anda rezonans kaynağı: <span className="text-emerald-400">{profile.activeDepth}</span></p>
+      </div>
+
+      <div className="grid grid-cols-3 gap-3 sm:gap-4">
+        <button onClick={onOpenProfile} className="bento-card p-4 text-left hover:border-amber-500/40">
+          <div className="flex items-center gap-2 text-amber-400 mb-1"><Icon name="bolt" className="text-[18px]" /><span className="font-mono text-[10px] tracking-widest uppercase text-zinc-500">Parlaklık</span></div>
+          <div className="font-display text-xl text-zinc-100">{profile.luminescence}%</div>
+        </button>
+        <button onClick={onOpenProfile} className="bento-card p-4 text-left hover:border-emerald-500/40">
+          <div className="flex items-center gap-2 text-emerald-400 mb-1"><Icon name="graphic_eq" className="text-[18px]" /><span className="font-mono text-[10px] tracking-widest uppercase text-zinc-500">Rezonans</span></div>
+          <div className="font-display text-xl text-zinc-100">{profile.resonance}%</div>
+        </button>
+        <button onClick={() => onNavigateToView('inventory')} className="bento-card p-4 text-left hover:border-sky-500/40">
+          <div className="flex items-center gap-2 text-sky-400 mb-1"><Icon name="inventory_2" className="text-[18px]" /><span className="font-mono text-[10px] tracking-widest uppercase text-zinc-500">Kapasite</span></div>
+          <div className="font-display text-xl text-zinc-100">{profile.inventoryCapacity}%</div>
+        </button>
+      </div>
+
+      <div className="bento-card cavern-grid p-4 sm:p-8 relative h-[420px] sm:h-[520px] overflow-hidden">
+        <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
+          {nodes.slice(1).map((node, idx) => {
+            const prev = nodes[idx];
+            return (
+              <line
+                key={node.id}
+                x1={`${prev.xPercent}%`} y1={`${prev.yPercent}%`}
+                x2={`${node.xPercent}%`} y2={`${node.yPercent}%`}
+                stroke="rgba(63,63,70,0.7)" strokeWidth="2" strokeDasharray="6 6"
+              />
+            );
+          })}
+        </svg>
+
+        {nodes.map((node) => {
+          const color = THREAT_COLORS[node.threat] || THREAT_COLORS.LOW;
+          const isSelected = selected?.id === node.id;
+          return (
+            <button
+              key={node.id}
+              onClick={() => setSelected(node)}
+              style={{ left: `${node.xPercent}%`, top: `${node.yPercent}%` }}
+              className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1.5 group"
+            >
+              <div
+                className={`w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center border-2 transition-transform group-hover:scale-110 ${node.isCurrent ? 'active-echo' : ''} ${isSelected ? 'scale-110' : ''}`}
+                style={{
+                  borderColor: node.isLocked ? '#3f3f46' : color,
+                  backgroundColor: node.isLocked ? 'rgba(24,24,27,0.9)' : `${color}22`,
+                }}
+              >
+                <Icon name={node.isLocked ? 'lock' : node.icon} className="text-[18px]" style={{ color: node.isLocked ? '#71717a' : color }} />
+              </div>
+              <span className={`font-mono text-[10px] px-1.5 py-0.5 rounded ${node.isLocked ? 'text-zinc-600' : 'text-zinc-300'} bg-[#09090b]/80 whitespace-nowrap`}>
+                Sv.{node.levelNum}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {selected && (
+        <div className="bento-card p-5 sm:p-6">
+          <div className="flex flex-wrap items-center gap-3 mb-3">
+            <h3 className="font-display text-xl text-zinc-100">{selected.name}</h3>
+            <ThreatTag threat={selected.threat} />
+            <span className="font-mono text-xs text-zinc-500">Seviye {selected.levelNum}</span>
+            {selected.isLocked && <span className="font-mono text-[10px] text-zinc-500 uppercase tracking-widest">Kilitli</span>}
+          </div>
+          <p className="text-zinc-400 text-sm leading-relaxed mb-4">{selected.description}</p>
+          {selected.relicsFound.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {selected.relicsFound.map((r) => (
+                <span key={r} className="moss-tag">{r}</span>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ============================================================
+// EchoSynthesis
+// ============================================================
+
+function EchoSynthesis({ inventory, history, onAddHistory }) {
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(null);
+
+  const toggleItem = (id) => {
+    setSelectedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : prev.length < 4 ? [...prev, id] : prev));
+  };
+
+  const selectedItems = inventory.filter((i) => selectedIds.includes(i.id));
+
+  const handleSynthesize = () => {
+    if (selectedItems.length < 2 || loading) return;
+    setLoading(true);
+    setResult(null);
+    setTimeout(() => {
+      const relic = mockSynthesize(selectedItems);
+      const withMeta = { ...relic, id: `h${Date.now()}`, createdTime: 'Az önce' };
+      setResult(withMeta);
+      onAddHistory(withMeta);
+      setSelectedIds([]);
+      setLoading(false);
+    }, 1100);
+  };
+
+  const tierColor = result?.tier === 'Kademe 3' ? '#c084fc' : result?.tier === 'Kademe 2' ? '#38bdf8' : '#34d399';
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="font-display text-2xl sm:text-3xl text-zinc-100">Yankı Sentezi Atölyesi</h1>
+        <p className="text-zinc-500 text-sm mt-1">2-4 toplanmış malzemeyi birleştir ve Rezonans Kâhini onları bağlasın.</p>
+      </div>
+
+      <div className="grid md:grid-cols-5 gap-6">
+        <div className="md:col-span-2 bento-card p-4 space-y-2 max-h-[480px] overflow-y-auto">
+          <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase px-1 pb-1">Malzemelerin</div>
+          {inventory.map((item) => {
+            const isSelected = selectedIds.includes(item.id);
+            return (
+              <button
+                key={item.id}
+                onClick={() => toggleItem(item.id)}
+                className={`w-full flex items-center gap-3 p-2.5 rounded-xl border transition-colors text-left ${
+                  isSelected ? 'border-emerald-500/60 bg-emerald-500/10' : 'border-zinc-800 hover:border-zinc-700'
+                }`}
+              >
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${item.color}22` }}>
+                  <Icon name={item.icon} className="text-[18px]" style={{ color: item.color }} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm text-zinc-200 truncate">{item.name}</div>
+                  <div className="font-mono text-[10px]" style={{ color: RARITY_COLORS[item.rarity] }}>{item.rarity}</div>
+                </div>
+                <span className="font-mono text-xs text-zinc-500">×{item.quantity}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="md:col-span-3 chiseled-slab p-6 flex flex-col items-center justify-center text-center min-h-[300px]">
+          {!result && !loading && (
+            <>
+              <Icon name="diamond" className="text-emerald-400 text-[42px] mb-3 crystal-glow-cyan" />
+              <p className="text-zinc-400 text-sm mb-5 max-w-xs">
+                {selectedItems.length === 0
+                  ? 'Başlamak için envanterinden 2-4 malzeme seç.'
+                  : `${selectedItems.length} malzeme seçildi: ${selectedItems.map((i) => i.name).join(', ')}`}
+              </p>
+              <button
+                onClick={handleSynthesize}
+                disabled={selectedItems.length < 2}
+                className="px-6 py-3 rounded-xl bg-emerald-500/15 border border-emerald-500/50 text-emerald-400 font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-emerald-500/25 transition-colors"
+              >
+                Yankıları Sentezle
+              </button>
+            </>
+          )}
+          {loading && (
+            <>
+              <div className="w-10 h-10 rounded-full border-2 border-emerald-500/30 border-t-emerald-400 animate-spin mb-4" />
+              <p className="font-mono text-xs text-zinc-500 tracking-wide">Rezonans Kâhini yankılarını hizalıyor…</p>
+            </>
+          )}
+          {result && !loading && (
+            <div className="w-full text-left">
+              <div className="flex items-center justify-between mb-2">
+                <span className="font-mono text-[10px] tracking-widest uppercase px-2 py-0.5 rounded-full border" style={{ color: tierColor, borderColor: `${tierColor}55`, backgroundColor: `${tierColor}1a` }}>
+                  {result.tier}
+                </span>
+                <span className="font-display text-2xl" style={{ color: tierColor }}>{result.resonanceScore}</span>
+              </div>
+              <h3 className="font-display text-xl text-zinc-100 mb-2">{result.relicName}</h3>
+              <p className="text-zinc-400 text-sm leading-relaxed mb-3">{result.description}</p>
+              <div className="flex flex-wrap gap-2 mb-3">
+                {result.perks.map((p) => <span key={p} className="moss-tag">{p}</span>)}
+              </div>
+              <p className="text-zinc-500 text-xs italic mb-5">{result.loreFlavor}</p>
+              <button onClick={() => setResult(null)} className="text-sm text-emerald-400 hover:underline">Bir tane daha sentezle</button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div>
+        <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase mb-3">Sentez güncesi</div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {history.map((relic) => (
+            <div key={relic.id} className="bento-card p-4">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="font-mono text-[10px] text-zinc-500 uppercase">{relic.tier}</span>
+                <span className="font-mono text-xs text-emerald-400">{relic.resonanceScore}</span>
+              </div>
+              <div className="font-display text-sm text-zinc-200 mb-1">{relic.relicName}</div>
+              <div className="text-zinc-500 text-xs">{relic.createdTime}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// Chronicle
+// ============================================================
+
+const CHRONICLE_CATEGORIES = ['Tümü', 'Yaratıklar', 'Anomaliler', 'Runiler', 'Tarih'];
+
+function Chronicle({ entries }) {
+  const [filter, setFilter] = useState('Tümü');
+  const [decrypted, setDecrypted] = useState({});
+  const [loadingId, setLoadingId] = useState(null);
+
+  const visible = filter === 'Tümü' ? entries : entries.filter((e) => e.category === filter);
+
+  const handleDecrypt = (entry) => {
+    setLoadingId(entry.id);
+    setTimeout(() => {
+      setDecrypted((prev) => ({ ...prev, [entry.id]: mockDecrypt(entry) }));
+      setLoadingId(null);
+    }, 900);
+  };
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="font-display text-2xl sm:text-3xl text-zinc-100">Gölgeler Güncesi</h1>
+        <p className="text-zinc-500 text-sm mt-1">Derinlerden kaydedilen efsaneler, yaratıklar ve anomaliler.</p>
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        {CHRONICLE_CATEGORIES.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setFilter(cat)}
+            className={`px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wide border transition-colors ${
+              filter === cat ? 'border-emerald-500/60 bg-emerald-500/10 text-emerald-400' : 'border-zinc-800 text-zinc-500 hover:text-zinc-300'
+            }`}
+          >
+            {cat.toUpperCase()}
+          </button>
+        ))}
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-4">
+        {visible.map((entry) => (
+          <div key={entry.id} className="bento-card p-5">
+            <div className="flex items-start justify-between gap-3 mb-2">
+              <div>
+                <h3 className="font-display text-lg text-zinc-100">{entry.title}</h3>
+                <p className="text-zinc-500 text-xs mt-0.5">{entry.subtitle}</p>
+              </div>
+              {entry.threatTag && (
+                <span
+                  className="font-mono text-[10px] tracking-widest uppercase px-2 py-0.5 rounded-full border shrink-0"
+                  style={{ color: entry.threatColor, borderColor: `${entry.threatColor}55`, backgroundColor: `${entry.threatColor}1a` }}
+                >
+                  {entry.threatTag}
+                </span>
+              )}
+            </div>
+            <p className="text-zinc-400 text-sm leading-relaxed mb-3">{entry.description}</p>
+            <div className="mb-3">
+              <div className="flex justify-between font-mono text-[10px] text-zinc-500 mb-1">
+                <span>REZONANS SEVİYESİ</span><span>{entry.resonanceLevel}%</span>
+              </div>
+              <div className="resonance-crack">
+                <div className="resonance-fill" style={{ width: `${entry.resonanceLevel}%` }} />
+              </div>
+            </div>
+
+            {decrypted[entry.id] ? (
+              <div className="rope-line pt-3 mt-3">
+                {decrypted[entry.id].split('\n\n').map((p, i) => (
+                  <p key={i} className="text-zinc-300 text-sm leading-relaxed mb-2 last:mb-0">{p}</p>
+                ))}
+              </div>
+            ) : (
+              <button
+                onClick={() => handleDecrypt(entry)}
+                disabled={loadingId === entry.id}
+                className="flex items-center gap-2 text-xs font-mono tracking-wide text-emerald-400 hover:text-emerald-300 disabled:opacity-50 transition-colors"
+              >
+                <Icon name={loadingId === entry.id ? 'progress_activity' : 'key'} className={`text-[16px] ${loadingId === entry.id ? 'animate-spin' : ''}`} />
+                {loadingId === entry.id ? 'Şifre çözülüyor…' : 'Sırrı çöz'}
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// InventoryView
+// ============================================================
+
+function InventoryView({ inventory, capacity, onNavigateToView }) {
+  const categories = [...new Set(inventory.map((i) => i.category))];
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="font-display text-2xl sm:text-3xl text-zinc-100">Envanter</h1>
+          <p className="text-zinc-500 text-sm mt-1">Her inişte toplanan malzemeler.</p>
+        </div>
+        <button onClick={() => onNavigateToView('synthesis')} className="flex items-center gap-2 px-4 py-2 rounded-xl border border-emerald-500/50 text-emerald-400 text-sm hover:bg-emerald-500/10 transition-colors">
+          <Icon name="diamond" className="text-[18px]" /> Sentezlemeye git
+        </button>
+      </div>
+
+      <div className="bento-card p-4">
+        <div className="flex justify-between font-mono text-[11px] text-zinc-500 mb-1.5">
+          <span>ÇANTA KAPASİTESİ</span><span>{capacity}%</span>
+        </div>
+        <div className="resonance-crack">
+          <div className="resonance-fill" style={{ width: `${capacity}%` }} />
+        </div>
+      </div>
+
+      {categories.map((cat) => (
+        <div key={cat}>
+          <div className="flex items-center gap-2 mb-3">
+            <Icon name={CATEGORY_ICONS[cat] || 'category'} className="text-zinc-400 text-[18px]" />
+            <span className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase">{cat}</span>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {inventory.filter((i) => i.category === cat).map((item) => (
+              <div key={item.id} className="bento-card p-4 flex items-start gap-3">
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${item.color}22` }}>
+                  <Icon name={item.icon} className="text-[20px]" style={{ color: item.color }} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-sm text-zinc-200 truncate">{item.name}</span>
+                    <span className="font-mono text-xs text-zinc-500 shrink-0">×{item.quantity}</span>
+                  </div>
+                  <div className="font-mono text-[10px] mb-1" style={{ color: RARITY_COLORS[item.rarity] }}>{item.rarity}</div>
+                  <p className="text-zinc-500 text-xs leading-snug">{item.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ============================================================
+// DelverModal (profil, görevler, Thistle kahin sohbeti)
+// ============================================================
+
+function DelverModal({ isOpen, onClose, profile, quests, onClaimQuest }) {
+  const [messages, setMessages] = useState([
+    { from: 'thistle', text: 'Hoş geldin, kâşif. Bana derinlik hakkında sor, eski taşın izin verdiği kadarıyla yanıtlayayım.' },
+  ]);
+  const [input, setInput] = useState('');
+  const [chatLoading, setChatLoading] = useState(false);
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+  }, [messages]);
+
+  if (!isOpen) return null;
+
+  const handleSend = () => {
+    const text = input.trim();
+    if (!text || chatLoading) return;
+    setMessages((prev) => [...prev, { from: 'user', text }]);
+    setInput('');
+    setChatLoading(true);
+    setTimeout(() => {
+      setMessages((prev) => [...prev, { from: 'thistle', text: mockChatReply(text) }]);
+      setChatLoading(false);
+    }, 800);
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative chiseled-slab w-full max-w-2xl max-h-[85vh] overflow-y-auto p-6 sm:p-8">
+        <button onClick={onClose} className="absolute top-5 right-5 text-zinc-500 hover:text-zinc-200">
+          <Icon name="close" className="text-[22px]" />
+        </button>
+
+        <div className="flex items-center gap-4 mb-6">
+          <div className="w-16 h-16 rounded-full bg-zinc-800 border-2 border-emerald-500/50 flex items-center justify-center crystal-glow-cyan">
+            <Icon name="person" className="text-[30px] text-zinc-300" />
+          </div>
+          <div>
+            <div className="font-display text-xl text-zinc-100">{profile.name}</div>
+            <div className="text-zinc-500 text-sm">{profile.title}</div>
+            <div className="font-mono text-[10px] text-emerald-400 tracking-widest mt-0.5">SEVİYE {profile.level}</div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <div>
+            <div className="flex justify-between font-mono text-[10px] text-zinc-500 mb-1.5"><span>PARLAKLIK</span><span>{profile.luminescence}%</span></div>
+            <div className="resonance-crack"><div className="resonance-fill" style={{ width: `${profile.luminescence}%`, background: '#f59e0b', boxShadow: '0 0 12px rgba(245,158,11,0.8)' }} /></div>
+          </div>
+          <div>
+            <div className="flex justify-between font-mono text-[10px] text-zinc-500 mb-1.5"><span>REZONANS</span><span>{profile.resonance}%</span></div>
+            <div className="resonance-crack"><div className="resonance-fill" style={{ width: `${profile.resonance}%` }} /></div>
+          </div>
+        </div>
+
+        <div className="mb-6">
+          <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase mb-3">Görevler</div>
+          <div className="space-y-2.5">
+            {quests.map((q) => (
+              <div key={q.id} className="stone-slab p-3.5">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-sm text-zinc-200">{q.title}</span>
+                  {q.isCompleted ? (
+                    <span className="moss-tag">Tamamlandı</span>
+                  ) : (
+                    <button
+                      onClick={() => onClaimQuest(q.id)}
+                      disabled={q.progress < q.maxProgress}
+                      className="font-mono text-[10px] tracking-widest uppercase text-emerald-400 disabled:text-zinc-600 disabled:cursor-not-allowed"
+                    >
+                      Talep Et
+                    </button>
+                  )}
+                </div>
+                <p className="text-zinc-500 text-xs mb-2">{q.objective} · {q.reward}</p>
+                <div className="resonance-crack h-1">
+                  <div className="resonance-fill" style={{ width: `${Math.min(100, (q.progress / q.maxProgress) * 100)}%` }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase mb-3">Thistle'a Fısılda</div>
+          <div ref={scrollRef} className="stone-slab p-3.5 h-40 overflow-y-auto space-y-2.5 mb-3">
+            {messages.map((m, i) => (
+              <div key={i} className={`text-sm leading-relaxed ${m.from === 'user' ? 'text-zinc-300 text-right' : 'text-emerald-300/90'}`}>
+                {m.from === 'thistle' && <span className="font-mono text-[10px] text-zinc-600 block mb-0.5">THISTLE</span>}
+                {m.text}
+              </div>
+            ))}
+            {chatLoading && <div className="font-mono text-[10px] text-zinc-600">Thistle taşı dinliyor…</div>}
+          </div>
+          <div className="flex gap-2">
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+              placeholder="Tehlike, kalıntı veya runiler hakkında sor…"
+              className="flex-1 bg-zinc-900 border border-zinc-700 rounded-xl px-3.5 py-2.5 text-sm text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500/60"
+            />
+            <button onClick={handleSend} className="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-500/50 flex items-center justify-center text-emerald-400 hover:bg-emerald-500/25 transition-colors shrink-0">
+              <Icon name="send" className="text-[18px]" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// MobileBottomNav
+// ============================================================
+
+function MobileBottomNav({ currentView, onViewChange, onOpenProfile }) {
+  return (
+    <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 border-t border-zinc-800/80 bg-[#09090b]/95 backdrop-blur-md flex justify-around py-2">
+      {NAV_ITEMS.map((item) => (
+        <button
+          key={item.id}
+          onClick={() => onViewChange(item.id)}
+          className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg ${currentView === item.id ? 'text-emerald-400' : 'text-zinc-500'}`}
+        >
+          <Icon name={item.icon} className="text-[22px]" />
+          <span className="font-mono text-[9px]">{item.label.split(' ')[0]}</span>
+        </button>
+      ))}
+      <button onClick={onOpenProfile} className="flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg text-zinc-500">
+        <Icon name="person" className="text-[22px]" />
+        <span className="font-mono text-[9px]">Profil</span>
+      </button>
+    </nav>
+  );
+}
+
+// ============================================================
+// App
+// ============================================================
+
+function App() {
+  const [currentView, setCurrentView] = useState('map');
+  const [profile, setProfile] = useState(initialDelverProfile);
+  const [nodes] = useState(initialCavernNodes);
+  const [inventory] = useState(initialGatheredItems);
+  const [loreEntries] = useState(initialLoreEntries);
+  const [quests, setQuests] = useState(initialQuests);
+  const [history, setHistory] = useState(initialSynthesizedHistory);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
+  const handleAddHistory = (relic) => {
+    setHistory((prev) => [relic, ...prev]);
+    setProfile((prev) => ({ ...prev, resonance: Math.min(100, prev.resonance + 2) }));
+  };
+
+  const handleClaimQuest = (questId) => {
+    setQuests((prev) => prev.map((q) => (q.id === questId ? { ...q, isCompleted: true, progress: q.maxProgress } : q)));
+    setProfile((prev) => ({ ...prev, luminescence: Math.min(100, prev.luminescence + 5) }));
+  };
+
+  return (
+    <div className="min-h-screen bg-[#09090b] text-[#f4f4f5] font-body felt-texture flex flex-col">
+      <Header
+        currentView={currentView}
+        onViewChange={setCurrentView}
+        luminescence={profile.luminescence}
+        resonance={profile.resonance}
+        onOpenProfile={() => setIsProfileModalOpen(true)}
+      />
+
+      <div className="flex flex-1 pt-20 pb-24 md:pb-12">
+        <SidebarNav
+          currentView={currentView}
+          onViewChange={setCurrentView}
+          activeDepth={profile.activeDepth}
+          resonance={profile.resonance}
+          onOpenQuests={() => setIsProfileModalOpen(true)}
+        />
+
+        <main className="flex-1 px-4 sm:px-6 md:px-12 md:ml-64 py-6 max-w-6xl mx-auto w-full transition-all">
+          {currentView === 'map' && (
+            <CavernMap
+              nodes={nodes}
+              profile={profile}
+              inventory={inventory}
+              onNavigateToView={setCurrentView}
+              onOpenProfile={() => setIsProfileModalOpen(true)}
+            />
+          )}
+          {currentView === 'synthesis' && (
+            <EchoSynthesis inventory={inventory} history={history} onAddHistory={handleAddHistory} />
+          )}
+          {currentView === 'chronicle' && <Chronicle entries={loreEntries} />}
+          {currentView === 'inventory' && (
+            <InventoryView inventory={inventory} capacity={profile.inventoryCapacity} onNavigateToView={setCurrentView} />
+          )}
+        </main>
+      </div>
+
+      <DelverModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        profile={profile}
+        quests={quests}
+        onClaimQuest={handleClaimQuest}
+      />
+
+      <MobileBottomNav
+        currentView={currentView}
+        onViewChange={setCurrentView}
+        onOpenProfile={() => setIsProfileModalOpen(true)}
+      />
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+
+  </script>
+</body>
+</html>
