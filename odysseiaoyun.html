@@ -32,7 +32,7 @@
     box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .bento-card:hover { border-color: rgba(63, 63, 70, 0.9); }
+  .bento-card:hover { border-color: rgba(63, 63, 70, 0.9); transform: translateY(-2px); }
 
   .chiseled-slab {
     position: relative;
@@ -47,6 +47,7 @@
     border: 1px solid #27272a;
     border-radius: 1rem;
     box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+    transition: box-shadow 0.4s ease, border-color 0.4s ease;
   }
 
   .cavern-grid {
@@ -61,7 +62,7 @@
     background-size: 20px 20px;
   }
 
-  .crystal-glow-cyan { filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.55)); }
+  .crystal-glow-cyan { filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.55)); animation: headerBreathe 4s ease-in-out infinite; }
 
   .resonance-crack {
     height: 6px;
@@ -75,7 +76,17 @@
     background: #10b981;
     box-shadow: 0 0 12px rgba(16, 185, 129, 0.8);
     height: 100%;
+    position: relative;
+    overflow: hidden;
     transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .resonance-fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+    width: 40%;
+    animation: shimmerMove 2.2s linear infinite;
   }
 
   .moss-tag {
@@ -89,6 +100,7 @@
     letter-spacing: 0.05em;
     font-weight: 600;
     display: inline-block;
+    animation: popIn 0.4s ease backwards;
   }
 
   @keyframes pulse-glow {
@@ -111,6 +123,111 @@
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
     line-height: 1;
     vertical-align: middle;
+  }
+
+  /* ---- Hareket / animasyon eklentileri ---- */
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .stagger-item {
+    opacity: 0;
+    animation: fadeInUp 0.55s cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+
+  @keyframes viewEnter {
+    from { opacity: 0; transform: translateY(10px) scale(0.99); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .view-enter { animation: viewEnter 0.4s cubic-bezier(0.16,1,0.3,1); }
+
+  @keyframes floatNode {
+    0%, 100% { transform: translate(-50%, -50%) translateY(0px); }
+    50% { transform: translate(-50%, -50%) translateY(-6px); }
+  }
+
+  @keyframes drawPath {
+    from { stroke-dashoffset: 1; }
+    to { stroke-dashoffset: 0; }
+  }
+
+  @keyframes moteDrift {
+    from { transform: translateY(0) translateX(0); opacity: 0; }
+    10% { opacity: var(--mote-op, 0.5); }
+    90% { opacity: var(--mote-op, 0.5); }
+    to { transform: translateY(-160px) translateX(var(--mote-drift, 14px)); opacity: 0; }
+  }
+  .mote {
+    position: absolute;
+    bottom: -10px;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(52,211,153,0.9), rgba(52,211,153,0) 70%);
+    pointer-events: none;
+    animation-name: moteDrift;
+    animation-timing-function: ease-in;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes popIn {
+    0% { opacity: 0; transform: scale(0.85); }
+    60% { opacity: 1; transform: scale(1.04); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  .pop-in { animation: popIn 0.5s cubic-bezier(0.16,1,0.3,1); }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.94) translateY(12px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  @keyframes backdropIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes statPulse {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+  }
+  .stat-pulse { animation: statPulse 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+
+  @keyframes shimmerMove {
+    0% { transform: translateX(-120%); }
+    100% { transform: translateX(320%); }
+  }
+
+  @keyframes ringPulse {
+    0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.55); border-color: rgba(16,185,129,0.8); }
+    70% { box-shadow: 0 0 0 16px rgba(16,185,129,0); }
+    100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); border-color: #27272a; }
+  }
+  .quest-claimed { animation: ringPulse 0.9s ease-out; }
+
+  @keyframes headerBreathe {
+    0%, 100% { filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.45)); }
+    50% { filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.75)); }
+  }
+
+  @keyframes spinnerSpin {
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes typingDot {
+    0%, 60%, 100% { opacity: 0.25; transform: translateY(0); }
+    30% { opacity: 1; transform: translateY(-2px); }
+  }
+  .typing-dot { animation: typingDot 1.1s ease-in-out infinite; }
+
+  .btn-press { transition: transform 0.15s ease; }
+  .btn-press:active { transform: scale(0.94); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 </style>
 </head>
@@ -332,6 +449,57 @@ function ThreatTag({ threat }) {
   );
 }
 
+// Değer değiştiğinde küçük bir "nabız" animasyonu oynatan sayı göstergesi
+function StatNumber({ value, className = '' }) {
+  const [pulsing, setPulsing] = useState(false);
+  const prevRef = useRef(value);
+
+  useEffect(() => {
+    if (prevRef.current !== value) {
+      setPulsing(true);
+      const t = setTimeout(() => setPulsing(false), 500);
+      prevRef.current = value;
+      return () => clearTimeout(t);
+    }
+  }, [value]);
+
+  return <span className={`inline-block ${pulsing ? 'stat-pulse' : ''} ${className}`}>{value}</span>;
+}
+
+// Ortam parçacıkları: mağarada asılı duran ışıldayan tozlar
+function AmbientMotes({ count = 16 }) {
+  const [motes] = useState(() =>
+    Array.from({ length: count }).map((_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      size: 2 + Math.random() * 4,
+      duration: 6 + Math.random() * 8,
+      delay: Math.random() * 8,
+      opacity: 0.25 + Math.random() * 0.4,
+      drift: (Math.random() - 0.5) * 40,
+    }))
+  );
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
+      {motes.map((m) => (
+        <span
+          key={m.id}
+          className="mote"
+          style={{
+            left: `${m.left}%`,
+            width: `${m.size}px`,
+            height: `${m.size}px`,
+            animationDuration: `${m.duration}s`,
+            animationDelay: `${m.delay}s`,
+            '--mote-op': m.opacity,
+            '--mote-drift': `${m.drift}px`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 const NAV_ITEMS = [
   { id: 'map', label: 'Mağara Haritası', icon: 'map', desc: 'Derinliğin diaroması' },
   { id: 'synthesis', label: 'Yankı Sentezi', icon: 'diamond', desc: 'Yankılardan kalıntı üret' },
@@ -362,7 +530,7 @@ function Header({ currentView, onViewChange, luminescence, resonance, onOpenProf
             <button
               key={item.id}
               onClick={() => onViewChange(item.id)}
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
+              className={`btn-press flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors duration-300 ${
                 currentView === item.id ? 'bg-emerald-500/15 text-emerald-400' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/60'
               }`}
             >
@@ -376,16 +544,16 @@ function Header({ currentView, onViewChange, luminescence, resonance, onOpenProf
           <div className="hidden sm:flex items-center gap-4 font-mono text-xs text-zinc-400">
             <div className="flex items-center gap-1.5">
               <Icon name="bolt" className="text-amber-400 text-[16px]" />
-              {luminescence}%
+              <StatNumber value={`${luminescence}%`} />
             </div>
             <div className="flex items-center gap-1.5">
               <Icon name="graphic_eq" className="text-emerald-400 text-[16px]" />
-              {resonance}%
+              <StatNumber value={`${resonance}%`} />
             </div>
           </div>
           <button
             onClick={onOpenProfile}
-            className="w-10 h-10 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center hover:border-emerald-500/60 transition-colors"
+            className="btn-press w-10 h-10 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center hover:border-emerald-500/60 transition-colors"
             aria-label="Kâşif profilini aç"
           >
             <Icon name="person" className="text-zinc-300 text-[20px]" />
@@ -408,7 +576,7 @@ function SidebarNav({ currentView, onViewChange, activeDepth, resonance, onOpenQ
           <button
             key={item.id}
             onClick={() => onViewChange(item.id)}
-            className={`w-full flex items-start gap-3 px-3.5 py-3 rounded-2xl text-left transition-colors ${
+            className={`btn-press w-full flex items-start gap-3 px-3.5 py-3 rounded-2xl text-left transition-colors duration-300 ${
               currentView === item.id ? 'bento-card border-emerald-500/40 text-emerald-400' : 'text-zinc-400 hover:bg-zinc-900/70'
             }`}
           >
@@ -429,7 +597,7 @@ function SidebarNav({ currentView, onViewChange, activeDepth, resonance, onOpenQ
         <div>
           <div className="flex justify-between font-mono text-[11px] text-zinc-500 mb-1.5">
             <span>REZONANS</span>
-            <span>{resonance}%</span>
+            <StatNumber value={`${resonance}%`} />
           </div>
           <div className="resonance-crack">
             <div className="resonance-fill" style={{ width: `${resonance}%` }} />
@@ -437,7 +605,7 @@ function SidebarNav({ currentView, onViewChange, activeDepth, resonance, onOpenQ
         </div>
         <button
           onClick={onOpenQuests}
-          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-zinc-700 text-sm text-zinc-300 hover:border-emerald-500/50 hover:text-emerald-400 transition-colors"
+          className="btn-press w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-zinc-700 text-sm text-zinc-300 hover:border-emerald-500/50 hover:text-emerald-400 transition-colors"
         >
           <Icon name="list_alt" className="text-[18px]" />
           Görevleri Aç
@@ -456,27 +624,28 @@ function CavernMap({ nodes, profile, inventory, onNavigateToView, onOpenProfile 
 
   return (
     <div className="space-y-6">
-      <div>
+      <div className="stagger-item">
         <h1 className="font-display text-2xl sm:text-3xl text-zinc-100">Mağara Diorama Haritası</h1>
         <p className="text-zinc-500 text-sm mt-1">Şu anda rezonans kaynağı: <span className="text-emerald-400">{profile.activeDepth}</span></p>
       </div>
 
       <div className="grid grid-cols-3 gap-3 sm:gap-4">
-        <button onClick={onOpenProfile} className="bento-card p-4 text-left hover:border-amber-500/40">
+        <button onClick={onOpenProfile} className="btn-press bento-card p-4 text-left hover:border-amber-500/40 stagger-item" style={{ animationDelay: '0.05s' }}>
           <div className="flex items-center gap-2 text-amber-400 mb-1"><Icon name="bolt" className="text-[18px]" /><span className="font-mono text-[10px] tracking-widest uppercase text-zinc-500">Parlaklık</span></div>
-          <div className="font-display text-xl text-zinc-100">{profile.luminescence}%</div>
+          <div className="font-display text-xl text-zinc-100"><StatNumber value={`${profile.luminescence}%`} /></div>
         </button>
-        <button onClick={onOpenProfile} className="bento-card p-4 text-left hover:border-emerald-500/40">
+        <button onClick={onOpenProfile} className="btn-press bento-card p-4 text-left hover:border-emerald-500/40 stagger-item" style={{ animationDelay: '0.1s' }}>
           <div className="flex items-center gap-2 text-emerald-400 mb-1"><Icon name="graphic_eq" className="text-[18px]" /><span className="font-mono text-[10px] tracking-widest uppercase text-zinc-500">Rezonans</span></div>
-          <div className="font-display text-xl text-zinc-100">{profile.resonance}%</div>
+          <div className="font-display text-xl text-zinc-100"><StatNumber value={`${profile.resonance}%`} /></div>
         </button>
-        <button onClick={() => onNavigateToView('inventory')} className="bento-card p-4 text-left hover:border-sky-500/40">
+        <button onClick={() => onNavigateToView('inventory')} className="btn-press bento-card p-4 text-left hover:border-sky-500/40 stagger-item" style={{ animationDelay: '0.15s' }}>
           <div className="flex items-center gap-2 text-sky-400 mb-1"><Icon name="inventory_2" className="text-[18px]" /><span className="font-mono text-[10px] tracking-widest uppercase text-zinc-500">Kapasite</span></div>
-          <div className="font-display text-xl text-zinc-100">{profile.inventoryCapacity}%</div>
+          <div className="font-display text-xl text-zinc-100"><StatNumber value={`${profile.inventoryCapacity}%`} /></div>
         </button>
       </div>
 
-      <div className="bento-card cavern-grid p-4 sm:p-8 relative h-[420px] sm:h-[520px] overflow-hidden">
+      <div className="bento-card cavern-grid p-4 sm:p-8 relative h-[420px] sm:h-[520px] overflow-hidden stagger-item" style={{ animationDelay: '0.2s' }}>
+        <AmbientMotes count={18} />
         <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
           {nodes.slice(1).map((node, idx) => {
             const prev = nodes[idx];
@@ -486,23 +655,36 @@ function CavernMap({ nodes, profile, inventory, onNavigateToView, onOpenProfile 
                 x1={`${prev.xPercent}%`} y1={`${prev.yPercent}%`}
                 x2={`${node.xPercent}%`} y2={`${node.yPercent}%`}
                 stroke="rgba(63,63,70,0.7)" strokeWidth="2" strokeDasharray="6 6"
+                pathLength="1"
+                style={{
+                  strokeDasharray: 1,
+                  strokeDashoffset: 1,
+                  animation: `drawPath 0.9s ease forwards`,
+                  animationDelay: `${0.3 + idx * 0.12}s`,
+                }}
               />
             );
           })}
         </svg>
 
-        {nodes.map((node) => {
+        {nodes.map((node, idx) => {
           const color = THREAT_COLORS[node.threat] || THREAT_COLORS.LOW;
           const isSelected = selected?.id === node.id;
           return (
             <button
               key={node.id}
               onClick={() => setSelected(node)}
-              style={{ left: `${node.xPercent}%`, top: `${node.yPercent}%` }}
-              className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1.5 group"
+              style={{
+                left: `${node.xPercent}%`,
+                top: `${node.yPercent}%`,
+                zIndex: 1,
+                animation: node.isCurrent ? undefined : `floatNode ${3 + (idx % 3) * 0.5}s ease-in-out infinite`,
+                animationDelay: `${idx * 0.2}s`,
+              }}
+              className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1.5 group btn-press"
             >
               <div
-                className={`w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center border-2 transition-transform group-hover:scale-110 ${node.isCurrent ? 'active-echo' : ''} ${isSelected ? 'scale-110' : ''}`}
+                className={`w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center border-2 transition-transform duration-300 group-hover:scale-110 ${node.isCurrent ? 'active-echo' : ''} ${isSelected ? 'scale-110' : ''}`}
                 style={{
                   borderColor: node.isLocked ? '#3f3f46' : color,
                   backgroundColor: node.isLocked ? 'rgba(24,24,27,0.9)' : `${color}22`,
@@ -519,7 +701,7 @@ function CavernMap({ nodes, profile, inventory, onNavigateToView, onOpenProfile 
       </div>
 
       {selected && (
-        <div className="bento-card p-5 sm:p-6">
+        <div key={selected.id} className="bento-card p-5 sm:p-6 pop-in">
           <div className="flex flex-wrap items-center gap-3 mb-3">
             <h3 className="font-display text-xl text-zinc-100">{selected.name}</h3>
             <ThreatTag threat={selected.threat} />
@@ -529,8 +711,8 @@ function CavernMap({ nodes, profile, inventory, onNavigateToView, onOpenProfile 
           <p className="text-zinc-400 text-sm leading-relaxed mb-4">{selected.description}</p>
           {selected.relicsFound.length > 0 && (
             <div className="flex flex-wrap gap-2">
-              {selected.relicsFound.map((r) => (
-                <span key={r} className="moss-tag">{r}</span>
+              {selected.relicsFound.map((r, i) => (
+                <span key={r} className="moss-tag" style={{ animationDelay: `${i * 0.08}s` }}>{r}</span>
               ))}
             </div>
           )}
@@ -573,25 +755,26 @@ function EchoSynthesis({ inventory, history, onAddHistory }) {
 
   return (
     <div className="space-y-6">
-      <div>
+      <div className="stagger-item">
         <h1 className="font-display text-2xl sm:text-3xl text-zinc-100">Yankı Sentezi Atölyesi</h1>
         <p className="text-zinc-500 text-sm mt-1">2-4 toplanmış malzemeyi birleştir ve Rezonans Kâhini onları bağlasın.</p>
       </div>
 
       <div className="grid md:grid-cols-5 gap-6">
-        <div className="md:col-span-2 bento-card p-4 space-y-2 max-h-[480px] overflow-y-auto">
+        <div className="md:col-span-2 bento-card p-4 space-y-2 max-h-[480px] overflow-y-auto stagger-item" style={{ animationDelay: '0.05s' }}>
           <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase px-1 pb-1">Malzemelerin</div>
-          {inventory.map((item) => {
+          {inventory.map((item, idx) => {
             const isSelected = selectedIds.includes(item.id);
             return (
               <button
                 key={item.id}
                 onClick={() => toggleItem(item.id)}
-                className={`w-full flex items-center gap-3 p-2.5 rounded-xl border transition-colors text-left ${
+                className={`btn-press w-full flex items-center gap-3 p-2.5 rounded-xl border transition-all duration-300 text-left stagger-item ${
                   isSelected ? 'border-emerald-500/60 bg-emerald-500/10' : 'border-zinc-800 hover:border-zinc-700'
                 }`}
+                style={{ animationDelay: `${0.1 + idx * 0.05}s` }}
               >
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${item.color}22` }}>
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-transform duration-300" style={{ backgroundColor: `${item.color}22`, transform: isSelected ? 'scale(1.08)' : 'scale(1)' }}>
                   <Icon name={item.icon} className="text-[18px]" style={{ color: item.color }} />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -604,7 +787,7 @@ function EchoSynthesis({ inventory, history, onAddHistory }) {
           })}
         </div>
 
-        <div className="md:col-span-3 chiseled-slab p-6 flex flex-col items-center justify-center text-center min-h-[300px]">
+        <div className="md:col-span-3 chiseled-slab p-6 flex flex-col items-center justify-center text-center min-h-[300px] stagger-item" style={{ animationDelay: '0.15s' }}>
           {!result && !loading && (
             <>
               <Icon name="diamond" className="text-emerald-400 text-[42px] mb-3 crystal-glow-cyan" />
@@ -616,7 +799,7 @@ function EchoSynthesis({ inventory, history, onAddHistory }) {
               <button
                 onClick={handleSynthesize}
                 disabled={selectedItems.length < 2}
-                className="px-6 py-3 rounded-xl bg-emerald-500/15 border border-emerald-500/50 text-emerald-400 font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-emerald-500/25 transition-colors"
+                className="btn-press px-6 py-3 rounded-xl bg-emerald-500/15 border border-emerald-500/50 text-emerald-400 font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-emerald-500/25 transition-colors"
               >
                 Yankıları Sentezle
               </button>
@@ -624,12 +807,17 @@ function EchoSynthesis({ inventory, history, onAddHistory }) {
           )}
           {loading && (
             <>
-              <div className="w-10 h-10 rounded-full border-2 border-emerald-500/30 border-t-emerald-400 animate-spin mb-4" />
-              <p className="font-mono text-xs text-zinc-500 tracking-wide">Rezonans Kâhini yankılarını hizalıyor…</p>
+              <div className="w-10 h-10 rounded-full border-2 border-emerald-500/30 border-t-emerald-400 mb-4" style={{ animation: 'spinnerSpin 0.8s linear infinite' }} />
+              <p className="font-mono text-xs text-zinc-500 tracking-wide">
+                Rezonans Kâhini yankılarını hizalıyor
+                <span className="typing-dot" style={{ animationDelay: '0s' }}>.</span>
+                <span className="typing-dot" style={{ animationDelay: '0.15s' }}>.</span>
+                <span className="typing-dot" style={{ animationDelay: '0.3s' }}>.</span>
+              </p>
             </>
           )}
           {result && !loading && (
-            <div className="w-full text-left">
+            <div className="w-full text-left pop-in">
               <div className="flex items-center justify-between mb-2">
                 <span className="font-mono text-[10px] tracking-widest uppercase px-2 py-0.5 rounded-full border" style={{ color: tierColor, borderColor: `${tierColor}55`, backgroundColor: `${tierColor}1a` }}>
                   {result.tier}
@@ -639,10 +827,10 @@ function EchoSynthesis({ inventory, history, onAddHistory }) {
               <h3 className="font-display text-xl text-zinc-100 mb-2">{result.relicName}</h3>
               <p className="text-zinc-400 text-sm leading-relaxed mb-3">{result.description}</p>
               <div className="flex flex-wrap gap-2 mb-3">
-                {result.perks.map((p) => <span key={p} className="moss-tag">{p}</span>)}
+                {result.perks.map((p, i) => <span key={p} className="moss-tag" style={{ animationDelay: `${0.2 + i * 0.1}s` }}>{p}</span>)}
               </div>
               <p className="text-zinc-500 text-xs italic mb-5">{result.loreFlavor}</p>
-              <button onClick={() => setResult(null)} className="text-sm text-emerald-400 hover:underline">Bir tane daha sentezle</button>
+              <button onClick={() => setResult(null)} className="btn-press text-sm text-emerald-400 hover:underline">Bir tane daha sentezle</button>
             </div>
           )}
         </div>
@@ -651,8 +839,8 @@ function EchoSynthesis({ inventory, history, onAddHistory }) {
       <div>
         <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase mb-3">Sentez güncesi</div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {history.map((relic) => (
-            <div key={relic.id} className="bento-card p-4">
+          {history.map((relic, idx) => (
+            <div key={relic.id} className="bento-card p-4 stagger-item" style={{ animationDelay: `${idx * 0.06}s` }}>
               <div className="flex items-center justify-between mb-1.5">
                 <span className="font-mono text-[10px] text-zinc-500 uppercase">{relic.tier}</span>
                 <span className="font-mono text-xs text-emerald-400">{relic.resonanceScore}</span>
@@ -690,17 +878,17 @@ function Chronicle({ entries }) {
 
   return (
     <div className="space-y-6">
-      <div>
+      <div className="stagger-item">
         <h1 className="font-display text-2xl sm:text-3xl text-zinc-100">Gölgeler Güncesi</h1>
         <p className="text-zinc-500 text-sm mt-1">Derinlerden kaydedilen efsaneler, yaratıklar ve anomaliler.</p>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 stagger-item" style={{ animationDelay: '0.05s' }}>
         {CHRONICLE_CATEGORIES.map((cat) => (
           <button
             key={cat}
             onClick={() => setFilter(cat)}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wide border transition-colors ${
+            className={`btn-press px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wide border transition-all duration-300 ${
               filter === cat ? 'border-emerald-500/60 bg-emerald-500/10 text-emerald-400' : 'border-zinc-800 text-zinc-500 hover:text-zinc-300'
             }`}
           >
@@ -709,9 +897,9 @@ function Chronicle({ entries }) {
         ))}
       </div>
 
-      <div className="grid md:grid-cols-2 gap-4">
-        {visible.map((entry) => (
-          <div key={entry.id} className="bento-card p-5">
+      <div key={filter} className="grid md:grid-cols-2 gap-4">
+        {visible.map((entry, idx) => (
+          <div key={entry.id} className="bento-card p-5 stagger-item" style={{ animationDelay: `${idx * 0.07}s` }}>
             <div className="flex items-start justify-between gap-3 mb-2">
               <div>
                 <h3 className="font-display text-lg text-zinc-100">{entry.title}</h3>
@@ -739,16 +927,16 @@ function Chronicle({ entries }) {
             {decrypted[entry.id] ? (
               <div className="rope-line pt-3 mt-3">
                 {decrypted[entry.id].split('\n\n').map((p, i) => (
-                  <p key={i} className="text-zinc-300 text-sm leading-relaxed mb-2 last:mb-0">{p}</p>
+                  <p key={i} className="text-zinc-300 text-sm leading-relaxed mb-2 last:mb-0 stagger-item" style={{ animationDelay: `${i * 0.15}s` }}>{p}</p>
                 ))}
               </div>
             ) : (
               <button
                 onClick={() => handleDecrypt(entry)}
                 disabled={loadingId === entry.id}
-                className="flex items-center gap-2 text-xs font-mono tracking-wide text-emerald-400 hover:text-emerald-300 disabled:opacity-50 transition-colors"
+                className="btn-press flex items-center gap-2 text-xs font-mono tracking-wide text-emerald-400 hover:text-emerald-300 disabled:opacity-50 transition-colors"
               >
-                <Icon name={loadingId === entry.id ? 'progress_activity' : 'key'} className={`text-[16px] ${loadingId === entry.id ? 'animate-spin' : ''}`} />
+                <Icon name={loadingId === entry.id ? 'progress_activity' : 'key'} className="text-[16px]" style={loadingId === entry.id ? { animation: 'spinnerSpin 0.8s linear infinite' } : {}} />
                 {loadingId === entry.id ? 'Şifre çözülüyor…' : 'Sırrı çöz'}
               </button>
             )}
@@ -768,34 +956,34 @@ function InventoryView({ inventory, capacity, onNavigateToView }) {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
+      <div className="flex flex-wrap items-end justify-between gap-4 stagger-item">
         <div>
           <h1 className="font-display text-2xl sm:text-3xl text-zinc-100">Envanter</h1>
           <p className="text-zinc-500 text-sm mt-1">Her inişte toplanan malzemeler.</p>
         </div>
-        <button onClick={() => onNavigateToView('synthesis')} className="flex items-center gap-2 px-4 py-2 rounded-xl border border-emerald-500/50 text-emerald-400 text-sm hover:bg-emerald-500/10 transition-colors">
+        <button onClick={() => onNavigateToView('synthesis')} className="btn-press flex items-center gap-2 px-4 py-2 rounded-xl border border-emerald-500/50 text-emerald-400 text-sm hover:bg-emerald-500/10 transition-colors">
           <Icon name="diamond" className="text-[18px]" /> Sentezlemeye git
         </button>
       </div>
 
-      <div className="bento-card p-4">
+      <div className="bento-card p-4 stagger-item" style={{ animationDelay: '0.05s' }}>
         <div className="flex justify-between font-mono text-[11px] text-zinc-500 mb-1.5">
-          <span>ÇANTA KAPASİTESİ</span><span>{capacity}%</span>
+          <span>ÇANTA KAPASİTESİ</span><StatNumber value={`${capacity}%`} />
         </div>
         <div className="resonance-crack">
           <div className="resonance-fill" style={{ width: `${capacity}%` }} />
         </div>
       </div>
 
-      {categories.map((cat) => (
-        <div key={cat}>
+      {categories.map((cat, catIdx) => (
+        <div key={cat} className="stagger-item" style={{ animationDelay: `${0.1 + catIdx * 0.08}s` }}>
           <div className="flex items-center gap-2 mb-3">
             <Icon name={CATEGORY_ICONS[cat] || 'category'} className="text-zinc-400 text-[18px]" />
             <span className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase">{cat}</span>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {inventory.filter((i) => i.category === cat).map((item) => (
-              <div key={item.id} className="bento-card p-4 flex items-start gap-3">
+            {inventory.filter((i) => i.category === cat).map((item, idx) => (
+              <div key={item.id} className="bento-card p-4 flex items-start gap-3 stagger-item" style={{ animationDelay: `${0.15 + catIdx * 0.08 + idx * 0.04}s` }}>
                 <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${item.color}22` }}>
                   <Icon name={item.icon} className="text-[20px]" style={{ color: item.color }} />
                 </div>
@@ -820,7 +1008,7 @@ function InventoryView({ inventory, capacity, onNavigateToView }) {
 // DelverModal (profil, görevler, Thistle kahin sohbeti)
 // ============================================================
 
-function DelverModal({ isOpen, onClose, profile, quests, onClaimQuest }) {
+function DelverModal({ isOpen, onClose, profile, quests, onClaimQuest, justClaimedId }) {
   const [messages, setMessages] = useState([
     { from: 'thistle', text: 'Hoş geldin, kâşif. Bana derinlik hakkında sor, eski taşın izin verdiği kadarıyla yanıtlayayım.' },
   ]);
@@ -848,9 +1036,9 @@ function DelverModal({ isOpen, onClose, profile, quests, onClaimQuest }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative chiseled-slab w-full max-w-2xl max-h-[85vh] overflow-y-auto p-6 sm:p-8">
-        <button onClick={onClose} className="absolute top-5 right-5 text-zinc-500 hover:text-zinc-200">
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" style={{ animation: 'backdropIn 0.25s ease' }} onClick={onClose} />
+      <div className="relative chiseled-slab w-full max-w-2xl max-h-[85vh] overflow-y-auto p-6 sm:p-8" style={{ animation: 'modalIn 0.35s cubic-bezier(0.16,1,0.3,1)' }}>
+        <button onClick={onClose} className="btn-press absolute top-5 right-5 text-zinc-500 hover:text-zinc-200">
           <Icon name="close" className="text-[22px]" />
         </button>
 
@@ -867,11 +1055,11 @@ function DelverModal({ isOpen, onClose, profile, quests, onClaimQuest }) {
 
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div>
-            <div className="flex justify-between font-mono text-[10px] text-zinc-500 mb-1.5"><span>PARLAKLIK</span><span>{profile.luminescence}%</span></div>
+            <div className="flex justify-between font-mono text-[10px] text-zinc-500 mb-1.5"><span>PARLAKLIK</span><StatNumber value={`${profile.luminescence}%`} /></div>
             <div className="resonance-crack"><div className="resonance-fill" style={{ width: `${profile.luminescence}%`, background: '#f59e0b', boxShadow: '0 0 12px rgba(245,158,11,0.8)' }} /></div>
           </div>
           <div>
-            <div className="flex justify-between font-mono text-[10px] text-zinc-500 mb-1.5"><span>REZONANS</span><span>{profile.resonance}%</span></div>
+            <div className="flex justify-between font-mono text-[10px] text-zinc-500 mb-1.5"><span>REZONANS</span><StatNumber value={`${profile.resonance}%`} /></div>
             <div className="resonance-crack"><div className="resonance-fill" style={{ width: `${profile.resonance}%` }} /></div>
           </div>
         </div>
@@ -880,7 +1068,7 @@ function DelverModal({ isOpen, onClose, profile, quests, onClaimQuest }) {
           <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase mb-3">Görevler</div>
           <div className="space-y-2.5">
             {quests.map((q) => (
-              <div key={q.id} className="stone-slab p-3.5">
+              <div key={q.id} className={`stone-slab p-3.5 ${justClaimedId === q.id ? 'quest-claimed' : ''}`}>
                 <div className="flex items-center justify-between mb-1.5">
                   <span className="text-sm text-zinc-200">{q.title}</span>
                   {q.isCompleted ? (
@@ -889,7 +1077,7 @@ function DelverModal({ isOpen, onClose, profile, quests, onClaimQuest }) {
                     <button
                       onClick={() => onClaimQuest(q.id)}
                       disabled={q.progress < q.maxProgress}
-                      className="font-mono text-[10px] tracking-widest uppercase text-emerald-400 disabled:text-zinc-600 disabled:cursor-not-allowed"
+                      className="btn-press font-mono text-[10px] tracking-widest uppercase text-emerald-400 disabled:text-zinc-600 disabled:cursor-not-allowed"
                     >
                       Talep Et
                     </button>
@@ -908,12 +1096,19 @@ function DelverModal({ isOpen, onClose, profile, quests, onClaimQuest }) {
           <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase mb-3">Thistle'a Fısılda</div>
           <div ref={scrollRef} className="stone-slab p-3.5 h-40 overflow-y-auto space-y-2.5 mb-3">
             {messages.map((m, i) => (
-              <div key={i} className={`text-sm leading-relaxed ${m.from === 'user' ? 'text-zinc-300 text-right' : 'text-emerald-300/90'}`}>
+              <div key={i} className={`text-sm leading-relaxed stagger-item ${m.from === 'user' ? 'text-zinc-300 text-right' : 'text-emerald-300/90'}`}>
                 {m.from === 'thistle' && <span className="font-mono text-[10px] text-zinc-600 block mb-0.5">THISTLE</span>}
                 {m.text}
               </div>
             ))}
-            {chatLoading && <div className="font-mono text-[10px] text-zinc-600">Thistle taşı dinliyor…</div>}
+            {chatLoading && (
+              <div className="font-mono text-[10px] text-zinc-600">
+                Thistle taşı dinliyor
+                <span className="typing-dot" style={{ animationDelay: '0s' }}>.</span>
+                <span className="typing-dot" style={{ animationDelay: '0.15s' }}>.</span>
+                <span className="typing-dot" style={{ animationDelay: '0.3s' }}>.</span>
+              </div>
+            )}
           </div>
           <div className="flex gap-2">
             <input
@@ -921,9 +1116,9 @@ function DelverModal({ isOpen, onClose, profile, quests, onClaimQuest }) {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
               placeholder="Tehlike, kalıntı veya runiler hakkında sor…"
-              className="flex-1 bg-zinc-900 border border-zinc-700 rounded-xl px-3.5 py-2.5 text-sm text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500/60"
+              className="flex-1 bg-zinc-900 border border-zinc-700 rounded-xl px-3.5 py-2.5 text-sm text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500/60 transition-colors"
             />
-            <button onClick={handleSend} className="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-500/50 flex items-center justify-center text-emerald-400 hover:bg-emerald-500/25 transition-colors shrink-0">
+            <button onClick={handleSend} className="btn-press w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-500/50 flex items-center justify-center text-emerald-400 hover:bg-emerald-500/25 transition-colors shrink-0">
               <Icon name="send" className="text-[18px]" />
             </button>
           </div>
@@ -944,13 +1139,13 @@ function MobileBottomNav({ currentView, onViewChange, onOpenProfile }) {
         <button
           key={item.id}
           onClick={() => onViewChange(item.id)}
-          className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg ${currentView === item.id ? 'text-emerald-400' : 'text-zinc-500'}`}
+          className={`btn-press flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg transition-colors duration-300 ${currentView === item.id ? 'text-emerald-400' : 'text-zinc-500'}`}
         >
           <Icon name={item.icon} className="text-[22px]" />
           <span className="font-mono text-[9px]">{item.label.split(' ')[0]}</span>
         </button>
       ))}
-      <button onClick={onOpenProfile} className="flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg text-zinc-500">
+      <button onClick={onOpenProfile} className="btn-press flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg text-zinc-500">
         <Icon name="person" className="text-[22px]" />
         <span className="font-mono text-[9px]">Profil</span>
       </button>
@@ -971,6 +1166,7 @@ function App() {
   const [quests, setQuests] = useState(initialQuests);
   const [history, setHistory] = useState(initialSynthesizedHistory);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [justClaimedId, setJustClaimedId] = useState(null);
 
   const handleAddHistory = (relic) => {
     setHistory((prev) => [relic, ...prev]);
@@ -980,6 +1176,8 @@ function App() {
   const handleClaimQuest = (questId) => {
     setQuests((prev) => prev.map((q) => (q.id === questId ? { ...q, isCompleted: true, progress: q.maxProgress } : q)));
     setProfile((prev) => ({ ...prev, luminescence: Math.min(100, prev.luminescence + 5) }));
+    setJustClaimedId(questId);
+    setTimeout(() => setJustClaimedId(null), 900);
   };
 
   return (
@@ -1002,22 +1200,24 @@ function App() {
         />
 
         <main className="flex-1 px-4 sm:px-6 md:px-12 md:ml-64 py-6 max-w-6xl mx-auto w-full transition-all">
-          {currentView === 'map' && (
-            <CavernMap
-              nodes={nodes}
-              profile={profile}
-              inventory={inventory}
-              onNavigateToView={setCurrentView}
-              onOpenProfile={() => setIsProfileModalOpen(true)}
-            />
-          )}
-          {currentView === 'synthesis' && (
-            <EchoSynthesis inventory={inventory} history={history} onAddHistory={handleAddHistory} />
-          )}
-          {currentView === 'chronicle' && <Chronicle entries={loreEntries} />}
-          {currentView === 'inventory' && (
-            <InventoryView inventory={inventory} capacity={profile.inventoryCapacity} onNavigateToView={setCurrentView} />
-          )}
+          <div key={currentView} className="view-enter">
+            {currentView === 'map' && (
+              <CavernMap
+                nodes={nodes}
+                profile={profile}
+                inventory={inventory}
+                onNavigateToView={setCurrentView}
+                onOpenProfile={() => setIsProfileModalOpen(true)}
+              />
+            )}
+            {currentView === 'synthesis' && (
+              <EchoSynthesis inventory={inventory} history={history} onAddHistory={handleAddHistory} />
+            )}
+            {currentView === 'chronicle' && <Chronicle entries={loreEntries} />}
+            {currentView === 'inventory' && (
+              <InventoryView inventory={inventory} capacity={profile.inventoryCapacity} onNavigateToView={setCurrentView} />
+            )}
+          </div>
         </main>
       </div>
 
@@ -1027,6 +1227,7 @@ function App() {
         profile={profile}
         quests={quests}
         onClaimQuest={handleClaimQuest}
+        justClaimedId={justClaimedId}
       />
 
       <MobileBottomNav
