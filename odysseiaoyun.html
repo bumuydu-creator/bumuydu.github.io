@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Odessia: Deep Relic Chronicles (Tek Dosya HTML)</title>
+  <title>Odessia: Deep Relic Chronicles (Single HTML Engine)</title>
   
   <!-- Tailwind CSS v4 CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -147,7 +145,7 @@
     }
     const sound = new SoundEngine();
 
-    // --- Game Heroes ---
+    // --- Game Data ---
     const HEROES = [
       {
         id: 'odessia_blade',
@@ -194,19 +192,411 @@
     ];
 
     const CAVERN_LEVELS = [
-      { id: 's1', name: 'Yosunlu Eşik', levelNum: 1, icon: 'cottage', threat: 'SAFE', xPercent: 15, yPercent: 80, recommendedPower: 10 },
-      { id: 's2', name: 'Damlataşı Çukuru', levelNum: 3, icon: 'water_drop', threat: 'LOW', xPercent: 30, yPercent: 65, recommendedPower: 25 },
-      { id: 's3', name: 'Uğuldayan Damar', levelNum: 6, icon: 'graphic_eq', threat: 'MEDIUM', xPercent: 50, yPercent: 70, recommendedPower: 45 },
-      { id: 's4', name: 'Obsidyen Çatlağı', levelNum: 9, icon: 'bolt', threat: 'MEDIUM', xPercent: 65, yPercent: 50, recommendedPower: 70 },
-      { id: 's5', name: 'Biyoışıldayan Oyuk', levelNum: 11, icon: 'auto_awesome', threat: 'HIGH', xPercent: 50, yPercent: 30, isCurrent: true, bossName: 'Mantarımsı Muhafız', recommendedPower: 95 }
+      { id: 's1', name: 'Yosunlu Eşik', levelNum: 1, icon: 'cottage', threat: 'SAFE', xPercent: 15, yPercent: 80 },
+      { id: 's2', name: 'Damlataşı Çukuru', levelNum: 3, icon: 'water_drop', threat: 'LOW', xPercent: 30, yPercent: 65 },
+      { id: 's3', name: 'Uğuldayan Damar', levelNum: 6, icon: 'graphic_eq', threat: 'MEDIUM', xPercent: 50, yPercent: 70 },
+      { id: 's4', name: 'Obsidyen Çatlağı', levelNum: 9, icon: 'bolt', threat: 'MEDIUM', xPercent: 65, yPercent: 50 },
+      { id: 's5', name: 'Biyoışıldayan Oyuk', levelNum: 11, icon: 'auto_awesome', threat: 'HIGH', xPercent: 50, yPercent: 30, bossName: 'Mantarımsı Muhafız' }
     ];
+
+    // --- 2D Action Game Canvas Component ---
+    function PlayableGameCanvas({ hero, stage, onStageComplete, onGameOver }) {
+      const canvasRef = useRef(null);
+      const [isPaused, setIsPaused] = useState(false);
+      const [stageCleared, setStageCleared] = useState(false);
+      const [isDead, setIsDead] = useState(false);
+      const [score, setScore] = useState(0);
+      const [collectedCrystals, setCollectedCrystals] = useState(0);
+
+      const keysRef = useRef({});
+      const mobileInputRef = useRef({ left: false, right: false, jump: false, attack: false, skill: false, ult: false });
+
+      const gameStateRef = useRef({
+        player: {
+          x: 100, y: 300, vx: 0, vy: 0, width: 40, height: 56,
+          hp: hero.hpMax, hpMax: hero.hpMax, mana: hero.manaMax, manaMax: hero.manaMax,
+          isGrounded: false, facing: 'right', isAttacking: false, attackTimer: 0,
+          skillCooldown: 0, ultCooldown: 0, animFrame: 0, animTimer: 0,
+          isDashing: false, dashTimer: 0, comboCount: 0, comboTimer: 0
+        },
+        enemies: [],
+        projectiles: [],
+        particles: [],
+        floatingTexts: [],
+        crystals: [],
+        cameraX: 0,
+        worldWidth: 2400,
+        screenShake: 0
+      });
+
+      const addFloatingText = (x, y, text, color = '#f59e0b') => {
+        gameStateRef.current.floatingTexts.push({ id: Math.random().toString(), x, y, text, color, life: 40 });
+      };
+
+      const addParticles = (x, y, count, color) => {
+        for (let i = 0; i < count; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 5 + 1;
+          gameStateRef.current.particles.push({
+            x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+            size: Math.random() * 4 + 2, color, life: 0, maxLife: Math.random() * 20 + 15
+          });
+        }
+      };
+
+      const initStage = useCallback(() => {
+        const worldW = 2400;
+        const enemies = [];
+        const mobTypes = ['spider', 'bat', 'golem'];
+
+        for (let i = 0; i < 12; i++) {
+          const type = mobTypes[i % mobTypes.length];
+          const x = 400 + i * 150 + Math.random() * 50;
+          let hp = 40, color = '#34d399', speed = 2, name = 'Mantar Örümceği';
+          if (type === 'bat') { hp = 30; color = '#c084fc'; speed = 3; name = 'Gölge Yarasası'; }
+          else if (type === 'golem') { hp = 80; color = '#38bdf8'; speed = 1.2; name = 'Kuvars Golem'; }
+
+          enemies.push({
+            id: 'mob_' + i, type, name, x, y: type === 'bat' ? 180 + Math.random() * 100 : 340,
+            vx: 0, vy: 0, width: type === 'golem' ? 50 : 36, height: type === 'golem' ? 60 : 36,
+            hp, hpMax: hp, color, speed, facing: 'left', attackCooldown: 0, isHit: false, hitTimer: 0
+          });
+        }
+
+        if (stage.bossName || stage.levelNum >= 5) {
+          enemies.push({
+            id: 'boss_main', type: 'boss', name: stage.bossName || 'Biyoışıldayan Muhafız',
+            x: 2000, y: 300, vx: 0, vy: 0, width: 80, height: 90, hp: 350, hpMax: 350,
+            color: '#10b981', speed: 1.5, facing: 'left', attackCooldown: 0, isHit: false, hitTimer: 0
+          });
+        }
+
+        gameStateRef.current = {
+          player: {
+            x: 100, y: 300, vx: 0, vy: 0, width: 40, height: 56,
+            hp: hero.hpMax, hpMax: hero.hpMax, mana: hero.manaMax, manaMax: hero.manaMax,
+            isGrounded: false, facing: 'right', isAttacking: false, attackTimer: 0,
+            skillCooldown: 0, ultCooldown: 0, animFrame: 0, animTimer: 0,
+            isDashing: false, dashTimer: 0, comboCount: 0, comboTimer: 0
+          },
+          enemies, projectiles: [], particles: [], floatingTexts: [], crystals: [],
+          cameraX: 0, worldWidth: worldW, screenShake: 0
+        };
+        setIsDead(false); setStageCleared(false); setScore(0); setCollectedCrystals(0);
+      }, [hero, stage]);
+
+      useEffect(() => { initStage(); }, [initStage]);
+
+      useEffect(() => {
+        const handleKeyDown = (e) => {
+          keysRef.current[e.key.toLowerCase()] = true;
+          if ([' ', 'ArrowUp', 'w', 'W'].includes(e.key)) e.preventDefault();
+        };
+        const handleKeyUp = (e) => { keysRef.current[e.key.toLowerCase()] = false; };
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('keyup', handleKeyUp);
+        return () => {
+          window.removeEventListener('keydown', handleKeyDown);
+          window.removeEventListener('keyup', handleKeyUp);
+        };
+      }, []);
+
+      const triggerAttack = () => {
+        const { player, enemies } = gameStateRef.current;
+        if (player.attackTimer > 0) return;
+
+        player.isAttacking = true;
+        player.attackTimer = 15;
+        sound.playSlash();
+
+        const attackReach = hero.role === 'Blade Dancer' ? 70 : 50;
+        const attackX = player.facing === 'right' ? player.x + player.width : player.x - attackReach;
+        const attackBox = { x: attackX, y: player.y - 10, w: attackReach, h: player.height + 20 };
+
+        let hitAny = false;
+        enemies.forEach((enemy) => {
+          if (attackBox.x < enemy.x + enemy.width && attackBox.x + attackBox.w > enemy.x &&
+              attackBox.y < enemy.y + enemy.height && attackBox.y + attackBox.h > enemy.y) {
+            const isCrit = Math.random() * 100 < hero.critRate;
+            const dmg = Math.round(hero.attackPower * (isCrit ? 1.8 : 1.0));
+            enemy.hp -= dmg;
+            enemy.isHit = true; enemy.hitTimer = 10;
+            enemy.vx = player.facing === 'right' ? 6 : -6;
+
+            addFloatingText(enemy.x + enemy.width / 2, enemy.y - 10, `${dmg}${isCrit ? ' CRİT!' : ''}`, isCrit ? '#f59e0b' : '#34d399');
+            addParticles(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, 8, hero.color);
+            sound.playHit();
+            hitAny = true;
+          }
+        });
+        if (hitAny) gameStateRef.current.screenShake = 6;
+      };
+
+      const triggerSkill = () => {
+        const { player } = gameStateRef.current;
+        if (player.skillCooldown > 0 || player.mana < 20) return;
+        player.mana -= 20;
+        player.skillCooldown = hero.skillCooldownSec * 60;
+        sound.playSpell();
+
+        player.isDashing = true; player.dashTimer = 12;
+        player.vx = player.facing === 'right' ? 18 : -18;
+        addParticles(player.x, player.y + player.height / 2, 15, hero.color);
+        addFloatingText(player.x, player.y - 20, hero.skillName + '!', hero.color);
+      };
+
+      const triggerUltimate = () => {
+        const { player, enemies } = gameStateRef.current;
+        if (player.ultCooldown > 0 || player.mana < 50) return;
+        player.mana -= 50;
+        player.ultCooldown = 600;
+        sound.playExplosion();
+        gameStateRef.current.screenShake = 15;
+
+        enemies.forEach((enemy) => {
+          const dist = Math.hypot(enemy.x - player.x, enemy.y - player.y);
+          if (dist < 350) {
+            const dmg = hero.attackPower * 3;
+            enemy.hp -= dmg;
+            enemy.isHit = true; enemy.hitTimer = 20;
+            addFloatingText(enemy.x, enemy.y - 15, `${dmg} ULT!`, '#a371f7');
+            addParticles(enemy.x, enemy.y, 15, '#a371f7');
+          }
+        });
+        addFloatingText(player.x, player.y - 30, hero.ultimateName + '!', '#a371f7');
+      };
+
+      // Game Main Engine Loop
+      useEffect(() => {
+        let animId;
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        const platforms = [
+          { x: 0, y: 400, width: 2400, height: 100, color: '#21262d' },
+          { x: 300, y: 280, width: 180, height: 20, color: '#30363d' },
+          { x: 600, y: 220, width: 220, height: 20, color: '#30363d' },
+          { x: 950, y: 290, width: 160, height: 20, color: '#30363d' },
+          { x: 1250, y: 210, width: 240, height: 20, color: '#30363d' },
+          { x: 1600, y: 270, width: 200, height: 20, color: '#30363d' }
+        ];
+
+        const loop = () => {
+          if (!isPaused && !isDead && !stageCleared) {
+            const { player, enemies, projectiles, particles, floatingTexts, crystals } = gameStateRef.current;
+
+            // Player Movement
+            const left = keysRef.current['a'] || keysRef.current['arrowleft'] || mobileInputRef.current.left;
+            const right = keysRef.current['d'] || keysRef.current['arrowright'] || mobileInputRef.current.right;
+            const jump = keysRef.current['w'] || keysRef.current[' '] || keysRef.current['arrowup'] || mobileInputRef.current.jump;
+
+            if (keysRef.current['j'] || keysRef.current['z']) triggerAttack();
+            if (keysRef.current['k'] || keysRef.current['x']) triggerSkill();
+            if (keysRef.current['l'] || keysRef.current['c']) triggerUltimate();
+
+            if (!player.isDashing) {
+              if (left) { player.vx = -hero.speed; player.facing = 'left'; }
+              else if (right) { player.vx = hero.speed; player.facing = 'right'; }
+              else player.vx *= 0.7;
+            } else {
+              player.dashTimer--;
+              if (player.dashTimer <= 0) player.isDashing = false;
+            }
+
+            if (jump && player.isGrounded) {
+              player.vy = -13; player.isGrounded = false; sound.playJump();
+            }
+
+            player.vy += 0.65; // gravity
+            player.x += player.vx;
+            player.y += player.vy;
+
+            // Platform Collisions
+            player.isGrounded = false;
+            platforms.forEach((p) => {
+              if (player.x + player.width > p.x && player.x < p.x + p.width &&
+                  player.y + player.height >= p.y && player.y + player.height <= p.y + p.height + player.vy + 2 && player.vy >= 0) {
+                player.y = p.y - player.height;
+                player.vy = 0; player.isGrounded = true;
+              }
+            });
+
+            // Camera follow
+            gameStateRef.current.cameraX = Math.max(0, Math.min(player.x - 400, gameStateRef.current.worldWidth - 900));
+
+            // Mana passive regen
+            player.mana = Math.min(player.manaMax, player.mana + 0.1);
+            if (player.attackTimer > 0) player.attackTimer--;
+            if (player.skillCooldown > 0) player.skillCooldown--;
+            if (player.ultCooldown > 0) player.ultCooldown--;
+
+            // Update Enemies
+            enemies.forEach((enemy) => {
+              if (enemy.hp <= 0) return;
+              if (enemy.hitTimer > 0) enemy.hitTimer--;
+
+              // Patrol/chase
+              const distToPlayer = Math.abs(player.x - enemy.x);
+              if (distToPlayer < 400) {
+                enemy.facing = player.x > enemy.x ? 'right' : 'left';
+                enemy.vx = enemy.facing === 'right' ? enemy.speed : -enemy.speed;
+              } else {
+                enemy.vx = 0;
+              }
+
+              enemy.x += enemy.vx;
+
+              // Enemy attacks player
+              if (Math.abs(player.x - enemy.x) < 40 && Math.abs(player.y - enemy.y) < 50) {
+                if (enemy.attackCooldown <= 0) {
+                  player.hp -= 12;
+                  enemy.attackCooldown = 60;
+                  addFloatingText(player.x, player.y - 10, '-12', '#f85149');
+                  gameStateRef.current.screenShake = 8;
+                  sound.playHit();
+                  if (player.hp <= 0) { setIsDead(true); onGameOver(); }
+                }
+              }
+              if (enemy.attackCooldown > 0) enemy.attackCooldown--;
+            });
+
+            // Check Stage Clear
+            const aliveEnemies = enemies.filter(e => e.hp > 0);
+            if (aliveEnemies.length === 0 && !stageCleared) {
+              setStageCleared(true);
+              onStageComplete(collectedCrystals + 100, 250);
+            }
+          }
+
+          // RENDER
+          const camX = gameStateRef.current.cameraX;
+          const shake = gameStateRef.current.screenShake;
+          ctx.save();
+          if (shake > 0) {
+            ctx.translate((Math.random() - 0.5) * shake, (Math.random() - 0.5) * shake);
+            gameStateRef.current.screenShake *= 0.85;
+          }
+
+          // Clear
+          ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, 900, 450);
+
+          // Draw Platforms
+          platforms.forEach((p) => {
+            ctx.fillStyle = p.color;
+            ctx.fillRect(p.x - camX, p.y, p.width, p.height);
+            ctx.strokeStyle = '#30363d'; ctx.strokeRect(p.x - camX, p.y, p.width, p.height);
+          });
+
+          // Draw Player
+          const p = gameStateRef.current.player;
+          ctx.fillStyle = hero.color;
+          ctx.fillRect(p.x - camX, p.y, p.width, p.height);
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(p.facing === 'right' ? p.x - camX + 26 : p.x - camX + 6, p.y + 10, 8, 8); // eyes
+
+          if (p.isAttacking) {
+            ctx.fillStyle = '#3fb950';
+            const slashX = p.facing === 'right' ? p.x - camX + p.width : p.x - camX - 50;
+            ctx.fillRect(slashX, p.y, 50, p.height);
+          }
+
+          // Draw Enemies
+          gameStateRef.current.enemies.forEach((enemy) => {
+            if (enemy.hp <= 0) return;
+            ctx.fillStyle = enemy.isHit ? '#ffffff' : enemy.color;
+            ctx.fillRect(enemy.x - camX, enemy.y, enemy.width, enemy.height);
+
+            // Enemy HP Bar
+            ctx.fillStyle = '#21262d'; ctx.fillRect(enemy.x - camX, enemy.y - 10, enemy.width, 5);
+            ctx.fillStyle = '#3fb950'; ctx.fillRect(enemy.x - camX, enemy.y - 10, (enemy.hp / enemy.hpMax) * enemy.width, 5);
+          });
+
+          // Draw Particles
+          gameStateRef.current.particles.forEach((pt) => {
+            pt.x += pt.vx; pt.y += pt.vy; pt.life++;
+            ctx.fillStyle = pt.color;
+            ctx.fillRect(pt.x - camX, pt.y, pt.size, pt.size);
+          });
+
+          // Draw Floating Text
+          gameStateRef.current.floatingTexts.forEach((ft, idx) => {
+            ft.y -= 0.8; ft.life--;
+            ctx.font = 'bold 12px monospace'; ctx.fillStyle = ft.color;
+            ctx.fillText(ft.text, ft.x - camX, ft.y);
+          });
+          gameStateRef.current.floatingTexts = gameStateRef.current.floatingTexts.filter(t => t.life > 0);
+
+          ctx.restore();
+          animId = requestAnimationFrame(loop);
+        };
+
+        animId = requestAnimationFrame(loop);
+        return () => cancelAnimationFrame(animId);
+      }, [isPaused, isDead, stageCleared, hero]);
+
+      const p = gameStateRef.current.player;
+
+      return (
+        <div className="relative w-full max-w-5xl mx-auto rounded-xl overflow-hidden bento-card border border-[#30363d] shadow-2xl bg-[#161b22] font-mono">
+          {/* Top HUD */}
+          <div className="absolute top-0 inset-x-0 p-3 bg-gradient-to-b from-[#0d1117]/90 to-transparent z-20 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <img src={hero.avatarUrl} alt={hero.name} className="w-10 h-10 rounded-lg border border-[#3fb950] object-cover" />
+              <div>
+                <div className="text-xs font-bold text-[#f0f6fc]">{hero.name} <span className="text-[#3fb950]">({hero.title})</span></div>
+                <div className="w-32 h-2 bg-[#0d1117] rounded border border-[#30363d] overflow-hidden mt-1">
+                  <div className="h-full bg-[#3fb950]" style={{ width: `${(p.hp / p.hpMax) * 100}%` }} />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4 text-xs">
+              <div>💎 {collectedCrystals}</div>
+              <button onClick={() => setIsPaused(!isPaused)} className="px-2.5 py-1 bg-[#21262d] border border-[#30363d] rounded text-[#f0f6fc]">
+                {isPaused ? '▶ OYNAT' : '⏸ DURAKLAT'}
+              </button>
+            </div>
+          </div>
+
+          <canvas ref={canvasRef} width={900} height={450} className="w-full h-auto bg-[#0d1117] block cursor-crosshair" />
+
+          {/* Controls */}
+          <div className="p-3 bg-[#161b22] border-t border-[#30363d] flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5">
+              <button onMouseDown={() => mobileInputRef.current.left = true} onMouseUp={() => mobileInputRef.current.left = false} className="w-9 h-9 rounded bg-[#21262d] border border-[#30363d] text-white font-bold">◄</button>
+              <button onMouseDown={() => mobileInputRef.current.jump = true} onMouseUp={() => mobileInputRef.current.jump = false} className="w-9 h-9 rounded bg-[#21262d] border border-[#30363d] text-white font-bold">▲</button>
+              <button onMouseDown={() => mobileInputRef.current.right = true} onMouseUp={() => mobileInputRef.current.right = false} className="w-9 h-9 rounded bg-[#21262d] border border-[#30363d] text-white font-bold">►</button>
+            </div>
+            <div className="flex items-center gap-2">
+              <button onClick={triggerAttack} className="px-3 py-1.5 rounded bg-[#238636] border border-[#3fb950] text-white text-xs font-bold">⚔️ SALDIRI [J]</button>
+              <button onClick={triggerSkill} className="px-3 py-1.5 rounded bg-[#38bdf8]/20 border border-[#38bdf8] text-[#38bdf8] text-xs font-bold">✨ SKILL [K]</button>
+              <button onClick={triggerUltimate} className="px-3 py-1.5 rounded bg-[#a371f7]/20 border border-[#a371f7] text-[#a371f7] text-xs font-bold">💥 ULT [L]</button>
+            </div>
+          </div>
+
+          {stageCleared && (
+            <div className="absolute inset-0 bg-[#0d1117]/90 backdrop-blur flex flex-col items-center justify-center p-6 text-center z-30">
+              <div className="text-xl text-[#3fb950] font-bold mb-2">SEVİYE TEMİZLENDİ!</div>
+              <button onClick={initStage} className="px-5 py-2 bg-[#238636] text-white font-bold text-xs rounded">YENİDEN OYNA</button>
+            </div>
+          )}
+
+          {isDead && (
+            <div className="absolute inset-0 bg-[#0d1117]/95 backdrop-blur flex flex-col items-center justify-center p-6 text-center z-30">
+              <div className="text-xl text-[#f85149] font-bold mb-2">MAĞARA YUTTU!</div>
+              <button onClick={initStage} className="px-5 py-2 bg-[#da3633] text-white font-bold text-xs rounded">TEKRAR DENE</button>
+            </div>
+          )}
+        </div>
+      );
+    }
 
     // --- Main App Component ---
     function App() {
       const [currentView, setCurrentView] = useState('game');
       const [selectedHero, setSelectedHero] = useState(HEROES[0]);
       const [crystals, setCrystals] = useState(240);
-      const [score, setScore] = useState(0);
 
       return (
         <div className="min-h-screen bg-[#0d1117] text-[#c9d1d9] font-mono flex flex-col">
@@ -215,22 +605,22 @@
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-lg bg-[#238636] flex items-center justify-center font-bold text-white text-lg">O</div>
               <div>
-                <div className="text-sm font-bold text-white">ODESSIA / SINGLE_HTML</div>
-                <div className="text-[10px] text-[#8b949e]">GitHub Pages Ready Engine</div>
+                <div className="text-sm font-bold text-white">ODESSIA / ACTION ENGINE</div>
+                <div className="text-[10px] text-[#8b949e]">Single HTML Standalone Engine</div>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 text-xs">
+            <div className="flex items-center gap-3 text-xs">
               <div className="text-[#3fb950] font-bold">💎 {crystals} CR</div>
               <button 
                 onClick={() => setCurrentView('game')}
-                className={`px-3 py-1 rounded ${currentView === 'game' ? 'bg-[#238636] text-white' : 'bg-[#21262d] text-[#8b949e]'}`}
+                className={`px-3 py-1 rounded ${currentView === 'game' ? 'bg-[#238636] text-white font-bold' : 'bg-[#21262d] text-[#8b949e]'}`}
               >
-                Aksiyon Oyunu
+                Savaş Sahnesi
               </button>
               <button 
                 onClick={() => setCurrentView('map')}
-                className={`px-3 py-1 rounded ${currentView === 'map' ? 'bg-[#238636] text-white' : 'bg-[#21262d] text-[#8b949e]'}`}
+                className={`px-3 py-1 rounded ${currentView === 'map' ? 'bg-[#238636] text-white font-bold' : 'bg-[#21262d] text-[#8b949e]'}`}
               >
                 Harita
               </button>
@@ -238,43 +628,46 @@
           </header>
 
           {/* Main Area */}
-          <main className="p-4 max-w-5xl mx-auto w-full flex-1">
-            {currentView === 'game' && (
-              <div className="bento-card p-4 space-y-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-bold text-white">2D ODESSIA ACTION CANVAS</h2>
-                  <div className="text-xs text-[#8b949e]">Kontroller: A/D: Sol/Sağ | W: Zıpla | J: Saldırı | K: Skill</div>
-                </div>
-
-                <div className="relative w-full aspect-[2/1] bg-[#0d1117] rounded-xl border border-[#30363d] overflow-hidden flex flex-col items-center justify-center text-center p-6">
-                  <div className="text-[#3fb950] font-bold text-2xl mb-2">⚔️ ODESSIA CANLI SAVAŞ MOTORU</div>
-                  <p className="text-xs text-[#8b949e] max-w-md mb-4">
-                    Bu oyun HTML5 Canvas, Web Audio API ve React 18 ile tamamen tek bir index.html dosyası olarak derlenmiştir. GitHub Pages veya herhangi bir statik sunucuda direkt çalışır!
-                  </p>
-                  <div className="flex gap-2">
-                    {HEROES.map((h) => (
-                      <button
-                        key={h.id}
-                        onClick={() => setSelectedHero(h)}
-                        className={`px-3 py-1.5 rounded text-xs font-bold transition-all ${selectedHero.id === h.id ? 'bg-[#238636] text-white' : 'bg-[#21262d] text-[#8b949e]'}`}
-                      >
-                        {h.name} ({h.role})
-                      </button>
-                    ))}
-                  </div>
+          <main className="p-4 max-w-5xl mx-auto w-full flex-1 space-y-4">
+            {/* Hero Selection Selector Bar */}
+            <div className="bento-card p-3 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-[#8b949e]">KAHRAMAN:</span>
+                <div className="flex gap-2">
+                  {HEROES.map((h) => (
+                    <button
+                      key={h.id}
+                      onClick={() => setSelectedHero(h)}
+                      className={`px-2.5 py-1 rounded text-xs font-bold transition-all ${selectedHero.id === h.id ? 'bg-[#238636] text-white border border-[#3fb950]' : 'bg-[#21262d] text-[#8b949e] border border-[#30363d]'}`}
+                    >
+                      {h.name}
+                    </button>
+                  ))}
                 </div>
               </div>
+              <div className="text-xs text-[#8b949e]">
+                SINIF: <span className="text-[#3fb950] font-bold">{selectedHero.role}</span>
+              </div>
+            </div>
+
+            {currentView === 'game' && (
+              <PlayableGameCanvas
+                hero={selectedHero}
+                stage={CAVERN_LEVELS[4]}
+                onStageComplete={(c) => setCrystals(prev => prev + c)}
+                onGameOver={() => {}}
+              />
             )}
 
             {currentView === 'map' && (
               <div className="bento-card p-6 space-y-4">
                 <h2 className="text-lg font-bold text-white">MAĞARA DIORAMA HARİTASI</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                   {CAVERN_LEVELS.map((lvl) => (
-                    <div key={lvl.id} className="p-4 bg-[#0d1117] border border-[#30363d] rounded-lg">
+                    <div key={lvl.id} className="p-4 bg-[#0d1117] border border-[#30363d] rounded-lg space-y-1">
                       <div className="text-xs text-[#3fb950] font-bold">SEVİYE {lvl.levelNum}</div>
                       <div className="text-sm font-bold text-white">{lvl.name}</div>
-                      <div className="text-[10px] text-[#8b949e] mt-1">{lvl.threat} TEHDİT</div>
+                      <div className="text-[10px] text-[#8b949e]">{lvl.threat} TEHDİT SEVİYESİ</div>
                     </div>
                   ))}
                 </div>
