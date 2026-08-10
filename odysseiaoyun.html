@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Odessia: Deep Relic Chronicles (Single HTML Engine)</title>
+  <title>Odessia: Deep Relic Chronicles (Tek Dosya HTML)</title>
   
   <!-- Tailwind CSS v4 CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -53,7 +53,7 @@
   <script type="text/babel">
     const { useState, useEffect, useRef, useCallback } = React;
 
-    // --- Ses Sentezleyicisi (Web Audio API) ---
+    // --- Sound Engine ---
     class SoundEngine {
       constructor() {
         this.ctx = null;
@@ -79,6 +79,45 @@
         osc.connect(gain); gain.connect(this.ctx.destination);
         osc.start(); osc.stop(this.ctx.currentTime + 0.12);
       }
+      playSpell() {
+        if (!this.enabled) return;
+        this.init(); if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(300, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.25);
+        gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.25);
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(); osc.stop(this.ctx.currentTime + 0.25);
+      }
+      playHit() {
+        if (!this.enabled) return;
+        this.init(); if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(150, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(30, this.ctx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.4, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(); osc.stop(this.ctx.currentTime + 0.1);
+      }
+      playPickup() {
+        if (!this.enabled) return;
+        this.init(); if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(520, this.ctx.currentTime);
+        osc.frequency.setValueAtTime(780, this.ctx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.18);
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(); osc.stop(this.ctx.currentTime + 0.18);
+      }
       playJump() {
         if (!this.enabled) return;
         this.init(); if (!this.ctx) return;
@@ -92,10 +131,23 @@
         osc.connect(gain); gain.connect(this.ctx.destination);
         osc.start(); osc.stop(this.ctx.currentTime + 0.12);
       }
+      playExplosion() {
+        if (!this.enabled) return;
+        this.init(); if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(100, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(20, this.ctx.currentTime + 0.4);
+        gain.gain.setValueAtTime(0.5, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.4);
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(); osc.stop(this.ctx.currentTime + 0.4);
+      }
     }
     const sound = new SoundEngine();
 
-    // --- Kahraman Tanımları ---
+    // --- Game Heroes ---
     const HEROES = [
       {
         id: 'odessia_blade',
@@ -103,9 +155,13 @@
         title: 'Kılıç Dansçısı',
         role: 'Blade Dancer',
         avatarUrl: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=300&auto=format&fit=crop&q=80',
-        description: 'Biyoışıldayan kılıçlarıyla mağara karanlığını yaran hızlı savaşçı.',
-        hpMax: 120, attackPower: 22, speed: 6.5,
-        skillName: 'Rüzgar Çentiği'
+        description: 'Biyoışıldayan kılıçlarıyla mağara karanlığını yaran hızlı ve çevik savaşçı.',
+        color: '#34d399',
+        secondaryColor: '#059669',
+        hpMax: 120, manaMax: 80, attackPower: 22, speed: 6.5, critRate: 20,
+        skillName: 'Rüzgar Çentiği', skillIcon: 'bolt', skillCooldownSec: 4,
+        skillDescription: 'Hızla ileri atılarak düşmanları keser.',
+        ultimateName: 'Biyoışık Kasırgası', ultimateDescription: '360 derece dönen yeşil bıçaklar fırlatır.'
       },
       {
         id: 'lumina_mage',
@@ -113,9 +169,13 @@
         title: 'Kristal Büyücüsü',
         role: 'Crystal Mage',
         avatarUrl: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=300&auto=format&fit=crop&q=80',
-        description: 'Yeraltı kristallerinden güç alan kâhin.',
-        hpMax: 90, attackPower: 28, speed: 5.2,
-        skillName: 'Kristal Patlaması'
+        description: 'Yeraltı kristallerinden güç alan, uzaktan patlamalar yaratan kâhin.',
+        color: '#38bdf8',
+        secondaryColor: '#0284c7',
+        hpMax: 90, manaMax: 140, attackPower: 28, speed: 5.2, critRate: 15,
+        skillName: 'Kristal Patlaması', skillIcon: 'auto_awesome', skillCooldownSec: 5,
+        skillDescription: 'Hedef noktada patlayan kristal şok dalgası.',
+        ultimateName: 'Yankı Kalkanı', ultimateDescription: 'Koruyucu bariyer ve enerji patlaması.'
       },
       {
         id: 'kaelen_rogue',
@@ -123,25 +183,30 @@
         title: 'Gölge Avcısı',
         role: 'Shadow Rogue',
         avatarUrl: 'https://images.unsplash.com/photo-1563089145-599997674d42?w=300&auto=format&fit=crop&q=80',
-        description: 'Gölgelerde kaybolan suikastçı.',
-        hpMax: 100, attackPower: 25, speed: 7.2,
-        skillName: 'Gölge Adımı'
+        description: 'Gölgelerde kaybolan, kritik darbeler vuran suikastçı.',
+        color: '#c084fc',
+        secondaryColor: '#7e22ce',
+        hpMax: 100, manaMax: 100, attackPower: 25, speed: 7.2, critRate: 35,
+        skillName: 'Gölge Adımı', skillIcon: 'visibility_off', skillCooldownSec: 3.5,
+        skillDescription: 'Düşmanın arkasına ışınlanır.',
+        ultimateName: 'Bıçak Yağmuru', ultimateDescription: 'Aşağıya 12 rezonanslı bıçak yağdırır.'
       }
     ];
 
     const CAVERN_LEVELS = [
-      { id: 's1', name: 'Yosunlu Eşik', levelNum: 1, threat: 'SAFE' },
-      { id: 's2', name: 'Damlataşı Çukuru', levelNum: 3, threat: 'LOW' },
-      { id: 's3', name: 'Uğuldayan Damar', levelNum: 6, threat: 'MEDIUM' },
-      { id: 's4', name: 'Obsidyen Çatlağı', levelNum: 9, threat: 'MEDIUM' },
-      { id: 's5', name: 'Biyoışıldayan Oyuk', levelNum: 11, threat: 'HIGH' }
+      { id: 's1', name: 'Yosunlu Eşik', levelNum: 1, icon: 'cottage', threat: 'SAFE', xPercent: 15, yPercent: 80, recommendedPower: 10 },
+      { id: 's2', name: 'Damlataşı Çukuru', levelNum: 3, icon: 'water_drop', threat: 'LOW', xPercent: 30, yPercent: 65, recommendedPower: 25 },
+      { id: 's3', name: 'Uğuldayan Damar', levelNum: 6, icon: 'graphic_eq', threat: 'MEDIUM', xPercent: 50, yPercent: 70, recommendedPower: 45 },
+      { id: 's4', name: 'Obsidyen Çatlağı', levelNum: 9, icon: 'bolt', threat: 'MEDIUM', xPercent: 65, yPercent: 50, recommendedPower: 70 },
+      { id: 's5', name: 'Biyoışıldayan Oyuk', levelNum: 11, icon: 'auto_awesome', threat: 'HIGH', xPercent: 50, yPercent: 30, isCurrent: true, bossName: 'Mantarımsı Muhafız', recommendedPower: 95 }
     ];
 
-    // --- Ana Uygulama Bileşeni ---
+    // --- Main App Component ---
     function App() {
       const [currentView, setCurrentView] = useState('game');
       const [selectedHero, setSelectedHero] = useState(HEROES[0]);
       const [crystals, setCrystals] = useState(240);
+      const [score, setScore] = useState(0);
 
       return (
         <div className="min-h-screen bg-[#0d1117] text-[#c9d1d9] font-mono flex flex-col">
@@ -155,33 +220,30 @@
               </div>
             </div>
 
-            <div className="flex items-center gap-3 text-xs">
+            <div className="flex items-center gap-4 text-xs">
               <div className="text-[#3fb950] font-bold">💎 {crystals} CR</div>
               <button 
                 onClick={() => setCurrentView('game')}
-                className={`px-3 py-1 rounded transition-colors ${currentView === 'game' ? 'bg-[#238636] text-white font-bold' : 'bg-[#21262d] text-[#8b949e]'}`}
+                className={`px-3 py-1 rounded ${currentView === 'game' ? 'bg-[#238636] text-white' : 'bg-[#21262d] text-[#8b949e]'}`}
               >
                 Aksiyon Oyunu
               </button>
               <button 
                 onClick={() => setCurrentView('map')}
-                className={`px-3 py-1 rounded transition-colors ${currentView === 'map' ? 'bg-[#238636] text-white font-bold' : 'bg-[#21262d] text-[#8b949e]'}`}
+                className={`px-3 py-1 rounded ${currentView === 'map' ? 'bg-[#238636] text-white' : 'bg-[#21262d] text-[#8b949e]'}`}
               >
                 Harita
               </button>
             </div>
           </header>
 
-          {/* Ana İçerik */}
+          {/* Main Area */}
           <main className="p-4 max-w-5xl mx-auto w-full flex-1">
             {currentView === 'game' && (
               <div className="bento-card p-4 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#3fb950]"></span>
-                    ODESSIA ACTION CANVAS
-                  </h2>
-                  <div className="text-xs text-[#8b949e]">Kontroller: A/D: Hareket | W: Zıpla | J: Saldırı</div>
+                  <h2 className="text-lg font-bold text-white">2D ODESSIA ACTION CANVAS</h2>
+                  <div className="text-xs text-[#8b949e]">Kontroller: A/D: Sol/Sağ | W: Zıpla | J: Saldırı | K: Skill</div>
                 </div>
 
                 <div className="relative w-full aspect-[2/1] bg-[#0d1117] rounded-xl border border-[#30363d] overflow-hidden flex flex-col items-center justify-center text-center p-6">
@@ -189,40 +251,17 @@
                   <p className="text-xs text-[#8b949e] max-w-md mb-4">
                     Bu oyun HTML5 Canvas, Web Audio API ve React 18 ile tamamen tek bir index.html dosyası olarak derlenmiştir. GitHub Pages veya herhangi bir statik sunucuda direkt çalışır!
                   </p>
-                  
-                  {/* Kahraman Seçimi */}
                   <div className="flex gap-2">
                     {HEROES.map((h) => (
                       <button
                         key={h.id}
-                        onClick={() => {
-                          setSelectedHero(h);
-                          sound.playSlash();
-                        }}
-                        className={`px-3 py-1.5 rounded text-xs font-bold transition-all border ${
-                          selectedHero.id === h.id 
-                            ? 'bg-[#238636] text-white border-[#3fb950]' 
-                            : 'bg-[#21262d] text-[#8b949e] border-[#30363d] hover:text-[#f0f6fc]'
-                        }`}
+                        onClick={() => setSelectedHero(h)}
+                        className={`px-3 py-1.5 rounded text-xs font-bold transition-all ${selectedHero.id === h.id ? 'bg-[#238636] text-white' : 'bg-[#21262d] text-[#8b949e]'}`}
                       >
                         {h.name} ({h.role})
                       </button>
                     ))}
                   </div>
-                </div>
-
-                <div className="p-3 bg-[#0d1117] border border-[#30363d] rounded-lg flex items-center justify-between text-xs">
-                  <div>
-                    <span className="text-[#8b949e]">Seçili Kahraman: </span>
-                    <span className="text-[#3fb950] font-bold">{selectedHero.name}</span>
-                    <span className="text-[#8b949e]"> - {selectedHero.description}</span>
-                  </div>
-                  <button 
-                    onClick={() => sound.playJump()} 
-                    className="px-3 py-1 bg-[#21262d] border border-[#30363d] rounded text-[#f0f6fc] hover:border-[#3fb950]"
-                  >
-                    Ses Test Et 🔊
-                  </button>
                 </div>
               </div>
             )}
@@ -230,11 +269,11 @@
             {currentView === 'map' && (
               <div className="bento-card p-6 space-y-4">
                 <h2 className="text-lg font-bold text-white">MAĞARA DIORAMA HARİTASI</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {CAVERN_LEVELS.map((lvl) => (
                     <div key={lvl.id} className="p-4 bg-[#0d1117] border border-[#30363d] rounded-lg">
                       <div className="text-xs text-[#3fb950] font-bold">SEVİYE {lvl.levelNum}</div>
-                      <div className="text-sm font-bold text-white mt-1">{lvl.name}</div>
+                      <div className="text-sm font-bold text-white">{lvl.name}</div>
                       <div className="text-[10px] text-[#8b949e] mt-1">{lvl.threat} TEHDİT</div>
                     </div>
                   ))}
