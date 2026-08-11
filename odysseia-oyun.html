@@ -1,1037 +1,770 @@
-<!doctype html>
-<html lang="en" class="dark">
+<!DOCTYPE html>
+<html lang="tr" class="dark">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Deep Relic — Subterranean Caverns</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Odessia: Deep Relic Chronicles (Single HTML Engine)</title>
+  
+  <!-- Tailwind CSS v4 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  
+  <!-- Google Fonts & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Hanken+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&family=Hanken+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <!-- React 18, ReactDOM 18, Babel Standalone -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
 
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-<style>
-  body {
-    font-family: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-    background-color: #09090b;
-    color: #f4f4f5;
-  }
-  h1, h2, h3, h4, .font-display { font-family: 'Domine', serif; }
-  code, pre, .font-mono { font-family: 'Space Mono', monospace; }
-
-  .bento-card {
-    background-color: rgba(24, 24, 27, 0.7);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(39, 39, 42, 0.8);
-    border-radius: 1.5rem;
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .bento-card:hover { border-color: rgba(63, 63, 70, 0.9); }
-
-  .chiseled-slab {
-    position: relative;
-    background: linear-gradient(145deg, #18181b 0%, #121215 100%);
-    border: 1px solid rgba(39, 39, 42, 0.9);
-    border-radius: 1.5rem;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
-  }
-
-  .stone-slab {
-    background: #18181b;
-    border: 1px solid #27272a;
-    border-radius: 1rem;
-    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
-  }
-
-  .cavern-grid {
-    background-image:
-      linear-gradient(rgba(16, 185, 129, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
-    background-size: 32px 32px;
-  }
-
-  .felt-texture {
-    background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.02) 1px, transparent 0);
-    background-size: 20px 20px;
-  }
-
-  .crystal-glow-cyan { filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.55)); }
-
-  .resonance-crack {
-    height: 6px;
-    background: #18181b;
-    position: relative;
-    overflow: hidden;
-    border-radius: 9999px;
-    border: 1px solid #27272a;
-  }
-  .resonance-fill {
-    background: #10b981;
-    box-shadow: 0 0 12px rgba(16, 185, 129, 0.8);
-    height: 100%;
-    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .moss-tag {
-    background-color: rgba(16, 185, 129, 0.15);
-    color: #34d399;
-    border: 1px solid rgba(16, 185, 129, 0.3);
-    padding: 2px 10px;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    border-radius: 9999px;
-    letter-spacing: 0.05em;
-    font-weight: 600;
-    display: inline-block;
-  }
-
-  @keyframes pulse-glow {
-    0%, 100% { filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.6)); transform: scale(1); }
-    50% { filter: drop-shadow(0 0 22px rgba(16, 185, 129, 0.9)); transform: scale(1.05); }
-  }
-  .active-echo { animation: pulse-glow 2.5s infinite ease-in-out; }
-
-  .rope-line {
-    background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(39, 39, 42, 0.6) 5px, rgba(39, 39, 42, 0.6) 10px);
-    border-top: 1px solid #27272a;
-  }
-
-  ::-webkit-scrollbar { width: 8px; height: 8px; }
-  ::-webkit-scrollbar-track { background: #09090b; }
-  ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; border: 1px solid #3f3f46; }
-  ::-webkit-scrollbar-thumb:hover { background: #10b981; }
-
-  .material-symbols-outlined {
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-    line-height: 1;
-    vertical-align: middle;
-  }
-</style>
+  <style>
+    body {
+      background-color: #0d1117;
+      color: #c9d1d9;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    .bento-card {
+      background-color: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      transition: all 0.2s ease-in-out;
+    }
+    .bento-card:hover {
+      border-color: #8b949e;
+    }
+    .bento-grid-bg {
+      background-image: radial-gradient(#30363d 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0d1117; }
+    ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3fb950; }
+  </style>
 </head>
-<body class="antialiased selection:bg-emerald-500 selection:text-emerald-950 overflow-x-hidden min-h-screen">
+<body class="bento-grid-bg min-h-screen">
   <div id="root"></div>
 
-  <script type="text/babel" data-presets="react">
-// ============================================================
-// DEEP RELIC — static data + mock "oracle" generators
-// (No backend: everything here runs client-side so this game
-// works as a single plain HTML file on GitHub Pages.)
-// ============================================================
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useCallback } = React;
 
-const THREAT_COLORS = {
-  SAFE: '#34d399',
-  LOW: '#34d399',
-  MEDIUM: '#f59e0b',
-  HIGH: '#fb923c',
-  EXTREME: '#ef4444',
-};
+    // --- Sound Engine ---
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+      }
+      init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) this.ctx = new AudioCtx();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+      }
+      playSlash() {
+        if (!this.enabled) return;
+        this.init(); if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(420, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(80, this.ctx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.12);
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(); osc.stop(this.ctx.currentTime + 0.12);
+      }
+      playSpell() {
+        if (!this.enabled) return;
+        this.init(); if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(300, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.25);
+        gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.25);
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(); osc.stop(this.ctx.currentTime + 0.25);
+      }
+      playHit() {
+        if (!this.enabled) return;
+        this.init(); if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(150, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(30, this.ctx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.4, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(); osc.stop(this.ctx.currentTime + 0.1);
+      }
+      playPickup() {
+        if (!this.enabled) return;
+        this.init(); if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(520, this.ctx.currentTime);
+        osc.frequency.setValueAtTime(780, this.ctx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.18);
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(); osc.stop(this.ctx.currentTime + 0.18);
+      }
+      playJump() {
+        if (!this.enabled) return;
+        this.init(); if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(180, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(360, this.ctx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.12);
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(); osc.stop(this.ctx.currentTime + 0.12);
+      }
+      playExplosion() {
+        if (!this.enabled) return;
+        this.init(); if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(100, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(20, this.ctx.currentTime + 0.4);
+        gain.gain.setValueAtTime(0.5, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.4);
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(); osc.stop(this.ctx.currentTime + 0.4);
+      }
+    }
+    const sound = new SoundEngine();
 
-const RARITY_COLORS = {
-  Common: '#a1a1aa',
-  Rare: '#38bdf8',
-  Ancient: '#f59e0b',
-  Mythic: '#c084fc',
-};
+    // --- Game Data ---
+    const HEROES = [
+      {
+        id: 'odessia_blade',
+        name: 'Odessia',
+        title: 'Kılıç Dansçısı',
+        role: 'Blade Dancer',
+        avatarUrl: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=300&auto=format&fit=crop&q=80',
+        description: 'Biyoışıldayan kılıçlarıyla mağara karanlığını yaran hızlı ve çevik savaşçı.',
+        color: '#34d399',
+        secondaryColor: '#059669',
+        hpMax: 120, manaMax: 80, attackPower: 22, speed: 6.5, critRate: 20,
+        skillName: 'Rüzgar Çentiği', skillIcon: 'bolt', skillCooldownSec: 4,
+        skillDescription: 'Hızla ileri atılarak düşmanları keser.',
+        ultimateName: 'Biyoışık Kasırgası', ultimateDescription: '360 derece dönen yeşil bıçaklar fırlatır.'
+      },
+      {
+        id: 'lumina_mage',
+        name: 'Lumina',
+        title: 'Kristal Büyücüsü',
+        role: 'Crystal Mage',
+        avatarUrl: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=300&auto=format&fit=crop&q=80',
+        description: 'Yeraltı kristallerinden güç alan, uzaktan patlamalar yaratan kâhin.',
+        color: '#38bdf8',
+        secondaryColor: '#0284c7',
+        hpMax: 90, manaMax: 140, attackPower: 28, speed: 5.2, critRate: 15,
+        skillName: 'Kristal Patlaması', skillIcon: 'auto_awesome', skillCooldownSec: 5,
+        skillDescription: 'Hedef noktada patlayan kristal şok dalgası.',
+        ultimateName: 'Yankı Kalkanı', ultimateDescription: 'Koruyucu bariyer ve enerji patlaması.'
+      },
+      {
+        id: 'kaelen_rogue',
+        name: 'Kaelen',
+        title: 'Gölge Avcısı',
+        role: 'Shadow Rogue',
+        avatarUrl: 'https://images.unsplash.com/photo-1563089145-599997674d42?w=300&auto=format&fit=crop&q=80',
+        description: 'Gölgelerde kaybolan, kritik darbeler vuran suikastçı.',
+        color: '#c084fc',
+        secondaryColor: '#7e22ce',
+        hpMax: 100, manaMax: 100, attackPower: 25, speed: 7.2, critRate: 35,
+        skillName: 'Gölge Adımı', skillIcon: 'visibility_off', skillCooldownSec: 3.5,
+        skillDescription: 'Düşmanın arkasına ışınlanır.',
+        ultimateName: 'Bıçak Yağmuru', ultimateDescription: 'Aşağıya 12 rezonanslı bıçak yağdırır.'
+      }
+    ];
 
-const CATEGORY_ICONS = {
-  'Biological Catalyst': 'eco',
-  'Structural Reinforcement': 'foundation',
-  'Echo Harmonic': 'graphic_eq',
-  'Crystal Matrix': 'diamond',
-};
+    const CAVERN_LEVELS = [
+      { id: 's1', name: 'Yosunlu Eşik', levelNum: 1, icon: 'cottage', threat: 'SAFE', xPercent: 15, yPercent: 80 },
+      { id: 's2', name: 'Damlataşı Çukuru', levelNum: 3, icon: 'water_drop', threat: 'LOW', xPercent: 30, yPercent: 65 },
+      { id: 's3', name: 'Uğuldayan Damar', levelNum: 6, icon: 'graphic_eq', threat: 'MEDIUM', xPercent: 50, yPercent: 70 },
+      { id: 's4', name: 'Obsidyen Çatlağı', levelNum: 9, icon: 'bolt', threat: 'MEDIUM', xPercent: 65, yPercent: 50 },
+      { id: 's5', name: 'Biyoışıldayan Oyuk', levelNum: 11, icon: 'auto_awesome', threat: 'HIGH', xPercent: 50, yPercent: 30, bossName: 'Mantarımsı Muhafız' }
+    ];
 
-const initialDelverProfile = {
-  name: 'Kessa Underlight',
-  level: 14,
-  title: 'Deep Delver of the Third Vein',
-  luminescence: 68,
-  resonance: 42,
-  avatarUrl: '',
-  activeDepth: 'Level 14 — The Hollow Vein',
-  inventoryCapacity: 62,
-};
+    // --- 2D Action Game Canvas Component ---
+    function PlayableGameCanvas({ hero, stage, onStageComplete, onGameOver, onNextStage, hasNextStage, onBackToMap }) {
+      const canvasRef = useRef(null);
+      const [isPaused, setIsPaused] = useState(false);
+      const [stageCleared, setStageCleared] = useState(false);
+      const [isDead, setIsDead] = useState(false);
+      const [score, setScore] = useState(0);
+      const [collectedCrystals, setCollectedCrystals] = useState(0);
+      const [showIntro, setShowIntro] = useState(true);
 
-const initialCavernNodes = [
-  { id: 'n1', name: 'Mossy Threshold', levelNum: 1, icon: 'cottage', description: 'Where the surface world gives way to felted stone and the first cold breath of the deep.', threat: 'SAFE', xPercent: 12, yPercent: 82, relicsFound: ['Cracked Lantern Shard'] },
-  { id: 'n2', name: 'Dripstone Hollow', levelNum: 3, icon: 'water_drop', description: 'A low chamber where mineral water beads endlessly from felted stalactites, each drop humming a faint note.', threat: 'LOW', xPercent: 28, yPercent: 68, relicsFound: ['Chipped Cave Pearl'] },
-  { id: 'n3', name: 'The Humming Vein', levelNum: 6, icon: 'graphic_eq', description: 'A seam of quartz that vibrates at a pitch you feel in your molars before you hear it.', threat: 'MEDIUM', xPercent: 46, yPercent: 74, relicsFound: ['Resonant Shard'] },
-  { id: 'n4', name: 'Obsidian Fracture', levelNum: 9, icon: 'bolt', description: 'Black glass split wide by an old tremor, its edges still warm to the touch.', threat: 'MEDIUM', xPercent: 60, yPercent: 55, relicsFound: [] },
-  { id: 'n5', name: 'Bioluminescent Hollow', levelNum: 11, icon: 'auto_awesome', description: 'Fungal light blooms across every surface here, breathing slowly in and out like the cavern itself.', threat: 'HIGH', xPercent: 50, yPercent: 38, isCurrent: true, relicsFound: ['Whisper Crystal'] },
-  { id: 'n6', name: 'The Resonance Chasm', levelNum: 13, icon: 'landscape', description: 'A drop with no visible floor. Dropped stones return an echo three seconds too late.', threat: 'HIGH', xPercent: 68, yPercent: 26, isLocked: true, relicsFound: [] },
-  { id: 'n7', name: 'Sunken Chancel', levelNum: 16, icon: 'account_balance', description: 'A flooded hall of carved slate, half-submerged altars still humming with old rites.', threat: 'EXTREME', xPercent: 34, yPercent: 16, isLocked: true, relicsFound: [] },
-  { id: 'n8', name: 'The Last Echo', levelNum: 20, icon: 'blur_circular', description: 'Delvers who reach this depth report the cavern answering back before they speak.', threat: 'EXTREME', xPercent: 14, yPercent: 6, isLocked: true, relicsFound: [] },
-];
+      const keysRef = useRef({});
+      const mobileInputRef = useRef({ left: false, right: false, jump: false, attack: false, skill: false, ult: false });
 
-const initialGatheredItems = [
-  { id: 'i1', name: 'Bioluminescent Moss', category: 'Biological Catalyst', quantity: 7, icon: 'eco', color: '#34d399', rarity: 'Common', description: 'Soft, faintly glowing moss that stains felted gloves a pale green.' },
-  { id: 'i2', name: 'Cave Pearl', category: 'Crystal Matrix', quantity: 3, icon: 'diamond', color: '#38bdf8', rarity: 'Rare', description: 'A smooth mineral sphere formed drop by drop over centuries.' },
-  { id: 'i3', name: 'Petrified Root', category: 'Structural Reinforcement', quantity: 5, icon: 'foundation', color: '#a1a1aa', rarity: 'Common', description: 'Stone-hard root wood, cold and dense as carved iron.' },
-  { id: 'i4', name: 'Resonant Shard', category: 'Echo Harmonic', quantity: 4, icon: 'graphic_eq', color: '#c084fc', rarity: 'Rare', description: 'A splinter of quartz that hums faintly when held near the ear.' },
-  { id: 'i5', name: 'Ancient Slate Fragment', category: 'Structural Reinforcement', quantity: 2, icon: 'history_edu', color: '#f59e0b', rarity: 'Ancient', description: 'Carved slate worn smooth, etched with runes no living delver reads.' },
-  { id: 'i6', name: 'Whisper Crystal', category: 'Crystal Matrix', quantity: 1, icon: 'auto_awesome', color: '#c084fc', rarity: 'Mythic', description: 'Cold to the touch and never fully silent, even in sealed wool.' },
-  { id: 'i7', name: 'Cavern Silk', category: 'Biological Catalyst', quantity: 6, icon: 'texture', color: '#34d399', rarity: 'Rare', description: 'Fine fungal fiber, felted by hand into a warm, breathable weave.' },
-  { id: 'i8', name: 'Iron Vein Ore', category: 'Structural Reinforcement', quantity: 9, icon: 'construction', color: '#a1a1aa', rarity: 'Common', description: 'Dense ore flecked with rust-colored veins, heavier than it looks.' },
-];
+      const gameStateRef = useRef({
+        player: {
+          x: 100, y: 300, vx: 0, vy: 0, width: 40, height: 56,
+          hp: hero.hpMax, hpMax: hero.hpMax, mana: hero.manaMax, manaMax: hero.manaMax,
+          isGrounded: false, facing: 'right', isAttacking: false, attackTimer: 0,
+          skillCooldown: 0, ultCooldown: 0, animFrame: 0, animTimer: 0,
+          isDashing: false, dashTimer: 0, comboCount: 0, comboTimer: 0
+        },
+        enemies: [],
+        projectiles: [],
+        particles: [],
+        floatingTexts: [],
+        crystals: [],
+        cameraX: 0,
+        worldWidth: 2400,
+        screenShake: 0
+      });
 
-const initialLoreEntries = [
-  { id: 'l1', title: 'The Umbral Stalker', subtitle: 'A predator that hunts by silence, not sound', threatTag: 'HIGH THREAT', threatColor: THREAT_COLORS.HIGH, description: 'Delvers speak of a shape that moves only when the cavern goes quiet, as if it feeds on the absence of echo.', resonanceLevel: 74, category: 'Creatures' },
-  { id: 'l2', title: 'Resonance Bloom', subtitle: 'Crystals that grow toward sound', threatTag: 'ANOMALY', threatColor: THREAT_COLORS.MEDIUM, description: 'A rare crystal formation that visibly bends and lengthens toward whatever resonant frequency it is exposed to.', resonanceLevel: 61, category: 'Anomalies' },
-  { id: 'l3', title: 'Runes of the First Delvers', subtitle: 'Carved slate from the earliest expeditions', threatTag: 'RUNE', threatColor: THREAT_COLORS.SAFE, description: 'Weathered glyphs believed to mark safe resonance paths through the upper caverns.', resonanceLevel: 55, category: 'Runes' },
-  { id: 'l4', title: 'The Sundering of Level 9', subtitle: 'A tremor that reshaped an entire vein', threatTag: 'HISTORY', threatColor: THREAT_COLORS.MEDIUM, description: 'A recorded quake split the Obsidian Fracture open, exposing chambers no map had charted before.', resonanceLevel: 48, category: 'History' },
-  { id: 'l5', title: 'Crystal-Skin Grubs', subtitle: 'Small, glassy, and surprisingly loud', threatTag: 'LOW THREAT', threatColor: THREAT_COLORS.LOW, description: 'Harmless on their own, these grubs cluster in swarms that ring like struck glass when disturbed.', resonanceLevel: 32, category: 'Creatures' },
-  { id: 'l6', title: 'The Silent Choir', subtitle: 'A chamber that cancels every echo', threatTag: 'ANOMALY', threatColor: THREAT_COLORS.EXTREME, description: 'No sound made inside this hollow returns an echo — delvers describe it as deeply, physically wrong.', resonanceLevel: 88, category: 'Anomalies' },
-];
+      const addFloatingText = (x, y, text, color = '#f59e0b') => {
+        gameStateRef.current.floatingTexts.push({ id: Math.random().toString(), x, y, text, color, life: 40 });
+      };
 
-const initialQuests = [
-  { id: 'q1', title: 'Moss Gatherer', objective: 'Collect 10 Bioluminescent Moss', progress: 7, maxProgress: 10, reward: '+5 Luminescence', isCompleted: false },
-  { id: 'q2', title: 'Reach the Hollow', objective: 'Descend to Level 14', progress: 14, maxProgress: 14, reward: '+10 Resonance', isCompleted: true },
-  { id: 'q3', title: 'First Synthesis', objective: 'Synthesize a Tier 2 relic or higher', progress: 0, maxProgress: 1, reward: '+8 Luminescence', isCompleted: false },
-  { id: 'q4', title: 'Rune Reader', objective: 'Decrypt 3 chronicle entries', progress: 1, maxProgress: 3, reward: '+6 Resonance', isCompleted: false },
-];
+      const addParticles = (x, y, count, color) => {
+        for (let i = 0; i < count; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 5 + 1;
+          gameStateRef.current.particles.push({
+            x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+            size: Math.random() * 4 + 2, color, life: 0, maxLife: Math.random() * 20 + 15
+          });
+        }
+      };
 
-const initialSynthesizedHistory = [
-  {
-    id: 'h0',
-    relicName: 'Felted Ember Charm',
-    tier: 'Tier 1',
-    resonanceScore: 71,
-    description: 'A small charm of felted wool wound tight around a warm ember-glass bead.',
-    perks: ['+10% Warmth Retention', 'Faint glow in total dark'],
-    loreFlavor: 'It smells, faintly, of the first fire ever lit underground.',
-    createdTime: 'Level 9 expedition',
-  },
-];
+      const initStage = useCallback(() => {
+        const worldW = 2400;
+        const enemies = [];
+        const mobTypes = ['spider', 'bat', 'golem'];
 
-// ---- Mock "oracle" generators (client-side only, no API key needed) ----
+        for (let i = 0; i < 12; i++) {
+          const type = mobTypes[i % mobTypes.length];
+          const x = 400 + i * 150 + Math.random() * 50;
+          let hp = 40, color = '#34d399', speed = 2, name = 'Mantar Örümceği';
+          if (type === 'bat') { hp = 30; color = '#c084fc'; speed = 3; name = 'Gölge Yarasası'; }
+          else if (type === 'golem') { hp = 80; color = '#38bdf8'; speed = 1.2; name = 'Kuvars Golem'; }
 
-const DECRYPT_OPENERS = [
-  'The glyphs resist at first, then peel open like wet slate under a careful thumb.',
-  'A low resonance rises from the stone as the meaning surfaces, slow and reluctant.',
-  'The crystal dust in the carving catches your lantern light and the rune finally answers.',
-];
+          enemies.push({
+            id: 'mob_' + i, type, name, x, y: type === 'bat' ? 180 + Math.random() * 100 : 340,
+            vx: 0, vy: 0, width: type === 'golem' ? 50 : 36, height: type === 'golem' ? 60 : 36,
+            hp, hpMax: hp, color, speed, facing: 'left', attackCooldown: 0, isHit: false, hitTimer: 0
+          });
+        }
 
-const DECRYPT_BODIES = [
-  'It speaks of a passage the first delvers sealed on purpose, not by collapse — a place they judged too resonant to leave open.',
-  'It describes a method for reading the cavern\'s hum as a kind of map, where silence marks safe ground and sudden pitch marks danger.',
-  'It names a chamber where light and sound behave like they are listening back, and warns that answering it changes what answers next.',
-];
+        if (stage.bossName || stage.levelNum >= 5) {
+          enemies.push({
+            id: 'boss_main', type: 'boss', name: stage.bossName || 'Biyoışıldayan Muhafız',
+            x: 2000, y: 300, vx: 0, vy: 0, width: 80, height: 90, hp: 350, hpMax: 350,
+            color: '#10b981', speed: 1.5, facing: 'left', attackCooldown: 0, isHit: false, hitTimer: 0
+          });
+        }
 
-const DECRYPT_CLOSERS = [
-  'Whatever wrote this wanted it remembered, not hidden — which, down here, is its own kind of warning.',
-  'The felt-wrapped tools found nearby suggest whoever carved this meant to return, and never did.',
-  'You mark the translation in your ledger, aware that some runes only fully translate the second time you read them.',
-];
+        gameStateRef.current = {
+          player: {
+            x: 100, y: 300, vx: 0, vy: 0, width: 40, height: 56,
+            hp: hero.hpMax, hpMax: hero.hpMax, mana: hero.manaMax, manaMax: hero.manaMax,
+            isGrounded: false, facing: 'right', isAttacking: false, attackTimer: 0,
+            skillCooldown: 0, ultCooldown: 0, animFrame: 0, animTimer: 0,
+            isDashing: false, dashTimer: 0, comboCount: 0, comboTimer: 0
+          },
+          enemies, projectiles: [], particles: [], floatingTexts: [], crystals: [],
+          cameraX: 0, worldWidth: worldW, screenShake: 0
+        };
+        setIsDead(false); setStageCleared(false); setScore(0); setCollectedCrystals(0);
+      }, [hero, stage]);
 
-function mockDecrypt(entry) {
-  const opener = DECRYPT_OPENERS[Math.floor(Math.random() * DECRYPT_OPENERS.length)];
-  const body = DECRYPT_BODIES[Math.floor(Math.random() * DECRYPT_BODIES.length)];
-  const closer = DECRYPT_CLOSERS[Math.floor(Math.random() * DECRYPT_CLOSERS.length)];
-  return `${opener}\n\n${body}\n\n${closer}`;
-}
+      useEffect(() => { initStage(); }, [initStage]);
 
-const RELIC_ADJECTIVES = ['Luminous', 'Felted', 'Pulse-Bound', 'Hollow-Etched', 'Deep-Woven', 'Resonant', 'Mossbound', 'Cindergrown'];
-const RELIC_MATERIALS = ['Obsidian', 'Cave Pearl', 'Quartz', 'Slate', 'Crystal', 'Ember-Glass', 'Ironroot'];
-const RELIC_NOUNS = ['Pickaxe', 'Helm', 'Charm', 'Lantern', 'Gauntlet', 'Sigil', 'Cloak Pin', 'Resonator'];
+      // Show a "new level" intro banner every time a stage loads, then auto-dismiss.
+      useEffect(() => {
+        setShowIntro(true);
+        const t = setTimeout(() => setShowIntro(false), 2200);
+        return () => clearTimeout(t);
+      }, [stage]);
 
-const PERK_POOL = [
-  '+25% Luminescence Radius', 'Highlights hidden veins through stone', '+15% Mining Yield',
-  '+30% Bioluminescent Glow', 'Reduces echo delay by half', 'Warns of unstable ground nearby',
-  '+20% Resonance Stability', 'Softens footsteps on loose scree', 'Grants faint sight in total dark',
-];
+      useEffect(() => {
+        const handleKeyDown = (e) => {
+          keysRef.current[e.key.toLowerCase()] = true;
+          if ([' ', 'ArrowUp', 'w', 'W'].includes(e.key)) e.preventDefault();
+        };
+        const handleKeyUp = (e) => { keysRef.current[e.key.toLowerCase()] = false; };
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('keyup', handleKeyUp);
+        return () => {
+          window.removeEventListener('keydown', handleKeyDown);
+          window.removeEventListener('keyup', handleKeyUp);
+        };
+      }, []);
 
-const FLAVOR_POOL = [
-  'It hums at a pitch that calms the cave shadows.',
-  'Cold to the touch, warm in the hand after a while.',
-  'Delvers say it grows quieter the closer you are to something dangerous.',
-  'Its felted lining smells faintly of moss and old rain.',
-];
+      const triggerAttack = () => {
+        const { player, enemies } = gameStateRef.current;
+        if (player.attackTimer > 0) return;
 
-function pickN(arr, n) {
-  const copy = [...arr];
-  const out = [];
-  for (let i = 0; i < n && copy.length; i++) {
-    out.push(copy.splice(Math.floor(Math.random() * copy.length), 1)[0]);
-  }
-  return out;
-}
+        player.isAttacking = true;
+        player.attackTimer = 15;
+        sound.playSlash();
 
-function mockSynthesize(items) {
-  const adj = RELIC_ADJECTIVES[Math.floor(Math.random() * RELIC_ADJECTIVES.length)];
-  const mat = RELIC_MATERIALS[Math.floor(Math.random() * RELIC_MATERIALS.length)];
-  const noun = RELIC_NOUNS[Math.floor(Math.random() * RELIC_NOUNS.length)];
-  const rarityWeight = items.some((i) => i.rarity === 'Mythic') ? 3 : items.some((i) => i.rarity === 'Ancient') ? 2 : 1;
-  const tier = rarityWeight >= 3 ? 'Tier 3' : rarityWeight === 2 ? 'Tier 2' : Math.random() > 0.6 ? 'Tier 2' : 'Tier 1';
-  const base = tier === 'Tier 3' ? 85 : tier === 'Tier 2' ? 72 : 60;
-  const resonanceScore = Math.min(99, base + Math.floor(Math.random() * 15));
-  const itemNames = items.map((i) => i.name.toLowerCase()).join(', ');
-  return {
-    relicName: `${adj} ${mat} ${noun}`,
-    tier,
-    resonanceScore,
-    description: `A carefully bound fusion of ${itemNames}, its surface alternating between carved crystal and felted wool.`,
-    perks: pickN(PERK_POOL, 2),
-    loreFlavor: FLAVOR_POOL[Math.floor(Math.random() * FLAVOR_POOL.length)],
-  };
-}
+        const attackReach = hero.role === 'Blade Dancer' ? 70 : 50;
+        const attackX = player.facing === 'right' ? player.x + player.width : player.x - attackReach;
+        const attackBox = { x: attackX, y: player.y - 10, w: attackReach, h: player.height + 20 };
 
-const THISTLE_LINES = [
-  'The deeper caverns reward patience more than speed, little delver — rushing only wakes what sleeps in the dark.',
-  'Felted wool and glowing crystal, that\'s the whole trade down here: soft things wrapped around dangerous ones.',
-  'A resonance crack in the stone means something changed recently. Best to know what, before you step past it.',
-  'I\'ve read a thousand runes and every one says the same thing underneath: go slow, mark your path, come back.',
-  'If the moss glows brighter than usual, the air is thinner than usual. Mind your breathing at that depth.',
-];
+        let hitAny = false;
+        enemies.forEach((enemy) => {
+          if (attackBox.x < enemy.x + enemy.width && attackBox.x + attackBox.w > enemy.x &&
+              attackBox.y < enemy.y + enemy.height && attackBox.y + attackBox.h > enemy.y) {
+            const isCrit = Math.random() * 100 < hero.critRate;
+            const dmg = Math.round(hero.attackPower * (isCrit ? 1.8 : 1.0));
+            enemy.hp -= dmg;
+            enemy.isHit = true; enemy.hitTimer = 10;
+            enemy.vx = player.facing === 'right' ? 6 : -6;
 
-function mockChatReply(message) {
-  const lower = (message || '').toLowerCase();
-  if (lower.includes('danger') || lower.includes('threat') || lower.includes('safe')) {
-    return 'Danger down here rarely announces itself loudly — watch for silence where there should be dripping, or light where there should be none. Trust your resonance readings over your eyes.';
-  }
-  if (lower.includes('relic') || lower.includes('synthes') || lower.includes('craft')) {
-    return 'A good relic isn\'t forced together, it\'s coaxed — pair a crystal matrix with an echo harmonic and let the wool binding do the gentle work of holding them close.';
-  }
-  if (lower.includes('rune') || lower.includes('lore') || lower.includes('chronicle')) {
-    return 'The old runes rarely lie, but they do withhold. Read a carving twice before trusting it, once for the words and once for what\'s left unsaid.';
-  }
-  return THISTLE_LINES[Math.floor(Math.random() * THISTLE_LINES.length)];
-}
-const { useState, useEffect, useRef } = React;
+            addFloatingText(enemy.x + enemy.width / 2, enemy.y - 10, `${dmg}${isCrit ? ' CRİT!' : ''}`, isCrit ? '#f59e0b' : '#34d399');
+            addParticles(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, 8, hero.color);
+            sound.playHit();
+            hitAny = true;
+          }
+        });
+        if (hitAny) gameStateRef.current.screenShake = 6;
+      };
 
-// ============================================================
-// Small shared bits
-// ============================================================
+      const triggerSkill = () => {
+        const { player } = gameStateRef.current;
+        if (player.skillCooldown > 0 || player.mana < 20) return;
+        player.mana -= 20;
+        player.skillCooldown = hero.skillCooldownSec * 60;
+        sound.playSpell();
 
-function Icon({ name, className = '', style = {} }) {
-  return <span className={`material-symbols-outlined ${className}`} style={style}>{name}</span>;
-}
+        player.isDashing = true; player.dashTimer = 12;
+        player.vx = player.facing === 'right' ? 18 : -18;
+        addParticles(player.x, player.y + player.height / 2, 15, hero.color);
+        addFloatingText(player.x, player.y - 20, hero.skillName + '!', hero.color);
+      };
 
-function ThreatTag({ threat }) {
-  const color = THREAT_COLORS[threat] || THREAT_COLORS.LOW;
-  return (
-    <span
-      className="font-mono text-[10px] tracking-widest uppercase px-2 py-0.5 rounded-full border"
-      style={{ color, borderColor: `${color}55`, backgroundColor: `${color}1a` }}
-    >
-      {threat}
-    </span>
-  );
-}
+      const triggerUltimate = () => {
+        const { player, enemies } = gameStateRef.current;
+        if (player.ultCooldown > 0 || player.mana < 50) return;
+        player.mana -= 50;
+        player.ultCooldown = 600;
+        sound.playExplosion();
+        gameStateRef.current.screenShake = 15;
 
-const NAV_ITEMS = [
-  { id: 'map', label: 'Cavern Map', icon: 'map', desc: 'Diorama of the depths' },
-  { id: 'synthesis', label: 'Echo Synthesis', icon: 'diamond', desc: 'Craft relics from echoes' },
-  { id: 'chronicle', label: 'Chronicle', icon: 'auto_stories', desc: 'Lore & decrypted secrets' },
-  { id: 'inventory', label: 'Inventory', icon: 'inventory_2', desc: 'Gathered materials' },
-];
+        enemies.forEach((enemy) => {
+          const dist = Math.hypot(enemy.x - player.x, enemy.y - player.y);
+          if (dist < 350) {
+            const dmg = hero.attackPower * 3;
+            enemy.hp -= dmg;
+            enemy.isHit = true; enemy.hitTimer = 20;
+            addFloatingText(enemy.x, enemy.y - 15, `${dmg} ULT!`, '#a371f7');
+            addParticles(enemy.x, enemy.y, 15, '#a371f7');
+          }
+        });
+        addFloatingText(player.x, player.y - 30, hero.ultimateName + '!', '#a371f7');
+      };
 
-// ============================================================
-// Header
-// ============================================================
+      // Game Main Engine Loop
+      useEffect(() => {
+        let animId;
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
 
-function Header({ currentView, onViewChange, luminescence, resonance, onOpenProfile }) {
-  return (
-    <header className="fixed top-0 inset-x-0 h-20 z-30 border-b border-zinc-800/80 bg-[#09090b]/85 backdrop-blur-md">
-      <div className="h-full max-w-[1600px] mx-auto px-4 sm:px-6 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl chiseled-slab flex items-center justify-center crystal-glow-cyan">
-            <Icon name="diamond" className="text-emerald-400 text-[22px]" />
-          </div>
-          <div className="leading-tight">
-            <div className="font-display text-lg sm:text-xl tracking-tight">Deep Relic</div>
-            <div className="hidden sm:block font-mono text-[11px] text-zinc-500 tracking-wider">SUBTERRANEAN CAVERNS</div>
-          </div>
-        </div>
+        const platforms = [
+          { x: 0, y: 400, width: 2400, height: 100, color: '#21262d' },
+          { x: 300, y: 280, width: 180, height: 20, color: '#30363d' },
+          { x: 600, y: 220, width: 220, height: 20, color: '#30363d' },
+          { x: 950, y: 290, width: 160, height: 20, color: '#30363d' },
+          { x: 1250, y: 210, width: 240, height: 20, color: '#30363d' },
+          { x: 1600, y: 270, width: 200, height: 20, color: '#30363d' }
+        ];
 
-        <nav className="hidden md:flex items-center gap-1 bento-card px-1.5 py-1.5 rounded-2xl">
-          {NAV_ITEMS.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => onViewChange(item.id)}
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
-                currentView === item.id ? 'bg-emerald-500/15 text-emerald-400' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/60'
-              }`}
-            >
-              <Icon name={item.icon} className="text-[18px]" />
-              {item.label}
-            </button>
-          ))}
-        </nav>
+        const loop = () => {
+          if (!isPaused && !isDead && !stageCleared && !showIntro) {
+            const { player, enemies, projectiles, particles, floatingTexts, crystals } = gameStateRef.current;
 
-        <div className="flex items-center gap-4">
-          <div className="hidden sm:flex items-center gap-4 font-mono text-xs text-zinc-400">
-            <div className="flex items-center gap-1.5">
-              <Icon name="bolt" className="text-amber-400 text-[16px]" />
-              {luminescence}%
-            </div>
-            <div className="flex items-center gap-1.5">
-              <Icon name="graphic_eq" className="text-emerald-400 text-[16px]" />
-              {resonance}%
-            </div>
-          </div>
-          <button
-            onClick={onOpenProfile}
-            className="w-10 h-10 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center hover:border-emerald-500/60 transition-colors"
-            aria-label="Open delver profile"
-          >
-            <Icon name="person" className="text-zinc-300 text-[20px]" />
-          </button>
-        </div>
-      </div>
-    </header>
-  );
-}
+            // Player Movement
+            const left = keysRef.current['a'] || keysRef.current['arrowleft'] || mobileInputRef.current.left;
+            const right = keysRef.current['d'] || keysRef.current['arrowright'] || mobileInputRef.current.right;
+            const jump = keysRef.current['w'] || keysRef.current[' '] || keysRef.current['arrowup'] || mobileInputRef.current.jump;
 
-// ============================================================
-// SidebarNav (desktop)
-// ============================================================
+            if (keysRef.current['j'] || keysRef.current['z']) triggerAttack();
+            if (keysRef.current['k'] || keysRef.current['x']) triggerSkill();
+            if (keysRef.current['l'] || keysRef.current['c']) triggerUltimate();
 
-function SidebarNav({ currentView, onViewChange, activeDepth, resonance, onOpenQuests }) {
-  return (
-    <aside className="hidden md:flex flex-col fixed top-20 bottom-0 left-0 w-64 border-r border-zinc-800/80 px-5 py-6 justify-between">
-      <div className="space-y-1.5">
-        {NAV_ITEMS.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => onViewChange(item.id)}
-            className={`w-full flex items-start gap-3 px-3.5 py-3 rounded-2xl text-left transition-colors ${
-              currentView === item.id ? 'bento-card border-emerald-500/40 text-emerald-400' : 'text-zinc-400 hover:bg-zinc-900/70'
-            }`}
-          >
-            <Icon name={item.icon} className="text-[20px] mt-0.5" />
-            <span>
-              <span className="block text-sm font-medium">{item.label}</span>
-              <span className="block text-[11px] text-zinc-500">{item.desc}</span>
-            </span>
-          </button>
-        ))}
-      </div>
+            if (!player.isDashing) {
+              if (left) { player.vx = -hero.speed; player.facing = 'left'; }
+              else if (right) { player.vx = hero.speed; player.facing = 'right'; }
+              else player.vx *= 0.7;
+            } else {
+              player.dashTimer--;
+              if (player.dashTimer <= 0) player.isDashing = false;
+            }
 
-      <div className="space-y-4">
-        <div className="chiseled-slab p-4">
-          <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase mb-1">Currently at</div>
-          <div className="font-display text-sm text-zinc-200">{activeDepth}</div>
-        </div>
-        <div>
-          <div className="flex justify-between font-mono text-[11px] text-zinc-500 mb-1.5">
-            <span>RESONANCE</span>
-            <span>{resonance}%</span>
-          </div>
-          <div className="resonance-crack">
-            <div className="resonance-fill" style={{ width: `${resonance}%` }} />
-          </div>
-        </div>
-        <button
-          onClick={onOpenQuests}
-          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-zinc-700 text-sm text-zinc-300 hover:border-emerald-500/50 hover:text-emerald-400 transition-colors"
-        >
-          <Icon name="list_alt" className="text-[18px]" />
-          Open Quests
-        </button>
-      </div>
-    </aside>
-  );
-}
+            if (jump && player.isGrounded) {
+              player.vy = -13; player.isGrounded = false; sound.playJump();
+            }
 
-// ============================================================
-// CavernMap
-// ============================================================
+            player.vy += 0.65; // gravity
+            player.x += player.vx;
+            player.y += player.vy;
 
-function CavernMap({ nodes, profile, inventory, onNavigateToView, onOpenProfile }) {
-  const [selected, setSelected] = useState(nodes.find((n) => n.isCurrent) || nodes[0]);
+            // Platform Collisions
+            player.isGrounded = false;
+            platforms.forEach((p) => {
+              if (player.x + player.width > p.x && player.x < p.x + p.width &&
+                  player.y + player.height >= p.y && player.y + player.height <= p.y + p.height + player.vy + 2 && player.vy >= 0) {
+                player.y = p.y - player.height;
+                player.vy = 0; player.isGrounded = true;
+              }
+            });
 
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-2xl sm:text-3xl text-zinc-100">Diorama Cavern Map</h1>
-        <p className="text-zinc-500 text-sm mt-1">Currently resonating from <span className="text-emerald-400">{profile.activeDepth}</span></p>
-      </div>
+            // Camera follow
+            gameStateRef.current.cameraX = Math.max(0, Math.min(player.x - 400, gameStateRef.current.worldWidth - 900));
 
-      <div className="grid grid-cols-3 gap-3 sm:gap-4">
-        <button onClick={onOpenProfile} className="bento-card p-4 text-left hover:border-amber-500/40">
-          <div className="flex items-center gap-2 text-amber-400 mb-1"><Icon name="bolt" className="text-[18px]" /><span className="font-mono text-[10px] tracking-widest uppercase text-zinc-500">Luminescence</span></div>
-          <div className="font-display text-xl text-zinc-100">{profile.luminescence}%</div>
-        </button>
-        <button onClick={onOpenProfile} className="bento-card p-4 text-left hover:border-emerald-500/40">
-          <div className="flex items-center gap-2 text-emerald-400 mb-1"><Icon name="graphic_eq" className="text-[18px]" /><span className="font-mono text-[10px] tracking-widest uppercase text-zinc-500">Resonance</span></div>
-          <div className="font-display text-xl text-zinc-100">{profile.resonance}%</div>
-        </button>
-        <button onClick={() => onNavigateToView('inventory')} className="bento-card p-4 text-left hover:border-sky-500/40">
-          <div className="flex items-center gap-2 text-sky-400 mb-1"><Icon name="inventory_2" className="text-[18px]" /><span className="font-mono text-[10px] tracking-widest uppercase text-zinc-500">Capacity</span></div>
-          <div className="font-display text-xl text-zinc-100">{profile.inventoryCapacity}%</div>
-        </button>
-      </div>
+            // Mana passive regen
+            player.mana = Math.min(player.manaMax, player.mana + 0.1);
+            if (player.attackTimer > 0) player.attackTimer--;
+            if (player.skillCooldown > 0) player.skillCooldown--;
+            if (player.ultCooldown > 0) player.ultCooldown--;
 
-      <div className="bento-card cavern-grid p-4 sm:p-8 relative h-[420px] sm:h-[520px] overflow-hidden">
-        <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
-          {nodes.slice(1).map((node, idx) => {
-            const prev = nodes[idx];
-            return (
-              <line
-                key={node.id}
-                x1={`${prev.xPercent}%`} y1={`${prev.yPercent}%`}
-                x2={`${node.xPercent}%`} y2={`${node.yPercent}%`}
-                stroke="rgba(63,63,70,0.7)" strokeWidth="2" strokeDasharray="6 6"
-              />
-            );
-          })}
-        </svg>
+            // Update Enemies
+            enemies.forEach((enemy) => {
+              if (enemy.hp <= 0) return;
+              if (enemy.hitTimer > 0) enemy.hitTimer--;
 
-        {nodes.map((node) => {
-          const color = THREAT_COLORS[node.threat] || THREAT_COLORS.LOW;
-          const isSelected = selected?.id === node.id;
-          return (
-            <button
-              key={node.id}
-              onClick={() => setSelected(node)}
-              style={{ left: `${node.xPercent}%`, top: `${node.yPercent}%` }}
-              className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1.5 group"
-            >
-              <div
-                className={`w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center border-2 transition-transform group-hover:scale-110 ${node.isCurrent ? 'active-echo' : ''} ${isSelected ? 'scale-110' : ''}`}
-                style={{
-                  borderColor: node.isLocked ? '#3f3f46' : color,
-                  backgroundColor: node.isLocked ? 'rgba(24,24,27,0.9)' : `${color}22`,
-                }}
-              >
-                <Icon name={node.isLocked ? 'lock' : node.icon} className="text-[18px]" style={{ color: node.isLocked ? '#71717a' : color }} />
-              </div>
-              <span className={`font-mono text-[10px] px-1.5 py-0.5 rounded ${node.isLocked ? 'text-zinc-600' : 'text-zinc-300'} bg-[#09090b]/80 whitespace-nowrap`}>
-                Lv.{node.levelNum}
-              </span>
-            </button>
-          );
-        })}
-      </div>
+              // Patrol/chase
+              const distToPlayer = Math.abs(player.x - enemy.x);
+              if (distToPlayer < 400) {
+                enemy.facing = player.x > enemy.x ? 'right' : 'left';
+                enemy.vx = enemy.facing === 'right' ? enemy.speed : -enemy.speed;
+              } else {
+                enemy.vx = 0;
+              }
 
-      {selected && (
-        <div className="bento-card p-5 sm:p-6">
-          <div className="flex flex-wrap items-center gap-3 mb-3">
-            <h3 className="font-display text-xl text-zinc-100">{selected.name}</h3>
-            <ThreatTag threat={selected.threat} />
-            <span className="font-mono text-xs text-zinc-500">Level {selected.levelNum}</span>
-            {selected.isLocked && <span className="font-mono text-[10px] text-zinc-500 uppercase tracking-widest">Locked</span>}
-          </div>
-          <p className="text-zinc-400 text-sm leading-relaxed mb-4">{selected.description}</p>
-          {selected.relicsFound.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {selected.relicsFound.map((r) => (
-                <span key={r} className="moss-tag">{r}</span>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
+              enemy.x += enemy.vx;
 
-// ============================================================
-// EchoSynthesis
-// ============================================================
+              // Enemy attacks player
+              if (Math.abs(player.x - enemy.x) < 40 && Math.abs(player.y - enemy.y) < 50) {
+                if (enemy.attackCooldown <= 0) {
+                  player.hp -= 12;
+                  enemy.attackCooldown = 60;
+                  addFloatingText(player.x, player.y - 10, '-12', '#f85149');
+                  gameStateRef.current.screenShake = 8;
+                  sound.playHit();
+                  if (player.hp <= 0) { setIsDead(true); onGameOver(); }
+                }
+              }
+              if (enemy.attackCooldown > 0) enemy.attackCooldown--;
+            });
 
-function EchoSynthesis({ inventory, history, onAddHistory }) {
-  const [selectedIds, setSelectedIds] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(null);
+            // Check Stage Clear
+            const aliveEnemies = enemies.filter(e => e.hp > 0);
+            if (aliveEnemies.length === 0 && !stageCleared) {
+              setStageCleared(true);
+              onStageComplete(collectedCrystals + 100, 250);
+            }
+          }
 
-  const toggleItem = (id) => {
-    setSelectedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : prev.length < 4 ? [...prev, id] : prev));
-  };
+          // RENDER
+          const camX = gameStateRef.current.cameraX;
+          const shake = gameStateRef.current.screenShake;
+          ctx.save();
+          if (shake > 0) {
+            ctx.translate((Math.random() - 0.5) * shake, (Math.random() - 0.5) * shake);
+            gameStateRef.current.screenShake *= 0.85;
+          }
 
-  const selectedItems = inventory.filter((i) => selectedIds.includes(i.id));
+          // Clear
+          ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, 900, 450);
 
-  const handleSynthesize = () => {
-    if (selectedItems.length < 2 || loading) return;
-    setLoading(true);
-    setResult(null);
-    setTimeout(() => {
-      const relic = mockSynthesize(selectedItems);
-      const withMeta = { ...relic, id: `h${Date.now()}`, createdTime: 'Just now' };
-      setResult(withMeta);
-      onAddHistory(withMeta);
-      setSelectedIds([]);
-      setLoading(false);
-    }, 1100);
-  };
+          // Draw Platforms
+          platforms.forEach((p) => {
+            ctx.fillStyle = p.color;
+            ctx.fillRect(p.x - camX, p.y, p.width, p.height);
+            ctx.strokeStyle = '#30363d'; ctx.strokeRect(p.x - camX, p.y, p.width, p.height);
+          });
 
-  const tierColor = result?.tier === 'Tier 3' ? '#c084fc' : result?.tier === 'Tier 2' ? '#38bdf8' : '#34d399';
+          // Draw Player
+          const p = gameStateRef.current.player;
+          ctx.fillStyle = hero.color;
+          ctx.fillRect(p.x - camX, p.y, p.width, p.height);
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(p.facing === 'right' ? p.x - camX + 26 : p.x - camX + 6, p.y + 10, 8, 8); // eyes
 
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-2xl sm:text-3xl text-zinc-100">Echo Synthesis Workshop</h1>
-        <p className="text-zinc-500 text-sm mt-1">Combine 2–4 gathered materials and let the Resonance Oracle bind them.</p>
-      </div>
+          if (p.isAttacking) {
+            ctx.fillStyle = '#3fb950';
+            const slashX = p.facing === 'right' ? p.x - camX + p.width : p.x - camX - 50;
+            ctx.fillRect(slashX, p.y, 50, p.height);
+          }
 
-      <div className="grid md:grid-cols-5 gap-6">
-        <div className="md:col-span-2 bento-card p-4 space-y-2 max-h-[480px] overflow-y-auto">
-          <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase px-1 pb-1">Your materials</div>
-          {inventory.map((item) => {
-            const isSelected = selectedIds.includes(item.id);
-            return (
-              <button
-                key={item.id}
-                onClick={() => toggleItem(item.id)}
-                className={`w-full flex items-center gap-3 p-2.5 rounded-xl border transition-colors text-left ${
-                  isSelected ? 'border-emerald-500/60 bg-emerald-500/10' : 'border-zinc-800 hover:border-zinc-700'
-                }`}
-              >
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${item.color}22` }}>
-                  <Icon name={item.icon} className="text-[18px]" style={{ color: item.color }} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm text-zinc-200 truncate">{item.name}</div>
-                  <div className="font-mono text-[10px]" style={{ color: RARITY_COLORS[item.rarity] }}>{item.rarity}</div>
-                </div>
-                <span className="font-mono text-xs text-zinc-500">×{item.quantity}</span>
-              </button>
-            );
-          })}
-        </div>
+          // Draw Enemies
+          gameStateRef.current.enemies.forEach((enemy) => {
+            if (enemy.hp <= 0) return;
+            ctx.fillStyle = enemy.isHit ? '#ffffff' : enemy.color;
+            ctx.fillRect(enemy.x - camX, enemy.y, enemy.width, enemy.height);
 
-        <div className="md:col-span-3 chiseled-slab p-6 flex flex-col items-center justify-center text-center min-h-[300px]">
-          {!result && !loading && (
-            <>
-              <Icon name="diamond" className="text-emerald-400 text-[42px] mb-3 crystal-glow-cyan" />
-              <p className="text-zinc-400 text-sm mb-5 max-w-xs">
-                {selectedItems.length === 0
-                  ? 'Select 2–4 materials from your inventory to begin.'
-                  : `${selectedItems.length} material${selectedItems.length > 1 ? 's' : ''} selected: ${selectedItems.map((i) => i.name).join(', ')}`}
-              </p>
-              <button
-                onClick={handleSynthesize}
-                disabled={selectedItems.length < 2}
-                className="px-6 py-3 rounded-xl bg-emerald-500/15 border border-emerald-500/50 text-emerald-400 font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-emerald-500/25 transition-colors"
-              >
-                Synthesize Echoes
-              </button>
-            </>
-          )}
-          {loading && (
-            <>
-              <div className="w-10 h-10 rounded-full border-2 border-emerald-500/30 border-t-emerald-400 animate-spin mb-4" />
-              <p className="font-mono text-xs text-zinc-500 tracking-wide">The Resonance Oracle is aligning your echoes…</p>
-            </>
-          )}
-          {result && !loading && (
-            <div className="w-full text-left">
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-mono text-[10px] tracking-widest uppercase px-2 py-0.5 rounded-full border" style={{ color: tierColor, borderColor: `${tierColor}55`, backgroundColor: `${tierColor}1a` }}>
-                  {result.tier}
-                </span>
-                <span className="font-display text-2xl" style={{ color: tierColor }}>{result.resonanceScore}</span>
-              </div>
-              <h3 className="font-display text-xl text-zinc-100 mb-2">{result.relicName}</h3>
-              <p className="text-zinc-400 text-sm leading-relaxed mb-3">{result.description}</p>
-              <div className="flex flex-wrap gap-2 mb-3">
-                {result.perks.map((p) => <span key={p} className="moss-tag">{p}</span>)}
-              </div>
-              <p className="text-zinc-500 text-xs italic mb-5">{result.loreFlavor}</p>
-              <button onClick={() => setResult(null)} className="text-sm text-emerald-400 hover:underline">Synthesize another</button>
-            </div>
-          )}
-        </div>
-      </div>
+            // Enemy HP Bar
+            ctx.fillStyle = '#21262d'; ctx.fillRect(enemy.x - camX, enemy.y - 10, enemy.width, 5);
+            ctx.fillStyle = '#3fb950'; ctx.fillRect(enemy.x - camX, enemy.y - 10, (enemy.hp / enemy.hpMax) * enemy.width, 5);
+          });
 
-      <div>
-        <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase mb-3">Synthesis chronicle</div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {history.map((relic) => (
-            <div key={relic.id} className="bento-card p-4">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="font-mono text-[10px] text-zinc-500 uppercase">{relic.tier}</span>
-                <span className="font-mono text-xs text-emerald-400">{relic.resonanceScore}</span>
-              </div>
-              <div className="font-display text-sm text-zinc-200 mb-1">{relic.relicName}</div>
-              <div className="text-zinc-500 text-xs">{relic.createdTime}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
+          // Draw Particles
+          gameStateRef.current.particles.forEach((pt) => {
+            pt.x += pt.vx; pt.y += pt.vy; pt.life++;
+            ctx.fillStyle = pt.color;
+            ctx.fillRect(pt.x - camX, pt.y, pt.size, pt.size);
+          });
 
-// ============================================================
-// Chronicle
-// ============================================================
+          // Draw Floating Text
+          gameStateRef.current.floatingTexts.forEach((ft, idx) => {
+            ft.y -= 0.8; ft.life--;
+            ctx.font = 'bold 12px monospace'; ctx.fillStyle = ft.color;
+            ctx.fillText(ft.text, ft.x - camX, ft.y);
+          });
+          gameStateRef.current.floatingTexts = gameStateRef.current.floatingTexts.filter(t => t.life > 0);
 
-const CHRONICLE_CATEGORIES = ['All', 'Creatures', 'Anomalies', 'Runes', 'History'];
+          ctx.restore();
+          animId = requestAnimationFrame(loop);
+        };
 
-function Chronicle({ entries }) {
-  const [filter, setFilter] = useState('All');
-  const [decrypted, setDecrypted] = useState({});
-  const [loadingId, setLoadingId] = useState(null);
+        animId = requestAnimationFrame(loop);
+        return () => cancelAnimationFrame(animId);
+      }, [isPaused, isDead, stageCleared, hero, showIntro]);
 
-  const visible = filter === 'All' ? entries : entries.filter((e) => e.category === filter);
+      const p = gameStateRef.current.player;
 
-  const handleDecrypt = (entry) => {
-    setLoadingId(entry.id);
-    setTimeout(() => {
-      setDecrypted((prev) => ({ ...prev, [entry.id]: mockDecrypt(entry) }));
-      setLoadingId(null);
-    }, 900);
-  };
-
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-2xl sm:text-3xl text-zinc-100">Chronicle of Shadows</h1>
-        <p className="text-zinc-500 text-sm mt-1">Lore, creatures, and anomalies logged from the deep.</p>
-      </div>
-
-      <div className="flex flex-wrap gap-2">
-        {CHRONICLE_CATEGORIES.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setFilter(cat)}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wide border transition-colors ${
-              filter === cat ? 'border-emerald-500/60 bg-emerald-500/10 text-emerald-400' : 'border-zinc-800 text-zinc-500 hover:text-zinc-300'
-            }`}
-          >
-            {cat.toUpperCase()}
-          </button>
-        ))}
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-4">
-        {visible.map((entry) => (
-          <div key={entry.id} className="bento-card p-5">
-            <div className="flex items-start justify-between gap-3 mb-2">
+      return (
+        <div className="relative w-full max-w-5xl mx-auto rounded-xl overflow-hidden bento-card border border-[#30363d] shadow-2xl bg-[#161b22] font-mono">
+          {/* Top HUD */}
+          <div className="absolute top-0 inset-x-0 p-3 bg-gradient-to-b from-[#0d1117]/90 to-transparent z-20 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <img src={hero.avatarUrl} alt={hero.name} className="w-10 h-10 rounded-lg border border-[#3fb950] object-cover" />
               <div>
-                <h3 className="font-display text-lg text-zinc-100">{entry.title}</h3>
-                <p className="text-zinc-500 text-xs mt-0.5">{entry.subtitle}</p>
-              </div>
-              {entry.threatTag && (
-                <span
-                  className="font-mono text-[10px] tracking-widest uppercase px-2 py-0.5 rounded-full border shrink-0"
-                  style={{ color: entry.threatColor, borderColor: `${entry.threatColor}55`, backgroundColor: `${entry.threatColor}1a` }}
-                >
-                  {entry.threatTag}
-                </span>
-              )}
-            </div>
-            <p className="text-zinc-400 text-sm leading-relaxed mb-3">{entry.description}</p>
-            <div className="mb-3">
-              <div className="flex justify-between font-mono text-[10px] text-zinc-500 mb-1">
-                <span>RESONANCE LEVEL</span><span>{entry.resonanceLevel}%</span>
-              </div>
-              <div className="resonance-crack">
-                <div className="resonance-fill" style={{ width: `${entry.resonanceLevel}%` }} />
+                <div className="text-xs font-bold text-[#f0f6fc]">{hero.name} <span className="text-[#3fb950]">({hero.title})</span></div>
+                <div className="w-32 h-2 bg-[#0d1117] rounded border border-[#30363d] overflow-hidden mt-1">
+                  <div className="h-full bg-[#3fb950]" style={{ width: `${(p.hp / p.hpMax) * 100}%` }} />
+                </div>
               </div>
             </div>
 
-            {decrypted[entry.id] ? (
-              <div className="rope-line pt-3 mt-3">
-                {decrypted[entry.id].split('\n\n').map((p, i) => (
-                  <p key={i} className="text-zinc-300 text-sm leading-relaxed mb-2 last:mb-0">{p}</p>
-                ))}
-              </div>
-            ) : (
-              <button
-                onClick={() => handleDecrypt(entry)}
-                disabled={loadingId === entry.id}
-                className="flex items-center gap-2 text-xs font-mono tracking-wide text-emerald-400 hover:text-emerald-300 disabled:opacity-50 transition-colors"
-              >
-                <Icon name={loadingId === entry.id ? 'progress_activity' : 'key'} className={`text-[16px] ${loadingId === entry.id ? 'animate-spin' : ''}`} />
-                {loadingId === entry.id ? 'Decrypting…' : 'Decrypt secret'}
+            <div className="flex flex-col items-center">
+              <div className="text-[10px] text-[#8b949e]">SEVİYE {stage.levelNum}</div>
+              <div className="text-xs font-bold text-white">{stage.name}</div>
+            </div>
+
+            <div className="flex items-center gap-4 text-xs">
+              <div>💎 {collectedCrystals}</div>
+              <button onClick={() => setIsPaused(!isPaused)} className="px-2.5 py-1 bg-[#21262d] border border-[#30363d] rounded text-[#f0f6fc]">
+                {isPaused ? '▶ OYNAT' : '⏸ DURAKLAT'}
               </button>
-            )}
+            </div>
           </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
-// ============================================================
-// InventoryView
-// ============================================================
+          {showIntro && (
+            <div
+              onClick={() => setShowIntro(false)}
+              className="absolute inset-0 bg-[#0d1117]/95 backdrop-blur flex flex-col items-center justify-center p-6 text-center z-40 cursor-pointer"
+            >
+              <div className="text-[10px] tracking-[0.3em] text-[#8b949e] mb-2">SEVİYE {stage.levelNum}</div>
+              <div className="text-2xl font-bold text-[#3fb950] mb-3">{stage.name}</div>
+              <div className="text-xs text-[#8b949e] mb-1">{stage.threat} TEHDİT SEVİYESİ</div>
+              {stage.bossName && (
+                <div className="text-xs text-[#f85149] font-bold mt-2">⚠ BOSS: {stage.bossName}</div>
+              )}
+              <div className="text-[10px] text-[#8b949e] mt-6 animate-pulse">devam etmek için tıkla</div>
+            </div>
+          )}
 
-function InventoryView({ inventory, capacity, onNavigateToView }) {
-  const categories = [...new Set(inventory.map((i) => i.category))];
+          <canvas ref={canvasRef} width={900} height={450} className="w-full h-auto bg-[#0d1117] block cursor-crosshair" />
 
-  return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="font-display text-2xl sm:text-3xl text-zinc-100">Inventory</h1>
-          <p className="text-zinc-500 text-sm mt-1">Materials gathered across every descent.</p>
-        </div>
-        <button onClick={() => onNavigateToView('synthesis')} className="flex items-center gap-2 px-4 py-2 rounded-xl border border-emerald-500/50 text-emerald-400 text-sm hover:bg-emerald-500/10 transition-colors">
-          <Icon name="diamond" className="text-[18px]" /> Go synthesize
-        </button>
-      </div>
-
-      <div className="bento-card p-4">
-        <div className="flex justify-between font-mono text-[11px] text-zinc-500 mb-1.5">
-          <span>PACK CAPACITY</span><span>{capacity}%</span>
-        </div>
-        <div className="resonance-crack">
-          <div className="resonance-fill" style={{ width: `${capacity}%` }} />
-        </div>
-      </div>
-
-      {categories.map((cat) => (
-        <div key={cat}>
-          <div className="flex items-center gap-2 mb-3">
-            <Icon name={CATEGORY_ICONS[cat] || 'category'} className="text-zinc-400 text-[18px]" />
-            <span className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase">{cat}</span>
+          {/* Controls */}
+          <div className="p-3 bg-[#161b22] border-t border-[#30363d] flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5">
+              <button onMouseDown={() => mobileInputRef.current.left = true} onMouseUp={() => mobileInputRef.current.left = false} className="w-9 h-9 rounded bg-[#21262d] border border-[#30363d] text-white font-bold">◄</button>
+              <button onMouseDown={() => mobileInputRef.current.jump = true} onMouseUp={() => mobileInputRef.current.jump = false} className="w-9 h-9 rounded bg-[#21262d] border border-[#30363d] text-white font-bold">▲</button>
+              <button onMouseDown={() => mobileInputRef.current.right = true} onMouseUp={() => mobileInputRef.current.right = false} className="w-9 h-9 rounded bg-[#21262d] border border-[#30363d] text-white font-bold">►</button>
+            </div>
+            <div className="flex items-center gap-2">
+              <button onClick={triggerAttack} className="px-3 py-1.5 rounded bg-[#238636] border border-[#3fb950] text-white text-xs font-bold">⚔️ SALDIRI [J]</button>
+              <button onClick={triggerSkill} className="px-3 py-1.5 rounded bg-[#38bdf8]/20 border border-[#38bdf8] text-[#38bdf8] text-xs font-bold">✨ SKILL [K]</button>
+              <button onClick={triggerUltimate} className="px-3 py-1.5 rounded bg-[#a371f7]/20 border border-[#a371f7] text-[#a371f7] text-xs font-bold">💥 ULT [L]</button>
+            </div>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {inventory.filter((i) => i.category === cat).map((item) => (
-              <div key={item.id} className="bento-card p-4 flex items-start gap-3">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${item.color}22` }}>
-                  <Icon name={item.icon} className="text-[20px]" style={{ color: item.color }} />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-sm text-zinc-200 truncate">{item.name}</span>
-                    <span className="font-mono text-xs text-zinc-500 shrink-0">×{item.quantity}</span>
-                  </div>
-                  <div className="font-mono text-[10px] mb-1" style={{ color: RARITY_COLORS[item.rarity] }}>{item.rarity}</div>
-                  <p className="text-zinc-500 text-xs leading-snug">{item.description}</p>
-                </div>
+
+          {stageCleared && (
+            <div className="absolute inset-0 bg-[#0d1117]/90 backdrop-blur flex flex-col items-center justify-center p-6 text-center z-30 gap-3">
+              <div className="text-xl text-[#3fb950] font-bold mb-1">SEVİYE TEMİZLENDİ!</div>
+              <div className="text-xs text-[#8b949e] mb-2">+{collectedCrystals + 100} 💎 kazandın</div>
+              <div className="flex items-center gap-3">
+                <button onClick={initStage} className="px-5 py-2 bg-[#21262d] border border-[#30363d] text-white font-bold text-xs rounded">↻ YENİDEN OYNA</button>
+                {hasNextStage ? (
+                  <button onClick={onNextStage} className="px-5 py-2 bg-[#238636] text-white font-bold text-xs rounded">SONRAKİ SEVİYE ►</button>
+                ) : (
+                  <button onClick={onBackToMap} className="px-5 py-2 bg-[#238636] text-white font-bold text-xs rounded">🗺 HARİTAYA DÖN</button>
+                )}
               </div>
-            ))}
-          </div>
+            </div>
+          )}
+
+          {isDead && (
+            <div className="absolute inset-0 bg-[#0d1117]/95 backdrop-blur flex flex-col items-center justify-center p-6 text-center z-30 gap-3">
+              <div className="text-xl text-[#f85149] font-bold mb-1">MAĞARA YUTTU!</div>
+              <div className="flex items-center gap-3">
+                <button onClick={initStage} className="px-5 py-2 bg-[#da3633] text-white font-bold text-xs rounded">TEKRAR DENE</button>
+                <button onClick={onBackToMap} className="px-5 py-2 bg-[#21262d] border border-[#30363d] text-white font-bold text-xs rounded">🗺 HARİTAYA DÖN</button>
+              </div>
+            </div>
+          )}
         </div>
-      ))}
-    </div>
-  );
-}
+      );
+    }
 
-// ============================================================
-// DelverModal (profile, quests, Thistle oracle chat)
-// ============================================================
+    // --- Main App Component ---
+    function App() {
+      const [currentView, setCurrentView] = useState('map');
+      const [selectedHero, setSelectedHero] = useState(HEROES[0]);
+      const [crystals, setCrystals] = useState(240);
+      const [currentStageIndex, setCurrentStageIndex] = useState(0);
+      // How many levels are unlocked, starting with just the first one.
+      const [unlockedCount, setUnlockedCount] = useState(1);
 
-function DelverModal({ isOpen, onClose, profile, quests, onClaimQuest }) {
-  const [messages, setMessages] = useState([
-    { from: 'thistle', text: 'Well met, delver. Ask me about the deep, and I\'ll answer as best the old stone allows.' },
-  ]);
-  const [input, setInput] = useState('');
-  const [chatLoading, setChatLoading] = useState(false);
-  const scrollRef = useRef(null);
+      const startStage = (idx) => {
+        setCurrentStageIndex(idx);
+        setCurrentView('game');
+      };
 
-  useEffect(() => {
-    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-  }, [messages]);
+      const handleStageComplete = (crystalReward) => {
+        setCrystals(prev => prev + crystalReward);
+        setUnlockedCount(prev => Math.max(prev, currentStageIndex + 2));
+      };
 
-  if (!isOpen) return null;
+      const goToNextStage = () => {
+        const nextIdx = currentStageIndex + 1;
+        if (nextIdx < CAVERN_LEVELS.length) {
+          setCurrentStageIndex(nextIdx);
+        } else {
+          setCurrentView('map');
+        }
+      };
 
-  const handleSend = () => {
-    const text = input.trim();
-    if (!text || chatLoading) return;
-    setMessages((prev) => [...prev, { from: 'user', text }]);
-    setInput('');
-    setChatLoading(true);
-    setTimeout(() => {
-      setMessages((prev) => [...prev, { from: 'thistle', text: mockChatReply(text) }]);
-      setChatLoading(false);
-    }, 800);
-  };
+      const hasNextStage = currentStageIndex < CAVERN_LEVELS.length - 1;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative chiseled-slab w-full max-w-2xl max-h-[85vh] overflow-y-auto p-6 sm:p-8">
-        <button onClick={onClose} className="absolute top-5 right-5 text-zinc-500 hover:text-zinc-200">
-          <Icon name="close" className="text-[22px]" />
-        </button>
+      return (
+        <div className="min-h-screen bg-[#0d1117] text-[#c9d1d9] font-mono flex flex-col">
+          {/* Header */}
+          <header className="h-16 border-b border-[#30363d] bg-[#161b22] px-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-[#238636] flex items-center justify-center font-bold text-white text-lg">O</div>
+              <div>
+                <div className="text-sm font-bold text-white">ODESSIA / ACTION ENGINE</div>
+                <div className="text-[10px] text-[#8b949e]">Single HTML Standalone Engine</div>
+              </div>
+            </div>
 
-        <div className="flex items-center gap-4 mb-6">
-          <div className="w-16 h-16 rounded-full bg-zinc-800 border-2 border-emerald-500/50 flex items-center justify-center crystal-glow-cyan">
-            <Icon name="person" className="text-[30px] text-zinc-300" />
-          </div>
-          <div>
-            <div className="font-display text-xl text-zinc-100">{profile.name}</div>
-            <div className="text-zinc-500 text-sm">{profile.title}</div>
-            <div className="font-mono text-[10px] text-emerald-400 tracking-widest mt-0.5">LEVEL {profile.level}</div>
-          </div>
-        </div>
+            <div className="flex items-center gap-3 text-xs">
+              <div className="text-[#3fb950] font-bold">💎 {crystals} CR</div>
+              <button 
+                onClick={() => setCurrentView('game')}
+                className={`px-3 py-1 rounded ${currentView === 'game' ? 'bg-[#238636] text-white font-bold' : 'bg-[#21262d] text-[#8b949e]'}`}
+              >
+                Savaş Sahnesi
+              </button>
+              <button 
+                onClick={() => setCurrentView('map')}
+                className={`px-3 py-1 rounded ${currentView === 'map' ? 'bg-[#238636] text-white font-bold' : 'bg-[#21262d] text-[#8b949e]'}`}
+              >
+                Harita
+              </button>
+            </div>
+          </header>
 
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <div>
-            <div className="flex justify-between font-mono text-[10px] text-zinc-500 mb-1.5"><span>LUMINESCENCE</span><span>{profile.luminescence}%</span></div>
-            <div className="resonance-crack"><div className="resonance-fill" style={{ width: `${profile.luminescence}%`, background: '#f59e0b', boxShadow: '0 0 12px rgba(245,158,11,0.8)' }} /></div>
-          </div>
-          <div>
-            <div className="flex justify-between font-mono text-[10px] text-zinc-500 mb-1.5"><span>RESONANCE</span><span>{profile.resonance}%</span></div>
-            <div className="resonance-crack"><div className="resonance-fill" style={{ width: `${profile.resonance}%` }} /></div>
-          </div>
-        </div>
-
-        <div className="mb-6">
-          <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase mb-3">Quests</div>
-          <div className="space-y-2.5">
-            {quests.map((q) => (
-              <div key={q.id} className="stone-slab p-3.5">
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-sm text-zinc-200">{q.title}</span>
-                  {q.isCompleted ? (
-                    <span className="moss-tag">Completed</span>
-                  ) : (
+          {/* Main Area */}
+          <main className="p-4 max-w-5xl mx-auto w-full flex-1 space-y-4">
+            {/* Hero Selection Selector Bar */}
+            <div className="bento-card p-3 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-[#8b949e]">KAHRAMAN:</span>
+                <div className="flex gap-2">
+                  {HEROES.map((h) => (
                     <button
-                      onClick={() => onClaimQuest(q.id)}
-                      disabled={q.progress < q.maxProgress}
-                      className="font-mono text-[10px] tracking-widest uppercase text-emerald-400 disabled:text-zinc-600 disabled:cursor-not-allowed"
+                      key={h.id}
+                      onClick={() => setSelectedHero(h)}
+                      className={`px-2.5 py-1 rounded text-xs font-bold transition-all ${selectedHero.id === h.id ? 'bg-[#238636] text-white border border-[#3fb950]' : 'bg-[#21262d] text-[#8b949e] border border-[#30363d]'}`}
                     >
-                      Claim
+                      {h.name}
                     </button>
-                  )}
-                </div>
-                <p className="text-zinc-500 text-xs mb-2">{q.objective} · {q.reward}</p>
-                <div className="resonance-crack h-1">
-                  <div className="resonance-fill" style={{ width: `${Math.min(100, (q.progress / q.maxProgress) * 100)}%` }} />
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <div className="font-mono text-[10px] tracking-widest text-zinc-500 uppercase mb-3">Whisper to Thistle</div>
-          <div ref={scrollRef} className="stone-slab p-3.5 h-40 overflow-y-auto space-y-2.5 mb-3">
-            {messages.map((m, i) => (
-              <div key={i} className={`text-sm leading-relaxed ${m.from === 'user' ? 'text-zinc-300 text-right' : 'text-emerald-300/90'}`}>
-                {m.from === 'thistle' && <span className="font-mono text-[10px] text-zinc-600 block mb-0.5">THISTLE</span>}
-                {m.text}
+              <div className="text-xs text-[#8b949e]">
+                SINIF: <span className="text-[#3fb950] font-bold">{selectedHero.role}</span>
               </div>
-            ))}
-            {chatLoading && <div className="font-mono text-[10px] text-zinc-600">Thistle is listening to the stone…</div>}
-          </div>
-          <div className="flex gap-2">
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              placeholder="Ask about danger, relics, or runes…"
-              className="flex-1 bg-zinc-900 border border-zinc-700 rounded-xl px-3.5 py-2.5 text-sm text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500/60"
-            />
-            <button onClick={handleSend} className="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-500/50 flex items-center justify-center text-emerald-400 hover:bg-emerald-500/25 transition-colors shrink-0">
-              <Icon name="send" className="text-[18px]" />
-            </button>
-          </div>
+            </div>
+
+            {currentView === 'game' && (
+              <PlayableGameCanvas
+                key={CAVERN_LEVELS[currentStageIndex].id}
+                hero={selectedHero}
+                stage={CAVERN_LEVELS[currentStageIndex]}
+                onStageComplete={handleStageComplete}
+                onGameOver={() => {}}
+                onNextStage={goToNextStage}
+                hasNextStage={hasNextStage}
+                onBackToMap={() => setCurrentView('map')}
+              />
+            )}
+
+            {currentView === 'map' && (
+              <div className="bento-card p-6 space-y-4">
+                <h2 className="text-lg font-bold text-white">MAĞARA DIORAMA HARİTASI</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                  {CAVERN_LEVELS.map((lvl, idx) => {
+                    const isLocked = idx >= unlockedCount;
+                    return (
+                      <button
+                        key={lvl.id}
+                        disabled={isLocked}
+                        onClick={() => !isLocked && startStage(idx)}
+                        className={`text-left p-4 bg-[#0d1117] border rounded-lg space-y-1 transition-all ${
+                          isLocked
+                            ? 'border-[#30363d] opacity-40 cursor-not-allowed'
+                            : 'border-[#30363d] hover:border-[#3fb950] cursor-pointer'
+                        }`}
+                      >
+                        <div className="text-xs text-[#3fb950] font-bold flex items-center justify-between">
+                          <span>SEVİYE {lvl.levelNum}</span>
+                          {isLocked && <span className="text-[#8b949e]">🔒</span>}
+                        </div>
+                        <div className="text-sm font-bold text-white">{lvl.name}</div>
+                        <div className="text-[10px] text-[#8b949e]">{lvl.threat} TEHDİT SEVİYESİ</div>
+                        {!isLocked && (
+                          <div className="text-[10px] text-[#3fb950] font-bold pt-1">▶ OYNA</div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </main>
         </div>
-      </div>
-    </div>
-  );
-}
+      );
+    }
 
-// ============================================================
-// MobileBottomNav
-// ============================================================
-
-function MobileBottomNav({ currentView, onViewChange, onOpenProfile }) {
-  return (
-    <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 border-t border-zinc-800/80 bg-[#09090b]/95 backdrop-blur-md flex justify-around py-2">
-      {NAV_ITEMS.map((item) => (
-        <button
-          key={item.id}
-          onClick={() => onViewChange(item.id)}
-          className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg ${currentView === item.id ? 'text-emerald-400' : 'text-zinc-500'}`}
-        >
-          <Icon name={item.icon} className="text-[22px]" />
-          <span className="font-mono text-[9px]">{item.label.split(' ')[0]}</span>
-        </button>
-      ))}
-      <button onClick={onOpenProfile} className="flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg text-zinc-500">
-        <Icon name="person" className="text-[22px]" />
-        <span className="font-mono text-[9px]">Profile</span>
-      </button>
-    </nav>
-  );
-}
-
-// ============================================================
-// App
-// ============================================================
-
-function App() {
-  const [currentView, setCurrentView] = useState('map');
-  const [profile, setProfile] = useState(initialDelverProfile);
-  const [nodes] = useState(initialCavernNodes);
-  const [inventory] = useState(initialGatheredItems);
-  const [loreEntries] = useState(initialLoreEntries);
-  const [quests, setQuests] = useState(initialQuests);
-  const [history, setHistory] = useState(initialSynthesizedHistory);
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-
-  const handleAddHistory = (relic) => {
-    setHistory((prev) => [relic, ...prev]);
-    setProfile((prev) => ({ ...prev, resonance: Math.min(100, prev.resonance + 2) }));
-  };
-
-  const handleClaimQuest = (questId) => {
-    setQuests((prev) => prev.map((q) => (q.id === questId ? { ...q, isCompleted: true, progress: q.maxProgress } : q)));
-    setProfile((prev) => ({ ...prev, luminescence: Math.min(100, prev.luminescence + 5) }));
-  };
-
-  return (
-    <div className="min-h-screen bg-[#09090b] text-[#f4f4f5] font-body felt-texture flex flex-col">
-      <Header
-        currentView={currentView}
-        onViewChange={setCurrentView}
-        luminescence={profile.luminescence}
-        resonance={profile.resonance}
-        onOpenProfile={() => setIsProfileModalOpen(true)}
-      />
-
-      <div className="flex flex-1 pt-20 pb-24 md:pb-12">
-        <SidebarNav
-          currentView={currentView}
-          onViewChange={setCurrentView}
-          activeDepth={profile.activeDepth}
-          resonance={profile.resonance}
-          onOpenQuests={() => setIsProfileModalOpen(true)}
-        />
-
-        <main className="flex-1 px-4 sm:px-6 md:px-12 md:ml-64 py-6 max-w-6xl mx-auto w-full transition-all">
-          {currentView === 'map' && (
-            <CavernMap
-              nodes={nodes}
-              profile={profile}
-              inventory={inventory}
-              onNavigateToView={setCurrentView}
-              onOpenProfile={() => setIsProfileModalOpen(true)}
-            />
-          )}
-          {currentView === 'synthesis' && (
-            <EchoSynthesis inventory={inventory} history={history} onAddHistory={handleAddHistory} />
-          )}
-          {currentView === 'chronicle' && <Chronicle entries={loreEntries} />}
-          {currentView === 'inventory' && (
-            <InventoryView inventory={inventory} capacity={profile.inventoryCapacity} onNavigateToView={setCurrentView} />
-          )}
-        </main>
-      </div>
-
-      <DelverModal
-        isOpen={isProfileModalOpen}
-        onClose={() => setIsProfileModalOpen(false)}
-        profile={profile}
-        quests={quests}
-        onClaimQuest={handleClaimQuest}
-      />
-
-      <MobileBottomNav
-        currentView={currentView}
-        onViewChange={setCurrentView}
-        onOpenProfile={() => setIsProfileModalOpen(true)}
-      />
-    </div>
-  );
-}
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
-
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
   </script>
 </body>
 </html>
