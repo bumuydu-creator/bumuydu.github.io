@@ -198,18 +198,12 @@
         ctx.drawImage(warriorSpriteImg, sx, sy, SPRITE_FRAME_W, SPRITE_FRAME_H, drawX, drawY, drawW, drawH);
       }
 
-      if (tintColor) {
-        // Faint colored rim so each hero still reads as visually distinct
-        // even though they currently share one sprite sheet.
-        ctx.globalAlpha = 0.18;
-        ctx.fillStyle = tintColor;
-        if (facing === 'left') {
-          ctx.fillRect(0, 0, drawW, drawH);
-        } else {
-          ctx.fillRect(drawX, drawY, drawW, drawH);
-        }
-        ctx.globalAlpha = 1;
-      }
+      // NOTE: an earlier version tried to tint the sprite with the hero's
+      // color here using a plain ctx.fillRect(). That draws an opaque
+      // colored rectangle over the sprite's full bounding box — including
+      // its transparent background — which is exactly what showed up as a
+      // visible green box around the character. Removed; the sprite is
+      // now drawn as-is, with no color overlay.
       ctx.restore();
       return true;
     }
