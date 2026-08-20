@@ -145,6 +145,105 @@
     }
     const sound = new SoundEngine();
 
+    // Draws a small heroic swordsman silhouette — head, bronze helm, cape,
+    // tunic, legs, and an arm holding a sword — instead of a flat color
+    // rectangle. All coordinates are relative to the sprite's own local
+    // space; ctx.scale(dir, 1) below mirrors the whole drawing for
+    // left-facing without needing a second set of coordinates.
+    function drawHeroSprite(ctx, px, py, width, height, facing, color, secondaryColor, isAttacking) {
+      const dir = facing === 'right' ? 1 : -1;
+      const originX = px + width / 2;
+      ctx.save();
+      ctx.translate(originX, py);
+      ctx.scale(dir, 1);
+
+      const headR = width * 0.22;
+      const headCY = headR + 2;
+
+      // Cape, billowing slightly behind
+      ctx.fillStyle = secondaryColor;
+      ctx.beginPath();
+      ctx.moveTo(-width * 0.18, headCY + headR * 0.5);
+      ctx.quadraticCurveTo(-width * 0.68, height * 0.5, -width * 0.32, height * 0.95);
+      ctx.quadraticCurveTo(-width * 0.1, height * 0.55, -width * 0.08, headCY + headR * 0.7);
+      ctx.closePath();
+      ctx.fill();
+
+      // Legs
+      ctx.fillStyle = '#8a6b4d';
+      ctx.fillRect(-width * 0.17, height * 0.64, width * 0.15, height * 0.36);
+      ctx.fillRect(width * 0.02, height * 0.64, width * 0.15, height * 0.36);
+
+      // Back arm (behind torso, mostly hidden)
+      ctx.fillStyle = color;
+      ctx.fillRect(-width * 0.32, headCY + headR * 0.8, width * 0.12, height * 0.3);
+
+      // Tunic
+      ctx.beginPath();
+      ctx.moveTo(-width * 0.26, headCY + headR * 0.7);
+      ctx.lineTo(width * 0.26, headCY + headR * 0.7);
+      ctx.lineTo(width * 0.32, height * 0.66);
+      ctx.lineTo(-width * 0.32, height * 0.66);
+      ctx.closePath();
+      ctx.fill();
+
+      // Belt
+      ctx.fillStyle = '#f0c419';
+      ctx.fillRect(-width * 0.3, height * 0.42, width * 0.6, height * 0.07);
+
+      // Head + bronze helm
+      ctx.fillStyle = '#e8c9a0';
+      ctx.beginPath();
+      ctx.arc(0, headCY, headR, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = secondaryColor;
+      ctx.beginPath();
+      ctx.arc(0, headCY - headR * 0.1, headR * 1.05, Math.PI * 1.05, Math.PI * 1.95);
+      ctx.fill();
+      ctx.fillRect(-1.5, headCY - headR * 1.6, 3, headR * 0.9); // helm crest
+
+      // Front arm + sword — two simple fixed poses (idle vs mid-swing),
+      // deliberately not trig-driven so the pose stays predictable.
+      const shoulderX = width * 0.22;
+      const shoulderY = headCY + headR * 0.8;
+      let handX, handY, bladeTipX, bladeTipY;
+      if (isAttacking) {
+        handX = shoulderX + width * 0.5;
+        handY = shoulderY - height * 0.05;
+        bladeTipX = handX + width * 0.55;
+        bladeTipY = handY + height * 0.35;
+      } else {
+        handX = shoulderX + width * 0.28;
+        handY = shoulderY + height * 0.22;
+        bladeTipX = handX + width * 0.18;
+        bladeTipY = handY + height * 0.34;
+      }
+
+      ctx.strokeStyle = color;
+      ctx.lineWidth = Math.max(3, width * 0.1);
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(shoulderX, shoulderY);
+      ctx.lineTo(handX, handY);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#e6edf3';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(handX, handY);
+      ctx.lineTo(bladeTipX, bladeTipY);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#f0c419';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(handX - 5, handY - 3);
+      ctx.lineTo(handX + 5, handY + 3);
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
     // --- Game Data ---
     const HEROES = [
       {
