@@ -682,15 +682,19 @@
           ctx.font = 'bold 11px monospace';
           ctx.fillText('MAĞARA ÇIKIŞI ►', exitX - camX + 8, 24);
 
-          // Draw Player
+          // Draw Player — heroic swordsman sprite (drawHeroSprite), not a
+          // flat rectangle. Mirrors automatically based on facing direction.
           const p = gameStateRef.current.player;
-          ctx.fillStyle = hero.color;
-          ctx.fillRect(p.x - camX, p.y, p.width, p.height);
-          ctx.fillStyle = '#ffffff';
-          ctx.fillRect(p.facing === 'right' ? p.x - camX + 26 : p.x - camX + 6, p.y + 10, 8, 8); // eyes
+          const playerIsSwinging = p.isAttacking && hero.role !== 'Crystal Mage';
+          drawHeroSprite(
+            ctx,
+            p.x - camX, p.y, p.width, p.height,
+            p.facing, hero.color, hero.secondaryColor,
+            playerIsSwinging
+          );
 
-          if (p.isAttacking && hero.role !== 'Crystal Mage') {
-            ctx.fillStyle = '#3fb950';
+          if (playerIsSwinging) {
+            ctx.fillStyle = 'rgba(63, 185, 80, 0.35)';
             const slashX = p.facing === 'right' ? p.x - camX + p.width : p.x - camX - 50;
             ctx.fillRect(slashX, p.y, 50, p.height);
           }
