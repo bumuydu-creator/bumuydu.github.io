@@ -230,8 +230,15 @@
         screenShake: 0
       });
 
+      // Random small offset so repeated hits don't render as one unreadable
+      // stacked blob of digits (e.g. "-12" landing on top of "-12").
       const addFloatingText = (x, y, text, color = '#f59e0b') => {
-        gameStateRef.current.floatingTexts.push({ id: Math.random().toString(), x, y, text, color, life: 40 });
+        gameStateRef.current.floatingTexts.push({
+          id: Math.random().toString(),
+          x: x + (Math.random() * 20 - 10),
+          y: y + (Math.random() * 10 - 5),
+          text, color, life: 40
+        });
       };
 
       const addParticles = (x, y, count, color) => {
@@ -257,8 +264,13 @@
           if (type === 'bat') { hp = 30; color = '#c084fc'; speed = 3; name = 'Gölge Yarasası'; }
           else if (type === 'golem') { hp = 80; color = '#38bdf8'; speed = 1.2; name = 'Kuvars Golem'; }
 
+          // NOTE: bats used to spawn anywhere between y=180 and y=280, which
+          // is often above the player's max jump height (~130px). An
+          // unreachable bat meant the stage could never be cleared, since
+          // clearing requires every enemy to reach 0 HP. Bats now spawn
+          // within 260-320, always inside jump range from the ground.
           enemies.push({
-            id: 'mob_' + i, type, name, x, y: type === 'bat' ? 180 + Math.random() * 100 : 340,
+            id: 'mob_' + i, type, name, x, y: type === 'bat' ? 260 + Math.random() * 60 : 340,
             vx: 0, vy: 0, width: type === 'golem' ? 50 : 36, height: type === 'golem' ? 60 : 36,
             hp, hpMax: hp, color, speed, facing: 'left', attackCooldown: 0, isHit: false, hitTimer: 0
           });
@@ -310,11 +322,32 @@
       }, []);
 
       const triggerAttack = () => {
-        const { player, enemies } = gameStateRef.current;
+        const { player, enemies, projectiles } = gameStateRef.current;
         if (player.attackTimer > 0) return;
+        player.attackTimer = 15;
+
+        // Crystal Mage fires a ranged bolt instead of swinging melee. This
+        // means her class can always poke a stray high-flying enemy even if
+        // the player can't line up a jump-attack perfectly, and it actually
+        // matches her "uzaktan patlamalar yaratan kâhin" description, which
+        // the old code never implemented (every hero used the same melee
+        // hitbox regardless of role).
+        if (hero.role === 'Crystal Mage') {
+          sound.playSpell();
+          const dir = player.facing === 'right' ? 1 : -1;
+          projectiles.push({
+            x: player.x + player.width / 2,
+            y: player.y + player.height / 2,
+            vx: 11 * dir,
+            width: 14, height: 14,
+            damage: hero.attackPower,
+            life: 90
+          });
+          addParticles(player.x + player.width / 2, player.y + player.height / 2, 4, hero.color);
+          return;
+        }
 
         player.isAttacking = true;
-        player.attackTimer = 15;
         sound.playSlash();
 
         const attackReach = hero.role === 'Blade Dancer' ? 70 : 50;
@@ -323,6 +356,7 @@
 
         let hitAny = false;
         enemies.forEach((enemy) => {
+          if (enemy.hp <= 0) return;
           if (attackBox.x < enemy.x + enemy.width && attackBox.x + attackBox.w > enemy.x &&
               attackBox.y < enemy.y + enemy.height && attackBox.y + attackBox.h > enemy.y) {
             const isCrit = Math.random() * 100 < hero.critRate;
@@ -362,6 +396,7 @@
         gameStateRef.current.screenShake = 15;
 
         enemies.forEach((enemy) => {
+          if (enemy.hp <= 0) return;
           const dist = Math.hypot(enemy.x - player.x, enemy.y - player.y);
           if (dist < 350) {
             const dmg = hero.attackPower * 3;
@@ -390,9 +425,18 @@
           { x: 1600, y: 270, width: 200, height: 20, color: '#30363d' }
         ];
 
+        // Escape-valve exit gate near the end of the cavern. Clearing the
+        // stage still primarily means defeating every enemy, but if the
+        // player fights their way past everyone and reaches the gate, the
+        // stage now also counts as cleared. This guarantees a stage can
+        // never become permanently stuck (e.g. from an edge-case enemy
+        // spawn), while keeping "kill everything" as the normal, rewarded
+        // way to play.
+        const exitGateWidth = 150;
+
         const loop = () => {
           if (!isPaused && !isDead && !stageCleared && !showIntro) {
-            const { player, enemies, projectiles, particles, floatingTexts, crystals } = gameStateRef.current;
+            const { player, enemies, projectiles, particles, floatingTexts, crystals, worldWidth } = gameStateRef.current;
 
             // Player Movement
             const left = keysRef.current['a'] || keysRef.current['arrowleft'] || mobileInputRef.current.left;
@@ -419,6 +463,7 @@
             player.vy += 0.65; // gravity
             player.x += player.vx;
             player.y += player.vy;
+            player.x = Math.max(0, Math.min(player.x, worldWidth - player.width));
 
             // Platform Collisions
             player.isGrounded = false;
@@ -469,9 +514,38 @@
               if (enemy.attackCooldown > 0) enemy.attackCooldown--;
             });
 
-            // Check Stage Clear
+            // Update Projectiles (ranged mage bolts)
+            gameStateRef.current.projectiles = projectiles.filter((proj) => {
+              proj.x += proj.vx;
+              proj.life--;
+              if (proj.life <= 0) return false;
+              if (proj.x < 0 || proj.x > worldWidth) return false;
+
+              let hit = false;
+              enemies.forEach((enemy) => {
+                if (enemy.hp <= 0 || hit) return;
+                if (proj.x < enemy.x + enemy.width && proj.x + proj.width > enemy.x &&
+                    proj.y < enemy.y + enemy.height && proj.y + proj.height > enemy.y) {
+                  const isCrit = Math.random() * 100 < hero.critRate;
+                  const dmg = Math.round(proj.damage * (isCrit ? 1.8 : 1.0));
+                  enemy.hp -= dmg;
+                  enemy.isHit = true; enemy.hitTimer = 10;
+                  addFloatingText(enemy.x + enemy.width / 2, enemy.y - 10, `${dmg}${isCrit ? ' CRİT!' : ''}`, isCrit ? '#f59e0b' : hero.color);
+                  addParticles(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, 8, hero.color);
+                  sound.playHit();
+                  gameStateRef.current.screenShake = 4;
+                  hit = true;
+                }
+              });
+              return !hit;
+            });
+
+            // Check Stage Clear: either every enemy is dead, OR the player
+            // has fought their way to the cavern exit gate. See note above
+            // the loop for why the exit gate exists.
             const aliveEnemies = enemies.filter(e => e.hp > 0);
-            if (aliveEnemies.length === 0 && !stageCleared) {
+            const reachedExit = player.x >= worldWidth - exitGateWidth;
+            if ((aliveEnemies.length === 0 || reachedExit) && !stageCleared) {
               setStageCleared(true);
               onStageComplete(collectedCrystals + 100, 250);
             }
@@ -479,6 +553,7 @@
 
           // RENDER
           const camX = gameStateRef.current.cameraX;
+          const worldWidth = gameStateRef.current.worldWidth;
           const shake = gameStateRef.current.screenShake;
           ctx.save();
           if (shake > 0) {
@@ -496,6 +571,18 @@
             ctx.strokeStyle = '#30363d'; ctx.strokeRect(p.x - camX, p.y, p.width, p.height);
           });
 
+          // Draw exit gate (escape valve — reaching this also clears the stage)
+          const exitX = worldWidth - exitGateWidth;
+          ctx.fillStyle = 'rgba(63, 185, 80, 0.12)';
+          ctx.fillRect(exitX - camX, 0, exitGateWidth, 450);
+          ctx.strokeStyle = '#3fb950';
+          ctx.setLineDash([6, 6]);
+          ctx.strokeRect(exitX - camX, 0, exitGateWidth, 450);
+          ctx.setLineDash([]);
+          ctx.fillStyle = '#3fb950';
+          ctx.font = 'bold 11px monospace';
+          ctx.fillText('MAĞARA ÇIKIŞI ►', exitX - camX + 8, 24);
+
           // Draw Player
           const p = gameStateRef.current.player;
           ctx.fillStyle = hero.color;
@@ -503,7 +590,7 @@
           ctx.fillStyle = '#ffffff';
           ctx.fillRect(p.facing === 'right' ? p.x - camX + 26 : p.x - camX + 6, p.y + 10, 8, 8); // eyes
 
-          if (p.isAttacking) {
+          if (p.isAttacking && hero.role !== 'Crystal Mage') {
             ctx.fillStyle = '#3fb950';
             const slashX = p.facing === 'right' ? p.x - camX + p.width : p.x - camX - 50;
             ctx.fillRect(slashX, p.y, 50, p.height);
@@ -518,6 +605,14 @@
             // Enemy HP Bar
             ctx.fillStyle = '#21262d'; ctx.fillRect(enemy.x - camX, enemy.y - 10, enemy.width, 5);
             ctx.fillStyle = '#3fb950'; ctx.fillRect(enemy.x - camX, enemy.y - 10, (enemy.hp / enemy.hpMax) * enemy.width, 5);
+          });
+
+          // Draw Projectiles
+          gameStateRef.current.projectiles.forEach((proj) => {
+            ctx.fillStyle = hero.color;
+            ctx.beginPath();
+            ctx.arc(proj.x - camX, proj.y, proj.width / 2, 0, Math.PI * 2);
+            ctx.fill();
           });
 
           // Draw Particles
@@ -583,6 +678,7 @@
               {stage.bossName && (
                 <div className="text-xs text-[#f85149] font-bold mt-2">⚠ BOSS: {stage.bossName}</div>
               )}
+              <div className="text-[10px] text-[#8b949e] mt-4">Tüm düşmanları öldür ya da yeşil "MAĞARA ÇIKIŞI" bölgesine ulaş.</div>
               <div className="text-[10px] text-[#8b949e] mt-6 animate-pulse">devam etmek için tıkla</div>
             </div>
           )}
