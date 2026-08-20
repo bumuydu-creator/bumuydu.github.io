@@ -615,12 +615,18 @@
             ctx.fill();
           });
 
-          // Draw Particles
+          // Draw Particles (and fade + remove expired ones — this array used
+          // to grow forever because nothing ever filtered it out, which is
+          // what eventually chokes the frame loop on longer sessions/boss
+          // fights and makes the game look "frozen").
           gameStateRef.current.particles.forEach((pt) => {
             pt.x += pt.vx; pt.y += pt.vy; pt.life++;
+            ctx.globalAlpha = Math.max(0, 1 - pt.life / pt.maxLife);
             ctx.fillStyle = pt.color;
             ctx.fillRect(pt.x - camX, pt.y, pt.size, pt.size);
           });
+          ctx.globalAlpha = 1;
+          gameStateRef.current.particles = gameStateRef.current.particles.filter(pt => pt.life < pt.maxLife);
 
           // Draw Floating Text
           gameStateRef.current.floatingTexts.forEach((ft, idx) => {
@@ -663,6 +669,12 @@
               <div>💎 {collectedCrystals}</div>
               <button onClick={() => setIsPaused(!isPaused)} className="px-2.5 py-1 bg-[#21262d] border border-[#30363d] rounded text-[#f0f6fc]">
                 {isPaused ? '▶ OYNAT' : '⏸ DURAKLAT'}
+              </button>
+              {/* Always-available emergency exit: no matter what state the
+                  run is in, the player should never be stuck with no way
+                  back to the map. */}
+              <button onClick={onBackToMap} className="px-2.5 py-1 bg-[#21262d] border border-[#30363d] rounded text-[#f0f6fc]" title="Haritaya dön">
+                🗺 Harita
               </button>
             </div>
           </div>
