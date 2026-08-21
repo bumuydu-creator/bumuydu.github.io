@@ -46,6 +46,7 @@ a{color:inherit}
   transition:.12s transform,.12s box-shadow
 }
 .btn:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 .btn.primary{background:var(--pink);color:white}
 .btn.yellow{background:var(--yellow)}
 .btn.blue{background:var(--blue)}
@@ -147,10 +148,16 @@ input:focus,textarea:focus{box-shadow:4px 4px 0 var(--blue)}
 .modal-box h2{margin-top:0;font-size:32px;letter-spacing:-.05em}
 .field{margin:13px 0}.field label{display:block;font-weight:700;margin-bottom:6px}
 .modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}
+.tabs{display:flex;gap:8px;margin-bottom:16px}
+.tab{
+  flex:1;text-align:center;padding:10px;border:3px solid var(--ink);border-radius:13px;
+  background:var(--white);font-weight:700;cursor:pointer
+}
+.tab.active{background:var(--pink);color:white}
 .toast{
   position:fixed;right:18px;bottom:18px;background:var(--ink);color:white;
   padding:13px 16px;border-radius:13px;z-index:100;display:none;
-  box-shadow:4px 4px 0 var(--pink)
+  box-shadow:4px 4px 0 var(--pink);max-width:320px
 }
 .toast.show{display:block;animation:pop .2s ease}
 @keyframes pop{from{transform:translateY(10px);opacity:0}to{transform:none;opacity:1}}
@@ -183,7 +190,7 @@ footer{padding:50px 0 25px;text-align:center;font-family:"DM Mono",monospace;fon
     <div>Bu Muydu?<br><small>Kitap Kulübüm</small></div>
   </div>
   <div class="top-actions">
-    <button class="btn yellow" onclick="openModal()">＋ Kulüp Kur</button>
+    <button class="btn yellow" onclick="openModal()">＋ Kulüp Kur / Katıl</button>
     <button class="btn" onclick="scrollToId('kulubum')">Kulübüm ↓</button>
   </div>
 </header>
@@ -194,11 +201,11 @@ footer{padding:50px 0 25px;text-align:center;font-family:"DM Mono",monospace;fon
   <p>
     Bu Muydu? Kitap Kulübüm; okuduğun kitabı sadece bitirmek yerine
     onun hakkında düşünmeni, soru sormanı ve başkalarının ne düşündüğünü
-    keşfetmeni sağlayan renkli bir okuma alanı.
+    keşfetmeni sağlayan renkli, paylaşımlı bir okuma alanı.
   </p>
   <div class="hero-buttons">
     <button class="btn primary" onclick="scrollToId('kesfet')">Kitapları keşfet →</button>
-    <button class="btn blue" onclick="openModal()">Kendi kulübünü kur</button>
+    <button class="btn blue" onclick="openModal()">Kulüp kur / kulübe katıl</button>
   </div>
 </section>
 
@@ -221,7 +228,7 @@ footer{padding:50px 0 25px;text-align:center;font-family:"DM Mono",monospace;fon
   <div class="section-head">
     <div>
       <h2>Kulübüm</h2>
-      <p>Bu cihazda tuttuğun kulüp alanı.</p>
+      <p id="kulubumSub">Bir kulüp kur ya da kodla bir kulübe katıl — herkes aynı sayfayı görür.</p>
     </div>
   </div>
   <div id="clubArea"></div>
@@ -253,26 +260,52 @@ footer{padding:50px 0 25px;text-align:center;font-family:"DM Mono",monospace;fon
 
 <div class="modal" id="modal">
   <div class="modal-box">
-    <h2>Kulübünü kur.</h2>
-    <p>İsmini ver. Kitabını seç. Gerisini birlikte düşünürüz.</p>
-    <div class="field">
-      <label for="clubName">Kulüp adı</label>
-      <input id="clubName" placeholder="Örn. Gece Yarısı Okurları">
+    <h2>Kulübüne git.</h2>
+    <div class="tabs">
+      <div class="tab active" id="tabCreate" onclick="switchTab('create')">Kulüp kur</div>
+      <div class="tab" id="tabJoin" onclick="switchTab('join')">Kodla katıl</div>
     </div>
-    <div class="field">
-      <label for="clubBook">Bu ay hangi kitap?</label>
-      <select id="clubBook"></select>
+
+    <div id="createPane">
+      <p>İsmini ver. Kitabını seç. Gerisini birlikte düşünürüz.</p>
+      <div class="field">
+        <label for="clubName">Kulüp adı</label>
+        <input id="clubName" placeholder="Örn. Gece Yarısı Okurları">
+      </div>
+      <div class="field">
+        <label for="clubBook">Bu ay hangi kitap?</label>
+        <select id="clubBook"></select>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" onclick="closeModal()">Vazgeç</button>
+        <button class="btn primary" id="createClubBtn" onclick="createClub()">Kulübü kur ✦</button>
+      </div>
     </div>
-    <div class="modal-actions">
-      <button class="btn" onclick="closeModal()">Vazgeç</button>
-      <button class="btn primary" onclick="createClub()">Kulübü kur ✦</button>
+
+    <div id="joinPane" style="display:none">
+      <p>Bir arkadaşından aldığın kulüp kodunu gir, aynı masaya otur.</p>
+      <div class="field">
+        <label for="joinCode">Kulüp kodu</label>
+        <input id="joinCode" placeholder="Örn. AB12CD" style="text-transform:uppercase">
+      </div>
+      <div class="modal-actions">
+        <button class="btn" onclick="closeModal()">Vazgeç</button>
+        <button class="btn primary" id="joinClubBtn" onclick="joinClub()">Kulübe katıl ✦</button>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+/* ---------- Supabase bağlantısı ---------- */
+const SUPABASE_URL = "https://rmlpfamabqerepzblkip.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_RIiRPXtqLdHs-kDfQrwv5A_Zs1WNb2y";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* ---------- Kitaplar (sabit liste, koda gömülü) ---------- */
 const books = [
   {id:1,title:"Bir Gün Tek Başına",author:"Vedat Türkali",genre:"Roman",color:"pink",
    desc:"Aşk, siyaset, yalnızlık ve seçimler arasında sıkışan bir hayat.",
@@ -294,15 +327,17 @@ const books = [
    prompts:["Gerçeği kontrol eden geçmişi de kontrol eder mi?","Dil düşüncelerimizi ne kadar belirler?","Winston'ın asıl korkusu neydi?"]}
 ];
 
-let state = JSON.parse(localStorage.getItem("bumuyduKitapKulubum") || "null") || {
-  club:null, notes:[], read:[], votes:[], selectedBook:null
+/* ---------- Yerel durum: sadece "bu cihaz hangi kulüpte / hangi kitapları okudum" ---------- */
+let local = JSON.parse(localStorage.getItem("bumuyduKitapKulubum_v2") || "null") || {
+  clubCode:null, read:[], selectedBook:null
 };
+function saveLocal(){localStorage.setItem("bumuyduKitapKulubum_v2",JSON.stringify(local));}
 
-function save(){localStorage.setItem("bumuyduKitapKulubum",JSON.stringify(state));}
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
 function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:"smooth"});}
-function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200);}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2400);}
 
+/* ---------- Kitap listesi ---------- */
 function renderBooks(){
   const grid=document.getElementById("bookGrid");
   grid.innerHTML=books.map(b=>`
@@ -324,9 +359,10 @@ function renderBooks(){
   `).join("");
 }
 
+/* ---------- Kitap detay / kişisel okuma alanı (kulüpsüz) ---------- */
 function readBook(id){
-  const b=books.find(x=>x.id===id); state.selectedBook=id;
-  if(!state.read.includes(id)) state.read.push(id); save();
+  const b=books.find(x=>x.id===id); local.selectedBook=id;
+  if(!local.read.includes(id)) local.read.push(id); saveLocal();
   const area=document.getElementById("clubArea");
   area.innerHTML=`
     <div class="panel">
@@ -338,95 +374,224 @@ function readBook(id){
         <div class="prompt">
           <div class="num">${i+1}</div>
           <div style="flex:1"><strong>${esc(q)}</strong></div>
-          <button class="btn yellow" onclick="voteQuestion(${b.id},${i})">★</button>
+          <button class="btn yellow" onclick="voteQuestion(${b.id},${i},null)">★</button>
         </div>`).join("")}
       <div style="margin-top:18px">
         <label><strong>Sen ne düşündün?</strong></label>
         <textarea id="quickNote" placeholder="Buraya aklına takılan şeyi yaz..."></textarea>
-        <button class="btn primary" style="margin-top:9px" onclick="saveNote(${b.id})">Düşüncemi kaydet ✦</button>
+        <button class="btn primary" style="margin-top:9px" onclick="saveNote(${b.id},null)">Düşüncemi kaydet ✦</button>
       </div>
+      ${local.clubCode? `<p style="margin-top:14px;opacity:.7">Not: Şu an <strong>${esc(local.clubCode)}</strong> kulübündesin. Kulüp masana dönmek için "Kulübüm" bölümüne git.</p>`:""}
     </div>`;
-  scrollToId("kulubum"); updateStats();
+  scrollToId("kulubum");
+}
+function addNote(id){readBook(id);setTimeout(()=>document.getElementById("quickNote")?.focus(),200);}
+
+/* ---------- Supabase: not kaydet ---------- */
+async function saveNote(bookId, clubCode){
+  const elId = clubCode ? "meetingNote" : "quickNote";
+  const el=document.getElementById(elId);
+  if(!el || !el.value.trim()){toast("Önce bir şey yaz :)");return}
+  const text = el.value.trim();
+  const {error} = await sb.from("notes").insert({
+    club_code: clubCode,
+    book_id: bookId,
+    text: text
+  });
+  if(error){toast("Kaydedilemedi, tekrar dener misin?");console.error(error);return}
+  el.value="";
+  toast(clubCode ? "Düşünce masaya bırakıldı ✦" : "Düşüncen kaydedildi ✦");
+  renderNotes();
+  updateStats();
 }
 
-function addNote(id){readBook(id);setTimeout(()=>document.getElementById("quickNote")?.focus(),200);}
-function saveNote(bookId){
-  const el=document.getElementById("quickNote"); if(!el || !el.value.trim()){toast("Önce bir şey yaz :)");return}
-  state.notes.unshift({id:Date.now(),bookId,text:el.value.trim(),date:new Date().toLocaleDateString("tr-TR")});
-  save();el.value="";renderNotes();updateStats();toast("Düşüncen kaydedildi ✦");
+/* ---------- Supabase: soru oyla ---------- */
+async function voteQuestion(bookId, index, clubCode){
+  const {error} = await sb.from("votes").insert({
+    club_code: clubCode,
+    book_id: bookId,
+    question_index: index
+  });
+  if(error){toast("Oy kaydedilemedi");console.error(error);return}
+  toast("Soruyu kulübe attın ★");
+  updateStats();
+  if(clubCode) renderClub();
 }
-function voteQuestion(bookId,i){
-  state.votes.push({bookId,index:i});save();updateStats();toast("Soruyu kulübe attın ★");
-}
-function renderNotes(){
+
+/* ---------- Supabase: son notları çek ve göster ---------- */
+async function renderNotes(){
   const el=document.getElementById("notesList");
-  if(!state.notes.length){el.innerHTML='<div class="empty">Henüz bir notun yok.<br><strong>Bir kitap seç ve aklından geçeni bırak.</strong></div>';return}
-  el.innerHTML=state.notes.map(n=>{
-    const b=books.find(x=>x.id===n.bookId);
-    return `<div class="note"><p>${esc(n.text)}</p><small>${esc(b?.title||"Kitap")} · ${n.date}</small></div>`
+  const {data, error} = await sb.from("notes")
+    .select("*")
+    .order("created_at",{ascending:false})
+    .limit(20);
+  if(error){el.innerHTML='<div class="empty">Notlar yüklenemedi.</div>';return}
+  if(!data || !data.length){el.innerHTML='<div class="empty">Henüz bir not yok.<br><strong>Bir kitap seç ve aklından geçeni bırak.</strong></div>';return}
+  el.innerHTML=data.map(n=>{
+    const b=books.find(x=>x.id===n.book_id);
+    const dt=new Date(n.created_at).toLocaleDateString("tr-TR");
+    const tag = n.club_code ? ` · ${esc(n.club_code)} kulübü` : "";
+    return `<div class="note"><p>${esc(n.text)}</p><small>${esc(b?.title||"Kitap")} · ${dt}${tag}</small></div>`
   }).join("");
 }
-function updateStats(){
-  document.getElementById("statBooks").textContent=state.read.length;
-  document.getElementById("statNotes").textContent=state.notes.length;
-  document.getElementById("statQuestions").textContent=state.votes.length;
-  document.getElementById("statVotes").textContent=state.votes.length;
+
+/* ---------- Supabase: istatistikler ---------- */
+async function updateStats(){
+  document.getElementById("statBooks").textContent = local.read.length;
+  const [{count:noteCount}, {count:voteCount}] = await Promise.all([
+    sb.from("notes").select("*",{count:"exact",head:true}),
+    sb.from("votes").select("*",{count:"exact",head:true})
+  ]);
+  document.getElementById("statNotes").textContent = noteCount ?? 0;
+  document.getElementById("statQuestions").textContent = voteCount ?? 0;
+  document.getElementById("statVotes").textContent = voteCount ?? 0;
 }
-function renderClub(){
+
+/* ---------- Kulüp: modal ve sekmeler ---------- */
+function openModal(){
+  document.getElementById("modal").classList.add("open");
+  document.getElementById("clubBook").innerHTML=books.map(b=>`<option value="${b.id}">${esc(b.title)} — ${esc(b.author)}</option>`).join("");
+  switchTab("create");
+}
+function closeModal(){document.getElementById("modal").classList.remove("open")}
+function switchTab(which){
+  document.getElementById("tabCreate").classList.toggle("active", which==="create");
+  document.getElementById("tabJoin").classList.toggle("active", which==="join");
+  document.getElementById("createPane").style.display = which==="create" ? "" : "none";
+  document.getElementById("joinPane").style.display = which==="join" ? "" : "none";
+}
+
+/* ---------- Supabase: kulüp kur ---------- */
+function genCode(){return Math.random().toString(36).slice(2,8).toUpperCase();}
+
+async function createClub(){
+  const name=document.getElementById("clubName").value.trim();
+  const bookId=Number(document.getElementById("clubBook").value);
+  if(!name){toast("Kulübün bir adı olmalı :)");return}
+  const btn=document.getElementById("createClubBtn");
+  btn.disabled=true; btn.textContent="Kuruluyor...";
+
+  const code=genCode();
+  const {error} = await sb.from("clubs").insert({
+    code, name, book_id: bookId
+  });
+
+  btn.disabled=false; btn.textContent="Kulübü kur ✦";
+
+  if(error){toast("Kulüp kurulamadı, tekrar dener misin?");console.error(error);return}
+
+  local.clubCode=code; saveLocal();
+  closeModal();
+  renderClub();
+  toast("Kulübün kuruldu ✦ Kod: "+code);
+  scrollToId("kulubum");
+}
+
+/* ---------- Supabase: kodla kulübe katıl ---------- */
+async function joinClub(){
+  const codeRaw=document.getElementById("joinCode").value.trim().toUpperCase();
+  if(!codeRaw){toast("Bir kod girmelisin :)");return}
+  const btn=document.getElementById("joinClubBtn");
+  btn.disabled=true; btn.textContent="Aranıyor...";
+
+  const {data, error} = await sb.from("clubs").select("*").eq("code", codeRaw).maybeSingle();
+
+  btn.disabled=false; btn.textContent="Kulübe katıl ✦";
+
+  if(error || !data){toast("Bu kodla bir kulüp bulunamadı.");return}
+
+  local.clubCode=codeRaw; saveLocal();
+  closeModal();
+  renderClub();
+  toast("Kulübe katıldın ✦ Hoş geldin, "+data.name);
+  scrollToId("kulubum");
+}
+
+/* ---------- Kulüp alanını çiz (Supabase'ten oku) ---------- */
+async function renderClub(){
   const el=document.getElementById("clubArea");
-  if(!state.club){
+  const sub=document.getElementById("kulubumSub");
+
+  if(!local.clubCode){
+    sub.textContent="Bir kulüp kur ya da kodla bir kulübe katıl — herkes aynı sayfayı görür.";
     el.innerHTML=`<div class="panel" style="text-align:center">
       <span class="sticker">HENÜZ KULÜP YOK</span>
       <h2 class="club-title">Bir masa kur.<br>İnsanları çağır.</h2>
-      <p>Kulüp adını ve kitabını seç. Bu cihazda kendi küçük okuma alanın oluşsun.</p>
-      <button class="btn primary" onclick="openModal()">＋ Kulüp kur</button>
-    </div>`;return;
+      <p>Kulüp adını ve kitabını seç, ya da bir arkadaşının kodunu gir. Kurduğun kulüp artık herkesin görebileceği ortak bir alanda yaşayacak.</p>
+      <button class="btn primary" onclick="openModal()">＋ Kulüp kur / katıl</button>
+    </div>`;
+    return;
   }
-  const b=books.find(x=>x.id===state.club.bookId);
+
+  el.innerHTML=`<div class="panel"><div class="empty">Kulüp yükleniyor...</div></div>`;
+
+  const {data: club, error} = await sb.from("clubs").select("*").eq("code", local.clubCode).maybeSingle();
+
+  if(error || !club){
+    local.clubCode=null; saveLocal();
+    sub.textContent="Bu kulüp bulunamadı, bağlantısı sıfırlandı.";
+    renderClub();
+    return;
+  }
+
+  const b=books.find(x=>x.id===club.book_id);
+  sub.textContent=`${club.name} kulübündesin.`;
+
+  const [{data: clubNotes}, {data: clubVotes}] = await Promise.all([
+    sb.from("notes").select("*").eq("club_code", local.clubCode).order("created_at",{ascending:false}).limit(10),
+    sb.from("votes").select("*").eq("club_code", local.clubCode)
+  ]);
+
+  const voteCounts = [0,0,0];
+  (clubVotes||[]).forEach(v=>{ if(voteCounts[v.question_index]!==undefined) voteCounts[v.question_index]++; });
+
   el.innerHTML=`<div class="club-grid">
     <div class="panel">
       <span class="sticker">KULÜBÜM</span>
-      <h2 class="club-title">${esc(state.club.name)}</h2>
+      <h2 class="club-title">${esc(club.name)}</h2>
       <p>Bu ayın kitabı: <strong>${esc(b.title)}</strong> — ${esc(b.author)}</p>
-      <div class="code">KOD: ${state.club.code} <button class="btn" style="padding:4px 7px" onclick="copyCode()">kopyala</button></div>
+      <div class="code">KOD: ${esc(club.code)} <button class="btn" style="padding:4px 7px" onclick="copyCode('${esc(club.code)}')">kopyala</button></div>
+      <p style="opacity:.7;margin-top:8px">Bu kodu paylaş, herkes aynı kulübe katılıp aynı soruları oylasın, aynı notları görsün.</p>
       <h3>Toplantı soruları</h3>
-      ${b.prompts.map((q,i)=>`<div class="prompt"><div class="num">${i+1}</div><div style="flex:1">${esc(q)}</div><button class="btn yellow" onclick="voteQuestion(${b.id},${i})">★</button></div>`).join("")}
+      ${b.prompts.map((q,i)=>`<div class="prompt"><div class="num">${i+1}</div><div style="flex:1">${esc(q)} <br><small style="opacity:.6">${voteCounts[i]} oy</small></div><button class="btn yellow" onclick="voteQuestion(${b.id},${i},'${esc(club.code)}')">★</button></div>`).join("")}
       <button class="btn blue" onclick="readBook(${b.id})">Kitabı aç →</button>
     </div>
     <div class="panel">
       <span class="sticker">KULÜP MASASI</span>
       <h3>Bugünün sorusu</h3>
       <p style="font-size:20px;font-weight:700">${esc(b.prompts[0])}</p>
-      <p style="opacity:.7">Bu alanı toplantıda kullanabilir, herkesin kendi düşüncesini yazmasını isteyebilirsin.</p>
+      <p style="opacity:.7">Buraya yazdığın şey, bu kodu bilen herkese görünür.</p>
       <textarea id="meetingNote" placeholder="Toplantıdan bir cümle..."></textarea>
-      <button class="btn green" style="margin-top:9px" onclick="saveMeetingNote(${b.id})">Masaya bırak ✦</button>
+      <button class="btn green" style="margin-top:9px" onclick="submitMeetingNote(${b.id},'${esc(club.code)}')">Masaya bırak ✦</button>
+      <div id="clubNotesList" style="margin-top:16px">
+        ${(clubNotes&&clubNotes.length) ? clubNotes.map(n=>`<div class="note"><p>${esc(n.text)}</p><small>${new Date(n.created_at).toLocaleDateString("tr-TR")}</small></div>`).join("") : '<div class="empty">Masada henüz not yok.</div>'}
+      </div>
       <hr style="border:0;border-top:3px dashed var(--ink);margin:20px 0">
-      <button class="btn" onclick="deleteClub()">Kulübü sıfırla</button>
+      <button class="btn" onclick="leaveClub()">Bu kulüpten ayrıl</button>
     </div>
   </div>`;
 }
-function saveMeetingNote(id){
-  const el=document.getElementById("meetingNote");if(!el.value.trim()){toast("Masaya boş düşünce bırakılmaz :)");return}
-  state.notes.unshift({id:Date.now(),bookId:id,text:el.value.trim(),date:new Date().toLocaleDateString("tr-TR")+" · kulüp masası"});
-  save();el.value="";renderNotes();updateStats();toast("Düşünce masaya bırakıldı ✦");
+
+async function submitMeetingNote(bookId, clubCode){
+  await saveNote(bookId, clubCode);
+  renderClub();
 }
-function openModal(){
-  document.getElementById("modal").classList.add("open");
-  document.getElementById("clubBook").innerHTML=books.map(b=>`<option value="${b.id}">${esc(b.title)} — ${esc(b.author)}</option>`).join("");
+
+function leaveClub(){
+  if(confirm("Bu kulüpten ayrılmak istiyor musun? (Kulübün kendisi silinmez, sadece bu cihazdaki bağlantın kalkar.)")){
+    local.clubCode=null; saveLocal(); renderClub();
+  }
 }
-function closeModal(){document.getElementById("modal").classList.remove("open")}
-function createClub(){
-  const name=document.getElementById("clubName").value.trim();
-  const bookId=Number(document.getElementById("clubBook").value);
-  if(!name){toast("Kulübün bir adı olmalı :)");return}
-  state.club={name,bookId,code:Math.random().toString(36).slice(2,8).toUpperCase()};
-  save();closeModal();renderClub();toast("Kulübün kuruldu ✦");scrollToId("kulubum");
-}
-function deleteClub(){if(confirm("Kulübü ve kulüp bilgisini bu cihazdan silmek istiyor musun?")){state.club=null;save();renderClub();}}
-function copyCode(){navigator.clipboard?.writeText(state.club.code);toast("Kulüp kodu kopyalandı ✦")}
+function copyCode(code){navigator.clipboard?.writeText(code);toast("Kulüp kodu kopyalandı ✦")}
 function randomBook(){const b=books[Math.floor(Math.random()*books.length)];readBook(b.id);toast("Bugünün kitabı: "+b.title)}
+
 document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal()});
-renderBooks();renderClub();renderNotes();updateStats();
+
+/* ---------- Başlangıç ---------- */
+renderBooks();
+renderClub();
+renderNotes();
+updateStats();
 </script>
 </body>
 </html>
