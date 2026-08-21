@@ -260,6 +260,80 @@
       return true;
     }
 
+    // Tiny seeded PRNG so each platform's jagged rock silhouette is stable
+    // across frames (same platform always draws the same shape) without
+    // needing to store per-platform point arrays in the platform data.
+    function mulberry32(seed) {
+      return function () {
+        seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+        let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    // Draws a platform as an irregular rock slab instead of a plain
+    // rectangle: jagged top edge, a mossy highlight band just under the
+    // edge, a couple of crack lines, and a darker stone body — all in the
+    // cave's purple/indigo palette so platforms read as part of the scene
+    // instead of floating UI boxes.
+    function drawRockPlatform(ctx, x, y, width, height) {
+      const rng = mulberry32(Math.round(x * 31 + y * 17));
+      const bumpCount = Math.max(4, Math.round(width / 28));
+      const bumpW = width / bumpCount;
+      const jag = Math.min(9, height * 0.4);
+
+      // Jagged top edge silhouette
+      const topPoints = [];
+      for (let i = 0; i <= bumpCount; i++) {
+        const px = x + i * bumpW;
+        const py = y + (rng() - 0.5) * jag;
+        topPoints.push([px, py]);
+      }
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(x, y + height);
+      ctx.lineTo(topPoints[0][0], topPoints[0][1]);
+      for (let i = 1; i < topPoints.length; i++) {
+        ctx.lineTo(topPoints[i][0], topPoints[i][1]);
+      }
+      ctx.lineTo(x + width, y + height);
+      ctx.closePath();
+
+      const grad = ctx.createLinearGradient(0, y, 0, y + height);
+      grad.addColorStop(0, '#4a4166');
+      grad.addColorStop(0.35, '#332b4d');
+      grad.addColorStop(1, '#211a33');
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Mossy highlight band hugging the jagged top edge
+      ctx.strokeStyle = 'rgba(120, 200, 140, 0.55)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(topPoints[0][0], topPoints[0][1] + 2);
+      for (let i = 1; i < topPoints.length; i++) {
+        ctx.lineTo(topPoints[i][0], topPoints[i][1] + 2);
+      }
+      ctx.stroke();
+
+      // A couple of subtle crack lines through the body for texture
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.25)';
+      ctx.lineWidth = 1;
+      const crackCount = Math.max(1, Math.round(width / 90));
+      for (let i = 0; i < crackCount; i++) {
+        const cx = x + (i + 0.5) * (width / crackCount) + (rng() - 0.5) * 10;
+        const cy0 = y + height * (0.25 + rng() * 0.2);
+        ctx.beginPath();
+        ctx.moveTo(cx, cy0);
+        ctx.lineTo(cx + (rng() - 0.5) * 12, cy0 + height * 0.4);
+        ctx.stroke();
+      }
+
+      ctx.restore();
+    }
+
     // Draws a small heroic swordsman silhouette — head, bronze helm, cape,
     // tunic, legs, and an arm holding a sword — instead of a flat color
     // rectangle. All coordinates are relative to the sprite's own local
@@ -800,11 +874,10 @@
             ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, 900, 450);
           }
 
-          // Draw Platforms
+          // Draw Platforms — irregular rock slabs instead of plain gray
+          // rectangles, matching the cave background's palette.
           platforms.forEach((p) => {
-            ctx.fillStyle = p.color;
-            ctx.fillRect(p.x - camX, p.y, p.width, p.height);
-            ctx.strokeStyle = '#30363d'; ctx.strokeRect(p.x - camX, p.y, p.width, p.height);
+            drawRockPlatform(ctx, p.x - camX, p.y, p.width, p.height);
           });
 
           // Draw exit gate (escape valve — reaching this also clears the stage)
