@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>📬 Bu Muydu? Gündem — 23 Ağustos 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --gundem-bg: #fdf8f0;
+    --gundem-card-bg: #ffffff;
+    --gundem-fg: #262626;
+    --gundem-accent: #a3241f;      /* Bu Muydu kırmızısı — yer tutucu, gerçek hex ile değiştir */
+    --gundem-accent-soft: #f3e2df;
+    --gundem-muted: #7c7b7a;
+    --gundem-border: #ece4d8;
+    --gundem-serif: 'Fraunces', Georgia, serif;
+    --gundem-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  body.gundem-page {
+    background: var(--gundem-bg);
+    color: var(--gundem-fg);
+    font-family: var(--gundem-sans);
+    margin: 0;
+    padding: 0;
+  }
+
+  .demo-banner {
+    background: var(--gundem-fg);
+    color: #fff;
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    padding: 8px;
+    font-family: var(--gundem-sans);
+  }
+
+  .gundem-issue {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 20px 100px;
+  }
+
+  /* HERO */
+  .gundem-hero {
+    padding: 56px 0 28px;
+    text-align: center;
+  }
+
+  .gundem-eyebrow {
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--gundem-accent);
+    background: var(--gundem-accent-soft);
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin: 0 0 18px;
+  }
+
+  .gundem-hero h1 {
+    font-family: var(--gundem-serif);
+    font-weight: 600;
+    font-size: 34px;
+    line-height: 1.25;
+    margin: 0 0 14px;
+  }
+
+  .gundem-hero .gundem-date {
+    color: var(--gundem-muted);
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .gundem-hero-image {
+    margin: 32px 0 8px;
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--gundem-accent) 0%, #5c1512 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.85);
+    font-family: var(--gundem-serif);
+    font-size: 15px;
+  }
+
+  .gundem-intro {
+    font-family: var(--gundem-serif);
+    font-size: 18px;
+    line-height: 1.6;
+    color: #3a3a3a;
+    margin: 28px 0 8px;
+  }
+
+  .gundem-intro em { color: var(--gundem-accent); font-style: normal; font-weight: 600; }
+
+  /* SECTIONS */
+  .gundem-section {
+    margin-top: 52px;
+  }
+
+  .gundem-section-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .gundem-section-head h2 {
+    font-family: var(--gundem-sans);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--gundem-accent);
+    margin: 0;
+  }
+
+  .gundem-section-head::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--gundem-border);
+  }
+
+  .gundem-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .gundem-item {
+    display: flex;
+    gap: 16px;
+    background: var(--gundem-card-bg);
+    border: 1px solid var(--gundem-border);
+    border-radius: 14px;
+    padding: 14px;
+    align-items: flex-start;
+  }
+
+  .gundem-item-thumb {
+    flex: 0 0 96px;
+    width: 96px;
+    height: 96px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #e8d5cf 0%, #d9bdb5 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    color: var(--gundem-accent);
+  }
+
+  .gundem-item-body { flex: 1; min-width: 0; }
+
+  .gundem-item-title {
+    font-family: var(--gundem-serif);
+    font-weight: 600;
+    font-size: 16.5px;
+    line-height: 1.35;
+    margin: 0 0 6px;
+  }
+
+  .gundem-item-text {
+    margin: 0 0 8px;
+    line-height: 1.55;
+    font-size: 14.5px;
+    color: #4a4a4a;
+  }
+
+  .gundem-item-source {
+    margin: 0;
+    font-size: 12.5px;
+  }
+
+  .gundem-item-source a {
+    color: var(--gundem-muted);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--gundem-muted);
+  }
+
+  .gundem-item-source a:hover { color: var(--gundem-accent); border-color: var(--gundem-accent); }
+
+  /* KENDİ İÇERİĞİM — vurgulu kart */
+  .gundem-section.own .gundem-item {
+    background: var(--gundem-accent-soft);
+    border-color: transparent;
+  }
+
+  .gundem-footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--gundem-border);
+    font-size: 13px;
+    color: var(--gundem-muted);
+    text-align: center;
+  }
+
+  .gundem-footer p { margin: 0 0 6px; }
+</style>
+</head>
+<body class="gundem-page">
+<div class="demo-banner">ÖRNEK GÖRÜNÜM — thumbnail alanları yer tutucu, gerçek yayında her haberin kendi kaynak görseli oturacak</div>
+<main class="gundem-issue">
+
+  <div class="gundem-hero">
+    <span class="gundem-eyebrow">BU MUYDU? GÜNDEM · 23 AĞUSTOS PAZAR</span>
+    <h1>📬 13 bin yıllık kaplumbağalar, yapay zekâ ve iletişimin hâli</h1>
+    <p class="gundem-date">Her gün otomatik derlenir · 4 dakikalık okuma</p>
+    <div class="gundem-hero-image">Gündemin görseli buraya gelecek</div>
+    <p class="gundem-intro">Bilecik'teki kazılarda <em>13 bin yıllık</em> kaplumbağa heykelcikleri bulundu, iletişim yapay zekâya devroluyor, ve gündemde bugün neler var — <em>Bu Muydu?</em> üslubuyla aşağıda.</p>
+  </div>
+
+  <section class="gundem-section">
+    <div class="gundem-section-head"><h2>Gündem</h2></div>
+    <ul class="gundem-items">
+      <li class="gundem-item">
+        <div class="gundem-item-thumb">🌍</div>
+        <div class="gundem-item-body">
+          <p class="gundem-item-title">Gümrük vergisi yürürlüğe girdi</p>
+          <p class="gundem-item-text">ABD-Kanada ticaret müzakerelerinin çıkmaza girmesiyle Washington, Kanada menşeli ürünlere yüzde 50'lik yeni vergi uyguladı; Kanada da misilleme vergisiyle karşılık verdi.</p>
+          <p class="gundem-item-source"><a href="#" target="_blank" rel="noopener">Anadolu Ajansı</a></p>
+        </div>
+      </li>
+      <li class="gundem-item">
+        <div class="gundem-item-thumb">🏛️</div>
+        <div class="gundem-item-body">
+          <p class="gundem-item-title">Gelecek Partisi feshedildi</p>
+          <p class="gundem-item-text">Olağanüstü kongrede alınan kararla parti siyasi faaliyetlerine son verdi; Meclis'teki Yeni Yol grubu üyeleri grup çatısı altında kalacak.</p>
+          <p class="gundem-item-source"><a href="#" target="_blank" rel="noopener">NTV</a></p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="gundem-section">
+    <div class="gundem-section-head"><h2>Mitoloji &amp; Arkeoloji</h2></div>
+    <ul class="gundem-items">
+      <li class="gundem-item">
+        <div class="gundem-item-thumb">🐢</div>
+        <div class="gundem-item-body">
+          <p class="gundem-item-title">Bilecik'te 13 bin yıllık kaplumbağa heykelcikleri</p>
+          <p class="gundem-item-text">Gedikkaya Tepesi ve İn Mağarası kazılarında MÖ 14.500–11.200 arasına tarihlenen 25 kireç taşı heykelcik bulundu; ritüel amaçlı yerleştirildiği düşünülüyor.</p>
+          <p class="gundem-item-source"><a href="#" target="_blank" rel="noopener">Arkeofili</a></p>
+        </div>
+      </li>
+      <li class="gundem-item">
+        <div class="gundem-item-thumb">⛪</div>
+        <div class="gundem-item-body">
+          <p class="gundem-item-title">Antandros'ta 1.600 yıllık kilise</p>
+          <p class="gundem-item-text">Balıkesir Edremit'teki kazılarda Geç Antik Çağ'a ait piskoposluk kilisesinin mozaikleri ve freskleri gün yüzüne çıktı.</p>
+          <p class="gundem-item-source"><a href="#" target="_blank" rel="noopener">Ancient Origins</a></p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="gundem-section">
+    <div class="gundem-section-head"><h2>Felsefe &amp; Düşünce</h2></div>
+    <ul class="gundem-items">
+      <li class="gundem-item">
+        <div class="gundem-item-thumb">📖</div>
+        <div class="gundem-item-body">
+          <p class="gundem-item-title">Otobiyografik anlatının yükselişi</p>
+          <p class="gundem-item-text">Çağdaş edebiyatta "dolaysızlık" estetiği merkeze yerleşirken kurgu ve hayal gücünün geri çekilmesi tartışılıyor.</p>
+          <p class="gundem-item-source"><a href="#" target="_blank" rel="noopener">Duende</a></p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="gundem-section">
+    <div class="gundem-section-head"><h2>Yapay Zekâ</h2></div>
+    <ul class="gundem-items">
+      <li class="gundem-item">
+        <div class="gundem-item-thumb">🤖</div>
+        <div class="gundem-item-body">
+          <p class="gundem-item-title">Yapay zeka destekli iletişim yaygınlaşıyor</p>
+          <p class="gundem-item-text">İnsanların birbirleriyle kurduğu iletişimin giderek yapay zeka aracılığına devredilmesi, dinleme ve anlama pratiklerini nasıl dönüştürüyor tartışması sürüyor.</p>
+          <p class="gundem-item-source"><a href="#" target="_blank" rel="noopener">MIT Technology Review</a></p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="gundem-section own">
+    <div class="gundem-section-head"><h2>Kendi İçeriğim</h2></div>
+    <ul class="gundem-items">
+      <li class="gundem-item">
+        <div class="gundem-item-thumb">🎬</div>
+        <div class="gundem-item-body">
+          <p class="gundem-item-title">Yeni bölüm yayında</p>
+          <p class="gundem-item-text">"Masalların Arkeolojisi: Odysseia" serisinin son bölümü YouTube kanalında yayınlandı.</p>
+          <p class="gundem-item-source"><a href="#" target="_blank" rel="noopener">YouTube — Bu Muydu?</a></p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <footer class="gundem-footer">
+    <p>Bu sayı otomatik olarak derlendi.</p>
+    <p>Kaynaklara verilen bağlantılardan devamını okuyabilirsin.</p>
+  </footer>
+
+</main>
+</body>
+</html>
