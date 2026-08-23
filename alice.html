@@ -1050,16 +1050,50 @@
       });
     });
 
-    // Web Audio Synthesizer (Victorian Clock & Oxford River Ambience)
+    
+
+    // Web Audio Synthesizer (Victorian Clock & Alice Theme)
     let audioCtx = null;
     let isPlaying = false;
     let clockTimer = null;
     let noiseNode = null;
     let gainNode = null;
 
+    // Alice müzik dosyası tanımı (dosya adını kendi müzik dosyanla değiştirebilirsin)
+    let musicAudio = new Audio('alice.mp3'); 
+    musicAudio.loop = true;
+    musicAudio.volume = 0.4;
+
     function initAudio() {
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }
+
+    // Sayfa açıldığında otomatik çalmayı dene
+    window.addEventListener('DOMContentLoaded', () => {
+      initAudio();
+      musicAudio.play().then(() => {
+        isPlaying = true;
+        startClockAndRiver();
+        document.getElementById('audio-icon').innerText = '🔊';
+        document.getElementById('audio-label').innerText = 'Ses Açık';
+      }).catch(error => {
+        console.log("Otomatik oynatma tarayıcı tarafından engellendi, ilk etkileşim bekleniyor.");
+        document.getElementById('audio-icon').innerText = '🔇';
+        document.getElementById('audio-label').innerText = 'Ambiyans';
+      });
+    });
+
+    // Kullanıcı sayfaya ilk tıkladığında otomatik engeli kesin olarak kaldırır
+    window.addEventListener('click', () => {
+      if (!isPlaying && audioCtx) {
+        audioCtx.resume();
+        musicAudio.play();
+        startClockAndRiver();
+        isPlaying = true;
+        document.getElementById('audio-icon').innerText = '🔊';
+        document.getElementById('audio-label').innerText = 'Ses Açık';
+      }
+    }, { once: true });
 
     function toggleAudio() {
       if (!audioCtx) initAudio();
@@ -1067,11 +1101,13 @@
       if (isPlaying) {
         if (clockTimer) clearInterval(clockTimer);
         if (noiseNode) noiseNode.disconnect();
+        musicAudio.pause();
         isPlaying = false;
         document.getElementById('audio-icon').innerText = '🔇';
         document.getElementById('audio-label').innerText = 'Ambiyans';
       } else {
         audioCtx.resume();
+        musicAudio.play().catch(e => console.log("Müzik oynatılamadı:", e));
         startClockAndRiver();
         isPlaying = true;
         document.getElementById('audio-icon').innerText = '🔊';
@@ -1096,6 +1132,7 @@
     }
 
     function startClockAndRiver() {
+      if (clockTimer) clearInterval(clockTimer);
       // Clock tick loop
       clockTimer = setInterval(() => {
         if (!audioCtx || !isPlaying) return;
@@ -1110,7 +1147,9 @@
         osc.start();
         osc.stop(audioCtx.currentTime + 0.05);
       }, 1000);
+    }
 
+    
       // Pink river murmur
       const bufferSize = audioCtx.sampleRate * 2;
       const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
