@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bumuydu-creator.github.io/bumuydu.github.io/sitemap.xml
