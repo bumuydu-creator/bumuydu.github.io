@@ -1051,15 +1051,14 @@
     });
 
     
-
-    // Web Audio Synthesizer (Victorian Clock & Alice Theme)
+// Web Audio Synthesizer (Victorian Clock & Alice Theme)
     let audioCtx = null;
     let isPlaying = false;
     let clockTimer = null;
     let noiseNode = null;
     let gainNode = null;
 
-    // Alice müzik dosyası tanımı (dosya adını kendi müzik dosyanla değiştirebilirsin)
+    // Alice müzik dosyası tanımı
     let musicAudio = new Audio('alice.mp3'); 
     musicAudio.loop = true;
     musicAudio.volume = 0.4;
@@ -1068,32 +1067,20 @@
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }
 
-    // Sayfa açıldığında otomatik çalmayı dene
-    window.addEventListener('DOMContentLoaded', () => {
-      initAudio();
-      musicAudio.play().then(() => {
-        isPlaying = true;
-        startClockAndRiver();
-        document.getElementById('audio-icon').innerText = '🔊';
-        document.getElementById('audio-label').innerText = 'Ses Açık';
-      }).catch(error => {
-        console.log("Otomatik oynatma tarayıcı tarafından engellendi, ilk etkileşim bekleniyor.");
-        document.getElementById('audio-icon').innerText = '🔇';
-        document.getElementById('audio-label').innerText = 'Ambiyans';
-      });
-    });
-
-    // Kullanıcı sayfaya ilk tıkladığında otomatik engeli kesin olarak kaldırır
+    // Kullanıcı sayfaya ilk tıkladığı an (tarayıcı kuralı gereği) sesleri ve müziği başlatır
     window.addEventListener('click', () => {
-      if (!isPlaying && audioCtx) {
+      if (!isPlaying) {
+        if (!audioCtx) initAudio();
         audioCtx.resume();
-        musicAudio.play();
+        
+        musicAudio.play().catch(e => console.log("Müzik çalınamadı:", e));
         startClockAndRiver();
+        
         isPlaying = true;
         document.getElementById('audio-icon').innerText = '🔊';
         document.getElementById('audio-label').innerText = 'Ses Açık';
       }
-    }, { once: true });
+    }, { once: true }); // Yalnızca ilk tıklamada çalışır
 
     function toggleAudio() {
       if (!audioCtx) initAudio();
@@ -1148,7 +1135,6 @@
         osc.stop(audioCtx.currentTime + 0.05);
       }, 1000);
     }
-
     
       // Pink river murmur
       const bufferSize = audioCtx.sampleRate * 2;
