@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Bir Tavşan Deliğinden Düşmek</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<style>
+
+:root{
+
+--bg:#181212;
+--fg:#f3efe7;
+--muted:#9e958c;
+
+--panel:#201819;
+
+--transition:900ms cubic-bezier(.22,.61,.36,1);
+
+--progress:0;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+html{
+scroll-behavior:smooth;
+}
+
+body{
+background:var(--bg);
+color:var(--fg);
+overflow-x:hidden;
+font-family:Georgia, serif;
+cursor:default;
+}
+
+/* =========================
+LOADER
+========================= */
+
+#intro{
+
+position:fixed;
+inset:0;
+
+background:#000;
+
+z-index:99999;
+
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+
+transition:opacity 1.5s ease;
+}
+
+#intro.hidden{
+
+opacity:0;
+pointer-events:none;
+}
+
+.intro-small{
+
+font-size:.75rem;
+
+letter-spacing:4px;
+
+text-transform:uppercase;
+
+color:#888;
+
+margin-bottom:20px;
+
+opacity:0;
+
+animation:fadeIn 1.5s .5s forwards;
+}
+
+.intro-title{
+
+font-size:clamp(2.5rem,7vw,7rem);
+
+line-height:.92;
+
+max-width:1200px;
+
+text-align:center;
+
+padding:0 40px;
+
+font-weight:normal;
+
+opacity:0;
+
+animation:fadeIn 2s 1s forwards;
+}
+
+.intro-sub{
+
+margin-top:30px;
+
+font-size:.95rem;
+
+letter-spacing:4px;
+
+color:#777;
+
+opacity:0;
+
+animation:fadeIn 2s 2s forwards;
+}
+
+@keyframes fadeIn{
+
+to{
+opacity:1;
+}
+}
+
+/* =========================
+NAV
+========================= */
+
+.nav{
+
+position:fixed;
+
+left:0;
+top:0;
+
+width:100%;
+
+padding:28px 36px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+z-index:5000;
+
+mix-blend-mode:difference;
+}
+
+.logo{
+
+font-size:.85rem;
+
+letter-spacing:3px;
+
+text-transform:uppercase;
+}
+
+.menu{
+
+display:flex;
+
+gap:25px;
+}
+
+.menu a{
+
+color:white;
+
+text-decoration:none;
+
+font-size:.8rem;
+
+letter-spacing:2px;
+
+text-transform:uppercase;
+}
+
+/* =========================
+SCENE WRAPPER
+========================= */
+
+.wrapper{
+
+position:relative;
+
+width:100%;
+}
+
+/* =========================
+FIXED VISUAL LAYER
+========================= */
+
+.visual-layer{
+
+position:fixed;
+
+inset:0;
+
+pointer-events:none;
+
+z-index:1;
+}
+
+.visual-glow{
+
+position:absolute;
+
+width:60vw;
+height:60vw;
+
+border-radius:50%;
+
+left:50%;
+top:50%;
+
+transform:
+translate(-50%,-50%)
+scale(.8);
+
+background:
+radial-gradient(
+circle,
+rgba(255,255,255,.08),
+transparent 70%
+);
+
+filter:blur(30px);
+
+transition:var(--transition);
+}
+
+.visual-ring{
+
+position:absolute;
+
+left:50%;
+top:50%;
+
+width:42vw;
+height:42vw;
+
+border-radius:50%;
+
+transform:
+translate(-50%,-50%);
+
+border:1px solid rgba(255,255,255,.08);
+
+transition:var(--transition);
+}
+
+.visual-ring::after{
+
+content:"";
+
+position:absolute;
+
+inset:20px;
+
+border-radius:50%;
+
+border:1px solid rgba(255,255,255,.05);
+}
+
+/* =========================
+SCROLL INDICATOR
+========================= */
+
+.progress{
+
+position:fixed;
+
+left:0;
+top:0;
+
+height:2px;
+
+width:100%;
+
+z-index:9000;
+}
+
+.progress-bar{
+
+height:100%;
+
+width:0%;
+
+background:white;
+}
+
+/* =========================
+SECTIONS
+========================= */
+
+.panel{
+
+position:relative;
+
+min-height:100vh;
+
+display:flex;
+
+align-items:center;
+
+padding-left:8vw;
+padding-right:8vw;
+
+z-index:10;
+}
+
+.panel-inner{
+
+max-width:1200px;
+width:100%;
+}
+
+.eyebrow{
+
+font-size:.75rem;
+
+letter-spacing:4px;
+
+text-transform:uppercase;
+
+color:var(--muted);
+
+margin-bottom:25px;
+}
+
+.hero-title{
+
+font-size:clamp(4rem,12vw,11rem);
+
+line-height:.88;
+
+font-weight:normal;
+
+letter-spacing:-0.05em;
+}
+
+.hero-copy{
+
+margin-top:40px;
+
+max-width:720px;
+
+font-size:1.2rem;
+
+line-height:1.9;
+
+color:#cfc9bf;
+}
+
+/* =========================
+BIG QUOTES
+========================= */
+
+.quote-panel{
+
+justify-content:center;
+
+text-align:center;
+}
+
+.quote{
+
+font-size:clamp(3rem,8vw,8rem);
+
+line-height:.92;
+
+max-width:1200px;
+
+margin:auto;
+
+letter-spacing:-0.05em;
+}
+
+/* =========================
+IMAGE PLACEHOLDER
+========================= */
+
+.visual-block{
+
+margin-top:80px;
+
+height:70vh;
+
+border:1px solid rgba(255,255,255,.08);
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:.8rem;
+
+letter-spacing:5px;
+
+text-transform:uppercase;
+
+color:#666;
+}
+
+/* =========================
+STICKY CHAPTER LABEL
+========================= */
+
+.chapter-label{
+
+position:fixed;
+
+bottom:35px;
+
+left:35px;
+
+font-size:.75rem;
+
+letter-spacing:4px;
+
+text-transform:uppercase;
+
+color:#999;
+
+z-index:2000;
+
+transition:600ms;
+}
+
+/* =========================
+SCROLL FADE
+========================= */
+
+.reveal{
+
+opacity:0;
+
+transform:translateY(80px);
+
+transition:
+opacity 1.2s ease,
+transform 1.2s ease;
+}
+
+.reveal.visible{
+
+opacity:1;
+
+transform:none;
+}
+
+/* =========================
+ALICE DROP
+========================= */
+
+.fall-section{
+
+min-height:220vh;
+}
+
+.fall-title{
+
+position:sticky;
+
+top:20vh;
+
+font-size:clamp(4rem,11vw,10rem);
+
+line-height:.9;
+
+letter-spacing:-0.05em;
+}
+
+/* =========================
+SECTION COLORS
+========================= */
+
+.section-dark{
+
+background:#181212;
+}
+
+.section-burgundy{
+
+background:#2a1721;
+}
+
+.section-purple{
+
+background:#15111f;
+}
+
+.section-black{
+
+background:#0a0a0a;
+}
+
+.section-warm{
+
+background:#221b17;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="intro">
+
+<div class="intro-small">
+BU MUYDU?
+</div>
+
+<h1 class="intro-title">
+Bir masal ne zaman<br>
+masal olmaktan çıkar?
+</h1>
+
+<div class="intro-sub">
+SCROLL TO DESCEND
+</div>
+
+</div>
+
+<div class="progress">
+<div class="progress-bar"></div>
+</div>
+
+<nav class="nav">
+
+<div class="logo">
+BİR TAVŞAN DELİĞİNDEN DÜŞMEK
+</div>
+
+<div class="menu">
+
+<a href="#platform">
+BU MUYDU?
+</a>
+
+</div>
+
+</nav>
+
+<div class="chapter-label">
+PROLOGUE
+</div>
+
+<div class="visual-layer">
+
+<div class="visual-glow"></div>
+
+<div class="visual-ring"></div>
+
+</div>
+
+<div class="wrapper">
+
+<section class="panel section-dark">
+
+<div class="panel-inner reveal">
+
+<div class="eyebrow">
+ALICE / 01
+</div>
+
+<h1 class="hero-title">
+BİR TAVŞAN<br>
+DELİĞİNDEN<br>
+DÜŞMEK
+</h1>
+
+<div class="hero-copy">
+
+Bir çocuğun düşü mü başlar,
+yoksa bir toplumun bilinçaltı mı konuşur?
+
+</div>
+
+<div class="visual-block">
+
+BURAYA HERO GÖRSELİ
+
+</div>
+
+</div>
+
+</section>
+
+<section class="panel fall-section section-dark">
+
+<div class="panel-inner">
+
+<h2 class="fall-title">
+
+ALTIN<br>
+BİR<br>
+ÖĞLEDEN<br>
+SONRA
+
+</h2>
+
+</div>
+
+</section>
+
+<section class="panel section-burgundy">
+
+<div class="panel-inner reveal">
+
+<div class="eyebrow">
+ALICE / 02
+</div>
+
+<div class="quote">
+
+“Altın bir öğleden sonra...”
+
+</div>
+
+</div>
+
+</section>
+
+<section class="panel section-burgundy">
+
+<div class="panel-inner reveal">
+
+<div class="eyebrow">
+RÜYANIN EŞİĞİNDE
+</div>
+
+<h2 class="hero-title">
+UYKU İLE<br>
+UYANIKLIK<br>
+ARASINDA
+</h2>
+
+<div class="hero-copy">
+
+BURAYA "Rüyanın Eşiğinde" bölümünün metinlerini
+yerleştireceksin.
+
+Alice'in tavşanı takip etmesi,
+merak duygusu,
+rüya mantığı,
+düşüş metaforu.
+
+</div>
+
+<div class="visual-block">
+
+ALICE 01
+
+</div>
+
+</div>
+
+</section>
+
+<section class="panel quote-panel section-purple">
+
+<div class="panel-inner reveal">
+
+<div class="quote">
+
+“Ben kimim?”
+
+</div>
+
+</div>
+
+</section>
+
+<section class="panel section-purple">
+
+<div class="panel-inner reveal">
+
+<div class="eyebrow">
+KİMLİK
+</div>
+
+<h2 class="hero-title">
+KENDİNİ<br>
+ARAYAN<br>
+BİR ZİHİN
+</h2>
+
+<div class="hero-copy">
+
+Buraya Alice'in büyüyüp küçülmesi,
+kimlik arayışı,
+çocukluk ve dönüşüm kısmı gelecek.
+
+</div>
+
+<div class="visual-block">
+
+ALICE 02
+
+</div>
+
+</div>
+
+</section>
+
+<section id="platform" class="panel section-black">
+
+<div class="panel-inner reveal">
+
+<div class="eyebrow">
+PLATFORM
+</div>
+
+<h2 class="hero-title">
+BU<br>
+MUYDU?
+</h2>
+
+<div class="hero-copy">
+
+Bir metin biter.
+
+Bir soru kalır.
+
+</div>
+
+</div>
+
+</section>
+
+<section class="panel section-black">
+
+<div class="panel-inner reveal">
+
+<div style="
+display:grid;
+grid-template-columns:repeat(2,minmax(280px,1fr));
+gap:30px;
+margin-top:40px;
+">
+
+<div style="
+border:1px solid rgba(255,255,255,.08);
+padding:40px;
+min-height:220px;
+">
+
+<h3 style="
+font-size:2rem;
+font-weight:normal;
+margin-bottom:15px;
+">
+YAZILAR
+</h3>
+
+<p style="line-height:1.8;color:#bfbfbf;">
+Denemeler, incelemeler,
+eleştiri metinleri.
+</p>
+
+</div>
+
+<div style="
+border:1px solid rgba(255,255,255,.08);
+padding:40px;
+min-height:220px;
+">
+
+<h3 style="
+font-size:2rem;
+font-weight:normal;
+margin-bottom:15px;
+">
+NOTLAR
+</h3>
+
+<p style="line-height:1.8;color:#bfbfbf;">
+Kısa düşünceler,
+taslaklar,
+kenar notları.
+</p>
+
+</div>
+
+<div style="
+border:1px solid rgba(255,255,255,.08);
+padding:40px;
+min-height:220px;
+">
+
+<h3 style="
+font-size:2rem;
+font-weight:normal;
+margin-bottom:15px;
+">
+ARŞİV
+</h3>
+
+<p style="line-height:1.8;color:#bfbfbf;">
+Tüm içeriklerin
+toplandığı alan.
+</p>
+
+</div>
+
+<div style="
+border:1px solid rgba(255,255,255,.08);
+padding:40px;
+min-height:220px;
+">
+
+<h3 style="
+font-size:2rem;
+font-weight:normal;
+margin-bottom:15px;
+">
+PODCAST
+</h3>
+
+<p style="line-height:1.8;color:#bfbfbf;">
+Sesli içerikler,
+söyleşiler,
+okumalar.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="panel section-warm">
+
+<div class="panel-inner reveal">
+
+<div class="eyebrow">
+VIKTORYA DÖNEMİ
+</div>
+
+<h2 class="hero-title">
+DÜZENİN<br>
+İÇİNDEKİ<br>
+ÇATLAK
+</h2>
+
+<div class="hero-copy">
+
+Buraya Viktorya dönemi,
+toplumsal yapı,
+sınıf sistemi,
+cinsiyet rolleri
+bölümlerini yerleştireceksin.
+
+</div>
+
+<div class="visual-block">
+
+VICTORIAN IMAGE
+
+</div>
+
+</div>
+
+</section>
+
+<section class="panel section-warm">
+
+<div class="panel-inner reveal">
+
+<div class="eyebrow">
+İKTİDAR
+</div>
+
+<h2 class="hero-title">
+KURALLAR<br>
+DİL<br>
+OTORİTE
+</h2>
+
+<div class="hero-copy">
+
+Kraliçe,
+mahkeme,
+sömürgecilik,
+iktidar eleştirisi,
+modern özne.
+
+</div>
+
+</div>
+
+</section>
+
+<section class="panel quote-panel section-black">
+
+<div class="panel-inner reveal">
+
+<div class="quote">
+
+Harikalar Diyarı
+artık bir yer değil.
+
+</div>
+
+</div>
+
+</section>
+
+<section class="panel section-black">
+
+<div class="panel-inner reveal">
+
+<div class="visual-block">
+
+FINAL IMAGE
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="panel section-black">
+
+<div class="panel-inner reveal">
+
+<div class="eyebrow">
+EPILOGUE
+</div>
+
+<h2 class="hero-title">
+GERÇEKLİĞİN<br>
+İÇİNDE<br>
+HÂLÂ<br>
+NE KADAR<br>
+HAYAL<br>
+KURABİLİYORUZ?
+</h2>
+
+<div class="hero-copy">
+
+Ve belki de asıl soru budur.
+
+</div>
+
+</div>
+
+</section>
+
+<footer style="
+padding:120px 8vw;
+border-top:1px solid rgba(255,255,255,.06);
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+gap:20px;
+">
+
+<div style="
+font-size:.8rem;
+letter-spacing:3px;
+text-transform:uppercase;
+color:#888;
+">
+BU MUYDU?
+</div>
+
+<div style="
+font-size:.8rem;
+letter-spacing:2px;
+color:#666;
+">
+© 2026
+</div>
+
+</footer>
+
+</div>
+
+<script>
+
+/* =========================
+INTRO
+========================= */
+
+window.addEventListener("load",()=>{
+
+setTimeout(()=>{
+
+document
+.getElementById("intro")
+.classList.add("hidden");
+
+},4200);
+
+});
+
+/* =========================
+PROGRESS BAR
+========================= */
+
+const progressBar =
+document.querySelector(".progress-bar");
+
+window.addEventListener("scroll",()=>{
+
+const winScroll =
+window.pageYOffset;
+
+const height =
+document.documentElement.scrollHeight -
+window.innerHeight;
+
+const scrolled =
+(winScroll / height) * 100;
+
+progressBar.style.width =
+scrolled + "%";
+
+});
+
+/* =========================
+REVEAL
+========================= */
+
+const observer =
+new IntersectionObserver(
+
+(entries)=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.classList.add(
+"visible"
+);
+
+}
+
+});
+
+},
+
+{
+threshold:.15
+}
+
+);
+
+document
+.querySelectorAll(".reveal")
+.forEach(el=>{
+
+observer.observe(el);
+
+});
+
+/* =========================
+CHAPTER LABEL
+========================= */
+
+const chapterLabel =
+document.querySelector(
+".chapter-label"
+);
+
+const chapters = [
+
+{
+id:0,
+name:"PROLOGUE"
+},
+
+{
+id:1,
+name:"ALTIN BİR ÖĞLEDEN SONRA"
+},
+
+{
+id:2,
+name:"RÜYANIN EŞİĞİNDE"
+},
+
+{
+id:3,
+name:"BEN KİMİM?"
+},
+
+{
+id:4,
+name:"BU MUYDU?"
+},
+
+{
+id:5,
+name:"VIKTORYA"
+},
+
+{
+id:6,
+name:"İKTİDAR"
+},
+
+{
+id:7,
+name:"EPILOGUE"
+}
+
+];
+
+window.addEventListener("scroll",()=>{
+
+const y = window.scrollY;
+
+const sections =
+document.querySelectorAll(
+".panel"
+);
+
+sections.forEach((sec,index)=>{
+
+const top =
+sec.offsetTop;
+
+const bottom =
+top + sec.offsetHeight;
+
+if(
+y >= top - 300 &&
+y < bottom - 300
+){
+
+if(chapters[index]){
+
+chapterLabel.textContent =
+chapters[index].name;
+
+}
+
+}
+
+});
+
+});
+
+/* =========================
+VISUAL LAYER
+========================= */
+
+const glow =
+document.querySelector(
+".visual-glow"
+);
+
+const ring =
+document.querySelector(
+".visual-ring"
+);
+
+window.addEventListener(
+"scroll",
+()=>{
+
+const scroll =
+window.scrollY;
+
+const scale =
+1 + scroll / 7000;
+
+const rotate =
+scroll / 35;
+
+glow.style.transform =
+`translate(-50%,-50%) scale(${scale})`;
+
+ring.style.transform =
+`translate(-50%,-50%) rotate(${rotate}deg)`;
+
+}
+);
+
+/* =========================
+PARALLAX PLACEHOLDERS
+========================= */
+
+const placeholders =
+document.querySelectorAll(
+".visual-block"
+);
+
+window.addEventListener(
+"scroll",
+()=>{
+
+const scrollY =
+window.scrollY;
+
+placeholders.forEach(box=>{
+
+const rect =
+box.getBoundingClientRect();
+
+const speed =
+(rect.top * -0.03);
+
+box.style.transform =
+`translateY(${speed}px)`;
+
+});
+
+}
+);
+
+/* =========================
+SECTION COLOR FLOW
+========================= */
+
+const body =
+document.body;
+
+const colorSections = [
+
+{
+selector:".section-dark",
+color:"#181212"
+},
+
+{
+selector:".section-burgundy",
+color:"#24141d"
+},
+
+{
+selector:".section-purple",
+color:"#15111f"
+},
+
+{
+selector:".section-warm",
+color:"#221b17"
+},
+
+{
+selector:".section-black",
+color:"#080808"
+}
+
+];
+
+const colorObserver =
+new IntersectionObserver(
+
+(entries)=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+const bg =
+getComputedStyle(
+entry.target
+).backgroundColor;
+
+body.style.background =
+bg;
+
+}
+
+});
+
+},
+
+{
+threshold:.55
+}
+
+);
+
+document
+.querySelectorAll(
+".section-dark,.section-burgundy,.section-purple,.section-warm,.section-black"
+)
+.forEach(sec=>{
+
+colorObserver.observe(sec);
+
+});
+
+/* =========================
+SMOOTH FADE TITLES
+========================= */
+
+const bigTitles =
+document.querySelectorAll(
+".hero-title,.quote,.fall-title"
+);
+
+window.addEventListener(
+"scroll",
+()=>{
+
+bigTitles.forEach(title=>{
+
+const rect =
+title.getBoundingClientRect();
+
+const center =
+window.innerHeight / 2;
+
+const distance =
+Math.abs(
+rect.top - center
+);
+
+const opacity =
+Math.max(
+0.15,
+1 - distance / 900
+);
+
+title.style.opacity =
+opacity;
+
+});
+
+}
+);
+
+</script>
+
+</body>
+</html>
