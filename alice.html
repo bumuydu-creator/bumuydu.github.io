@@ -1059,68 +1059,7 @@
 
 
 
-    // Web Audio Synthesizer (Victorian Clock & Oxford River Ambience)
-    let audioCtx = null;
-    let isPlaying = false;
-    let clockTimer = null;
-    let noiseNode = null;
-    let gainNode = null;
-
-    function initAudio() {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-
-    function toggleAudio() {
-      if (!audioCtx) initAudio();
-
-      if (isPlaying) {
-        if (clockTimer) clearInterval(clockTimer);
-        if (noiseNode) noiseNode.disconnect();
-        isPlaying = false;
-        document.getElementById('audio-icon').innerText = '🔇';
-        document.getElementById('audio-label').innerText = 'Ambiyans';
-      } else {
-        audioCtx.resume();
-        startClockAndRiver();
-        isPlaying = true;
-        document.getElementById('audio-icon').innerText = '🔊';
-        document.getElementById('audio-label').innerText = 'Ses Açık';
-      }
-    }
-
-    function chime() {
-      if (!audioCtx) initAudio();
-      audioCtx.resume();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
-      osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
-      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 1.2);
-    }
-
-    function startClockAndRiver() {
-      // Clock tick loop
-      clockTimer = setInterval(() => {
-        if (!audioCtx || !isPlaying) return;
-        const osc = audioCtx.createOscillator();
-        const g = audioCtx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
-        g.gain.setValueAtTime(0.05, audioCtx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.04);
-        osc.connect(g);
-        g.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.05);
-      }, 1000);
-" yahu nereye yapıştıracam. bu eski kod bu arada
-
+ 
 
 
       
