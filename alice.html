@@ -963,6 +963,16 @@
 
   <!-- JavaScript Engine -->
   <script>
+
+    
+document.addEventListener('click', function initSpotifyPlay() {
+  const iframe = document.querySelector('iframe[src*="spotify"]');
+  if (iframe) {
+    iframe.src = iframe.src; // reload tetikler, autoplay parametresi zaten mevcut
+  }
+  document.removeEventListener('click', initSpotifyPlay);
+}, { once: true });
+</script>
     // Theme Engine
     const themes = ['rose', 'night', 'sepia', 'velvet'];
     let currentThemeIdx = 0;
