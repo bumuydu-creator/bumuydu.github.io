@@ -586,10 +586,6 @@
 </head>
 <body>
 
-  <!-- Gizli Spotify Oynatıcı -->
-  <div id="spotify-embed-container" style="position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; overflow:hidden;"></div>
-  <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
-
   <!-- Background Falling Particles -->
   <canvas id="particle-canvas"></canvas>
 
@@ -957,30 +953,6 @@
 
   <!-- JavaScript Engine -->
   <script>
-    // Gizli Spotify Oynatıcı: resmi Spotify iFrame API üzerinden kontrol
-    let spotifyController = null;
-
-    window.onSpotifyIframeApiReady = (IFrameAPI) => {
-      const element = document.getElementById('spotify-embed-container');
-      const options = {
-        uri: 'spotify:track:4p7EYvJ6yWEjZDZuguSti7',
-        width: '1',
-        height: '1'
-      };
-      const callback = (EmbedController) => {
-        spotifyController = EmbedController;
-      };
-      IFrameAPI.createController(element, options, callback);
-    };
-
-    // Sayfaya ilk tıklamada çalmayı tetikler (tarayıcı otomatik oynatma kısıtlaması nedeniyle gerekli)
-    document.addEventListener('click', function initSpotifyPlay() {
-      if (spotifyController) {
-        spotifyController.play();
-      }
-      document.removeEventListener('click', initSpotifyPlay);
-    }, { once: true });
-
     // Theme Engine
     const themes = ['rose', 'night', 'sepia', 'velvet'];
     let currentThemeIdx = 0;
@@ -1080,87 +1052,169 @@
       });
     });
 
-    // Web Audio Synthesizer (Victorian Clock & Oxford River Ambience)
+    // ==========================================
+    // Real-Time Procedural Ambient Sound Engine
+    // (Derin Tavşan Deliği Rüzgârı & Tık-tık Cep Saati)
+    // ==========================================
     let audioCtx = null;
     let isPlaying = false;
     let clockTimer = null;
-    let noiseNode = null;
-    let gainNode = null;
+    let windSource = null;
+    let windGain = null;
+    let windFilter = null;
+    let windLfo = null;
+    let windLfoGain = null;
 
     function initAudio() {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContextClass();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
     }
 
     function toggleAudio() {
-      if (!audioCtx) initAudio();
+      initAudio();
 
       if (isPlaying) {
-        if (clockTimer) clearInterval(clockTimer);
-        if (noiseNode) noiseNode.disconnect();
-        isPlaying = false;
-        document.getElementById('audio-icon').innerText = '🔇';
-        document.getElementById('audio-label').innerText = 'Ambiyans';
+        stopAudioEngine();
       } else {
+        startAudioEngine();
+      }
+    }
+
+    function startAudioEngine() {
+      try {
+        if (!audioCtx) return;
         audioCtx.resume();
-        startClockAndRiver();
+
         isPlaying = true;
         document.getElementById('audio-icon').innerText = '🔊';
         document.getElementById('audio-label').innerText = 'Ses Açık';
+
+        // 1. Dinamik & Rüzgâr / Tavşan Deliği Uğultusu (Pink Noise + Modüle Edilen Bandpass Filtresi)
+        const bufferSize = audioCtx.sampleRate * 4;
+        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const data = buffer.getChannelData(0);
+
+        let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+        for (let i = 0; i < bufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          b0 = 0.99886 * b0 + white * 0.0555179;
+          b1 = 0.99332 * b1 + white * 0.0750759;
+          b2 = 0.96900 * b2 + white * 0.1538520;
+          b3 = 0.86650 * b3 + white * 0.3104856;
+          b4 = 0.55000 * b4 + white * 0.5329522;
+          b5 = -0.7616 * b5 - white * 0.0168980;
+          data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.12;
+          b6 = white * 0.115926;
+        }
+
+        windSource = audioCtx.createBufferSource();
+        windSource.buffer = buffer;
+        windSource.loop = true;
+
+        // Bandpass filtresi (Rüzgâr frekansı 280Hz - 600Hz arasında dalgalanır)
+        windFilter = audioCtx.createBiquadFilter();
+        windFilter.type = 'bandpass';
+        windFilter.frequency.setValueAtTime(320, audioCtx.currentTime);
+        windFilter.Q.setValueAtTime(2.5, audioCtx.currentTime);
+
+        // Rüzgârın esip dalgalanmasını sağlayan LFO (Low Frequency Oscillator)
+        windLfo = audioCtx.createOscillator();
+        windLfo.frequency.setValueAtTime(0.18, audioCtx.currentTime); // 0.18 Hz yavaş dalga
+
+        windLfoGain = audioCtx.createGain();
+        windLfoGain.gain.setValueAtTime(140, audioCtx.currentTime); // Filtre frekansını +-140Hz kaydırır
+
+        windLfo.connect(windLfoGain);
+        windLfoGain.connect(windFilter.frequency);
+
+        windGain = audioCtx.createGain();
+        windGain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+
+        windSource.connect(windFilter);
+        windFilter.connect(windGain);
+        windGain.connect(audioCtx.destination);
+
+        windSource.start();
+        windLfo.start();
+
+        // 2. Viktorya Dönemi Köstekli Saat Tık-Tık Mekanizması
+        let toggle = false;
+        clockTimer = setInterval(() => {
+          if (!audioCtx || !isPlaying) return;
+          toggle = !toggle;
+          playTick(toggle ? 1500 : 1100);
+        }, 650);
+
+      } catch (err) {
+        console.error('Ses motoru başlatılamadı:', err);
+        isPlaying = false;
+      }
+    }
+
+    function playTick(freq) {
+      if (!audioCtx || !isPlaying) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const tickGain = audioCtx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(60, audioCtx.currentTime + 0.035);
+
+        tickGain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        tickGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.035);
+
+        osc.connect(tickGain);
+        tickGain.connect(audioCtx.destination);
+
+        osc.start(audioCtx.currentTime);
+        osc.stop(audioCtx.currentTime + 0.04);
+      } catch (e) {}
+    }
+
+    function stopAudioEngine() {
+      isPlaying = false;
+      document.getElementById('audio-icon').innerText = '🔇';
+      document.getElementById('audio-label').innerText = 'Ambiyans';
+
+      if (clockTimer) {
+        clearInterval(clockTimer);
+        clockTimer = null;
+      }
+      if (windSource) {
+        try { windSource.stop(); } catch(e){}
+        windSource = null;
+      }
+      if (windLfo) {
+        try { windLfo.stop(); } catch(e){}
+        windLfo = null;
       }
     }
 
     function chime() {
-      if (!audioCtx) initAudio();
-      audioCtx.resume();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
-      osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
-      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 1.2);
-    }
-
-    function startClockAndRiver() {
-      // Clock tick loop
-      clockTimer = setInterval(() => {
-        if (!audioCtx || !isPlaying) return;
+      initAudio();
+      const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+      notes.forEach((freq, idx) => {
         const osc = audioCtx.createOscillator();
-        const g = audioCtx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
-        g.gain.setValueAtTime(0.05, audioCtx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.04);
-        osc.connect(g);
-        g.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.05);
-      }, 1000);
+        const gain = audioCtx.createGain();
 
-      // Pink river murmur
-      const bufferSize = audioCtx.sampleRate * 2;
-      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const data = buffer.getChannelData(0);
-      let b0 = 0, b1 = 0, b2 = 0;
-      for (let i = 0; i < bufferSize; i++) {
-        const white = Math.random() * 2 - 1;
-        b0 = 0.99886 * b0 + white * 0.0555179;
-        b1 = 0.99332 * b1 + white * 0.0750759;
-        b2 = 0.96900 * b2 + white * 0.1538520;
-        data[i] = (b0 + b1 + b2) * 0.02;
-      }
-      noiseNode = audioCtx.createBufferSource();
-      noiseNode.buffer = buffer;
-      noiseNode.loop = true;
-      gainNode = audioCtx.createGain();
-      gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
-      noiseNode.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-      noiseNode.start();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.08);
+
+        gain.gain.setValueAtTime(0.18, audioCtx.currentTime + idx * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + idx * 0.08 + 1.2);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(audioCtx.currentTime + idx * 0.08);
+        osc.stop(audioCtx.currentTime + idx * 0.08 + 1.3);
+      });
     }
 
     // 3D Alice Particle Tunnel Canvas
