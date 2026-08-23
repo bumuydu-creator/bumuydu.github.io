@@ -1050,37 +1050,18 @@
       });
     });
 
+
     
-// Web Audio Synthesizer (Victorian Clock & Alice Theme)
-    let audioCtx = null;
+    
+let audioCtx = null;
     let isPlaying = false;
     let clockTimer = null;
     let noiseNode = null;
     let gainNode = null;
 
-    // Alice müzik dosyası tanımı
-    let musicAudio = new Audio('alice.mp3'); 
-    musicAudio.loop = true;
-    musicAudio.volume = 0.4;
-
     function initAudio() {
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }
-
-    // Kullanıcı sayfaya ilk tıkladığı an (tarayıcı kuralı gereği) sesleri ve müziği başlatır
-    window.addEventListener('click', () => {
-      if (!isPlaying) {
-        if (!audioCtx) initAudio();
-        audioCtx.resume();
-        
-        musicAudio.play().catch(e => console.log("Müzik çalınamadı:", e));
-        startClockAndRiver();
-        
-        isPlaying = true;
-        document.getElementById('audio-icon').innerText = '🔊';
-        document.getElementById('audio-label').innerText = 'Ses Açık';
-      }
-    }, { once: true }); // Yalnızca ilk tıklamada çalışır
 
     function toggleAudio() {
       if (!audioCtx) initAudio();
@@ -1088,13 +1069,11 @@
       if (isPlaying) {
         if (clockTimer) clearInterval(clockTimer);
         if (noiseNode) noiseNode.disconnect();
-        musicAudio.pause();
         isPlaying = false;
         document.getElementById('audio-icon').innerText = '🔇';
         document.getElementById('audio-label').innerText = 'Ambiyans';
       } else {
         audioCtx.resume();
-        musicAudio.play().catch(e => console.log("Müzik oynatılamadı:", e));
         startClockAndRiver();
         isPlaying = true;
         document.getElementById('audio-icon').innerText = '🔊';
@@ -1119,7 +1098,6 @@
     }
 
     function startClockAndRiver() {
-      if (clockTimer) clearInterval(clockTimer);
       // Clock tick loop
       clockTimer = setInterval(() => {
         if (!audioCtx || !isPlaying) return;
