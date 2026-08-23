@@ -587,15 +587,8 @@
 <body>
 
   <!-- Gizli Spotify Oynatıcı -->
-  <iframe
-    src="https://open.spotify.com/embed/track/4p7EYvJ6yWEjZDZuguSti7?utm_source=generator&si=a98882935f2042bf&autoplay=1"
-    width="1"
-    height="1"
-    style="position:absolute; opacity:0; pointer-events:none;"
-    frameBorder="0"
-    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-    loading="lazy">
-  </iframe>
+  <div id="spotify-embed-container" style="position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; overflow:hidden;"></div>
+  <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
 
   <!-- Background Falling Particles -->
   <canvas id="particle-canvas"></canvas>
@@ -964,12 +957,26 @@
 
   <!-- JavaScript Engine -->
   <script>
-    // Gizli Spotify Oynatıcı: sayfaya ilk tıklamada çalmayı tetikler
+    // Gizli Spotify Oynatıcı: resmi Spotify iFrame API üzerinden kontrol
+    let spotifyController = null;
+
+    window.onSpotifyIframeApiReady = (IFrameAPI) => {
+      const element = document.getElementById('spotify-embed-container');
+      const options = {
+        uri: 'spotify:track:4p7EYvJ6yWEjZDZuguSti7',
+        width: '1',
+        height: '1'
+      };
+      const callback = (EmbedController) => {
+        spotifyController = EmbedController;
+      };
+      IFrameAPI.createController(element, options, callback);
+    };
+
+    // Sayfaya ilk tıklamada çalmayı tetikler (tarayıcı otomatik oynatma kısıtlaması nedeniyle gerekli)
     document.addEventListener('click', function initSpotifyPlay() {
-      const spotifyFrame = document.querySelector('iframe[src*="spotify"]');
-      if (spotifyFrame) {
-        const baseSrc = spotifyFrame.src.split('&_t=')[0];
-        spotifyFrame.src = baseSrc + '&_t=' + Date.now();
+      if (spotifyController) {
+        spotifyController.play();
       }
       document.removeEventListener('click', initSpotifyPlay);
     }, { once: true });
