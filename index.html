@@ -1347,6 +1347,7 @@ Christopher Nolan'ın "The Odyssey" filmi vizyona girdi, ama asıl hikaye 3000 y
 </script>
 
 
+  
 <script>
 /* BU MUYDU? AÇILIŞ ANİMASYONU — mevcut site JavaScript'ine dokunulmadı */
 (() => {
@@ -1360,49 +1361,12 @@ Christopher Nolan'ın "The Odyssey" filmi vizyona girdi, ama asıl hikaye 3000 y
     if(audioStarted) return;
     audioStarted = true;
 
-    try{
-      const Ctx = window.AudioContext || window.webkitAudioContext;
-      if(!Ctx) return;
+    const audio = new Audio("intro.mp3");
 
-      const ctx = new Ctx();
-      const master = ctx.createGain();
+    audio.volume = 0.45;
+    audio.currentTime = 0;
 
-      master.gain.setValueAtTime(.0001, ctx.currentTime);
-      master.gain.exponentialRampToValueAtTime(.12, ctx.currentTime + .08);
-      master.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + 1.8);
-      master.connect(ctx.destination);
-
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(72, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(42, ctx.currentTime + .7);
-
-      gain.gain.setValueAtTime(.0001, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(.8, ctx.currentTime + .03);
-      gain.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + 1.5);
-
-      osc.connect(gain);
-      gain.connect(master);
-      osc.start();
-      osc.stop(ctx.currentTime + 1.6);
-
-      const bell = ctx.createOscillator();
-      const bellGain = ctx.createGain();
-
-      bell.type = 'triangle';
-      bell.frequency.value = 880;
-      bellGain.gain.setValueAtTime(.0001, ctx.currentTime + .55);
-      bellGain.gain.exponentialRampToValueAtTime(.08, ctx.currentTime + .62);
-      bellGain.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + 1.3);
-
-      bell.connect(bellGain);
-      bellGain.connect(master);
-      bell.start(ctx.currentTime + .55);
-      bell.stop(ctx.currentTime + 1.35);
-
-    }catch(e){}
+    audio.play().catch(() => {});
   }
 
   function closeIntro(withSound = true){
@@ -1423,11 +1387,13 @@ Christopher Nolan'ın "The Odyssey" filmi vizyona girdi, ama asıl hikaye 3000 y
     }
   });
 
-  // Açılış yaklaşık 6,5 saniye sonra kendiliğinden kapanır.
-  // Tarayıcıların otomatik ses engeline takılmamak için bu durumda ses çalmaz.
   setTimeout(() => closeIntro(false), 6500);
 })();
 </script>
+
+
+
+  
 
 </body>
 </html>
