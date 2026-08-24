@@ -1358,20 +1358,16 @@ Christopher Nolan'ın "The Odyssey" filmi vizyona girdi, ama asıl hikaye 3000 y
   let audioStarted = false;
 
   function sound(){
-    if(audioStarted) return;
-    audioStarted = true;
+  if(audioStarted) return;
+  audioStarted = true;
 
-    const audio = new Audio("bu-muydu-intro.mp3");
+  const audio = new Audio("./bu-muydu-intro.mp3");
+  audio.volume = 0.45;
 
-    <audio autoplay>
-  <source src="./bu-muydu-intro.mp3" type="audio/mpeg">
-</audio>
-    
-    audio.volume = 0.45;
-    audio.currentTime = 0;
-
-    audio.play().catch(() => {});
-  }
+  audio.play().catch(err => {
+    console.log("Ses başlatılamadı:", err);
+  });
+}
 
   function closeIntro(withSound = true){
     if(closed) return;
