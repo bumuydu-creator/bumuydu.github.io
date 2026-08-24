@@ -591,7 +591,14 @@
       <p>Beklenmedik bağlantıların peşine düş.</p>
     </div>
   </div>
+
   <div class="enter"><span>ENTER / TIKLA</span> · AÇILIŞI GEÇ</div>
+
+
+  
+  <audio id="bm-intro-audio" preload="auto">
+  <source src="https://bumuydu-creator.github.io/bumuydu.github.io/bu-muydu-intro.mp3" type="audio/mpeg">
+</audio>
 </section>
 
 
@@ -1357,13 +1364,15 @@ Christopher Nolan'ın "The Odyssey" filmi vizyona girdi, ama asıl hikaye 3000 y
   let audio = null;
 
   function playSound() {
-    // Her denemede yeni Audio oluşturma — tek obje kullan
     if (!audio) {
-      audio = new Audio("https://bumuydu-creator.github.io/bumuydu.github.io/bu-muydu-intro.mp3");
+      audio = new Audio(
+        "https://bumuydu-creator.github.io/bumuydu.github.io/bu-muydu-intro.mp3"
+      );
+
       audio.volume = 0.45;
+      audio.preload = "auto";
     }
 
-    // Zaten çalıyorsa yeniden başlat
     audio.currentTime = 0;
 
     const playPromise = audio.play();
@@ -1371,44 +1380,65 @@ Christopher Nolan'ın "The Odyssey" filmi vizyona girdi, ama asıl hikaye 3000 y
     if (playPromise !== undefined) {
       playPromise
         .then(() => {
-          console.log("Intro sesi çalıyor.");
+          console.log("BU MUYDU? intro sesi başladı.");
         })
         .catch(err => {
-          console.error("Ses başlatılamadı:", err.name, err.message);
-          // Hata durumunda kapıyı açık bırak — tekrar denenebilsin
-          closed = false;
+          console.error(
+            "BU MUYDU? intro sesi başlatılamadı:",
+            err.name,
+            err.message
+          );
         });
     }
   }
 
   function closeIntro(withSound = true) {
     if (closed) return;
+
     closed = true;
 
     if (withSound) {
       playSound();
-      // Eğer ses başarısız olursa catch bloğu closed = false yapacak
     }
 
     intro.classList.add('hide');
+
     setTimeout(() => {
-      if (intro.parentNode) intro.remove();
+      if (intro && intro.parentNode) {
+        intro.remove();
+      }
     }, 1050);
   }
 
-  // Tıklama / dokunma
-  intro.addEventListener('pointerdown', () => closeIntro(true));
-  intro.addEventListener('touchstart', () => closeIntro(true), { passive: true });
+  /* Açılış ekranına tıklayınca ses başlar */
+  intro.addEventListener('pointerdown', () => {
+    playSound();
+    closeIntro(false);
+  });
 
-  // Klavye
+  /* Mobil dokunma */
+  intro.addEventListener('touchstart', () => {
+    playSound();
+    closeIntro(false);
+  }, { passive: true });
+
+  /* ENTER / SPACE / ESC */
   window.addEventListener('keydown', e => {
-    if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
-      closeIntro(true);
+    if (
+      e.key === 'Escape' ||
+      e.key === 'Enter' ||
+      e.key === ' '
+    ) {
+      playSound();
+      closeIntro(false);
     }
   });
 
-  // 6.5 saniye sonra sessiz kapan
-  setTimeout(() => closeIntro(false), 6500);
+  /* 6.5 saniye sonra animasyon sessizce kapanır */
+  setTimeout(() => {
+    closeIntro(false);
+  }, 6500);
+
 })();
 </script>
 
