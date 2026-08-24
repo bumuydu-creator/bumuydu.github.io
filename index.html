@@ -1349,52 +1349,65 @@ Christopher Nolan'ın "The Odyssey" filmi vizyona girdi, ama asıl hikaye 3000 y
 
   
 <script>
-/* BU MUYDU? AÇILIŞ ANİMASYONU — mevcut site JavaScript'ine dokunulmadı */
 (() => {
   const intro = document.getElementById('bm-intro');
   if (!intro) return;
 
   let closed = false;
-  let audioStarted = false;
+  let audio = null;
 
-function sound(){
-  if(audioStarted) return;
-  audioStarted = true;
+  function playSound() {
+    // Her denemede yeni Audio oluşturma — tek obje kullan
+    if (!audio) {
+      audio = new Audio("https://bumuydu-creator.github.io/bumuydu.github.io/bu-muydu-intro.mp3");
+      audio.volume = 0.45;
+    }
 
-  const audio = new Audio(
-    "https://bumuydu-creator.github.io/bumuydu.github.io/bu-muydu-intro.mp3"
-  );
+    // Zaten çalıyorsa yeniden başlat
+    audio.currentTime = 0;
 
-  audio.volume = 0.45;
+    const playPromise = audio.play();
 
-  audio.play()
-    .then(() => {
-      console.log("BU MUYDU? intro sesi başladı.");
-    })
-    .catch(err => {
-      console.error("Ses başlatılamadı:", err);
-      audioStarted = false;
-    });
-}
-
-  function closeIntro(withSound = true){
-    if(closed) return;
-    closed = true;
-
-    if(withSound) sound();
-
-    intro.classList.add('hide');
-    setTimeout(() => intro.remove(), 1050);
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          console.log("Intro sesi çalıyor.");
+        })
+        .catch(err => {
+          console.error("Ses başlatılamadı:", err.name, err.message);
+          // Hata durumunda kapıyı açık bırak — tekrar denenebilsin
+          closed = false;
+        });
+    }
   }
 
-  intro.addEventListener('pointerdown', () => closeIntro(true));
+  function closeIntro(withSound = true) {
+    if (closed) return;
+    closed = true;
 
+    if (withSound) {
+      playSound();
+      // Eğer ses başarısız olursa catch bloğu closed = false yapacak
+    }
+
+    intro.classList.add('hide');
+    setTimeout(() => {
+      if (intro.parentNode) intro.remove();
+    }, 1050);
+  }
+
+  // Tıklama / dokunma
+  intro.addEventListener('pointerdown', () => closeIntro(true));
+  intro.addEventListener('touchstart', () => closeIntro(true), { passive: true });
+
+  // Klavye
   window.addEventListener('keydown', e => {
-    if(e.key === 'Escape' || e.key === 'Enter' || e.key === ' '){
+    if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
       closeIntro(true);
     }
   });
 
+  // 6.5 saniye sonra sessiz kapan
   setTimeout(() => closeIntro(false), 6500);
 })();
 </script>
